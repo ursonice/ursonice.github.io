@@ -14,6 +14,9 @@ const SLUG_PROP = process.env.NOTION_SLUG_PROPERTY || "Slug";
 const STATUS_PROP = process.env.NOTION_STATUS_PROPERTY || "";
 const PUBLISHED_STATUS = process.env.NOTION_PUBLISHED_STATUS || "Published";
 const ABOUT_PAGE_ID = process.env.NOTION_ABOUT_PAGE_ID || "";
+const FORCE_FULL = ["1", "true", "yes"].includes((process.env.NOTION_FORCE_FULL || "").toLowerCase());
+
+const stats = { rendered: 0, reused: 0 };
 
 if (!TOKEN) {
   throw new Error("NOTION_TOKEN 또는 NOTION_API_KEY 환경 변수가 필요합니다.");
@@ -400,7 +403,7 @@ const renderBlocks = async (blockId, context) => {
   return { html: html.join("\n"), plainText: plain.join(" ") };
 };
 
-const queryDataSource = async (source) => {
+const queryDataSource = async (source, cache) => {
   const sourceMeta = await notion(`/data_sources/${source.dataSourceId}`);
   const posts = [];
   let cursor;
@@ -420,6 +423,16 @@ const queryDataSource = async (source) => {
     for (const page of data.results || []) {
       try {
         if (!isPublished(page)) continue;
+
+        // Incremental: reuse the cached post if Notion's last edit hasn't changed.
+        const cached = cache.get(page.id);
+        if (cached && !FORCE_FULL && cached.updated === page.last_edited_time) {
+          stats.reused += 1;
+          posts.push(cached);
+          continue;
+        }
+        stats.rendered += 1;
+
         const title = titleFromPage(page);
         const pageSlug = slugFromPage(page, title);
         currentPageId = page.id;
@@ -452,11 +465,14 @@ const queryDataSource = async (source) => {
   return posts;
 };
 
-const fetchAbout = async () => {
+const fetchAbout = async (cachedAbout) => {
   const pageId = await readAboutPageId();
   if (!pageId) return null;
 
   const page = await notion(`/pages/${pageId}`);
+  if (cachedAbout && !FORCE_FULL && cachedAbout.updated === page.last_edited_time) {
+    return cachedAbout;
+  }
   const title = titleFromPage(page);
   currentPageId = pageId;
   const rendered = await renderBlocks(pageId, { pageSlug: "about" });
@@ -467,12 +483,23 @@ const fetchAbout = async () => {
   };
 };
 
+const readExistingOutput = async () => {
+  try {
+    return JSON.parse(await readFile(OUTPUT, "utf8"));
+  } catch {
+    return {};
+  }
+};
+
 const main = async () => {
   const sources = await readSources();
+  const existing = await readExistingOutput();
+  const cache = new Map((existing.posts || []).map((post) => [post.id, post]));
+
   const nestedPosts = [];
   for (const source of sources) {
     try {
-      nestedPosts.push(await queryDataSource(source));
+      nestedPosts.push(await queryDataSource(source, cache));
     } catch (error) {
       console.warn(`source skipped (${source.name || source.dataSourceId}): ${error.message}`);
     }
@@ -484,7 +511,7 @@ const main = async () => {
 
   let about = null;
   try {
-    about = await fetchAbout();
+    about = await fetchAbout(existing.about || null);
   } catch (error) {
     console.warn(`about skipped: ${error.message}`);
   }
@@ -502,7 +529,9 @@ const main = async () => {
 
   await mkdir(dirname(OUTPUT), { recursive: true });
   await writeFile(OUTPUT, `${JSON.stringify(payload, null, 2)}\n`);
-  console.log(`Synced ${posts.length} posts${about ? " + about page" : ""} to ${OUTPUT}`);
+  console.log(
+    `Synced ${posts.length} posts (${stats.rendered} re-rendered, ${stats.reused} reused)${about ? " + about page" : ""} to ${OUTPUT}`,
+  );
 };
 
 main().catch((error) => {
