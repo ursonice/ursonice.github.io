@@ -1,55 +1,182 @@
 <!DOCTYPE html>
-  <html lang="ko">
+<html lang="ko">
   <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WooJae's Homepage</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    }
-  .container {
-        text-align: center;
-    padding: 3rem;
-    background: rgba(255,255,255,0.1);
-    border-radius: 20px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-    max-width: 600px;
-}
-  h1 { font-size: 3rem; margin-bottom: 1rem; }
-  p { font-size: 1.2rem; margin-bottom: 1.5rem; line-height: 1.6; }
-  .links a {
-        display: inline-block;
-    margin: 0.5rem;
-    padding: 0.7rem 1.5rem;
-    background: rgba(255,255,255,0.2);
-    color: #fff;
-        text-decoration: none;
-    border-radius: 30px;
-    transition: all 0.3s;
-  }
-  .links a:hover {
-        background: rgba(255,255,255,0.4);
-    transform: translateY(-2px);
-  }
-</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Woojae Joo가 AI, Robotics, Systems를 공부하며 정리한 기록과 이력을 모아두는 개발 노트입니다."
+    />
+    <meta name="theme-color" content="#0a0b0e" />
+    <title>Woojae Joo — Developer Note</title>
+    <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/styles.css" />
   </head>
   <body>
-    <div class="container">
-      <h1>Hello, I'm WooJae</h1>
-      <p>웹사이트에 오신 것을 환영합니다!<br>이곳은 GitHub Pages로 만든 저의 개인 홈페이지입니다.</p>
-      <div class="links">
-        <a href="https://github.com/ursonice">GitHub</a>
-        <a href="mailto:contact@example.com">Contact</a>
+    <a class="skip-link" href="#posts">본문으로 이동</a>
+
+    <header class="site-header" data-header>
+      <a class="brand" href="./" aria-label="Woojae Joo home">
+        <span class="brand-mark">W</span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="#posts">Writing</a>
+        <a href="#topics">Topics</a>
+        <a href="#about">About</a>
+        <a href="https://github.com/ursonice" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-bg" aria-hidden="true"></div>
+        <div class="shell hero-inner">
+          <div class="hero-text">
+            <p class="eyebrow">AI · Reinforcement Learning · VLA</p>
+            <h1>Everything is a<br /><em>trade-off relationship</em>.</h1>
+            <div class="hero-actions">
+              <a class="button primary" href="#posts">Recent notes</a>
+              <a class="button ghost" href="#about">About me</a>
+            </div>
+            <p class="hero-note">Today, yo<strong>u</strong> a<strong>r</strong>e <strong>so&nbsp;nice</strong>.</p>
+          </div>
+          <div class="hero-art">
+            <svg
+              class="trade-off-art"
+              viewBox="0 0 460 360"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              role="img"
+              aria-label="Trade-off frontier: gaining one objective costs the other"
+            >
+              <defs>
+                <linearGradient id="frontier" x1="70" y1="70" x2="300" y2="300" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#5bc8ff" />
+                  <stop offset="1" stop-color="#0a84ff" />
+                </linearGradient>
+                <radialGradient id="nodeGlow" cx="0.5" cy="0.5" r="0.5">
+                  <stop offset="0" stop-color="#0a84ff" stop-opacity="0.5" />
+                  <stop offset="1" stop-color="#0a84ff" stop-opacity="0" />
+                </radialGradient>
+              </defs>
+
+              <path d="M70 40 L70 300 L400 300" stroke="currentColor" stroke-opacity="0.38" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+
+              <path d="M70 70 C 198 70, 300 172, 300 300" stroke="url(#frontier)" stroke-width="3.5" stroke-linecap="round" />
+
+              <g class="node" tabindex="0" aria-label="Best for A">
+                <line class="node-leader" x1="78" y1="66" x2="150" y2="48" stroke="currentColor" stroke-opacity="0.3" stroke-width="1" />
+                <circle class="node-glow" cx="70" cy="70" r="13" fill="url(#nodeGlow)" />
+                <circle class="node-dot" cx="70" cy="70" r="5" fill="#5bc8ff" />
+                <text class="art-label strong node-label" x="155" y="44">Best for A</text>
+              </g>
+              <g class="node" tabindex="0" aria-label="Balanced">
+                <line class="node-leader" x1="241" y1="133" x2="300" y2="120" stroke="currentColor" stroke-opacity="0.3" stroke-width="1" />
+                <circle class="node-glow" cx="233" cy="137" r="14" fill="url(#nodeGlow)" />
+                <circle class="node-dot" cx="233" cy="137" r="5.5" fill="#0a84ff" />
+                <text class="art-label strong node-label" x="305" y="124">Balanced</text>
+              </g>
+              <g class="node" tabindex="0" aria-label="Best for B">
+                <line class="node-leader" x1="306" y1="298" x2="356" y2="286" stroke="currentColor" stroke-opacity="0.3" stroke-width="1" />
+                <circle class="node-glow" cx="300" cy="300" r="13" fill="url(#nodeGlow)" />
+                <circle class="node-dot" cx="300" cy="300" r="5" fill="#0a84ff" />
+                <text class="art-label strong node-label" x="361" y="290">Best for B</text>
+              </g>
+
+              <text class="art-label axis" x="50" y="175" transform="rotate(-90 50 175)" text-anchor="middle">Objective A</text>
+              <text class="art-label axis" x="235" y="330" text-anchor="middle">Objective B</text>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <section class="section shell" id="posts" aria-labelledby="posts-title">
+        <div class="section-heading">
+          <p class="eyebrow">Writing</p>
+          <h2 id="posts-title">Recent</h2>
+        </div>
+
+        <div class="toolbar">
+          <label class="search-box">
+            <span class="sr-only">게시글 검색</span>
+            <input type="search" data-search placeholder="논문, 키워드, 태그 검색" />
+          </label>
+          <div class="segmented" data-filters role="group" aria-label="토픽 필터"></div>
+        </div>
+
+        <div class="post-grid" data-posts aria-live="polite"></div>
+        <p class="empty-state" data-empty hidden>검색 결과가 없습니다. 다른 키워드로 다시 시도해보세요.</p>
+      </section>
+
+      <section class="section shell" id="topics" aria-labelledby="topics-title">
+        <div class="section-heading">
+          <p class="eyebrow">Explore</p>
+          <h2 id="topics-title">Browse by topic</h2>
+        </div>
+        <div class="topic-grid" data-topics></div>
+      </section>
+
+      <section class="section shell about-section" id="about" aria-labelledby="about-title">
+        <div class="section-heading">
+          <p class="eyebrow">About</p>
+          <h2 id="about-title">Woojae Joo</h2>
+        </div>
+        <div class="about-layout">
+          <div class="about-main">
+            <div class="about-content" data-about>
+              <p>About 내용을 불러오는 중입니다…</p>
+            </div>
+          </div>
+          <aside class="about-aside">
+            <div class="profile-card">
+              <div class="avatar" aria-hidden="true">W</div>
+              <div class="name">Woojae Joo</div>
+              <div class="role">AI · RL · VLA</div>
+              <div class="profile-links">
+                <a href="https://github.com/ursonice" target="_blank" rel="me noreferrer">GitHub</a>
+                <a href="mailto:you@example.com">Email</a>
+              </div>
+            </div>
+            <div class="facts-card">
+              <h4>Writing about</h4>
+              <div class="chips" data-about-topics></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+      <div class="section shell" aria-label="블로그 요약">
+        <div class="metrics">
+          <div><strong data-stat="post-count">0</strong><span>notes</span></div>
+          <div><strong data-stat="topic-count">0</strong><span>topics</span></div>
+          <div><strong data-stat="last-updated">–</strong><span>updated</span></div>
+        </div>
       </div>
-    </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p>© <span data-year></span> Woojae Joo · ursonice</p>
+        <div class="footer-links">
+          <a href="https://github.com/ursonice" target="_blank" rel="me noreferrer">GitHub</a>
+          <a href="mailto:you@example.com">Email</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="assets/js/main.js" type="module"></script>
   </body>
-  </html>
+</html>

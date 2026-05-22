@@ -1,0 +1,16 @@
+{
+  "about": { "pageId": "368b12c0115c805291dfebef00cc1065" },
+  "sources": [
+    { "name": "Application", "dataSourceId": "aa232334-5fa4-4e27-a3aa-7a5dee7f3e42" },
+    { "name": "Robotics", "dataSourceId": "272b12c0-115c-80df-974c-000b1c84185d" },
+    { "name": "Kubernetes", "dataSourceId": "1e8b12c0-115c-8073-8f7a-000bb8f4fc83" },
+    { "name": "AI/ Deep Learning", "dataSourceId": "2b36813f-2bad-4e7f-99a2-0f42a1dde6ba" },
+    { "name": "AI/ Theory", "dataSourceId": "78e3b99d-972d-4185-802a-38656fdf32db" },
+    { "name": "Python", "dataSourceId": "9f211b12-7115-4a26-b5b5-d99b8d1e14df" },
+    { "name": "C/ C++", "dataSourceId": "16731916-4044-4f6d-add8-acc90926536e" },
+    { "name": "ONNX-MLIR", "dataSourceId": "091b98ec-7ba7-476e-a3fd-78791f7c99a8" },
+    { "name": "Tools", "dataSourceId": "48c9d6ec-8827-4fef-9cdd-2d2429bf462e" },
+    { "name": "Coding Test", "dataSourceId": "1c6c92a6-db7e-4b97-9638-7599491dc217" },
+    { "name": "Etc", "dataSourceId": "40d73572-5e1a-47ff-87f1-f1db1f668c85" }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "ursonice-github-io",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync:notion": "node scripts/sync-notion.mjs",
+    "serve": "node scripts/serve.mjs"
+  }
+}

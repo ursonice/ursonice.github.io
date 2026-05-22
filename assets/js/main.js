@@ -1,0 +1,190 @@
+const DATA_URL = "data/notion-posts.json";
+
+const state = {
+  posts: [],
+  about: null,
+  activeTopic: "all",
+  query: "",
+};
+
+const $ = (selector, scope = document) => scope.querySelector(selector);
+
+const formatDate = (value) => {
+  if (!value) return "날짜 없음";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return new Intl.DateTimeFormat("ko-KR", { year: "numeric", month: "short", day: "numeric" }).format(date);
+};
+
+const normalize = (value = "") => value.toString().trim().toLowerCase();
+
+const sortedByRecent = (posts) =>
+  [...posts].sort((a, b) => new Date(b.updated || b.created) - new Date(a.updated || a.created));
+
+const uniqueTopics = (posts) => {
+  const counts = new Map();
+  posts.forEach((post) => {
+    const topic = post.category || "Notes";
+    counts.set(topic, (counts.get(topic) || 0) + 1);
+  });
+  return [...counts.entries()].sort((a, b) => b[1] - a[1]);
+};
+
+const renderFilters = () => {
+  const container = $("[data-filters]");
+  const topics = uniqueTopics(state.posts);
+  const buttons = [["all", `All ${state.posts.length}`], ...topics.map(([topic, count]) => [topic, `${topic} ${count}`])];
+  container.innerHTML = buttons
+    .map(
+      ([value, label]) =>
+        `<button class="filter-button" type="button" data-filter="${value}" aria-pressed="${value === state.activeTopic}">${label}</button>`,
+    )
+    .join("");
+};
+
+const filteredPosts = () => {
+  const q = normalize(state.query);
+  return state.posts.filter((post) => {
+    const topicMatch = state.activeTopic === "all" || post.category === state.activeTopic;
+    const target = normalize([post.title, post.summary, post.category, ...(post.tags || [])].join(" "));
+    return topicMatch && (!q || target.includes(q));
+  });
+};
+
+const renderPosts = () => {
+  const container = $("[data-posts]");
+  const empty = $("[data-empty]");
+  const posts = filteredPosts();
+
+  empty.hidden = posts.length > 0;
+  container.innerHTML = posts
+    .map((post) => {
+      const tags = (post.tags || []).slice(0, 2);
+      const href = `post.html?slug=${encodeURIComponent(post.slug)}`;
+      return `
+        <a class="post-card" href="${href}">
+          <div class="post-meta">
+            <span class="cat">${post.category || "Notes"}</span>
+            ${tags.map((tag) => `<span class="badge">${tag}</span>`).join("")}
+          </div>
+          <h3>${post.title}</h3>
+          <p>${post.summary || "노션에서 가져온 공부 기록입니다."}</p>
+          <div class="post-footer">
+            <span>${formatDate(post.updated || post.created)}</span>
+          </div>
+        </a>`;
+    })
+    .join("");
+};
+
+const renderTopics = () => {
+  const container = $("[data-topics]");
+  container.innerHTML = uniqueTopics(state.posts)
+    .map(
+      ([topic, count]) =>
+        `<button class="topic-card" type="button" data-topic-jump="${topic}"><strong>${topic}</strong><span>${count} notes</span></button>`,
+    )
+    .join("");
+};
+
+const renderStats = () => {
+  const latest = sortedByRecent(state.posts)[0];
+  $("[data-stat='post-count']").textContent = state.posts.length;
+  $("[data-stat='topic-count']").textContent = uniqueTopics(state.posts).length;
+  $("[data-stat='last-updated']").textContent = latest ? formatDate(latest.updated || latest.created) : "–";
+};
+
+const renderAbout = () => {
+  const container = $("[data-about]");
+  if (state.about?.html) {
+    container.innerHTML = state.about.html;
+  } else {
+    container.innerHTML = `
+      <p>아직 노션 About 페이지가 연결되지 않았습니다. 노션에 자기소개 · 경력 · 학력 · 기술 스택을 정리한 페이지를 만들고
+      <code>NOTION_ABOUT_PAGE_ID</code>로 연결하면 이 영역이 자동으로 채워집니다.</p>
+      <p>그 전까지는 이 자리에서 디자인과 레이아웃을 미리 확인할 수 있습니다.</p>`;
+  }
+
+  const chips = $("[data-about-topics]");
+  if (chips) {
+    chips.innerHTML = uniqueTopics(state.posts)
+      .slice(0, 8)
+      .map(([topic]) => `<span class="badge">${topic}</span>`)
+      .join("");
+  }
+};
+
+const bindEvents = () => {
+  $("[data-search]").addEventListener("input", (event) => {
+    state.query = event.target.value;
+    renderPosts();
+  });
+
+  $("[data-filters]").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-filter]");
+    if (!button) return;
+    state.activeTopic = button.dataset.filter;
+    renderFilters();
+    renderPosts();
+  });
+
+  $("[data-topics]").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-topic-jump]");
+    if (!button) return;
+    state.activeTopic = button.dataset.topicJump;
+    renderFilters();
+    renderPosts();
+    $("#posts").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+};
+
+const applyThemeIcon = () => {
+  const icon = $("[data-theme-icon]");
+  if (icon) icon.textContent = document.documentElement.dataset.theme === "dark" ? "☀" : "◐";
+};
+
+const initTheme = () => {
+  const saved = localStorage.getItem("theme");
+  const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)").matches;
+  document.documentElement.dataset.theme = saved || (prefersDark ? "dark" : "light");
+  applyThemeIcon();
+
+  $("[data-theme-toggle]").addEventListener("click", () => {
+    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = next;
+    localStorage.setItem("theme", next);
+    applyThemeIcon();
+  });
+};
+
+const initHeaderScroll = () => {
+  const header = $("[data-header]");
+  const onScroll = () => header.toggleAttribute("data-scrolled", window.scrollY > 8);
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+};
+
+const init = async () => {
+  $("[data-year]").textContent = new Date().getFullYear();
+  initTheme();
+  initHeaderScroll();
+
+  try {
+    const response = await fetch(DATA_URL, { cache: "no-store" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+    state.posts = sortedByRecent(data.posts || []);
+    state.about = data.about || null;
+  } catch (error) {
+    console.warn("Failed to load Notion data", error);
+  }
+
+  renderStats();
+  renderFilters();
+  renderPosts();
+  renderTopics();
+  renderAbout();
+  bindEvents();
+};
+
+init();
