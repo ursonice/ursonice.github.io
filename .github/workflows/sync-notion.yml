@@ -2,8 +2,13 @@ name: Sync Notion posts
 
 on:
   workflow_dispatch:
+  repository_dispatch:
+    types: [notion-sync]
   schedule:
-    - cron: "*/5 * * * *"
+    # Fallback only — GitHub's scheduled cron is best-effort and heavily
+    # throttled for short intervals. Real-time updates come from the
+    # repository_dispatch trigger fired by Notion (see README).
+    - cron: "*/15 * * * *"
 
 permissions:
   contents: write
