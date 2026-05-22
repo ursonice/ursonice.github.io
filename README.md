@@ -46,7 +46,26 @@ npm run sync:notion                        # data/notion-posts.json + assets/not
 npm run serve                              # http://localhost:4173 에서 확인
 ```
 
-데이터소스의 속성 이름이 기본값(`이름`, `Tag`, `Summary`, `Slug`)과 다르면 위 "옵션 환경 변수"로 맞춰주세요. 결과물(`data/notion-posts.json`, `assets/notion/`)만 커밋하고 토큰은 커밋하지 않습니다. 자동화는 GitHub Secrets에 같은 값을 넣으면 12시간마다 워크플로가 동기화합니다.
+데이터소스의 속성 이름이 기본값(`이름`, `Tag`, `Summary`, `Slug`)과 다르면 위 "옵션 환경 변수"로 맞춰주세요. 결과물(`data/notion-posts.json`, `assets/notion/`)만 커밋하고 토큰은 커밋하지 않습니다.
+
+## 동기화가 도는 방식
+
+워크플로(`.github/workflows/sync-notion.yml`)는 세 가지로 실행됩니다.
+
+1. `repository_dispatch` (type `notion-sync`) — **실시간**. 노션에서 글을 추가/삭제/수정하면 곧바로 실행됩니다(아래 설정 필요).
+2. `schedule` (`*/15`) — **fallback**. GitHub의 cron은 정시 보장이 없는 best-effort라 실시간 용도로는 못 씁니다. 실시간 트리거가 빠뜨린 경우의 안전망입니다.
+3. `workflow_dispatch` — Actions 탭에서 수동 실행.
+
+## 실시간 동기화 (노션 → GitHub 즉시 반영)
+
+노션 웹훅은 GitHub의 dispatch API가 요구하는 본문(`{"event_type":"notion-sync"}`)을 직접 만들 수 없어서, 사이에 작은 릴레이(`scripts/notion-relay.ts`) 하나를 둡니다. 노션 **integration 웹훅**은 `page.created`/`page.deleted`/`page.undeleted`/`page.moved`/`page.content_updated`/`page.properties_updated`를 보내므로 추가·삭제 모두 즉시 반영됩니다.
+
+1. **GitHub 토큰**: github.com/settings/tokens → Fine-grained token → 저장소 `ursonice/ursonice.github.io`, 권한 **Contents: Read and write**.
+2. **릴레이 배포**: [val.town](https://www.val.town)에서 새 HTTP val을 만들고 `scripts/notion-relay.ts` 내용을 붙여넣습니다. val의 환경변수에 `GITHUB_TOKEN`=위 토큰을 등록하고, 공개 URL(`https://<유저>-<val>.web.val.run`)을 확인합니다.
+3. **노션 웹훅 구독**: notion.so → Settings → Connections(또는 `notion.so/profile/integrations`) → `NOTION_TOKEN`을 발급한 integration → **Webhooks** 탭 → **Create a subscription** → Webhook URL에 위 val URL 입력 → 이벤트 선택(위 6종).
+4. **검증**: 노션이 릴레이로 `verification_token`을 한 번 POST합니다. val의 Logs에 찍힌 토큰을 복사해 노션 Webhooks 탭의 **Verify** 버튼에 붙여넣으면 구독이 활성화됩니다.
+
+이후 노션에서 글을 올리거나 지우면 수십 초 내 사이트에 반영됩니다. 토큰은 릴레이 호스트의 환경변수에만 두고, 저장소에는 절대 커밋하지 않습니다.
 
 ## 지원하는 노션 블록
 
