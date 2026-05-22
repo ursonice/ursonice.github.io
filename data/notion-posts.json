@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-22T12:49:41.178Z",
+  "generatedAt": "2026-05-22T12:58:45.155Z",
   "site": {
     "title": "Woojae Joo — Developer Note",
     "description": "AI, Robotics, Systems 공부 기록"
@@ -56,19 +56,6 @@
     "updated": "2026-05-22T04:45:00.000Z"
   },
   "posts": [
-    {
-      "id": "368b12c0-115c-80f6-9283-eb8853542c49",
-      "title": "123",
-      "slug": "123",
-      "category": "Robotics",
-      "tags": [],
-      "created": "2026-05-22T11:59:00.000Z",
-      "updated": "2026-05-22T11:59:00.000Z",
-      "readingTime": 1,
-      "summary": "123",
-      "sourceUrl": "https://www.notion.so/123-368b12c0115c80f69283eb8853542c49",
-      "html": "<p>123</p>"
-    },
     {
       "id": "2afb12c0-115c-805f-a2dc-c2bda949f787",
       "title": "(VLA) NaVILA 논문리뷰",
