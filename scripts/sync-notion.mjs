@@ -476,9 +476,25 @@ const fetchAbout = async (cachedAbout) => {
   const title = titleFromPage(page);
   currentPageId = pageId;
   const rendered = await renderBlocks(pageId, { pageSlug: "about" });
+
+  // Profile photo: use the About page's icon if it's an uploaded/external image.
+  let avatar = null;
+  const iconUrl =
+    page.icon?.type === "file" ? page.icon.file?.url
+    : page.icon?.type === "external" ? page.icon.external?.url
+    : null;
+  if (iconUrl) {
+    try {
+      avatar = await downloadImage(iconUrl, "about", "avatar");
+    } catch (error) {
+      console.warn(`about avatar skipped: ${error.message}`);
+    }
+  }
+
   return {
     title,
     html: rendered.html,
+    avatar,
     updated: page.last_edited_time,
   };
 };

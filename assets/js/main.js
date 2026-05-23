@@ -105,6 +105,13 @@ const renderAbout = () => {
       <p>그 전까지는 이 자리에서 디자인과 레이아웃을 미리 확인할 수 있습니다.</p>`;
   }
 
+  const avatarImg = $(".profile-card .avatar img");
+  if (avatarImg && state.about?.avatar) {
+    avatarImg.src = state.about.avatar;
+    avatarImg.alt = "Woojae Joo";
+    avatarImg.closest(".avatar")?.classList.add("has-photo");
+  }
+
   const chips = $("[data-about-topics]");
   if (chips) {
     chips.innerHTML = uniqueTopics(state.posts)

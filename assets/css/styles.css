@@ -951,6 +951,20 @@ p {
   height: 100%;
 }
 
+/* Circular profile photo (applied only when an About-page photo is present) */
+.avatar.has-photo {
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0 0 3px var(--glass-edge), var(--shadow-md);
+}
+
+.avatar.has-photo img {
+  object-fit: cover;
+  object-position: center top;
+}
+
 .profile-card .name {
   font-size: 1.15rem;
   font-weight: 650;
