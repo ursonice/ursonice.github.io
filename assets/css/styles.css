@@ -951,18 +951,17 @@ p {
   height: 100%;
 }
 
-/* Square profile photo, matched to the icon size (applied only when an About-page photo is present) */
+/* Profile photo — matched exactly to the Notion page icon (124px square, cover crop, 4px radius) */
 .avatar.has-photo {
-  width: 72px;
-  height: 72px;
-  border-radius: 16px;
+  width: 124px;
+  height: 124px;
+  border-radius: 4px;
   overflow: hidden;
-  box-shadow: var(--shadow-sm), inset 0 0 0 1px var(--glass-edge);
 }
 
 .avatar.has-photo img {
   object-fit: cover;
-  object-position: center top;
+  object-position: 50% 50%;
 }
 
 .profile-card .name {
