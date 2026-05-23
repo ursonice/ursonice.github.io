@@ -951,13 +951,13 @@ p {
   height: 100%;
 }
 
-/* Circular profile photo (applied only when an About-page photo is present) */
+/* Square profile photo, matched to the icon size (applied only when an About-page photo is present) */
 .avatar.has-photo {
-  width: 104px;
-  height: 104px;
-  border-radius: 50%;
+  width: 72px;
+  height: 72px;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 0 0 3px var(--glass-edge), var(--shadow-md);
+  box-shadow: var(--shadow-sm), inset 0 0 0 1px var(--glass-edge);
 }
 
 .avatar.has-photo img {
