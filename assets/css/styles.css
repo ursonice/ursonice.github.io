@@ -808,6 +808,10 @@ p {
 }
 
 /* "Filtering by #tag" indicator above the post grid. */
+.active-tag[hidden] {
+  display: none;
+}
+
 .active-tag {
   display: flex;
   align-items: center;
