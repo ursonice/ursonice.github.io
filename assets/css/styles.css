@@ -1343,6 +1343,11 @@ p {
 .article-side {
   position: sticky;
   top: 96px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  padding-right: 4px;
 }
 
 .article-side strong {
@@ -1640,6 +1645,8 @@ p {
     position: static;
     border-top: 1px solid var(--line);
     padding-top: 24px;
+    max-height: none;
+    overflow: visible;
   }
 }
 

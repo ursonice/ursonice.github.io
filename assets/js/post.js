@@ -92,11 +92,24 @@ const buildToc = () => {
     links.push({ id: "comments", link: clink });
   }
 
+  // Keep the active item visible inside the (scrollable) TOC, without moving the page.
+  const keepInView = (link) => {
+    const c = side.getBoundingClientRect();
+    const l = link.getBoundingClientRect();
+    const pad = 8;
+    if (l.top < c.top + pad) side.scrollTop -= c.top + pad - l.top;
+    else if (l.bottom > c.bottom - pad) side.scrollTop += l.bottom - (c.bottom - pad);
+  };
+
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
-        links.forEach(({ id, link }) => link.classList.toggle("is-active", id === entry.target.id));
+        links.forEach(({ id, link }) => {
+          const active = id === entry.target.id;
+          link.classList.toggle("is-active", active);
+          if (active) keepInView(link);
+        });
       });
     },
     { rootMargin: "-80px 0px -70% 0px" },
