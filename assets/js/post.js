@@ -111,19 +111,13 @@ const initJumpToComments = () => {
   const target = document.getElementById("comments");
   if (!btn || !target) return;
 
-  let commentsVisible = false;
   const update = () => {
-    const show = window.scrollY > 320 && !commentsVisible;
+    const commentsReached = target.getBoundingClientRect().top < window.innerHeight * 0.85;
+    const show = window.scrollY > 320 && !commentsReached;
     btn.toggleAttribute("hidden", !show);
   };
-  new IntersectionObserver(
-    (entries) => {
-      commentsVisible = entries[0].isIntersecting;
-      update();
-    },
-    { rootMargin: "0px 0px -35% 0px" },
-  ).observe(target);
   window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", update, { passive: true });
   update();
 };
 
