@@ -1141,7 +1141,7 @@ p {
   font-family: var(--font-mono);
   font-size: 0.76rem;
   letter-spacing: 0.04em;
-  color: var(--muted);
+  color: var(--ink);
 }
 
 .profile-links {
