@@ -11,7 +11,7 @@ const KAKAO_KEY = "6b60f0fffaa5128881dae4b76b0a165a";
 
 // View counts: paste your val.town counter URL (see scripts/view-counter.ts) to enable
 // the "조회 N" count on posts. Empty = disabled.
-const VIEW_COUNTER_URL = "";
+const VIEW_COUNTER_URL = "https://ursonice--635302de577811f18749ee650bb23af1.web.val.run";
 
 // Giscus (GitHub Discussions) comments. Each post maps to its own discussion via data-term = slug.
 const GISCUS = {
