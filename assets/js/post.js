@@ -353,6 +353,33 @@ const renderPostNav = (post, all) => {
   else main.appendChild(section);
 };
 
+// Series box: if this post belongs to a Notion "Series", show the ordered list of parts.
+const renderSeries = (post, all) => {
+  if (!post.series || !Array.isArray(all)) return;
+  const parts = all
+    .filter((p) => p.series === post.series)
+    .sort((a, b) => (a.seriesOrder ?? 1e9) - (b.seriesOrder ?? 1e9) || new Date(a.created) - new Date(b.created));
+  if (parts.length < 2) return;
+
+  const idx = parts.findIndex((p) => p.id === post.id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const href = (p) => `post.html?slug=${encodeURIComponent(p.slug)}`;
+  const items = parts
+    .map((p, i) => {
+      const cur = p.id === post.id;
+      const inner = `<span class="series-num">${i + 1}</span><span class="series-item-title">${esc(p.title)}</span>`;
+      return `<li class="${cur ? "is-current" : ""}">${cur ? inner : `<a href="${href(p)}">${inner}</a>`}</li>`;
+    })
+    .join("");
+
+  const box = document.createElement("details");
+  box.className = "series-box";
+  box.open = true;
+  box.innerHTML = `<summary><span class="series-label">📚 ${esc(post.series)}</span><span class="series-progress">${idx + 1} / ${parts.length}</span></summary><ol class="series-list">${items}</ol>`;
+  const content = $(".article-content");
+  if (content) content.parentNode.insertBefore(box, content);
+};
+
 const renderPost = (post) => {
   document.title = `${post.title} — Woojae Joo`;
   setMeta(post);
@@ -439,6 +466,7 @@ const init = async () => {
     const post = (data.posts || []).find((item) => (item.slug || "").normalize("NFC") === slug);
     if (post) {
       renderPost(post);
+      renderSeries(post, data.posts);
       renderPostNav(post, data.posts);
       loadGiscus(post.slug);
       initJumpToComments();

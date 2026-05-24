@@ -11,6 +11,8 @@ const TITLE_PROP = process.env.NOTION_TITLE_PROPERTY || "이름";
 const TAG_PROP = process.env.NOTION_TAG_PROPERTY || "Tag";
 const SUMMARY_PROP = process.env.NOTION_SUMMARY_PROPERTY || "Summary";
 const SLUG_PROP = process.env.NOTION_SLUG_PROPERTY || "Slug";
+const SERIES_PROP = process.env.NOTION_SERIES_PROPERTY || "Series";
+const SERIES_ORDER_PROP = process.env.NOTION_SERIES_ORDER_PROPERTY || "SeriesOrder";
 const STATUS_PROP = process.env.NOTION_STATUS_PROPERTY || "";
 const PUBLISHED_STATUS = process.env.NOTION_PUBLISHED_STATUS || "Published";
 const ABOUT_PAGE_ID = process.env.NOTION_ABOUT_PAGE_ID || "";
@@ -114,6 +116,21 @@ const slugFromPage = (page, title) => {
     if (value) return slugify(value);
   }
   return slugify(title || page.id);
+};
+
+// Series grouping: read an optional "Series" (text/select) + "SeriesOrder" (number) property.
+const seriesFromPage = (page) => {
+  const prop = propertyValue(page.properties, SERIES_PROP);
+  if (!prop) return null;
+  if (prop.type === "select") return prop.select?.name || null;
+  if (prop.type === "multi_select") return prop.multi_select?.[0]?.name || null;
+  if (prop.type === "rich_text") return textFromRich(prop.rich_text).trim() || null;
+  return null;
+};
+
+const seriesOrderFromPage = (page) => {
+  const prop = propertyValue(page.properties, SERIES_ORDER_PROP);
+  return prop?.type === "number" && typeof prop.number === "number" ? prop.number : null;
 };
 
 const isPublished = (page) => {
@@ -441,6 +458,7 @@ const queryDataSource = async (source, cache) => {
         const category = source.name || textFromRich(sourceMeta.title || []) || "Notes";
         const summary = summaryFromPage(page, rendered.plainText);
 
+        const series = seriesFromPage(page);
         posts.push({
           id: page.id,
           title,
@@ -453,6 +471,7 @@ const queryDataSource = async (source, cache) => {
           summary,
           sourceUrl: page.url,
           html: rendered.html,
+          ...(series ? { series, seriesOrder: seriesOrderFromPage(page) } : {}),
         });
       } catch (error) {
         console.warn(`page skipped (${page.id}): ${error.message}`);
