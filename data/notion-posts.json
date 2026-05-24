@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-24T09:40:08.105Z",
+  "generatedAt": "2026-05-24T09:41:15.225Z",
   "site": {
     "title": "Woojae Joo — Developer Note",
     "description": "AI, Robotics, Systems 공부 기록"
@@ -69,7 +69,7 @@
       "category": "AI/ Deep Learning",
       "tags": [],
       "created": "2026-05-20T13:37:00.000Z",
-      "updated": "2026-05-24T09:39:00.000Z",
+      "updated": "2026-05-24T09:40:00.000Z",
       "readingTime": 19,
       "summary": "서론 목차 1) Teacher Model Training 시뮬레이션 환경에서 산업환경 물체(장애물)의 실제 경계보다 확장된 privileged collision mesh를 정의하고, 이에 대해 2D LiDAR raycasting을 수행하여 얻은 거리 정보와 로봇의 자기 상태 정보를 입력으로 teacher",
       "sourceUrl": "https://www.notion.so/Learning-Vision-Based-Omnidirectional-Navigation-A-Teacher-Student-Approach-Using-Monocular-Depth-E-366b12c0115c800db636caec12f58f18",
