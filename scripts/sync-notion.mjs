@@ -42,17 +42,51 @@ const notion = async (path, init = {}) => {
   return response.json();
 };
 
+// Auto-discover every database/data source the integration can access via Notion search,
+// so a DB newly created (and shared with the integration) shows up without editing config.
+// Fail-soft: any error here just falls back to the explicitly-configured sources.
+const discoverSources = async () => {
+  const found = [];
+  let cursor;
+  try {
+    do {
+      const res = await notion("/search", {
+        method: "POST",
+        body: JSON.stringify({ page_size: 100, ...(cursor ? { start_cursor: cursor } : {}) }),
+      });
+      for (const item of res.results || []) {
+        if (item.object === "data_source") {
+          found.push({ dataSourceId: item.id, name: textFromRich(item.title || []) });
+        } else if (item.object === "database") {
+          for (const ds of item.data_sources || []) {
+            found.push({ dataSourceId: ds.id, name: ds.name || textFromRich(item.title || []) });
+          }
+        }
+      }
+      cursor = res.has_more ? res.next_cursor : null;
+    } while (cursor);
+  } catch (error) {
+    console.warn(`source auto-discovery skipped: ${error.message}`);
+  }
+  return found;
+};
+
 const readSources = async () => {
   const fromEnv = (process.env.NOTION_DATA_SOURCE_IDS || "")
     .split(",")
     .map((id) => id.trim())
     .filter(Boolean)
     .map((dataSourceId) => ({ dataSourceId }));
-
-  if (fromEnv.length) return fromEnv;
-
   const config = await readConfig();
-  return config.sources || [];
+  const configured = fromEnv.length ? fromEnv : config.sources || [];
+
+  // Union of configured + auto-discovered (dedup by id; an explicit config name wins).
+  const byId = new Map();
+  for (const s of configured) if (s.dataSourceId) byId.set(s.dataSourceId, s);
+  for (const s of await discoverSources()) {
+    if (s.dataSourceId && !byId.has(s.dataSourceId)) byId.set(s.dataSourceId, s);
+  }
+  return [...byId.values()];
 };
 
 let configCache;

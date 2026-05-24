@@ -1429,14 +1429,14 @@ p {
   margin: 48px 0 16px;
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: 1.7rem;
+  font-size: 1.6em; /* em → scales with the reading font-size control */
   color: var(--ink);
   scroll-margin-top: 90px;
 }
 
 .article-content h3 {
   margin: 36px 0 12px;
-  font-size: 1.28rem;
+  font-size: 1.2em; /* em → scales with the reading font-size control */
   font-weight: 650;
   color: var(--ink);
   scroll-margin-top: 90px;
