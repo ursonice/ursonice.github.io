@@ -294,6 +294,7 @@ const init = async () => {
     state.posts = sortedByCreated(data.posts || []);
     state.about = data.about || null;
     state.profile = data.profile || null;
+    window.__POSTS__ = state.posts; // shared with the ⌘K palette
   } catch (error) {
     console.warn("Failed to load Notion data", error);
   }

@@ -618,6 +618,7 @@ const init = async () => {
     const response = await fetch(DATA_URL, { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
+    window.__POSTS__ = data.posts || []; // shared with the ⌘K palette
     const p = data.profile;
     if (p) {
       if (p.github) document.querySelectorAll('[data-profile-link="github"]').forEach((a) => (a.href = p.github));
