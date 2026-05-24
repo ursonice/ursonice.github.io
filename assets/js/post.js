@@ -1,6 +1,6 @@
 const DATA_URL = "data/notion-posts.json";
 // Notion-backed comments API (val.town). Empty = comments disabled.
-const COMMENTS_API = "__COMMENTS_API__";
+const COMMENTS_API = "https://ursonice--923e1e4a572211f196ffee650bb23af1.web.val.run";
 const $ = (selector, scope = document) => scope.querySelector(selector);
 
 const setupComments = (postId) => {
