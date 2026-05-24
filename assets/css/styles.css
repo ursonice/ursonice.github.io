@@ -1217,11 +1217,9 @@ p {
 
 .share-label {
   margin-right: 4px;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--faint);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--muted);
 }
 
 .share-btn[hidden] {
@@ -1261,6 +1259,37 @@ p {
 .share-btn.share-kakao:hover {
   background: #fdd835;
   border-color: #fdd835;
+  color: #191600;
+}
+
+/* X (Twitter) — black brand pill */
+.share-btn.share-x {
+  background: #000;
+  border-color: #000;
+  color: #fff;
+}
+
+.share-btn.share-x:hover {
+  background: #222;
+  border-color: #222;
+  color: #fff;
+}
+
+[data-theme="dark"] .share-btn.share-x {
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+/* LinkedIn — brand blue pill */
+.share-btn.share-li {
+  background: #0a66c2;
+  border-color: #0a66c2;
+  color: #fff;
+}
+
+.share-btn.share-li:hover {
+  background: #00568f;
+  border-color: #00568f;
+  color: #fff;
 }
 
 .article-content {

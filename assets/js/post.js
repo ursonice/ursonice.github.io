@@ -525,8 +525,8 @@ const renderPost = (post) => {
     <div class="share-bar" data-share>
       <span class="share-label">Share</span>
       <button type="button" class="share-btn" data-share-copy>Copy</button>
-      <a class="share-btn" data-share-x target="_blank" rel="noopener">X</a>
-      <a class="share-btn" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
       <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
     </div>`;
   buildToc();
