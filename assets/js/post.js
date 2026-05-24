@@ -1,5 +1,78 @@
 const DATA_URL = "data/notion-posts.json";
+// Notion-backed comments API (val.town). Empty = comments disabled.
+const COMMENTS_API = "__COMMENTS_API__";
 const $ = (selector, scope = document) => scope.querySelector(selector);
+
+const setupComments = (postId) => {
+  const section = $("[data-comments]");
+  if (!section || !postId || !COMMENTS_API || COMMENTS_API.startsWith("__")) return;
+  section.hidden = false;
+
+  const list = $("[data-comment-list]", section);
+  const countEl = $("[data-comments-count]", section);
+  const form = $("[data-comment-form]", section);
+  const statusEl = $("[data-comment-status]", section);
+
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const fmt = (iso) => {
+    try { return new Intl.DateTimeFormat("ko-KR", { dateStyle: "medium", timeStyle: "short" }).format(new Date(iso)); }
+    catch { return ""; }
+  };
+
+  const load = async () => {
+    try {
+      const res = await fetch(`${COMMENTS_API}?postId=${encodeURIComponent(postId)}`);
+      const data = await res.json();
+      const comments = (data.comments || []).sort((a, b) => new Date(a.created) - new Date(b.created));
+      countEl.textContent = comments.length ? `(${comments.length})` : "";
+      list.innerHTML = comments.length
+        ? comments.map((c) => `
+          <li class="comment">
+            <div class="comment-head">
+              <span class="comment-name">${esc(c.name)}</span>
+              <span class="comment-date">${fmt(c.created)}</span>
+            </div>
+            <div class="comment-body">${esc(c.body).replace(/\n/g, "<br>")}</div>
+          </li>`).join("")
+        : `<li class="comment-empty">첫 댓글을 남겨보세요.</li>`;
+    } catch {
+      list.innerHTML = `<li class="comment-empty">댓글을 불러오지 못했습니다.</li>`;
+    }
+  };
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const fd = new FormData(form);
+    const body = String(fd.get("body") || "").trim();
+    if (!body) return;
+    const button = form.querySelector("button");
+    button.disabled = true;
+    statusEl.textContent = "등록 중…";
+    try {
+      const res = await fetch(COMMENTS_API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          postId,
+          name: String(fd.get("name") || "").trim(),
+          body,
+          website: String(fd.get("website") || ""),
+        }),
+      });
+      if (!res.ok) throw new Error("post failed");
+      form.reset();
+      statusEl.textContent = "등록되었습니다.";
+      await load();
+      setTimeout(() => { statusEl.textContent = ""; }, 2500);
+    } catch {
+      statusEl.textContent = "등록 실패. 잠시 후 다시 시도해주세요.";
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  load();
+};
 
 const formatDate = (value) => {
   if (!value) return "";
@@ -166,7 +239,12 @@ const init = async () => {
       if (p.email) document.querySelectorAll('[data-profile-link="email"]').forEach((a) => (a.href = `mailto:${p.email}`));
     }
     const post = (data.posts || []).find((item) => item.slug === slug);
-    post ? renderPost(post) : renderMissing();
+    if (post) {
+      renderPost(post);
+      setupComments(post.id);
+    } else {
+      renderMissing();
+    }
   } catch (error) {
     console.warn("Failed to load post", error);
     renderMissing();

@@ -51,6 +51,20 @@
       <aside class="article-side" data-article-side hidden></aside>
     </main>
 
+    <section class="comments shell" id="comments" data-comments hidden aria-labelledby="comments-title">
+      <h2 class="comments-title" id="comments-title">댓글 <span data-comments-count></span></h2>
+      <ol class="comment-list" data-comment-list></ol>
+      <form class="comment-form" data-comment-form novalidate>
+        <input class="comment-name-input" type="text" name="name" placeholder="이름 (선택)" maxlength="40" autocomplete="name" />
+        <input class="comment-hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <textarea name="body" placeholder="댓글을 남겨보세요…" maxlength="2000" rows="3" required></textarea>
+        <div class="comment-form-row">
+          <span class="comment-status" data-comment-status role="status"></span>
+          <button class="button" type="submit">등록</button>
+        </div>
+      </form>
+    </section>
+
     <script src="assets/js/post.js" type="module"></script>
   </body>
 </html>
