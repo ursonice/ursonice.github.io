@@ -539,6 +539,40 @@ const renderPost = (post) => {
   typesetMath();
 };
 
+// Absolute, NFC-normalized URL for a stored asset path (works from nested /posts/<slug>/ URLs).
+const absAsset = (src) => {
+  if (!src) return "";
+  const s = src.normalize("NFC");
+  return /^https?:/i.test(s) ? s : `/${s.replace(/^\/+/, "")}`;
+};
+
+// Author box at the end of the article (avatar + name + bio + profile links).
+const renderAuthorBox = (about, profile) => {
+  const article = $("[data-article]");
+  if (!article) return;
+  const shareBar = article.querySelector(".share-bar");
+  const avatar = absAsset(about?.avatar);
+  const p = profile || {};
+  const links = [
+    p.github ? `<a href="${p.github}" target="_blank" rel="noopener">GitHub</a>` : "",
+    p.linkedin ? `<a href="${p.linkedin}" target="_blank" rel="noopener">LinkedIn</a>` : "",
+    p.email ? `<a href="mailto:${p.email}">Email</a>` : "",
+  ]
+    .filter(Boolean)
+    .join("");
+  const box = document.createElement("div");
+  box.className = "author-box";
+  box.innerHTML = `
+    ${avatar ? `<img class="author-avatar" src="${avatar}" alt="Woojae Joo" loading="lazy" />` : ""}
+    <div class="author-info">
+      <strong class="author-name">Woojae Joo</strong>
+      <p class="author-bio">AI · Robotics · Systems를 공부하고 기록합니다.</p>
+      ${links ? `<div class="author-links">${links}</div>` : ""}
+    </div>`;
+  if (shareBar) article.insertBefore(box, shareBar);
+  else article.appendChild(box);
+};
+
 const renderMissing = () => {
   $("[data-article]").innerHTML = `
     <a class="back-link" href="/#posts">← 글 목록</a>
@@ -593,6 +627,7 @@ const init = async () => {
     const post = (data.posts || []).find((item) => (item.slug || "").normalize("NFC") === slug);
     if (post) {
       renderPost(post);
+      renderAuthorBox(data.about, data.profile);
       renderSeries(post, data.posts);
       renderPostNav(post, data.posts);
       loadGiscus(post.slug);

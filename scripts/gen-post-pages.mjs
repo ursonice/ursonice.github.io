@@ -47,6 +47,18 @@ const head = (post, slug, url) => {
   const card = img === DEFAULT_IMG ? "summary" : "summary_large_image";
   const published = post.created ? new Date(post.created).toISOString() : "";
   const modified = post.updated ? new Date(post.updated).toISOString() : published;
+  const ld = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title || "Woojae Joo",
+    description: (post.summary || "AI, Robotics, Systems 공부 기록").slice(0, 200),
+    image: img,
+    ...(published ? { datePublished: published } : {}),
+    ...(modified ? { dateModified: modified } : {}),
+    author: { "@type": "Person", name: "Woojae Joo", url: "https://github.com/ursonice" },
+    publisher: { "@type": "Person", name: "Woojae Joo" },
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+  }).replace(/</g, "\\u003c");
   return `<!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -83,6 +95,8 @@ const head = (post, slug, url) => {
     <meta name="twitter:title" content="${title}" />
     <meta name="twitter:description" content="${desc}" />
     <meta name="twitter:image" content="${esc(img)}" />
+
+    <script type="application/ld+json">${ld}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
