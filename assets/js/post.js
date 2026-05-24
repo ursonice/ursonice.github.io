@@ -92,13 +92,15 @@ const buildToc = () => {
     links.push({ id: "comments", link: clink });
   }
 
-  // Keep the active item visible inside the (scrollable) TOC, without moving the page.
+  // Keep the active item centered inside the (scrollable) TOC, without moving the page.
   const keepInView = (link) => {
+    if (side.scrollHeight <= side.clientHeight + 1) return; // TOC fits; nothing to scroll
     const c = side.getBoundingClientRect();
     const l = link.getBoundingClientRect();
-    const pad = 8;
-    if (l.top < c.top + pad) side.scrollTop -= c.top + pad - l.top;
-    else if (l.bottom > c.bottom - pad) side.scrollTop += l.bottom - (c.bottom - pad);
+    // How far the link's center is from the TOC's visible center → scroll the TOC by that much.
+    const delta = l.top + l.height / 2 - (c.top + side.clientHeight / 2);
+    if (Math.abs(delta) < 6) return; // already ~centered; avoid micro-jitter
+    side.scrollTo({ top: side.scrollTop + delta, behavior: "smooth" });
   };
 
   const observer = new IntersectionObserver(
