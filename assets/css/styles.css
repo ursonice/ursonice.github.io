@@ -1236,14 +1236,6 @@ p {
   border: 1px solid color-mix(in srgb, var(--accent) 60%, transparent);
   border-radius: 14px;
   background: transparent;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
-}
-
-.author-box:hover {
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 6%, transparent);
-  box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 16%, transparent);
-  transform: translateY(-2px);
 }
 
 .author-avatar {
