@@ -386,7 +386,8 @@ const renderPostNav = (post, all) => {
   const section = document.createElement("section");
   section.className = "post-nav";
   section.innerHTML = relatedHtml + prevNext;
-  if (comments) main.insertBefore(section, comments);
+  // Comments first, then post recommendations below them.
+  if (comments && comments.parentNode === main) comments.after(section);
   else main.appendChild(section);
 };
 
