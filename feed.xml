@@ -6,7 +6,7 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 24 May 2026 14:25:08 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 24 May 2026 14:27:05 GMT</lastBuildDate>
     <item>
       <title>Learning Vision-Based Omnidirectional Navigation: A Teacher-Student Approach Using Monocular Depth Estimation 논문리뷰</title>
       <link>https://ursonice.github.io/posts/learning-vision-based-omnidirectional-navigation-a-teacher-student-approach-usin/</link>
@@ -200,28 +200,12 @@
       <description>서론 Vitjan Zavrtanik, Matej Kristan, Danijel Skočaj; Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2021, pp. 1-10. DRÆM – A Discrim</description>
     </item>
     <item>
-      <title>ONNX-Runtime에서 Custom Operator 구현 Study</title>
-      <link>https://ursonice.github.io/posts/onnx-runtime%EC%97%90%EC%84%9C-custom-operator-%EA%B5%AC%ED%98%84-study/</link>
-      <guid isPermaLink="false">6f19fddf-1ede-476c-b3e2-16bf8a8ec15b</guid>
-      <pubDate>Tue, 30 May 2023 23:42:00 GMT</pubDate>
-      <category>ONNX-MLIR</category>
-      <description>서론 이 장은 ORT(ONNX-Runtime)에서 Custom Operator를 구현하는 방법에 대해 study한것을 설명한다. ONNX Operation은 하나 이상의 커널을 갖는다. 각 커널은 연산이 어떻게 실행되는지를 정의하며 커널은 특정 하드웨어에 대해 최적화되어 있다. 따라서 ORT가 다양한 하</description>
-    </item>
-    <item>
       <title>Raspberry PI에서 Ubuntu Setting부터 Coral TPU를 사용해 MobileNetV2 Inference 해보기</title>
       <link>https://ursonice.github.io/posts/raspberry-pi%EC%97%90%EC%84%9C-ubuntu-setting%EB%B6%80%ED%84%B0-coral-tpu%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%B4-mobilenetv2-inference-%E1%84%92/</link>
       <guid isPermaLink="false">6ce7ed92-14ce-4cce-855c-2d969e51f267</guid>
       <pubDate>Sat, 12 Nov 2022 06:23:00 GMT</pubDate>
       <category>Application</category>
       <description>서론 이 장에서는 Raspberry PI에서 MobileNetV2를 Coral Edge TPU를 사용해 inference하는 방법과 필요한 환경셋팅 대해서 설명한다. 목차 1. Requirements 2. Install Ubuntu 방법1. 라즈베리파이에서 제공하는 GUI툴을 이용해 설치 방법2. Ser</description>
-    </item>
-    <item>
-      <title>ONNX-MLIR 다뤄보기(MobileNetV2-12)</title>
-      <link>https://ursonice.github.io/posts/onnx-mlir-%EB%8B%A4%EB%A4%84%EB%B3%B4%EA%B8%B0-mobilenetv2-12/</link>
-      <guid isPermaLink="false">392835f5-a06f-4c04-b1e8-d07d56e9d112</guid>
-      <pubDate>Mon, 05 Dec 2022 05:18:00 GMT</pubDate>
-      <category>ONNX-MLIR</category>
-      <description>서론 이 장은 ONNX-MLIR로 모델을 컴파일 하는 방법에 대해 소개한다. Docker를 사용하거나 직접 설치해서 사용할 수 있다.(직접설치하는 방법 바로가기) 그리고 기존 onnx모델을 shared library형태에로 컴파일 한 후, Inference를 진행해본다. (환경) AMD64 Archite</description>
     </item>
     <item>
       <title>GLASS 논문리뷰</title>
@@ -246,6 +230,22 @@
       <pubDate>Sat, 28 Jun 2025 12:38:00 GMT</pubDate>
       <category>Kubernetes</category>
       <description>서론 쿠버네티스에서 multi container 파드를 구성할 때 두 가지 패턴(종류)가 있다. 하나는 Sidecar container와 co-located container이다. 두 컨테이너는 같은 파드 안에 존재하지만 역할과 생명주기 동작방식에서 차이가 있다. 이 두 종류에 대해서 알아보자 Sidec</description>
+    </item>
+    <item>
+      <title>[Kubernetes] Backup and Restore</title>
+      <link>https://ursonice.github.io/posts/kubernetes-backup-and-restore/</link>
+      <guid isPermaLink="false">22fb12c0-115c-80df-b59c-e89c990a385d</guid>
+      <pubDate>Sun, 13 Jul 2025 08:34:00 GMT</pubDate>
+      <category>Kubernetes</category>
+      <description>서론 Kubernetes 클러스터를 안정적으로 운영하기 위해서는 정기적인 백업과 복원이 필요하다. 이 장에서는 Kubernetes 리소스를 백업하고 복원하는 두 가지 주요 방법에 대해 알아보자. 첫 번째는 Kube API 서버를 통해 리소스 정의를 백업하는 방식이고 두 번째는 etcd 데이터베이스 자체를</description>
+    </item>
+    <item>
+      <title>[Kubernetes] Cluster Upgrade</title>
+      <link>https://ursonice.github.io/posts/kubernetes-cluster-upgrade/</link>
+      <guid isPermaLink="false">225b12c0-115c-800c-8e18-e14b94d2e931</guid>
+      <pubDate>Thu, 03 Jul 2025 15:13:00 GMT</pubDate>
+      <category>Kubernetes</category>
+      <description>서론 Kubernetes는 최근 3개의 버전만을 공식 지원하기 때문에, 정기적인 업그레이드가 필요하다. 예를 들어 최신 버전이 1.13일 경우, 지원 대상은 1.13, 1.12, 1.11이며 1.10은 지원되지 않는다. 따라서 최신 버전(1.13)이 release되기 전에 1.10을 사용하고 있다면 1.</description>
     </item>
   </channel>
 </rss>

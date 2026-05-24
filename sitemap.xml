@@ -25,9 +25,7 @@
   <url><loc>https://ursonice.github.io/posts/gradient/</loc><lastmod>2025-08-11</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/towards-total-recall-in-industrial-anomaly-detection-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2025-07-20</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/</loc><lastmod>2025-07-20</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/onnx-runtime%EC%97%90%EC%84%9C-custom-operator-%EA%B5%AC%ED%98%84-study/</loc><lastmod>2025-07-20</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/raspberry-pi%EC%97%90%EC%84%9C-ubuntu-setting%EB%B6%80%ED%84%B0-coral-tpu%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%B4-mobilenetv2-inference-%E1%84%92/</loc><lastmod>2025-07-20</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/onnx-mlir-%EB%8B%A4%EB%A4%84%EB%B3%B4%EA%B8%B0-mobilenetv2-12/</loc><lastmod>2025-07-19</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/glass-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2025-07-19</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/kubernetes-taint-toleration/</loc><lastmod>2025-07-14</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/kubernetes-multi-container-pods/</loc><lastmod>2025-07-13</lastmod></url>
@@ -141,10 +139,6 @@
   <url><loc>https://ursonice.github.io/posts/mobilenetv2-%EC%BD%94%EB%93%9C%EB%A6%AC%EB%B7%B0/</loc><lastmod>2023-06-16</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/clip-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2023-06-16</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/stride-pooling-%EC%9E%A5-%EB%8B%A8%EC%A0%90/</loc><lastmod>2023-06-15</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/onnx-mlir-%EC%84%A4%EC%B9%98-%EA%B0%80%EC%9D%B4%EB%93%9C/</loc><lastmod>2023-06-14</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/emit-c/</loc><lastmod>2023-06-14</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/mlir-inference-code/</loc><lastmod>2023-06-14</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/onnx-mlir-flow/</loc><lastmod>2023-06-14</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/c-%EA%B0%80%EC%83%81%ED%95%A8%EC%88%98-virtual-function/</loc><lastmod>2023-06-14</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/cmake-%EC%82%AC%EC%9A%A9%EA%B0%80%EC%9D%B4%EB%93%9C/</loc><lastmod>2023-06-14</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/make-%EC%82%AC%EC%9A%A9-%EA%B0%80%EC%9D%B4%EB%93%9C/</loc><lastmod>2023-06-14</lastmod></url>
