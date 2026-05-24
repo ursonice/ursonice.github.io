@@ -1,6 +1,11 @@
 const DATA_URL = "data/notion-posts.json";
 const $ = (selector, scope = document) => scope.querySelector(selector);
 
+// KakaoTalk share: paste your Kakao JavaScript app key here to enable the 카카오톡 button.
+// Get one (free) at https://developers.kakao.com → 내 애플리케이션 → 앱 키 → JavaScript 키,
+// and register https://ursonice.github.io under 플랫폼 → Web. Empty = button hidden.
+const KAKAO_KEY = "";
+
 // Giscus (GitHub Discussions) comments. Each post maps to its own discussion via data-term = slug.
 const GISCUS = {
   repo: "ursonice/ursonice.github.io",
@@ -328,7 +333,7 @@ const initBackToTop = () => {
 // Per-post SEO/social meta (works for crawlers that run JS, e.g. Google).
 const setMeta = (post) => {
   const desc = (post.summary || "AI, Robotics, Systems 공부 기록").slice(0, 200);
-  const url = `${location.origin}/post.html?slug=${encodeURIComponent(post.slug)}`;
+  const url = `${location.origin}/post.html?slug=${encodeURIComponent((post.slug || "").normalize("NFC"))}`;
   const upsert = (selector, make, attr, value) => {
     let el = document.head.querySelector(selector);
     if (!el) { el = make(); document.head.appendChild(el); }
@@ -339,6 +344,69 @@ const setMeta = (post) => {
   upsert('meta[property="og:description"]', () => { const m = document.createElement("meta"); m.setAttribute("property", "og:description"); return m; }, "content", desc);
   upsert('meta[property="og:url"]', () => { const m = document.createElement("meta"); m.setAttribute("property", "og:url"); return m; }, "content", url);
   upsert('link[rel="canonical"]', () => { const l = document.createElement("link"); l.rel = "canonical"; return l; }, "href", url);
+};
+
+// First image in the post body, as an absolute URL (used for the KakaoTalk share thumbnail).
+const firstImage = (post) => {
+  const m = (post.html || "").match(/<img[^>]+src=["']([^"']+)["']/i);
+  if (!m) return `${location.origin}/assets/images/favicon.svg`;
+  let src = m[1];
+  if (/^https?:/i.test(src)) return src;
+  if (src.startsWith("/")) return location.origin + src;
+  return `${location.origin}/${src.replace(/^\.?\//, "")}`;
+};
+
+// Share bar: copy link, X, LinkedIn (URL-based) + optional KakaoTalk (needs KAKAO_KEY).
+const initShare = (post) => {
+  const bar = $("[data-share]");
+  if (!bar) return;
+  const url = `${location.origin}/post.html?slug=${encodeURIComponent((post.slug || "").normalize("NFC"))}`;
+  const title = post.title || "Woojae Joo";
+
+  const x = bar.querySelector("[data-share-x]");
+  if (x) x.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
+  const li = bar.querySelector("[data-share-li]");
+  if (li) li.href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+
+  const copy = bar.querySelector("[data-share-copy]");
+  if (copy)
+    copy.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(url);
+        copy.textContent = "복사됨!";
+      } catch {
+        copy.textContent = "복사 실패";
+      }
+      setTimeout(() => (copy.textContent = "링크 복사"), 1500);
+    });
+
+  initKakaoShare(bar, { url, title, desc: (post.summary || "").slice(0, 100), image: firstImage(post) });
+};
+
+const initKakaoShare = (bar, payload) => {
+  const btn = bar.querySelector("[data-share-kakao]");
+  if (!btn || !KAKAO_KEY) return; // no key → button stays hidden
+  const ready = () => {
+    if (!window.Kakao) return;
+    if (!window.Kakao.isInitialized()) window.Kakao.init(KAKAO_KEY);
+    btn.hidden = false;
+    btn.addEventListener("click", () => {
+      window.Kakao.Share.sendDefault({
+        objectType: "feed",
+        content: {
+          title: payload.title,
+          description: payload.desc,
+          imageUrl: payload.image,
+          link: { mobileWebUrl: payload.url, webUrl: payload.url },
+        },
+      });
+    });
+  };
+  if (window.Kakao) return ready();
+  const s = document.createElement("script");
+  s.src = "https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js";
+  s.onload = ready;
+  document.head.appendChild(s);
 };
 
 // Related posts (same category/tags) + previous/next navigation at the end of a post.
@@ -440,12 +508,23 @@ const renderPost = (post) => {
     <p class="eyebrow">${post.category || "Note"}</p>
     <h1>${post.title}</h1>
     <div class="article-meta">
-      ${(post.tags || []).map((tag) => `<span>${tag}</span><span class="dot"></span>`).join("")}
+      ${(post.tags || [])
+        .map((tag) => `<a class="meta-tag" href="index.html?tag=${encodeURIComponent(tag)}">#${escapeHtml(tag)}</a>`)
+        .join("")}
+      ${(post.tags || []).length ? '<span class="dot"></span>' : ""}
       ${dateMeta}
     </div>
     <hr class="article-divider" />
-    ${body}`;
+    ${body}
+    <div class="share-bar" data-share>
+      <span class="share-label">이 글 공유</span>
+      <button type="button" class="share-btn" data-share-copy>링크 복사</button>
+      <a class="share-btn" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+    </div>`;
   buildToc();
+  initShare(post);
   addHeadingAnchors();
   initMermaid();
   highlightCode();

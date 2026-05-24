@@ -5,6 +5,7 @@ const state = {
   about: null,
   profile: null,
   activeTopic: "all",
+  activeTag: null,
   query: "",
   pageSize: 12,
   visible: 12,
@@ -36,6 +37,9 @@ const formatDate = (value) => {
 
 const normalize = (value = "") => value.toString().trim().toLowerCase();
 
+const escAttr = (value = "") =>
+  value.toString().replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+
 const sortedByRecent = (posts) =>
   [...posts].sort((a, b) => new Date(b.updated || b.created) - new Date(a.updated || a.created));
 
@@ -64,12 +68,21 @@ const renderFilters = () => {
     .join("");
 };
 
+// Plain-text search haystack (title + summary + category + tags + body), computed once per post.
+const searchText = (post) => {
+  if (post._search == null) {
+    const body = (post.html || "").replace(/<[^>]+>/g, " ");
+    post._search = normalize([post.title, post.summary, post.category, ...(post.tags || []), body].join(" "));
+  }
+  return post._search;
+};
+
 const filteredPosts = () => {
   const q = normalize(state.query);
   return state.posts.filter((post) => {
     const topicMatch = state.activeTopic === "all" || post.category === state.activeTopic;
-    const target = normalize([post.title, post.summary, post.category, ...(post.tags || [])].join(" "));
-    return topicMatch && (!q || target.includes(q));
+    const tagMatch = !state.activeTag || (post.tags || []).includes(state.activeTag);
+    return topicMatch && tagMatch && (!q || searchText(post).includes(q));
   });
 };
 
@@ -88,7 +101,9 @@ const renderPosts = () => {
         <a class="post-card" href="${href}">
           <div class="post-meta">
             <span class="cat">${post.category || "Notes"}</span>
-            ${tags.map((tag) => `<span class="badge">${tag}</span>`).join("")}
+            ${tags
+              .map((tag) => `<span class="badge" data-tag="${escAttr(tag)}" role="button" tabindex="0" title="${escAttr(tag)} 태그로 필터">${tag}</span>`)
+              .join("")}
           </div>
           <h3>${post.title}</h3>
           <p>${post.summary || "노션에서 가져온 공부 기록입니다."}</p>
@@ -119,6 +134,32 @@ const renderPosts = () => {
   } else if (more) {
     more.hidden = true;
   }
+};
+
+// Indicator shown above the grid when filtering by a clicked tag.
+const renderActiveTag = () => {
+  const grid = $("[data-posts]");
+  if (!grid) return;
+  let bar = $("[data-active-tag]");
+  if (!state.activeTag) {
+    if (bar) bar.hidden = true;
+    return;
+  }
+  if (!bar) {
+    bar = document.createElement("div");
+    bar.className = "active-tag";
+    bar.setAttribute("data-active-tag", "");
+    grid.parentNode.insertBefore(bar, grid);
+  }
+  bar.hidden = false;
+  bar.innerHTML = `<span class="active-tag-label">태그</span><strong>#${escAttr(state.activeTag)}</strong><button type="button" class="active-tag-clear" data-clear-tag>✕ 해제</button>`;
+};
+
+const setActiveTag = (tag) => {
+  state.activeTag = tag || null;
+  state.visible = state.pageSize;
+  renderActiveTag();
+  renderPosts();
 };
 
 const renderTopics = () => {
@@ -190,6 +231,29 @@ const bindEvents = () => {
     renderPosts();
     $("#posts").scrollIntoView({ behavior: "smooth", block: "start" });
   });
+
+  // Clicking a tag chip on a card filters by that tag (without following the card link).
+  const grid = $("[data-posts]");
+  grid.addEventListener("click", (event) => {
+    const tagEl = event.target.closest("[data-tag]");
+    if (!tagEl) return;
+    event.preventDefault();
+    event.stopPropagation();
+    setActiveTag(tagEl.dataset.tag);
+    $("#posts").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  grid.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    const tagEl = event.target.closest("[data-tag]");
+    if (!tagEl) return;
+    event.preventDefault();
+    setActiveTag(tagEl.dataset.tag);
+    $("#posts").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  document.addEventListener("click", (event) => {
+    if (event.target.closest("[data-clear-tag]")) setActiveTag(null);
+  });
 };
 
 const applyThemeIcon = () => {
@@ -234,13 +298,19 @@ const init = async () => {
     console.warn("Failed to load Notion data", error);
   }
 
+  const tagParam = new URLSearchParams(location.search).get("tag");
+  if (tagParam) state.activeTag = tagParam;
+
   renderStats();
   renderFilters();
+  renderActiveTag();
   renderPosts();
   renderTopics();
   renderAbout();
   applyProfile();
   bindEvents();
+
+  if (state.activeTag) document.getElementById("posts")?.scrollIntoView({ block: "start" });
 };
 
 init();

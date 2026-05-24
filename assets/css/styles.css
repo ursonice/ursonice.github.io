@@ -776,6 +776,59 @@ p {
   font-weight: 600;
 }
 
+/* Clickable tag chips on cards (filter by tag without following the card link). */
+.badge[data-tag] {
+  cursor: pointer;
+  transition: background 0.16s ease, color 0.16s ease;
+}
+
+.badge[data-tag]:hover,
+.badge[data-tag]:focus-visible {
+  background: var(--accent);
+  color: #fff;
+  outline: none;
+}
+
+/* "Filtering by #tag" indicator above the post grid. */
+.active-tag {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+
+.active-tag-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.active-tag strong {
+  color: var(--ink);
+  font-weight: 650;
+}
+
+.active-tag-clear {
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 3px 11px;
+  font: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.active-tag-clear:hover {
+  color: var(--ink);
+  border-color: var(--line-strong);
+}
+
 .post-card h3 {
   font-size: 1.22rem;
   font-weight: 650;
@@ -1117,6 +1170,17 @@ p {
   background: var(--faint);
 }
 
+/* Clickable tag links in the post header meta. */
+.meta-tag {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.16s ease;
+}
+
+.meta-tag:hover {
+  color: var(--accent-ink, var(--accent));
+}
+
 .article-summary {
   margin: 28px 0 0;
   padding: 20px 24px;
@@ -1132,6 +1196,65 @@ p {
   margin: 36px 0;
   border: 0;
   border-top: 1px solid var(--line);
+}
+
+/* Share bar at the end of the article. */
+.share-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 48px;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+}
+
+.share-label {
+  margin-right: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.share-btn[hidden] {
+  display: none;
+}
+
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.share-btn:hover {
+  color: var(--ink);
+  border-color: var(--line-strong);
+  transform: translateY(-1px);
+}
+
+.share-btn.share-kakao {
+  background: #fee500;
+  border-color: #fee500;
+  color: #191600;
+}
+
+.share-btn.share-kakao:hover {
+  background: #fdd835;
+  border-color: #fdd835;
 }
 
 .article-content {
