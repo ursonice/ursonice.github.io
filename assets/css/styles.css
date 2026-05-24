@@ -787,6 +787,9 @@ p {
 }
 
 .filter-button {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   border: 1px solid var(--glass-edge);
   background: linear-gradient(
     180deg,
@@ -812,17 +815,69 @@ p {
 
 .filter-button:hover {
   color: var(--accent-ink);
-  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--accent) 18%, var(--glass-strong)),
-    color-mix(in srgb, var(--accent) 7%, var(--glass))
-  );
+  border-color: color-mix(in srgb, var(--accent) 48%, transparent);
+  background:
+    radial-gradient(125% 90% at 28% -10%, rgba(255, 255, 255, 0.6), transparent 55%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--accent) 16%, var(--glass-strong)),
+      color-mix(in srgb, var(--accent) 6%, var(--glass))
+    );
   box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.7),
-    inset 0 -2px 5px color-mix(in srgb, var(--accent) 12%, transparent),
-    0 4px 14px color-mix(in srgb, var(--accent) 22%, transparent);
-  transform: translateY(-1px);
+    inset 0 1px 1px rgba(255, 255, 255, 0.95),
+    inset 0 -3px 7px color-mix(in srgb, var(--accent) 14%, transparent),
+    0 7px 20px color-mix(in srgb, var(--accent) 26%, transparent);
+  transform: translateY(-2px) scale(1.04);
+}
+
+/* A light glint sweeps across the glass once on hover. */
+.filter-button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent,
+    rgba(255, 255, 255, 0.55),
+    transparent
+  );
+  transform: translateX(-200%) skewX(-14deg);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.filter-button:hover::after {
+  animation: chip-glint 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes chip-glint {
+  0% {
+    transform: translateX(-200%) skewX(-14deg);
+    opacity: 0;
+  }
+  18% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(320%) skewX(-14deg);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filter-button {
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  }
+  .filter-button:hover {
+    transform: none;
+  }
+  .filter-button:hover::after {
+    animation: none;
+  }
 }
 
 .filter-button[aria-pressed="true"] {
