@@ -6,10 +6,10 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 24 May 2026 09:41:15 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 24 May 2026 09:47:06 GMT</lastBuildDate>
     <item>
       <title>Learning Vision-Based Omnidirectional Navigation: A Teacher-Student Approach Using Monocular Depth Estimation 논문리뷰</title>
-      <link>https://ursonice.github.io/post.html?slug=learning-vision-based-omnidirectional-navigation-a-teacher-student-approach-usin</link>
+      <link>https://ursonice.github.io/posts/learning-vision-based-omnidirectional-navigation-a-teacher-student-approach-usin/</link>
       <guid isPermaLink="false">366b12c0-115c-800d-b636-caec12f58f18</guid>
       <pubDate>Wed, 20 May 2026 13:37:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
@@ -17,7 +17,7 @@
     </item>
     <item>
       <title>(VLA) NaVILA 논문리뷰</title>
-      <link>https://ursonice.github.io/post.html?slug=vla-navila-%E1%84%82%E1%85%A9%E1%86%AB%E1%84%86%E1%85%AE%E1%86%AB%E1%84%85%E1%85%B5%E1%84%87%E1%85%B2</link>
+      <link>https://ursonice.github.io/posts/vla-navila-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</link>
       <guid isPermaLink="false">2afb12c0-115c-805f-a2dc-c2bda949f787</guid>
       <pubDate>Tue, 18 Nov 2025 00:58:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
@@ -25,7 +25,7 @@
     </item>
     <item>
       <title>ResNet 논문리뷰</title>
-      <link>https://ursonice.github.io/post.html?slug=resnet-%E1%84%82%E1%85%A9%E1%86%AB%E1%84%86%E1%85%AE%E1%86%AB%E1%84%85%E1%85%B5%E1%84%87%E1%85%B2</link>
+      <link>https://ursonice.github.io/posts/resnet-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</link>
       <guid isPermaLink="false">d4583caf-3da1-4e11-8701-f895316a92ad</guid>
       <pubDate>Wed, 14 Jun 2023 23:17:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
@@ -33,7 +33,7 @@
     </item>
     <item>
       <title>TRPO - Trust Region Policy Optimizer</title>
-      <link>https://ursonice.github.io/post.html?slug=trpo-trust-region-policy-optimizer</link>
+      <link>https://ursonice.github.io/posts/trpo-trust-region-policy-optimizer/</link>
       <guid isPermaLink="false">35db12c0-115c-8082-9620-f701ca2b7a2f</guid>
       <pubDate>Mon, 11 May 2026 04:49:00 GMT</pubDate>
       <category>AI/ Theory</category>
@@ -41,7 +41,7 @@
     </item>
     <item>
       <title>PPO</title>
-      <link>https://ursonice.github.io/post.html?slug=ppo</link>
+      <link>https://ursonice.github.io/posts/ppo/</link>
       <guid isPermaLink="false">35db12c0-115c-80d1-8eee-c368710fb683</guid>
       <pubDate>Mon, 11 May 2026 04:04:00 GMT</pubDate>
       <category>AI/ Theory</category>
@@ -49,7 +49,7 @@
     </item>
     <item>
       <title>NAS(Neural Network Search)</title>
-      <link>https://ursonice.github.io/post.html?slug=nas-neural-network-search</link>
+      <link>https://ursonice.github.io/posts/nas-neural-network-search/</link>
       <guid isPermaLink="false">d8c14d53-56d5-4447-a6a8-d43d9aa4cbbf</guid>
       <pubDate>Sun, 11 Jun 2023 06:33:00 GMT</pubDate>
       <category>AI/ Theory</category>
@@ -57,7 +57,7 @@
     </item>
     <item>
       <title>How to do Internal Camera Calibration</title>
-      <link>https://ursonice.github.io/post.html?slug=how-to-do-internal-camera-calibration</link>
+      <link>https://ursonice.github.io/posts/how-to-do-internal-camera-calibration/</link>
       <guid isPermaLink="false">2fdb12c0-115c-80b6-a95f-fd82d92af82a</guid>
       <pubDate>Wed, 04 Feb 2026 05:23:00 GMT</pubDate>
       <category>Application</category>
@@ -65,7 +65,7 @@
     </item>
     <item>
       <title>[RL] DQN의 Action Space 한계</title>
-      <link>https://ursonice.github.io/post.html?slug=rl-dqn%E1%84%8B%E1%85%B4-action-space-%E1%84%92%E1%85%A1%E1%86%AB%E1%84%80%E1%85%A8</link>
+      <link>https://ursonice.github.io/posts/rl-dqn%EC%9D%98-action-space-%ED%95%9C%EA%B3%84/</link>
       <guid isPermaLink="false">345b12c0-115c-80ad-a4a1-eb9961bbd163</guid>
       <pubDate>Fri, 17 Apr 2026 01:38:00 GMT</pubDate>
       <category>AI/ Theory</category>
@@ -73,7 +73,7 @@
     </item>
     <item>
       <title>Likelihood(MLE)</title>
-      <link>https://ursonice.github.io/post.html?slug=likelihood-mle</link>
+      <link>https://ursonice.github.io/posts/likelihood-mle/</link>
       <guid isPermaLink="false">38883001-3d8c-451a-a56f-f475f9d69d26</guid>
       <pubDate>Wed, 14 Jun 2023 02:07:00 GMT</pubDate>
       <category>AI/ Theory</category>
@@ -81,7 +81,7 @@
     </item>
     <item>
       <title>[01] C++ 기초</title>
-      <link>https://ursonice.github.io/post.html?slug=01-c-%E1%84%80%E1%85%B5%E1%84%8E%E1%85%A9</link>
+      <link>https://ursonice.github.io/posts/01-c-%EA%B8%B0%EC%B4%88/</link>
       <guid isPermaLink="false">327b12c0-115c-8054-943c-eb189c200cf8</guid>
       <pubDate>Wed, 18 Mar 2026 10:16:00 GMT</pubDate>
       <category>C/ C++</category>
@@ -89,7 +89,7 @@
     </item>
     <item>
       <title>Raspi Segmentation</title>
-      <link>https://ursonice.github.io/post.html?slug=raspi-segmentation</link>
+      <link>https://ursonice.github.io/posts/raspi-segmentation/</link>
       <guid isPermaLink="false">2fcb12c0-115c-802f-9543-cb4345effb6b</guid>
       <pubDate>Tue, 03 Feb 2026 09:40:00 GMT</pubDate>
       <category>Application</category>
@@ -97,7 +97,7 @@
     </item>
     <item>
       <title>Reinforcement Learning 1차시</title>
-      <link>https://ursonice.github.io/post.html?slug=reinforcement-learning-1%E1%84%8E%E1%85%A1%E1%84%89%E1%85%B5</link>
+      <link>https://ursonice.github.io/posts/reinforcement-learning-1%EC%B0%A8%EC%8B%9C/</link>
       <guid isPermaLink="false">2edb12c0-115c-80ef-babc-d7b8ed3e3b94</guid>
       <pubDate>Mon, 19 Jan 2026 06:08:00 GMT</pubDate>
       <category>AI/ Theory</category>
@@ -105,7 +105,7 @@
     </item>
     <item>
       <title>Docker에 VNC 설치</title>
-      <link>https://ursonice.github.io/post.html?slug=docker%E1%84%8B%E1%85%A6-vnc-%E1%84%89%E1%85%A5%E1%86%AF%E1%84%8E%E1%85%B5</link>
+      <link>https://ursonice.github.io/posts/docker%EC%97%90-vnc-%EC%84%A4%EC%B9%98/</link>
       <guid isPermaLink="false">2edb12c0-115c-805d-aa36-ccceca42b396</guid>
       <pubDate>Mon, 19 Jan 2026 05:19:00 GMT</pubDate>
       <category>Tools</category>
@@ -113,7 +113,7 @@
     </item>
     <item>
       <title>Manifold 개념</title>
-      <link>https://ursonice.github.io/post.html?slug=manifold-%E1%84%80%E1%85%A2%E1%84%82%E1%85%A7%E1%86%B7</link>
+      <link>https://ursonice.github.io/posts/manifold-%EA%B0%9C%EB%85%90/</link>
       <guid isPermaLink="false">7c984a89-c8d3-4b5d-aff7-f782c8101731</guid>
       <pubDate>Sun, 11 Jun 2023 05:05:00 GMT</pubDate>
       <category>AI/ Theory</category>
@@ -121,7 +121,7 @@
     </item>
     <item>
       <title>Isaacsim 5.1 Manual</title>
-      <link>https://ursonice.github.io/post.html?slug=isaacsim-5-1-manual</link>
+      <link>https://ursonice.github.io/posts/isaacsim-5-1-manual/</link>
       <guid isPermaLink="false">2e0b12c0-115c-80de-9d96-d8ecca8af5d5</guid>
       <pubDate>Tue, 06 Jan 2026 10:30:00 GMT</pubDate>
       <category>Robotics</category>
@@ -129,7 +129,7 @@
     </item>
     <item>
       <title>Unitree Go1</title>
-      <link>https://ursonice.github.io/post.html?slug=unitree-go1</link>
+      <link>https://ursonice.github.io/posts/unitree-go1/</link>
       <guid isPermaLink="false">2a7b12c0-115c-806b-9f33-dc35eef5de3e</guid>
       <pubDate>Mon, 10 Nov 2025 05:43:00 GMT</pubDate>
       <category>Robotics</category>
@@ -137,7 +137,7 @@
     </item>
     <item>
       <title>RT-2(Robotics Transformer-2) 논문리뷰</title>
-      <link>https://ursonice.github.io/post.html?slug=rt-2-robotics-transformer-2-%E1%84%82%E1%85%A9%E1%86%AB%E1%84%86%E1%85%AE%E1%86%AB%E1%84%85%E1%85%B5%E1%84%87%E1%85%B2</link>
+      <link>https://ursonice.github.io/posts/rt-2-robotics-transformer-2-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</link>
       <guid isPermaLink="false">28bb12c0-115c-80b1-aa9a-fb839ddfc10d</guid>
       <pubDate>Mon, 13 Oct 2025 10:56:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
@@ -145,7 +145,7 @@
     </item>
     <item>
       <title>DiffusionAD: Norm-guided One-step Denoising Diffusion for Anomaly Detection 논문리뷰</title>
-      <link>https://ursonice.github.io/post.html?slug=diffusionad-norm-guided-one-step-denoising-diffusion-for-anomaly-detection-%E1%84%82%E1%85%A9%E1%86%AB%E1%84%86%E1%85%AE</link>
+      <link>https://ursonice.github.io/posts/diffusionad-norm-guided-one-step-denoising-diffusion-for-anomaly-detection-%EB%85%BC%EB%AC%B4/</link>
       <guid isPermaLink="false">2faa86ea-5304-4f76-8da3-2b8e7b91ede5</guid>
       <pubDate>Sat, 10 Aug 2024 08:48:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
@@ -153,7 +153,7 @@
     </item>
     <item>
       <title>RT-1(Robotics Transformer-1) 논문리뷰 </title>
-      <link>https://ursonice.github.io/post.html?slug=rt-1-robotics-transformer-1-%E1%84%82%E1%85%A9%E1%86%AB%E1%84%86%E1%85%AE%E1%86%AB%E1%84%85%E1%85%B5%E1%84%87%E1%85%B2</link>
+      <link>https://ursonice.github.io/posts/rt-1-robotics-transformer-1-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</link>
       <guid isPermaLink="false">285b12c0-115c-8076-871f-f701199189cb</guid>
       <pubDate>Tue, 07 Oct 2025 09:18:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
@@ -161,7 +161,7 @@
     </item>
     <item>
       <title>ViT 논문리뷰</title>
-      <link>https://ursonice.github.io/post.html?slug=vit-%E1%84%82%E1%85%A9%E1%86%AB%E1%84%86%E1%85%AE%E1%86%AB%E1%84%85%E1%85%B5%E1%84%87%E1%85%B2</link>
+      <link>https://ursonice.github.io/posts/vit-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</link>
       <guid isPermaLink="false">95458e7d-0614-40ef-b9e1-cab3c363dbc4</guid>
       <pubDate>Sun, 11 Dec 2022 09:34:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
@@ -169,7 +169,7 @@
     </item>
     <item>
       <title>ROS2</title>
-      <link>https://ursonice.github.io/post.html?slug=ros2</link>
+      <link>https://ursonice.github.io/posts/ros2/</link>
       <guid isPermaLink="false">279b12c0-115c-80f6-8d59-ffa114c11425</guid>
       <pubDate>Thu, 25 Sep 2025 05:56:00 GMT</pubDate>
       <category>Robotics</category>
@@ -177,7 +177,7 @@
     </item>
     <item>
       <title></title>
-      <link>https://ursonice.github.io/post.html?slug=272b12c0-115c-8015-b798-c73a7df07ba6</link>
+      <link>https://ursonice.github.io/posts/272b12c0-115c-8015-b798-c73a7df07ba6/</link>
       <guid isPermaLink="false">272b12c0-115c-8015-b798-c73a7df07ba6</guid>
       <pubDate>Thu, 18 Sep 2025 02:35:00 GMT</pubDate>
       <category>Robotics</category>
@@ -185,7 +185,7 @@
     </item>
     <item>
       <title>Ubuntu Nvidia Driver Install</title>
-      <link>https://ursonice.github.io/post.html?slug=ubuntu-nvidia-driver-install</link>
+      <link>https://ursonice.github.io/posts/ubuntu-nvidia-driver-install/</link>
       <guid isPermaLink="false">8812b0fb-a40e-476e-82e1-5dee7b662ff2</guid>
       <pubDate>Wed, 17 May 2023 06:43:00 GMT</pubDate>
       <category>Tools</category>
@@ -193,7 +193,7 @@
     </item>
     <item>
       <title>Gradient</title>
-      <link>https://ursonice.github.io/post.html?slug=gradient</link>
+      <link>https://ursonice.github.io/posts/gradient/</link>
       <guid isPermaLink="false">34a741d8-2bcf-4dcb-b056-d30e59af6b93</guid>
       <pubDate>Sun, 20 Nov 2022 04:44:00 GMT</pubDate>
       <category>AI/ Theory</category>
@@ -201,7 +201,7 @@
     </item>
     <item>
       <title>Towards Total Recall in Industrial Anomaly Detection 논문리뷰</title>
-      <link>https://ursonice.github.io/post.html?slug=towards-total-recall-in-industrial-anomaly-detection-%E1%84%82%E1%85%A9%E1%86%AB%E1%84%86%E1%85%AE%E1%86%AB%E1%84%85%E1%85%B5%E1%84%87%E1%85%B2</link>
+      <link>https://ursonice.github.io/posts/towards-total-recall-in-industrial-anomaly-detection-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</link>
       <guid isPermaLink="false">0e1004e6-ab79-46ae-a047-1e94c70e37d3</guid>
       <pubDate>Tue, 13 Aug 2024 04:26:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
@@ -209,7 +209,7 @@
     </item>
     <item>
       <title>DRÆM – A discriminatively trained reconstruction embedding for surface anomaly detection 논문 리뷰</title>
-      <link>https://ursonice.github.io/post.html?slug=dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det</link>
+      <link>https://ursonice.github.io/posts/dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/</link>
       <guid isPermaLink="false">30cd1c6a-5aed-483c-96a5-6a15183740e2</guid>
       <pubDate>Mon, 17 Jul 2023 08:30:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
@@ -217,7 +217,7 @@
     </item>
     <item>
       <title>ONNX-Runtime에서 Custom Operator 구현 Study</title>
-      <link>https://ursonice.github.io/post.html?slug=onnx-runtime%E1%84%8B%E1%85%A6%E1%84%89%E1%85%A5-custom-operator-%E1%84%80%E1%85%AE%E1%84%92%E1%85%A7%E1%86%AB-study</link>
+      <link>https://ursonice.github.io/posts/onnx-runtime%EC%97%90%EC%84%9C-custom-operator-%EA%B5%AC%ED%98%84-study/</link>
       <guid isPermaLink="false">6f19fddf-1ede-476c-b3e2-16bf8a8ec15b</guid>
       <pubDate>Tue, 30 May 2023 23:42:00 GMT</pubDate>
       <category>ONNX-MLIR</category>
@@ -225,7 +225,7 @@
     </item>
     <item>
       <title>Raspberry PI에서 Ubuntu Setting부터 Coral TPU를 사용해 MobileNetV2 Inference 해보기</title>
-      <link>https://ursonice.github.io/post.html?slug=raspberry-pi%E1%84%8B%E1%85%A6%E1%84%89%E1%85%A5-ubuntu-setting%E1%84%87%E1%85%AE%E1%84%90%E1%85%A5-coral-tpu%E1%84%85%E1%85%B3%E1%86%AF-%E1%84%89%E1%85%A1%E1%84%8B%E1%85%AD%E1%86%BC%E1%84%92%E1%85%A2-mobilenetv2-inference-%E1%84%92</link>
+      <link>https://ursonice.github.io/posts/raspberry-pi%EC%97%90%EC%84%9C-ubuntu-setting%EB%B6%80%ED%84%B0-coral-tpu%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%B4-mobilenetv2-inference-%E1%84%92/</link>
       <guid isPermaLink="false">6ce7ed92-14ce-4cce-855c-2d969e51f267</guid>
       <pubDate>Sat, 12 Nov 2022 06:23:00 GMT</pubDate>
       <category>Application</category>
@@ -233,7 +233,7 @@
     </item>
     <item>
       <title>ONNX-MLIR 다뤄보기(MobileNetV2-12)</title>
-      <link>https://ursonice.github.io/post.html?slug=onnx-mlir-%E1%84%83%E1%85%A1%E1%84%85%E1%85%AF%E1%84%87%E1%85%A9%E1%84%80%E1%85%B5-mobilenetv2-12</link>
+      <link>https://ursonice.github.io/posts/onnx-mlir-%EB%8B%A4%EB%A4%84%EB%B3%B4%EA%B8%B0-mobilenetv2-12/</link>
       <guid isPermaLink="false">392835f5-a06f-4c04-b1e8-d07d56e9d112</guid>
       <pubDate>Mon, 05 Dec 2022 05:18:00 GMT</pubDate>
       <category>ONNX-MLIR</category>
@@ -241,7 +241,7 @@
     </item>
     <item>
       <title>GLASS 논문리뷰</title>
-      <link>https://ursonice.github.io/post.html?slug=glass-%E1%84%82%E1%85%A9%E1%86%AB%E1%84%86%E1%85%AE%E1%86%AB%E1%84%85%E1%85%B5%E1%84%87%E1%85%B2</link>
+      <link>https://ursonice.github.io/posts/glass-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</link>
       <guid isPermaLink="false">a243f2c4-d437-496d-93d7-ba5d879e14ea</guid>
       <pubDate>Tue, 30 Jul 2024 09:46:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
