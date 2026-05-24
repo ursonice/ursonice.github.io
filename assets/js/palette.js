@@ -150,3 +150,110 @@
     { passive: true },
   );
 })();
+
+// Sliding liquid-glass nav indicator: one frosted capsule that glides between
+// menu items on hover/focus and rests on the current item (Apple dock style).
+(() => {
+  const nav = document.querySelector(".site-nav");
+  if (!nav) return;
+  const links = Array.from(nav.querySelectorAll("a"));
+  if (!links.length) return;
+
+  const glass = document.createElement("span");
+  glass.className = "nav-glass no-anim";
+  glass.setAttribute("aria-hidden", "true");
+  nav.insertBefore(glass, nav.firstChild);
+
+  let activeLink = null;
+  let mouseOver = false;
+
+  const interacting = () => mouseOver || nav.contains(document.activeElement);
+
+  const withoutAnim = (fn) => {
+    glass.classList.add("no-anim");
+    fn();
+    void glass.offsetWidth; // flush layout so the next change animates
+    glass.classList.remove("no-anim");
+  };
+
+  const placeAt = (link, animate) => {
+    if (!link) return;
+    const apply = () => {
+      glass.style.width = link.offsetWidth + "px";
+      glass.style.height = link.offsetHeight + "px";
+      glass.style.transform = "translate(" + link.offsetLeft + "px," + link.offsetTop + "px)";
+      glass.style.opacity = "1";
+    };
+    animate ? apply() : withoutAnim(apply);
+  };
+
+  const hide = (animate) => {
+    const apply = () => {
+      glass.style.opacity = "0";
+    };
+    animate ? apply() : withoutAnim(apply);
+  };
+
+  const restore = () => (activeLink ? placeAt(activeLink, true) : hide(true));
+
+  const findActive = () => {
+    const current = nav.querySelector("a[aria-current]");
+    if (current) return current;
+    const hash = location.hash;
+    if (hash) {
+      const match = links.find((a) => {
+        try {
+          return new URL(a.getAttribute("href"), location.href).hash === hash;
+        } catch {
+          return false;
+        }
+      });
+      if (match) return match;
+    }
+    return null;
+  };
+
+  const syncActive = () => {
+    const next = findActive();
+    links.forEach((a) => a.classList.toggle("is-active", a === next));
+    activeLink = next || null;
+    if (!interacting()) restore();
+  };
+
+  links.forEach((link) => {
+    link.addEventListener("mouseenter", () => placeAt(link, true));
+    link.addEventListener("focus", () => placeAt(link, true));
+  });
+
+  nav.addEventListener("mouseenter", () => (mouseOver = true));
+  nav.addEventListener("mouseleave", () => {
+    mouseOver = false;
+    restore();
+  });
+  nav.addEventListener("focusout", (e) => {
+    if (!nav.contains(e.relatedTarget) && !mouseOver) restore();
+  });
+
+  window.addEventListener("hashchange", syncActive);
+
+  let rt;
+  window.addEventListener("resize", () => {
+    clearTimeout(rt);
+    rt = setTimeout(() => {
+      if (!interacting()) (activeLink ? placeAt(activeLink, false) : hide(false));
+    }, 120);
+  });
+
+  const init = () => {
+    syncActive();
+    if (activeLink) placeAt(activeLink, false);
+  };
+  if (document.readyState === "complete") init();
+  else window.addEventListener("load", init);
+  // Re-place once webfonts settle (they change link widths).
+  if (document.fonts?.ready) {
+    document.fonts.ready.then(() => {
+      if (!interacting() && activeLink) placeAt(activeLink, false);
+    });
+  }
+})();
