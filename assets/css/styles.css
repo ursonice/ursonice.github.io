@@ -237,24 +237,40 @@ p {
   width: min(100% - 40px, var(--max));
   margin-inline: auto;
   height: var(--header-h);
+  padding-inline: 22px;
 }
 
+/* Floating "liquid glass" capsule that sits within the header band. */
 .site-header::before {
   content: "";
-  position: fixed;
-  inset: 0 0 auto;
-  height: var(--header-h);
-  background: color-mix(in srgb, var(--bg) 72%, transparent);
-  backdrop-filter: blur(16px) saturate(1.4);
-  -webkit-backdrop-filter: blur(16px) saturate(1.4);
-  border-bottom: 1px solid transparent;
+  position: absolute;
+  inset: 9px 0;
+  border-radius: 18px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--surface) 38%, transparent),
+    color-mix(in srgb, var(--bg) 52%, transparent)
+  );
+  -webkit-backdrop-filter: blur(22px) saturate(1.9);
+  backdrop-filter: blur(22px) saturate(1.9);
+  border: 1px solid var(--glass-edge);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
   z-index: -1;
-  transition: border-color 0.25s ease, background 0.25s ease;
+  transition: background 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .site-header[data-scrolled]::before {
-  border-bottom-color: var(--line);
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--surface) 60%, transparent),
+    color-mix(in srgb, var(--bg) 74%, transparent)
+  );
+  border-color: var(--line-strong);
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
 
 .brand {
@@ -305,8 +321,8 @@ p {
 }
 
 .site-nav a {
-  padding: 8px 12px;
-  border-radius: var(--r-sm);
+  padding: 8px 13px;
+  border-radius: 999px;
   color: var(--muted);
   text-decoration: none;
   font-size: 0.9rem;
@@ -317,7 +333,7 @@ p {
 .site-nav a:hover,
 .site-nav a:focus-visible {
   color: var(--ink);
-  background: var(--surface-2);
+  background: color-mix(in srgb, var(--ink) 8%, transparent);
 }
 
 .icon-button {
