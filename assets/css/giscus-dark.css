@@ -1,0 +1,6 @@
+/* Custom giscus theme (dark) = default dark theme + hide the "Powered by giscus" credit. */
+@import url("https://giscus.app/themes/dark.css");
+
+.gsc-left-header em:has(a[href="https://giscus.app"]) {
+  display: none !important;
+}

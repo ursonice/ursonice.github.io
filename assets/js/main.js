@@ -37,6 +37,10 @@ const normalize = (value = "") => value.toString().trim().toLowerCase();
 const sortedByRecent = (posts) =>
   [...posts].sort((a, b) => new Date(b.updated || b.created) - new Date(a.updated || a.created));
 
+// Post list order: newest *created* first (creation order), independent of later edits.
+const sortedByCreated = (posts) =>
+  [...posts].sort((a, b) => new Date(b.created || b.updated) - new Date(a.created || a.updated));
+
 const uniqueTopics = (posts) => {
   const counts = new Map();
   posts.forEach((post) => {
@@ -196,7 +200,7 @@ const init = async () => {
     const response = await fetch(DATA_URL, { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
-    state.posts = sortedByRecent(data.posts || []);
+    state.posts = sortedByCreated(data.posts || []);
     state.about = data.about || null;
     state.profile = data.profile || null;
   } catch (error) {

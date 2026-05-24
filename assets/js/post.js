@@ -9,9 +9,15 @@ const GISCUS = {
   categoryId: "DIC_kwDOSkehSc4C9txy",
 };
 
-const giscusTheme = () => (document.documentElement.dataset.theme === "dark" ? "dark" : "light");
+// Custom giscus theme URLs (default theme + "Powered by giscus" credit hidden).
+const giscusThemeUrl = (mode) =>
+  `${location.origin}/assets/css/giscus-${mode === "dark" ? "dark" : "light"}.css`;
 
-const setGiscusTheme = (theme) => {
+const giscusTheme = () =>
+  giscusThemeUrl(document.documentElement.dataset.theme === "dark" ? "dark" : "light");
+
+const setGiscusTheme = (mode) => {
+  const theme = giscusThemeUrl(mode);
   const frame = document.querySelector("iframe.giscus-frame");
   frame?.contentWindow?.postMessage({ giscus: { setConfig: { theme } } }, "https://giscus.app");
 };
