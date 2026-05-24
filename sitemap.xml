@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://ursonice.github.io/</loc></url>
-  <url><loc>https://ursonice.github.io/posts/learning-vision-based-omnidirectional-navigation-a-teacher-student-approach-usin/</loc><lastmod>2026-05-24</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/monolift-learning-3d-manipulation-policies-from-monocular-rgb-via-distillation/</loc><lastmod>2026-05-24</lastmod></url>
+  <url><loc>https://ursonice.github.io/posts/learning-vision-based-omnidirectional-navigation-a-teacher-student-approach-usin/</loc><lastmod>2026-05-24</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/vla-navila-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2026-05-22</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/resnet-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2026-05-20</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/nas-neural-network-search/</loc><lastmod>2026-05-11</lastmod></url>

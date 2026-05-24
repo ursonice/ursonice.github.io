@@ -6,7 +6,15 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 24 May 2026 14:37:26 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 24 May 2026 14:45:35 GMT</lastBuildDate>
+    <item>
+      <title>MonoLift: Learning 3D Manipulation Policies from Monocular RGB via Distillation</title>
+      <link>https://ursonice.github.io/posts/monolift-learning-3d-manipulation-policies-from-monocular-rgb-via-distillation/</link>
+      <guid isPermaLink="false">36ab12c0-115c-8031-b1d2-e1a5a8077788</guid>
+      <pubDate>Sun, 24 May 2026 14:31:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 이 논문은 단일 RGB 이미지, 즉 Monocular RGB만을 입력으로 사용하여 로봇이 3D 조작 정책을 학습할 수 있도록 하는 MonoLift framework를 제안한다. 기존 로봇 조작 연구에서는 3D 공간 정보를 얻기 위해 RGB-D camera, multi-view camera, poin</description>
+    </item>
     <item>
       <title>Learning Vision-Based Omnidirectional Navigation: A Teacher-Student Approach Using Monocular Depth Estimation 논문리뷰</title>
       <link>https://ursonice.github.io/posts/learning-vision-based-omnidirectional-navigation-a-teacher-student-approach-usin/</link>
@@ -14,14 +22,6 @@
       <pubDate>Wed, 20 May 2026 13:37:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
       <description>서론 이 논문은 기존 2D LiDAR 기반 이동 로봇 내비게이션의 한계를 해결하기 위해, Monocular Depth Estimation(MDE) 기반 Teacher-Student framework를 제안한다. Teacher policy는 시뮬레이션에서 2D LiDAR와 로봇 자기 상태 정보를 입력으로 </description>
-    </item>
-    <item>
-      <title>MonoLift: Learning 3D Manipulation Policies from Monocular RGB via Distillation</title>
-      <link>https://ursonice.github.io/posts/monolift-learning-3d-manipulation-policies-from-monocular-rgb-via-distillation/</link>
-      <guid isPermaLink="false">36ab12c0-115c-8031-b1d2-e1a5a8077788</guid>
-      <pubDate>Sun, 24 May 2026 14:31:00 GMT</pubDate>
-      <category>AI/ Deep Learning</category>
-      <description></description>
     </item>
     <item>
       <title>(VLA) NaVILA 논문리뷰</title>
