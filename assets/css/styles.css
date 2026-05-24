@@ -1198,14 +1198,19 @@ p {
   border-top: 1px solid var(--line);
 }
 
+/* A divider as the very last content block is redundant before the share bar. */
+.article-content > hr:last-child {
+  display: none;
+}
+
 /* Share bar at the end of the article. */
 .share-bar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;
-  margin-top: 48px;
-  padding-top: 28px;
+  margin-top: 24px;
+  padding-top: 18px;
   border-top: 1px solid var(--line);
 }
 

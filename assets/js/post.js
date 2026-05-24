@@ -379,11 +379,11 @@ const initShare = (post) => {
     copy.addEventListener("click", async () => {
       try {
         await navigator.clipboard.writeText(url);
-        copy.textContent = "복사됨!";
+        copy.textContent = "Copied";
       } catch {
-        copy.textContent = "복사 실패";
+        copy.textContent = "Failed";
       }
-      setTimeout(() => (copy.textContent = "링크 복사"), 1500);
+      setTimeout(() => (copy.textContent = "Copy"), 1500);
     });
 
   initKakaoShare(bar, { url, title, desc: (post.summary || "").slice(0, 100), image: firstImage(post) });
@@ -523,8 +523,8 @@ const renderPost = (post) => {
     <hr class="article-divider" />
     ${body}
     <div class="share-bar" data-share>
-      <span class="share-label">이 글 공유</span>
-      <button type="button" class="share-btn" data-share-copy>링크 복사</button>
+      <span class="share-label">공유</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
       <a class="share-btn" data-share-x target="_blank" rel="noopener">X</a>
       <a class="share-btn" data-share-li target="_blank" rel="noopener">LinkedIn</a>
       <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
