@@ -1,77 +1,48 @@
 const DATA_URL = "data/notion-posts.json";
-// Notion-backed comments API (val.town). Empty = comments disabled.
-const COMMENTS_API = "https://ursonice--923e1e4a572211f196ffee650bb23af1.web.val.run";
 const $ = (selector, scope = document) => scope.querySelector(selector);
 
-const setupComments = (postId) => {
+// Giscus (GitHub Discussions) comments. Each post maps to its own discussion via data-term = slug.
+const GISCUS = {
+  repo: "ursonice/ursonice.github.io",
+  repoId: "R_kgDOSkehSQ",
+  category: "Announcements",
+  categoryId: "DIC_kwDOSkehSc4C9txy",
+};
+
+const giscusTheme = () => (document.documentElement.dataset.theme === "dark" ? "dark" : "light");
+
+const setGiscusTheme = (theme) => {
+  const frame = document.querySelector("iframe.giscus-frame");
+  frame?.contentWindow?.postMessage({ giscus: { setConfig: { theme } } }, "https://giscus.app");
+};
+
+const loadGiscus = (term) => {
   const section = $("[data-comments]");
-  if (!section || !postId || !COMMENTS_API || COMMENTS_API.startsWith("__")) return;
+  const mount = $("[data-giscus]");
+  if (!section || !mount || !term) return;
   section.hidden = false;
+  mount.innerHTML = "";
 
-  const list = $("[data-comment-list]", section);
-  const countEl = $("[data-comments-count]", section);
-  const form = $("[data-comment-form]", section);
-  const statusEl = $("[data-comment-status]", section);
-
-  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-  const fmt = (iso) => {
-    try { return new Intl.DateTimeFormat("ko-KR", { dateStyle: "medium", timeStyle: "short" }).format(new Date(iso)); }
-    catch { return ""; }
+  const s = document.createElement("script");
+  s.src = "https://giscus.app/client.js";
+  s.async = true;
+  s.crossOrigin = "anonymous";
+  const attrs = {
+    "data-repo": GISCUS.repo,
+    "data-repo-id": GISCUS.repoId,
+    "data-category": GISCUS.category,
+    "data-category-id": GISCUS.categoryId,
+    "data-mapping": "specific",
+    "data-term": term,
+    "data-strict": "1",
+    "data-reactions-enabled": "1",
+    "data-emit-metadata": "0",
+    "data-input-position": "top",
+    "data-theme": giscusTheme(),
+    "data-lang": "ko",
   };
-
-  const load = async () => {
-    try {
-      const res = await fetch(`${COMMENTS_API}?postId=${encodeURIComponent(postId)}`);
-      const data = await res.json();
-      const comments = (data.comments || []).sort((a, b) => new Date(a.created) - new Date(b.created));
-      countEl.textContent = comments.length ? `(${comments.length})` : "";
-      list.innerHTML = comments.length
-        ? comments.map((c) => `
-          <li class="comment">
-            <div class="comment-head">
-              <span class="comment-name">${esc(c.name)}</span>
-              <span class="comment-date">${fmt(c.created)}</span>
-            </div>
-            <div class="comment-body">${esc(c.body).replace(/\n/g, "<br>")}</div>
-          </li>`).join("")
-        : `<li class="comment-empty">첫 댓글을 남겨보세요.</li>`;
-    } catch {
-      list.innerHTML = `<li class="comment-empty">댓글을 불러오지 못했습니다.</li>`;
-    }
-  };
-
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const fd = new FormData(form);
-    const body = String(fd.get("body") || "").trim();
-    if (!body) return;
-    const button = form.querySelector("button");
-    button.disabled = true;
-    statusEl.textContent = "등록 중…";
-    try {
-      const res = await fetch(COMMENTS_API, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          postId,
-          name: String(fd.get("name") || "").trim(),
-          body,
-          website: String(fd.get("website") || ""),
-        }),
-      });
-      if (!res.ok) throw new Error("post failed");
-      form.reset();
-      statusEl.textContent = "등록되었습니다.";
-      await load();
-      setTimeout(() => { statusEl.textContent = ""; }, 2500);
-    } catch {
-      statusEl.textContent = "등록 실패. 잠시 후 다시 시도해주세요.";
-    } finally {
-      button.disabled = false;
-    }
-  });
-
-  load();
+  for (const [k, v] of Object.entries(attrs)) s.setAttribute(k, v);
+  mount.appendChild(s);
 };
 
 const formatDate = (value) => {
@@ -214,6 +185,7 @@ const initTheme = () => {
     document.documentElement.dataset.theme = next;
     localStorage.setItem("theme", next);
     applyThemeIcon();
+    setGiscusTheme(next);
   });
 };
 
@@ -241,7 +213,7 @@ const init = async () => {
     const post = (data.posts || []).find((item) => item.slug === slug);
     if (post) {
       renderPost(post);
-      setupComments(post.id);
+      loadGiscus(post.slug);
     } else {
       renderMissing();
     }
