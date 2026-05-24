@@ -233,7 +233,8 @@ const initHeaderScroll = () => {
 const init = async () => {
   initTheme();
   initHeaderScroll();
-  const slug = new URLSearchParams(location.search).get("slug");
+  // Normalize to NFC so Korean slugs match regardless of NFC/NFD form (direct URLs vs JSON).
+  const slug = (new URLSearchParams(location.search).get("slug") || "").normalize("NFC");
   try {
     const response = await fetch(DATA_URL, { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -244,7 +245,7 @@ const init = async () => {
       if (p.linkedin) document.querySelectorAll('[data-profile-link="linkedin"]').forEach((a) => (a.href = p.linkedin));
       if (p.email) document.querySelectorAll('[data-profile-link="email"]').forEach((a) => (a.href = `mailto:${p.email}`));
     }
-    const post = (data.posts || []).find((item) => item.slug === slug);
+    const post = (data.posts || []).find((item) => (item.slug || "").normalize("NFC") === slug);
     if (post) {
       renderPost(post);
       loadGiscus(post.slug);

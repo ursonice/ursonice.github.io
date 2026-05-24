@@ -90,7 +90,7 @@ const renderPosts = () => {
           <h3>${post.title}</h3>
           <p>${post.summary || "노션에서 가져온 공부 기록입니다."}</p>
           <div class="post-footer">
-            <span>${formatDate(post.updated || post.created)}</span>
+            <span>${formatDate(post.created || post.updated)}</span>
           </div>
         </a>`;
     })
