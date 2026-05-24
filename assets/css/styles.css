@@ -802,7 +802,7 @@ p {
     var(--shadow-sm),
     inset 0 1px 1px rgba(255, 255, 255, 0.8),
     inset 0 -2px 5px rgba(255, 255, 255, 0.14);
-  color: var(--muted);
+  color: var(--ink);
   min-height: 38px;
   padding: 0 14px;
   border-radius: 999px;
