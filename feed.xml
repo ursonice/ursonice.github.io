@@ -6,7 +6,7 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 24 May 2026 14:24:33 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 24 May 2026 14:25:08 GMT</lastBuildDate>
     <item>
       <title>Learning Vision-Based Omnidirectional Navigation: A Teacher-Student Approach Using Monocular Depth Estimation 논문리뷰</title>
       <link>https://ursonice.github.io/posts/learning-vision-based-omnidirectional-navigation-a-teacher-student-approach-usin/</link>
@@ -30,22 +30,6 @@
       <pubDate>Wed, 14 Jun 2023 23:17:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
       <description>서론 Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun; &quot;Deep Residual Learning for Image Recognition&quot;, Proceedings of the IEEE Conference on Computer Vision and Pattern Re</description>
-    </item>
-    <item>
-      <title>TRPO - Trust Region Policy Optimizer</title>
-      <link>https://ursonice.github.io/posts/trpo-trust-region-policy-optimizer/</link>
-      <guid isPermaLink="false">35db12c0-115c-8082-9620-f701ca2b7a2f</guid>
-      <pubDate>Mon, 11 May 2026 04:49:00 GMT</pubDate>
-      <category>AI/ Theory</category>
-      <description>서론 기존 DDPG는 성능의 단조개선(Monotonic Improvement)가 이론적으로 보장되지 않았다.(목적함수 J(\theta))가 매 iteration마다 증가한다는 보장이 없다.) 왜냐하면 Actor( \mu )가 Ciritic(Q 함수)의 gradient를 따라가도록 학습하는데 critic </description>
-    </item>
-    <item>
-      <title>PPO</title>
-      <link>https://ursonice.github.io/posts/ppo/</link>
-      <guid isPermaLink="false">35db12c0-115c-80d1-8eee-c368710fb683</guid>
-      <pubDate>Mon, 11 May 2026 04:04:00 GMT</pubDate>
-      <category>AI/ Theory</category>
-      <description>목표: PPO(Proximal Policy Optimization)를 논문(academic paper) 흐름(문제정의 → 방법 → 분석/실험 → 결론)으로 정리한다. 서론 이전에 배운 TPRO는 정책의 단조 향상(Monotonic Improvement)을 이론적으로 보장한다는 강한 장점을 얻는 대가로 T</description>
     </item>
     <item>
       <title>NAS(Neural Network Search)</title>
@@ -246,6 +230,22 @@
       <pubDate>Tue, 30 Jul 2024 09:46:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
       <description>Cite Hui Zhang, Zheng Wang, Zuxuan Wu, Yu-Gang Jiang; arXiv preprint arXiv:2303.08730, 2023. https://arxiv.org/abs/2303.08730 출간일: 2023. 03. 15 목차 Abstract Introduction P</description>
+    </item>
+    <item>
+      <title>[Kubernetes] Taint &amp; Toleration</title>
+      <link>https://ursonice.github.io/posts/kubernetes-taint-toleration/</link>
+      <guid isPermaLink="false">201b12c0-115c-806b-945c-e9db77640e68</guid>
+      <pubDate>Wed, 28 May 2025 13:39:00 GMT</pubDate>
+      <category>Kubernetes</category>
+      <description>서론 Taint와 Toleration의 관계에 대해서 설명한다. Taint와 Toleration는 사람과 벌레 두 요소로 예를 들면 이해하기가 쉽다. 사람은 노드에 비유하며 벌레는 파드이다. 벌레 스프레이(Taint)를 사람(Node)에게 뿌리면 벌래(Pod)는 사람(Node)에게 접근하지 못한다. 그러</description>
+    </item>
+    <item>
+      <title>[Kubernetes] Multi Container Pods</title>
+      <link>https://ursonice.github.io/posts/kubernetes-multi-container-pods/</link>
+      <guid isPermaLink="false">220b12c0-115c-809d-8959-e42b2736a976</guid>
+      <pubDate>Sat, 28 Jun 2025 12:38:00 GMT</pubDate>
+      <category>Kubernetes</category>
+      <description>서론 쿠버네티스에서 multi container 파드를 구성할 때 두 가지 패턴(종류)가 있다. 하나는 Sidecar container와 co-located container이다. 두 컨테이너는 같은 파드 안에 존재하지만 역할과 생명주기 동작방식에서 차이가 있다. 이 두 종류에 대해서 알아보자 Sidec</description>
     </item>
   </channel>
 </rss>
