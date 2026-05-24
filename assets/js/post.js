@@ -286,8 +286,25 @@ const initBackToTop = () => {
   update();
 };
 
+// Per-post SEO/social meta (works for crawlers that run JS, e.g. Google).
+const setMeta = (post) => {
+  const desc = (post.summary || "AI, Robotics, Systems 공부 기록").slice(0, 200);
+  const url = `${location.origin}/post.html?slug=${encodeURIComponent(post.slug)}`;
+  const upsert = (selector, make, attr, value) => {
+    let el = document.head.querySelector(selector);
+    if (!el) { el = make(); document.head.appendChild(el); }
+    el.setAttribute(attr, value);
+  };
+  upsert('meta[name="description"]', () => { const m = document.createElement("meta"); m.name = "description"; return m; }, "content", desc);
+  upsert('meta[property="og:title"]', () => { const m = document.createElement("meta"); m.setAttribute("property", "og:title"); return m; }, "content", post.title);
+  upsert('meta[property="og:description"]', () => { const m = document.createElement("meta"); m.setAttribute("property", "og:description"); return m; }, "content", desc);
+  upsert('meta[property="og:url"]', () => { const m = document.createElement("meta"); m.setAttribute("property", "og:url"); return m; }, "content", url);
+  upsert('link[rel="canonical"]', () => { const l = document.createElement("link"); l.rel = "canonical"; return l; }, "href", url);
+};
+
 const renderPost = (post) => {
   document.title = `${post.title} — Woojae Joo`;
+  setMeta(post);
   const article = $("[data-article]");
   const body = post.html
     ? `<div class="article-content">${post.html}</div>`

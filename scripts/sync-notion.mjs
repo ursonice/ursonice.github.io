@@ -582,6 +582,33 @@ const main = async () => {
   console.log(
     `Synced ${posts.length} posts (${stats.rendered} re-rendered, ${stats.reused} reused)${about ? " + about page" : ""} to ${OUTPUT}`,
   );
+
+  // --- RSS feed + sitemap (regenerated each sync) ---
+  const SITE = process.env.SITE_URL || "https://ursonice.github.io";
+  const xmlEsc = (s = "") =>
+    s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" }[c]));
+  const postUrl = (p) => `${SITE}/post.html?slug=${encodeURIComponent(p.slug)}`;
+
+  const items = posts
+    .slice(0, 30)
+    .map(
+      (p) =>
+        `    <item>\n      <title>${xmlEsc(p.title)}</title>\n      <link>${xmlEsc(postUrl(p))}</link>\n      <guid isPermaLink="false">${p.id}</guid>\n      <pubDate>${new Date(p.created || p.updated).toUTCString()}</pubDate>\n      <category>${xmlEsc(p.category || "Notes")}</category>\n      <description>${xmlEsc(p.summary || "")}</description>\n    </item>`,
+    )
+    .join("\n");
+  const feed = `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n  <channel>\n    <title>${xmlEsc(payload.site.title)}</title>\n    <link>${SITE}/</link>\n    <atom:link href="${SITE}/feed.xml" rel="self" type="application/rss+xml"/>\n    <description>${xmlEsc(payload.site.description)}</description>\n    <language>ko</language>\n    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>\n${items}\n  </channel>\n</rss>\n`;
+  await writeFile("feed.xml", feed);
+
+  const urlEntries = [
+    `  <url><loc>${SITE}/</loc></url>`,
+    ...posts.map(
+      (p) =>
+        `  <url><loc>${xmlEsc(postUrl(p))}</loc><lastmod>${new Date(p.updated || p.created).toISOString().slice(0, 10)}</lastmod></url>`,
+    ),
+  ].join("\n");
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urlEntries}\n</urlset>\n`;
+  await writeFile("sitemap.xml", sitemap);
+  console.log(`Wrote feed.xml (${Math.min(30, posts.length)} items) + sitemap.xml (${posts.length + 1} urls)`);
 };
 
 main().catch((error) => {

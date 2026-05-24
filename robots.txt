@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ursonice.github.io/sitemap.xml
