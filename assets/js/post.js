@@ -7,7 +7,7 @@ const postUrl = (post) => `${location.origin}/posts/${encodeURIComponent((post.s
 // KakaoTalk share: paste your Kakao JavaScript app key here to enable the 카카오톡 button.
 // Get one (free) at https://developers.kakao.com → 내 애플리케이션 → 앱 키 → JavaScript 키,
 // and register https://ursonice.github.io under 플랫폼 → Web. Empty = button hidden.
-const KAKAO_KEY = "";
+const KAKAO_KEY = "6b60f0fffaa5128881dae4b76b0a165a";
 
 // Giscus (GitHub Discussions) comments. Each post maps to its own discussion via data-term = slug.
 const GISCUS = {
