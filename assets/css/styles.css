@@ -45,6 +45,7 @@
   --glass: color-mix(in srgb, var(--surface) 62%, transparent);
   --glass-strong: color-mix(in srgb, var(--surface) 78%, transparent);
   --glass-edge: rgba(255, 255, 255, 0.65);
+  --header-edge: rgba(255, 255, 255, 0.85);
   --glass-shade: rgba(21, 23, 28, 0.06);
   --blur: blur(22px) saturate(180%);
 
@@ -73,9 +74,9 @@
   --surface: #131519;
   --surface-2: #1a1d23;
   --ink: #f4f4f6;
-  --ink-soft: #d2d5db;
-  --muted: #9298a3;
-  --faint: #6b7280;
+  --ink-soft: #f0f1f4;
+  --muted: #e2e5ea;
+  --faint: #c2c8d2;
   --line: #23262d;
   --line-strong: #2e323b;
 
@@ -88,6 +89,7 @@
   --glass: color-mix(in srgb, var(--surface) 55%, transparent);
   --glass-strong: color-mix(in srgb, var(--surface) 72%, transparent);
   --glass-edge: rgba(255, 255, 255, 0.1);
+  --header-edge: rgba(255, 255, 255, 0.12);
   --glass-shade: rgba(0, 0, 0, 0.4);
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
@@ -253,7 +255,7 @@ p {
   );
   -webkit-backdrop-filter: blur(22px);
   backdrop-filter: blur(22px);
-  border: 1px solid var(--glass-edge);
+  border: 1px solid var(--header-edge);
   box-shadow:
     0 10px 30px rgba(0, 0, 0, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.5);
@@ -267,7 +269,7 @@ p {
     color-mix(in srgb, var(--surface) 82%, transparent),
     color-mix(in srgb, var(--surface) 70%, transparent)
   );
-  border-color: var(--line-strong);
+  border-color: var(--header-edge);
   box-shadow:
     0 16px 40px rgba(0, 0, 0, 0.13),
     inset 0 1px 0 rgba(255, 255, 255, 0.55);
@@ -633,6 +635,15 @@ p {
   opacity: 0.55;
 }
 
+/* Dark mode: brighten the chart axes and their labels toward white. */
+[data-theme="dark"] .trade-off-art path[stroke="currentColor"] {
+  stroke-opacity: 0.72;
+}
+
+[data-theme="dark"] .trade-off-art .art-label.axis {
+  opacity: 0.9;
+}
+
 @media (max-width: 860px) {
   .hero-inner {
     grid-template-columns: 1fr;
@@ -776,8 +787,9 @@ p {
 }
 
 .filter-button:hover {
-  color: var(--ink);
-  border-color: var(--line-strong);
+  color: var(--accent-ink);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  background: color-mix(in srgb, var(--accent) 12%, var(--glass));
 }
 
 .filter-button[aria-pressed="true"] {
@@ -926,8 +938,8 @@ p {
 }
 
 .active-tag-clear:hover {
-  color: var(--ink);
-  border-color: var(--line-strong);
+  color: var(--accent-ink);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
 }
 
 .post-card h3 {
@@ -1180,6 +1192,11 @@ p {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+/* "Writing about" chips wear the accent blue (informational, not filters). */
+.facts-card .chips .badge {
+  color: var(--accent-ink);
 }
 
 /* ============================ Footer ============================ */
