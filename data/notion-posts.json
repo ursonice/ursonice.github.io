@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-24T14:47:20.564Z",
+  "generatedAt": "2026-05-24T14:48:34.462Z",
   "site": {
     "title": "Woojae Joo — Developer Note",
     "description": "AI, Robotics, Systems 공부 기록"
@@ -73,11 +73,11 @@
       "category": "AI/ Deep Learning",
       "tags": [],
       "created": "2026-05-24T14:31:00.000Z",
-      "updated": "2026-05-24T14:46:00.000Z",
-      "readingTime": 1,
+      "updated": "2026-05-24T14:48:00.000Z",
+      "readingTime": 2,
       "summary": "서론 이 논문은 단일 RGB 이미지(Monocular RGB)만으로 3D 로봇 조작 정책을 학습하는 MonoLift framework를 제안한다. 기존 RGB-D, multi-view, point cloud 기반 방법은 3D 정보를 잘 활용할 수 있지만, 추가 센서와 전처리 비용이 크다. 반대로 RGB-",
       "sourceUrl": "https://www.notion.so/MonoLift-Learning-3D-Manipulation-Policies-from-Monocular-RGB-via-Distillation-36ab12c0115c8031b1d2e1a5a8077788",
-      "html": "<h2 id=\"block-36ab12c0115c808b9976f29854e1fa62\">서론</h2>\n<p>이 논문은 단일 RGB 이미지(Monocular RGB)만으로 3D 로봇 조작 정책을 학습하는 MonoLift framework를 제안한다.</p>\n<p>기존 RGB-D, multi-view, point cloud 기반 방법은 3D 정보를 잘 활용할 수 있지만, 추가 센서와 전처리 비용이 크다. 반대로 RGB-only 방식은 배포가 쉽지만 깊이 정보가 없어 3D 위치 차이를 구분하기 어렵고, 이로 인해 부정확한 action을 출력할 수 있다.</p>\n<p>MonoLift는 이를 해결하기 위해 학습 단계에서만 Depth Anything V2로 만든 pseudo-depth를 사용하는 teacher model을 만들고, 이 teacher의 3D-aware knowledge를 RGB-only student model에게 전달한다.</p>\n<p>전달되는 지식은 크게 세 가지이다.</p>\n<ol><li><strong>Spatial knowledge</strong>: RGB만으로도 3D 공간 구조를 이해하도록 함</li><li><strong>Temporal knowledge</strong>: 시간에 따른 상태 변화를 안정적으로 이해하도록 함</li><li><strong>Action knowledge</strong>: teacher의 3D-aware action 선택을 따라가도록 함</li></ol>\n<p>즉, MonoLift는 학습 중에는 depth 정보를 활용하지만, 실제 배포 시에는 depth estimator 없이 RGB-only로 동작하는 효율적인 3D manipulation policy 학습 방법이다.</p>"
+      "html": "<h2 id=\"block-36ab12c0115c808b9976f29854e1fa62\">서론</h2>\n<p>이 논문은 단일 RGB 이미지(Monocular RGB)만으로 3D 로봇 조작 정책을 학습하는 MonoLift framework를 제안한다.</p>\n<p>기존 RGB-D, multi-view, point cloud 기반 방법은 3D 정보를 잘 활용할 수 있지만, 추가 센서와 전처리 비용이 크다. 반대로 RGB-only 방식은 배포가 쉽지만 깊이 정보가 없어 3D 위치 차이를 구분하기 어렵고, 이로 인해 부정확한 action을 출력할 수 있다.</p>\n<p>MonoLift는 이를 해결하기 위해 학습 단계에서만 Depth Anything V2로 만든 pseudo-depth를 사용하는 teacher model을 만들고, 이 teacher의 3D-aware knowledge를 RGB-only student model에게 전달한다.</p>\n<p>전달되는 지식은 크게 세 가지이다.</p>\n<ol><li><strong>Spatial knowledge</strong>: RGB만으로도 3D 공간 구조를 이해하도록 함</li><li><strong>Temporal knowledge</strong>: 시간에 따른 상태 변화를 안정적으로 이해하도록 함</li><li><strong>Action knowledge</strong>: teacher의 3D-aware action 선택을 따라가도록 함</li></ol>\n<p>즉, MonoLift는 학습 중에는 depth 정보를 활용하지만, 실제 배포 시에는 depth estimator 없이 RGB-only로 동작하는 효율적인 3D manipulation policy 학습 방법이다.</p>\n<h2 id=\"block-36ab12c0115c800b85dfcd297124cfbc\">목차</h2>\n<ul><li>‘</li></ul>\n<h2 id=\"block-36ab12c0115c801389fed53a6748216d\">Problem Formulation</h2>\n<p>이 논문에서 목표는 단일 RGB 이미지와 언어 명령을 입력으로 받아 로봇 조작 action을 출력하는 policy를 학습하는 것이다.</p>\n<p>각 demonstration trajectory는 다음과 같이 표현된다.</p>\n<div class=\"math-block\">\\[\\tau_i = \\left(g_i,{(o_t^i,a_t^i)}_{t=1}^{T}\\right)\\]</div>\n<p>여기서,</p>\n<ul><li>$g_i$: language instruction</li><li>$o_t^i$: timestep $t$에서의 RGB observation</li><li>$a_t^i$: timestep $t$에서의 expert action</li><li>$T$: trajectory 길이</li><li>$D={\\tau_i}_{i=1}^{N}$: 전체 demonstration dataset</li></ul>"
     },
     {
       "id": "366b12c0-115c-800d-b636-caec12f58f18",
