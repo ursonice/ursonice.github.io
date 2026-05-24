@@ -6,7 +6,7 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 24 May 2026 07:44:11 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 24 May 2026 07:46:19 GMT</lastBuildDate>
     <item>
       <title>Learning Vision-Based Omnidirectional Navigation: A Teacher-Student Approach Using Monocular Depth Estimation 논문리뷰</title>
       <link>https://ursonice.github.io/post.html?slug=learning-vision-based-omnidirectional-navigation-a-teacher-student-approach-usin</link>
@@ -14,6 +14,22 @@
       <pubDate>Wed, 20 May 2026 13:37:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
       <description>서론 목차 1) Teacher Model Training 시뮬레이션 환경에서 산업환경 물체(장애물)의 실제 경계보다 확장된 privileged collision mesh를 정의하고, 이에 대해 2D LiDAR raycasting을 수행하여 얻은 거리 정보와 로봇의 자기 상태 정보를 입력으로 teacher</description>
+    </item>
+    <item>
+      <title>(VLA) NaVILA 논문리뷰</title>
+      <link>https://ursonice.github.io/post.html?slug=vla-navila-%E1%84%82%E1%85%A9%E1%86%AB%E1%84%86%E1%85%AE%E1%86%AB%E1%84%85%E1%85%B5%E1%84%87%E1%85%B2</link>
+      <guid isPermaLink="false">2afb12c0-115c-805f-a2dc-c2bda949f787</guid>
+      <pubDate>Tue, 18 Nov 2025 00:58:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>Cite Anthony Brohan, Noah Brown, Justice Carbajal, Chelsea Finn, Sergey Levine, et al.; arXiv preprint arXiv:2307.15818 [cs.RO] https://navila-bot.github.io/static/navila</description>
+    </item>
+    <item>
+      <title>ResNet 논문리뷰</title>
+      <link>https://ursonice.github.io/post.html?slug=resnet-%E1%84%82%E1%85%A9%E1%86%AB%E1%84%86%E1%85%AE%E1%86%AB%E1%84%85%E1%85%B5%E1%84%87%E1%85%B2</link>
+      <guid isPermaLink="false">d4583caf-3da1-4e11-8701-f895316a92ad</guid>
+      <pubDate>Wed, 14 Jun 2023 23:17:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun; &quot;Deep Residual Learning for Image Recognition&quot;, Proceedings of the IEEE Conference on Computer Vision and Pattern Re</description>
     </item>
     <item>
       <title>TRPO - Trust Region Policy Optimizer</title>
@@ -32,20 +48,12 @@
       <description>목표: PPO(Proximal Policy Optimization)를 논문(academic paper) 흐름(문제정의 → 방법 → 분석/실험 → 결론)으로 정리한다. 서론 이전에 배운 TPRO는 정책의 단조 향상(Monotonic Improvement)을 이론적으로 보장한다는 강한 장점을 얻는 대가로 T</description>
     </item>
     <item>
-      <title>[RL] DQN의 Action Space 한계</title>
-      <link>https://ursonice.github.io/post.html?slug=rl-dqn%E1%84%8B%E1%85%B4-action-space-%E1%84%92%E1%85%A1%E1%86%AB%E1%84%80%E1%85%A8</link>
-      <guid isPermaLink="false">345b12c0-115c-80ad-a4a1-eb9961bbd163</guid>
-      <pubDate>Fri, 17 Apr 2026 01:38:00 GMT</pubDate>
+      <title>NAS(Neural Network Search)</title>
+      <link>https://ursonice.github.io/post.html?slug=nas-neural-network-search</link>
+      <guid isPermaLink="false">d8c14d53-56d5-4447-a6a8-d43d9aa4cbbf</guid>
+      <pubDate>Sun, 11 Jun 2023 06:33:00 GMT</pubDate>
       <category>AI/ Theory</category>
-      <description>로봇이 잘 걸어가도록 하기 위해 DQN모델을 사용한다 해보자. 총 4개의 관절이 있고 각 관절은 (-90, 0, 90) 3개의 값 중 하나를 가질 수 있다. 이 경우 각 관절 당 3가지의 값을 가질 수 있으니 관절이 4개 임으로 3x3x3x3 = 81개의 조합이 만들어진다. 넘어지기 직전상태인 St에 대</description>
-    </item>
-    <item>
-      <title>[01] C++ 기초</title>
-      <link>https://ursonice.github.io/post.html?slug=01-c-%E1%84%80%E1%85%B5%E1%84%8E%E1%85%A9</link>
-      <guid isPermaLink="false">327b12c0-115c-8054-943c-eb189c200cf8</guid>
-      <pubDate>Wed, 18 Mar 2026 10:16:00 GMT</pubDate>
-      <category>C/ C++</category>
-      <description>목차 1. Namespace 2. 기초문법 3. Reference 4. New, Delete 5. Class 1. Namespace C++에서 이름 공간(namespace)은 변수, 함수, 클래스와 같은 이름들이 어느 소속에 속해 있는지 구분하기 위한 개념으로 같은 이름이라도 서로 다른 namespace</description>
+      <description>서론 이 장은 NAS의 개념에 대해 설명한다. 목차 NAS Search Space Search Strategy Search Algorithm Performance Estimation Search Strategy &amp; Search Algorithm 차이점 Example NAS Neural Architectu</description>
     </item>
     <item>
       <title>How to do Internal Camera Calibration</title>
@@ -54,6 +62,30 @@
       <pubDate>Wed, 04 Feb 2026 05:23:00 GMT</pubDate>
       <category>Application</category>
       <description>서론 ROS2를 사용해서 카메라 내부 캘리브레이션 하는 방법에 대해 설명한다. Dependencies 카메라 렌즈와 센서의 특성 때문에 발생하는 영상 왜곡을 수학적으로 계산하여 보정값을 찾아내는 프로그램으로 실시간으로 ROS 토픽(image_raw)을 구독(Subscribe)하여 화면을 보면서, 그 위에</description>
+    </item>
+    <item>
+      <title>[RL] DQN의 Action Space 한계</title>
+      <link>https://ursonice.github.io/post.html?slug=rl-dqn%E1%84%8B%E1%85%B4-action-space-%E1%84%92%E1%85%A1%E1%86%AB%E1%84%80%E1%85%A8</link>
+      <guid isPermaLink="false">345b12c0-115c-80ad-a4a1-eb9961bbd163</guid>
+      <pubDate>Fri, 17 Apr 2026 01:38:00 GMT</pubDate>
+      <category>AI/ Theory</category>
+      <description>로봇이 잘 걸어가도록 하기 위해 DQN모델을 사용한다 해보자. 총 4개의 관절이 있고 각 관절은 (-90, 0, 90) 3개의 값 중 하나를 가질 수 있다. 이 경우 각 관절 당 3가지의 값을 가질 수 있으니 관절이 4개 임으로 3x3x3x3 = 81개의 조합이 만들어진다. 넘어지기 직전상태인 St에 대</description>
+    </item>
+    <item>
+      <title>Likelihood(MLE)</title>
+      <link>https://ursonice.github.io/post.html?slug=likelihood-mle</link>
+      <guid isPermaLink="false">38883001-3d8c-451a-a56f-f475f9d69d26</guid>
+      <pubDate>Wed, 14 Jun 2023 02:07:00 GMT</pubDate>
+      <category>AI/ Theory</category>
+      <description>서론 이 장은 MLE에 대해서 설명한다. 확률의 의미와 기본 개념들에 대해서 같이 알아봐보자. 목차 Probability PDF(Probability Density Function) CDF(Cumulative Distribution Function) 모수 추정 Likelihood Maximum likel</description>
+    </item>
+    <item>
+      <title>[01] C++ 기초</title>
+      <link>https://ursonice.github.io/post.html?slug=01-c-%E1%84%80%E1%85%B5%E1%84%8E%E1%85%A9</link>
+      <guid isPermaLink="false">327b12c0-115c-8054-943c-eb189c200cf8</guid>
+      <pubDate>Wed, 18 Mar 2026 10:16:00 GMT</pubDate>
+      <category>C/ C++</category>
+      <description>목차 1. Namespace 2. 기초문법 3. Reference 4. New, Delete 5. Class 1. Namespace C++에서 이름 공간(namespace)은 변수, 함수, 클래스와 같은 이름들이 어느 소속에 속해 있는지 구분하기 위한 개념으로 같은 이름이라도 서로 다른 namespace</description>
     </item>
     <item>
       <title>Raspi Segmentation</title>
@@ -80,20 +112,20 @@
       <description>Ubuntu Image 다운로드 및 실행 --net=host 를 옵션에 꼭 넣어줘야 외부포트 접속이 가능하다. docker run -it --net=host --name ubuntu-desktop ubuntu:22.04 /bin/bash 컨테이너 접속 명령어 만약 컨테이너에서 나왔다면 아래 명령어로 다시</description>
     </item>
     <item>
+      <title>Manifold 개념</title>
+      <link>https://ursonice.github.io/post.html?slug=manifold-%E1%84%80%E1%85%A2%E1%84%82%E1%85%A7%E1%86%B7</link>
+      <guid isPermaLink="false">7c984a89-c8d3-4b5d-aff7-f782c8101731</guid>
+      <pubDate>Sun, 11 Jun 2023 05:05:00 GMT</pubDate>
+      <category>AI/ Theory</category>
+      <description>서론 이 장은 Manifold의 개념에 대해서 설명한다. 목차 Manifold Manifold Hypothesis 1. Data compression 2. Data visualization 3. Curse of dimensionality 개선 4. Discovering most important feat</description>
+    </item>
+    <item>
       <title>Isaacsim 5.1 Manual</title>
       <link>https://ursonice.github.io/post.html?slug=isaacsim-5-1-manual</link>
       <guid isPermaLink="false">2e0b12c0-115c-80de-9d96-d8ecca8af5d5</guid>
       <pubDate>Tue, 06 Jan 2026 10:30:00 GMT</pubDate>
       <category>Robotics</category>
       <description>Basic usage Preparation 파일 생성 Menu Bar → File → New를 눌러 프로젝트를 생성 Ground plane생성 Create &gt; Physics &gt; Ground Plane 조명추가 Create &gt; Lights &gt; Distant Light Visual Cube Gizmo(큐브)</description>
-    </item>
-    <item>
-      <title>(VLA) NaVILA 논문리뷰</title>
-      <link>https://ursonice.github.io/post.html?slug=vla-navila-%E1%84%82%E1%85%A9%E1%86%AB%E1%84%86%E1%85%AE%E1%86%AB%E1%84%85%E1%85%B5%E1%84%87%E1%85%B2</link>
-      <guid isPermaLink="false">2afb12c0-115c-805f-a2dc-c2bda949f787</guid>
-      <pubDate>Tue, 18 Nov 2025 00:58:00 GMT</pubDate>
-      <category>AI/ Deep Learning</category>
-      <description>Cite Anthony Brohan, Noah Brown, Justice Carbajal, Chelsea Finn, Sergey Levine, et al.; arXiv preprint arXiv:2307.15818 [cs.RO] https://navila-bot.github.io/static/navila</description>
     </item>
     <item>
       <title>Unitree Go1</title>
@@ -112,12 +144,28 @@
       <description>Cite An-Chieh Cheng, Yandong Ji, Zhaojing Yang, Zaitian Gongye, Xueyan Zou, Jan Kautz, Erdem Bıyık, Hongxu Yin, Sifei Liu, Xiaolong Wang; arXiv preprint arXiv:2412.04453 </description>
     </item>
     <item>
+      <title>DiffusionAD: Norm-guided One-step Denoising Diffusion for Anomaly Detection 논문리뷰</title>
+      <link>https://ursonice.github.io/post.html?slug=diffusionad-norm-guided-one-step-denoising-diffusion-for-anomaly-detection-%E1%84%82%E1%85%A9%E1%86%AB%E1%84%86%E1%85%AE</link>
+      <guid isPermaLink="false">2faa86ea-5304-4f76-8da3-2b8e7b91ede5</guid>
+      <pubDate>Sat, 10 Aug 2024 08:48:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>Cite Hui Zhang1,2 Zheng Wang3 Zuxuan Wu1,2 Yu-Gang Jiang1,2; arXiv preprint arXiv:2303.08730 https://arxiv.org/pdf/2407.09359 출간일: 2024. 07. 12 Abstract Unsupervised Abno</description>
+    </item>
+    <item>
       <title>RT-1(Robotics Transformer-1) 논문리뷰 </title>
       <link>https://ursonice.github.io/post.html?slug=rt-1-robotics-transformer-1-%E1%84%82%E1%85%A9%E1%86%AB%E1%84%86%E1%85%AE%E1%86%AB%E1%84%85%E1%85%B5%E1%84%87%E1%85%B2</link>
       <guid isPermaLink="false">285b12c0-115c-8076-871f-f701199189cb</guid>
       <pubDate>Tue, 07 Oct 2025 09:18:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
       <description>Cite Anthony Brohan, Noah Brown, Justice Carbajal, Yevgen Chebotar, et al.; arXiv preprint arXiv:2212.06817 [cs.RO] https://arxiv.org/pdf/2212.06817 출간일: 2022. 12. 13 저널:</description>
+    </item>
+    <item>
+      <title>ViT 논문리뷰</title>
+      <link>https://ursonice.github.io/post.html?slug=vit-%E1%84%82%E1%85%A9%E1%86%AB%E1%84%86%E1%85%AE%E1%86%AB%E1%84%85%E1%85%B5%E1%84%87%E1%85%B2</link>
+      <guid isPermaLink="false">95458e7d-0614-40ef-b9e1-cab3c363dbc4</guid>
+      <pubDate>Sun, 11 Dec 2022 09:34:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 이 장은 NLP에서 사용되던 Transformer에서 self-attention기반의 아키텍처가 Vision Task에 적용한 Vision Transformer에 대해 설명한다. 본 논문에서 ViT는 CNN보다 데이터셋의 갯수가 적을경우 Inductive Bias학습이 어려워 일반화가 어렵다는 단점</description>
     </item>
     <item>
       <title>ROS2</title>
@@ -136,116 +184,68 @@
       <description>URDF: Unified Robot discription format Link: 로봇의 몸체 부분 Link의 구성요소 Visual: 시각적 요소 부분 inertial: 관성 Mass(질량): 물체의 무게 Origin(무게중심): 물체의 균형점 Inertia(관성모멘트): 회전하기 어려운 정도 collis</description>
     </item>
     <item>
-      <title>[Kubernetes] Backup and Restore</title>
-      <link>https://ursonice.github.io/post.html?slug=kubernetes-backup-and-restore</link>
-      <guid isPermaLink="false">22fb12c0-115c-80df-b59c-e89c990a385d</guid>
-      <pubDate>Sun, 13 Jul 2025 08:34:00 GMT</pubDate>
-      <category>Kubernetes</category>
-      <description>서론 Kubernetes 클러스터를 안정적으로 운영하기 위해서는 정기적인 백업과 복원이 필요하다. 이 장에서는 Kubernetes 리소스를 백업하고 복원하는 두 가지 주요 방법에 대해 알아보자. 첫 번째는 Kube API 서버를 통해 리소스 정의를 백업하는 방식이고 두 번째는 etcd 데이터베이스 자체를</description>
+      <title>Ubuntu Nvidia Driver Install</title>
+      <link>https://ursonice.github.io/post.html?slug=ubuntu-nvidia-driver-install</link>
+      <guid isPermaLink="false">8812b0fb-a40e-476e-82e1-5dee7b662ff2</guid>
+      <pubDate>Wed, 17 May 2023 06:43:00 GMT</pubDate>
+      <category>Tools</category>
+      <description>서론 우분투 20.04 환경에서 Nvidia driver 설치 방법에 대해서 설명한다. 목차 Nvidia-driver 설치 Driver 설치 확인 Nvidia-driver 설치 아래 명령어를 입력하면 다음과 같은 화면이 뜨는데 recommended 부분을 설치하면되는데 open버전이 아닌 걸로 설치하면 </description>
     </item>
     <item>
-      <title>[Kubernetes] Cluster Upgrade</title>
-      <link>https://ursonice.github.io/post.html?slug=kubernetes-cluster-upgrade</link>
-      <guid isPermaLink="false">225b12c0-115c-800c-8e18-e14b94d2e931</guid>
-      <pubDate>Thu, 03 Jul 2025 15:13:00 GMT</pubDate>
-      <category>Kubernetes</category>
-      <description>서론 Kubernetes는 최근 3개의 버전만을 공식 지원하기 때문에, 정기적인 업그레이드가 필요하다. 예를 들어 최신 버전이 1.13일 경우, 지원 대상은 1.13, 1.12, 1.11이며 1.10은 지원되지 않는다. 따라서 최신 버전(1.13)이 release되기 전에 1.10을 사용하고 있다면 1.</description>
+      <title>Gradient</title>
+      <link>https://ursonice.github.io/post.html?slug=gradient</link>
+      <guid isPermaLink="false">34a741d8-2bcf-4dcb-b056-d30e59af6b93</guid>
+      <pubDate>Sun, 20 Nov 2022 04:44:00 GMT</pubDate>
+      <category>AI/ Theory</category>
+      <description>서론 이 장은 Foward 신경망에 대한 Weight(가중치)를 update하는 방법(backpropagation)에 대해 다룬다. 목차 1. Analytical Differentiation(해석적 미분) 2. Numerical Differentiation(수치 미분) 3. Symbolic differe</description>
     </item>
     <item>
-      <title>[Kubernetes] Version</title>
-      <link>https://ursonice.github.io/post.html?slug=kubernetes-version</link>
-      <guid isPermaLink="false">225b12c0-115c-80f3-9ea7-dc607305c8cc</guid>
-      <pubDate>Thu, 03 Jul 2025 15:00:00 GMT</pubDate>
-      <category>Kubernetes</category>
-      <description>서론 쿠버네티스에는 다양한 릴리즈와 버전 체계가 있다. 이에 대해 알아보자 본론 쿠버네티스 버전을 확인하는 방법은 kubectl get nodes를 통해알 수 있다. 쿠버네티스 버전 출시는 메이저 버전, 마이너 버전, 패치 버전이 존재한다. 메이저 버전은 아키텍처가 크게 바뀔때 올라간다. 마이너 버전은 </description>
+      <title>Towards Total Recall in Industrial Anomaly Detection 논문리뷰</title>
+      <link>https://ursonice.github.io/post.html?slug=towards-total-recall-in-industrial-anomaly-detection-%E1%84%82%E1%85%A9%E1%86%AB%E1%84%86%E1%85%AE%E1%86%AB%E1%84%85%E1%85%B5%E1%84%87%E1%85%B2</link>
+      <guid isPermaLink="false">0e1004e6-ab79-46ae-a047-1e94c70e37d3</guid>
+      <pubDate>Tue, 13 Aug 2024 04:26:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>Cite Karsten Roth, Latha Pemula, Joaquin Zepeda, Bernhard Schölkopf, Thomas Brox, Peter Gehler; arXiv preprint arXiv:2106.08265, 2022. https://arxiv.org/abs/2106.08265 출간</description>
     </item>
     <item>
-      <title>[Kubernetes] Drain, Cordon, Uncordon</title>
-      <link>https://ursonice.github.io/post.html?slug=kubernetes-drain-cordon-uncordon</link>
-      <guid isPermaLink="false">225b12c0-115c-801e-b89b-e92f0eea340c</guid>
-      <pubDate>Thu, 03 Jul 2025 12:35:00 GMT</pubDate>
-      <category>Kubernetes</category>
-      <description>서론 클러스터를 운영하다보면 노드에 OS업그레이드나 보안 패치를 적용하기 위해 잠시 노드를 중단해야 하는 상황이 생긴다. 이때 파드가 끊기는 시간을 최소화하면서 안전하게 노드를 관리해야 한다. 이와 관련하여 Drain명령어를 통해 노드에 실행중인 파드들을 모드 종료하고 다른 노드에 생성하도록 한다. 파드</description>
+      <title>DRÆM – A discriminatively trained reconstruction embedding for surface anomaly detection 논문 리뷰</title>
+      <link>https://ursonice.github.io/post.html?slug=dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det</link>
+      <guid isPermaLink="false">30cd1c6a-5aed-483c-96a5-6a15183740e2</guid>
+      <pubDate>Mon, 17 Jul 2023 08:30:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 Vitjan Zavrtanik, Matej Kristan, Danijel Skočaj; Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2021, pp. 1-10. DRÆM – A Discrim</description>
     </item>
     <item>
-      <title>[Kubernetes] AutoScaling</title>
-      <link>https://ursonice.github.io/post.html?slug=kubernetes-autoscaling</link>
-      <guid isPermaLink="false">221b12c0-115c-80b6-b0ce-fd7f4125fb04</guid>
-      <pubDate>Sun, 29 Jun 2025 09:33:00 GMT</pubDate>
-      <category>Kubernetes</category>
-      <description>Cluster 관점 Horizontal Scaling 노드 갯수 조절 노드를 옆으로 늘리는 것으로 예를들어 서버가 3대인데 자원이 부족해서 서버를 3대 더 추가해 총 6대로 만드는 것이다. 스케일링 방법 Manual Way(수동 방식) 새 서버를 직접 준비하고 kubeadm join 명령으로 클러스터에 </description>
+      <title>ONNX-Runtime에서 Custom Operator 구현 Study</title>
+      <link>https://ursonice.github.io/post.html?slug=onnx-runtime%E1%84%8B%E1%85%A6%E1%84%89%E1%85%A5-custom-operator-%E1%84%80%E1%85%AE%E1%84%92%E1%85%A7%E1%86%AB-study</link>
+      <guid isPermaLink="false">6f19fddf-1ede-476c-b3e2-16bf8a8ec15b</guid>
+      <pubDate>Tue, 30 May 2023 23:42:00 GMT</pubDate>
+      <category>ONNX-MLIR</category>
+      <description>서론 이 장은 ORT(ONNX-Runtime)에서 Custom Operator를 구현하는 방법에 대해 study한것을 설명한다. ONNX Operation은 하나 이상의 커널을 갖는다. 각 커널은 연산이 어떻게 실행되는지를 정의하며 커널은 특정 하드웨어에 대해 최적화되어 있다. 따라서 ORT가 다양한 하</description>
     </item>
     <item>
-      <title>[Kubernetes] Multi Container Pods</title>
-      <link>https://ursonice.github.io/post.html?slug=kubernetes-multi-container-pods</link>
-      <guid isPermaLink="false">220b12c0-115c-809d-8959-e42b2736a976</guid>
-      <pubDate>Sat, 28 Jun 2025 12:38:00 GMT</pubDate>
-      <category>Kubernetes</category>
-      <description>서론 쿠버네티스에서 multi container 파드를 구성할 때 두 가지 패턴(종류)가 있다. 하나는 Sidecar container와 co-located container이다. 두 컨테이너는 같은 파드 안에 존재하지만 역할과 생명주기 동작방식에서 차이가 있다. 이 두 종류에 대해서 알아보자 Sidec</description>
+      <title>Raspberry PI에서 Ubuntu Setting부터 Coral TPU를 사용해 MobileNetV2 Inference 해보기</title>
+      <link>https://ursonice.github.io/post.html?slug=raspberry-pi%E1%84%8B%E1%85%A6%E1%84%89%E1%85%A5-ubuntu-setting%E1%84%87%E1%85%AE%E1%84%90%E1%85%A5-coral-tpu%E1%84%85%E1%85%B3%E1%86%AF-%E1%84%89%E1%85%A1%E1%84%8B%E1%85%AD%E1%86%BC%E1%84%92%E1%85%A2-mobilenetv2-inference-%E1%84%92</link>
+      <guid isPermaLink="false">6ce7ed92-14ce-4cce-855c-2d969e51f267</guid>
+      <pubDate>Sat, 12 Nov 2022 06:23:00 GMT</pubDate>
+      <category>Application</category>
+      <description>서론 이 장에서는 Raspberry PI에서 MobileNetV2를 Coral Edge TPU를 사용해 inference하는 방법과 필요한 환경셋팅 대해서 설명한다. 목차 1. Requirements 2. Install Ubuntu 방법1. 라즈베리파이에서 제공하는 GUI툴을 이용해 설치 방법2. Ser</description>
     </item>
     <item>
-      <title>[Kubernetes] Secrets</title>
-      <link>https://ursonice.github.io/post.html?slug=kubernetes-secrets</link>
-      <guid isPermaLink="false">21ab12c0-115c-80d8-935e-cd0f7d4c4cea</guid>
-      <pubDate>Sun, 22 Jun 2025 12:14:00 GMT</pubDate>
-      <category>Kubernetes</category>
-      <description>서론 Kubernetes에서 환경변수를 파드에 직접 삽입이 가능했으나 이는 파드의 갯수가 많아 질 경우 관리하기 힘들다. 따라서 ConfigMap을 사용하여 환경변수 데이터를 중앙화 하였다. ConfigMap은 이러한 환경변수를 텍스트 형태로 저장한다. 따라서 아이디나 비밀번호와 같은 민감한 정보를 텍스</description>
+      <title>ONNX-MLIR 다뤄보기(MobileNetV2-12)</title>
+      <link>https://ursonice.github.io/post.html?slug=onnx-mlir-%E1%84%83%E1%85%A1%E1%84%85%E1%85%AF%E1%84%87%E1%85%A9%E1%84%80%E1%85%B5-mobilenetv2-12</link>
+      <guid isPermaLink="false">392835f5-a06f-4c04-b1e8-d07d56e9d112</guid>
+      <pubDate>Mon, 05 Dec 2022 05:18:00 GMT</pubDate>
+      <category>ONNX-MLIR</category>
+      <description>서론 이 장은 ONNX-MLIR로 모델을 컴파일 하는 방법에 대해 소개한다. Docker를 사용하거나 직접 설치해서 사용할 수 있다.(직접설치하는 방법 바로가기) 그리고 기존 onnx모델을 shared library형태에로 컴파일 한 후, Inference를 진행해본다. (환경) AMD64 Archite</description>
     </item>
     <item>
-      <title>[Kubernetes] Configure Environment Variables in Applications</title>
-      <link>https://ursonice.github.io/post.html?slug=kubernetes-configure-environment-variables-in-applications</link>
-      <guid isPermaLink="false">219b12c0-115c-80ca-b25a-da9674d2b742</guid>
-      <pubDate>Sat, 21 Jun 2025 11:36:00 GMT</pubDate>
-      <category>Kubernetes</category>
-      <description>서론 Kubernetes에서는 컨테이너 실행 시 필요한 환경 변수를 설정할 수 있다. 이 장에서는 Pod정의 파일에서 환경 변수를 설정하는 기본적인 방법과 ConfigMap, Secret대해 공부한다. Pod Pod 정의 파일에서 spec.containers.env 항목을 사용하여 환경 변수 설정 가능하</description>
-    </item>
-    <item>
-      <title>[Kubernetes] Command Configure Application</title>
-      <link>https://ursonice.github.io/post.html?slug=kubernetes-command-configure-application</link>
-      <guid isPermaLink="false">219b12c0-115c-801a-8ba1-d1c43ee9e6e2</guid>
-      <pubDate>Sat, 21 Jun 2025 07:33:00 GMT</pubDate>
-      <category>Kubernetes</category>
-      <description>서론 쿠버네티스에서 파드 정의 파일에서의 명령어와 인자(arguments)를 설정하는 부분이 있다. 이것에 대해 이해하기 위해서 먼저 Docker에서의 명령어와 컨테이너에 대한 이해가 선행되어야 한다. 따라서 이후 Kubernetes 파드 개념으로 연결해보자. CMD docker run ubuntu 명령</description>
-    </item>
-    <item>
-      <title>[Kubernetes] Rolling Updates and Rollbacks</title>
-      <link>https://ursonice.github.io/post.html?slug=kubernetes-rolling-updates-and-rollbacks</link>
-      <guid isPermaLink="false">215b12c0-115c-802a-afcb-cefb483209b2</guid>
-      <pubDate>Tue, 17 Jun 2025 15:16:00 GMT</pubDate>
-      <category>Kubernetes</category>
-      <description>서론 Kubernetes에서 애플리케이션을 안정적으로 운영하기 위해서는 배포(Deployment)할 때 서비스 중단 없이 애플리케이션을 업그레이드하거나 문제가 발생했을 때 이전 상태로 되돌리는 롤아웃(Rollout)과 롤백(Rollback) 기능에 대해서 알아본다. Rollout &amp; Rollback Ku</description>
-    </item>
-    <item>
-      <title>[Kubernetes] Cluster Monitoring / Logs</title>
-      <link>https://ursonice.github.io/post.html?slug=kubernetes-cluster-monitoring-logs</link>
-      <guid isPermaLink="false">215b12c0-115c-8069-a4b4-ceb447366ede</guid>
-      <pubDate>Tue, 17 Jun 2025 11:24:00 GMT</pubDate>
-      <category>Kubernetes</category>
-      <description>서론 쿠버네티스 클러스터에서의 자원 사용량을 모니터링하는 방법에 대해 알아본다. 모니터링의 주요 대상은 크게 노드 수준과 파드 수준으로 나뉘며, 각각 다음과 같은 지표들을 포함한다. 노드 수준: 클러스터 내 노드의 수, 각 노드의 상태(정상 여부), CPU, 메모리, 디스크, 네트워크 사용량 등 파드 수</description>
-    </item>
-    <item>
-      <title>[Kuberentes] Validating and Mutating Admission Controller / Webhook</title>
-      <link>https://ursonice.github.io/post.html?slug=kuberentes-validating-and-mutating-admission-controller-webhook</link>
-      <guid isPermaLink="false">210b12c0-115c-80e0-a847-e2dfd1a4b2ee</guid>
-      <pubDate>Thu, 12 Jun 2025 12:54:00 GMT</pubDate>
-      <category>Kubernetes</category>
-      <description>서론 이전 페이지에서 Admission Controller의 역할에 대해서 알아봤다. Admission Controller는 Kube-apisever에서 사용자의 요청을 검증하고 거부하는것 뿐만 아니라 요청 자체를 수정하는 역할을 한다고 하였다. 이전 페이지에서 보았던 NamespaceExists, Na</description>
-    </item>
-    <item>
-      <title>[Kubernetes] Admission Controller</title>
-      <link>https://ursonice.github.io/post.html?slug=kubernetes-admission-controller</link>
-      <guid isPermaLink="false">210b12c0-115c-804f-9009-ea0abfae1ba4</guid>
-      <pubDate>Thu, 12 Jun 2025 07:16:00 GMT</pubDate>
-      <category>Kubernetes</category>
-      <description>서론 사용자가 어떤 명령어 전달할 때 kubectl을 통해Kubernetes클러스터에서 다양한 작업을 수행했다. 파드를 생성하는 등의 요청을 보낼 때마다 그 요청은 API 서버로 전달되고, 이후 파드가 생성되며 최종적으로 그 정보는 Etcd 데이터베이스에 저장된다. 이때 사용자의 요청이 API 서버에 도</description>
-    </item>
-    <item>
-      <title>[Kubernetes] Multiple Schedulers</title>
-      <link>https://ursonice.github.io/post.html?slug=kubernetes-multiple-schedulers</link>
-      <guid isPermaLink="false">208b12c0-115c-8029-9796-e33f50692aa4</guid>
-      <pubDate>Wed, 04 Jun 2025 10:57:00 GMT</pubDate>
-      <category>Kubernetes</category>
-      <description>서론 스케줄러는 taints, tolerations, node affinity 등 다양한 조건을 고려하여 파드를 노드에 고르게 분산시키는 알고리즘을 사용한다. 그런데 나만의 스케줄링 알고리즘을 만들어 파드를 노드에 배치하고자 하려면 어떻게해야 할까? 사용자는 자신만의 스케줄러 프로그램을 작성하여, 이를 </description>
+      <title>GLASS 논문리뷰</title>
+      <link>https://ursonice.github.io/post.html?slug=glass-%E1%84%82%E1%85%A9%E1%86%AB%E1%84%86%E1%85%AE%E1%86%AB%E1%84%85%E1%85%B5%E1%84%87%E1%85%B2</link>
+      <guid isPermaLink="false">a243f2c4-d437-496d-93d7-ba5d879e14ea</guid>
+      <pubDate>Tue, 30 Jul 2024 09:46:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>Cite Hui Zhang, Zheng Wang, Zuxuan Wu, Yu-Gang Jiang; arXiv preprint arXiv:2303.08730, 2023. https://arxiv.org/abs/2303.08730 출간일: 2023. 03. 15 목차 Abstract Introduction P</description>
     </item>
   </channel>
 </rss>
