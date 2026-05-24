@@ -1122,7 +1122,8 @@ p {
   margin: 56px auto 110px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 240px;
-  gap: 56px;
+  column-gap: 56px;
+  row-gap: 24px;
   align-items: start;
 }
 
@@ -1813,7 +1814,7 @@ p {
 .comments {
   grid-column: 1 / 2;
   min-width: 0;
-  margin-top: 64px;
+  margin-top: 16px;
   padding-top: 40px;
   border-top: 1px solid var(--line);
 }
@@ -1833,7 +1834,7 @@ p {
 .post-nav {
   grid-column: 1 / 2;
   min-width: 0;
-  margin-top: 56px;
+  margin-top: 16px;
   padding-top: 36px;
   border-top: 1px solid var(--line);
 }
