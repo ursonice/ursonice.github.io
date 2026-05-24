@@ -81,6 +81,17 @@ const buildToc = () => {
     links.push({ id, link });
   });
 
+  // Jump-to-comments entry at the end of the table of contents.
+  const commentsEl = document.getElementById("comments");
+  if (commentsEl) {
+    const clink = document.createElement("a");
+    clink.href = "#comments";
+    clink.className = "toc-comment";
+    clink.textContent = "Comment";
+    side.append(clink);
+    links.push({ id: "comments", link: clink });
+  }
+
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -91,6 +102,29 @@ const buildToc = () => {
     { rootMargin: "-80px 0px -70% 0px" },
   );
   headings.forEach((heading) => observer.observe(heading));
+  if (commentsEl) observer.observe(commentsEl);
+};
+
+// Floating "jump to comments" button: appears once you scroll down, hides when comments are in view.
+const initJumpToComments = () => {
+  const btn = $("[data-jump-comments]");
+  const target = document.getElementById("comments");
+  if (!btn || !target) return;
+
+  let commentsVisible = false;
+  const update = () => {
+    const show = window.scrollY > 320 && !commentsVisible;
+    btn.toggleAttribute("hidden", !show);
+  };
+  new IntersectionObserver(
+    (entries) => {
+      commentsVisible = entries[0].isIntersecting;
+      update();
+    },
+    { rootMargin: "0px 0px -35% 0px" },
+  ).observe(target);
+  window.addEventListener("scroll", update, { passive: true });
+  update();
 };
 
 const typesetMath = () => {
@@ -220,6 +254,7 @@ const init = async () => {
     if (post) {
       renderPost(post);
       loadGiscus(post.slug);
+      initJumpToComments();
     } else {
       renderMissing();
     }
