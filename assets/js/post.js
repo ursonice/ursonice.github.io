@@ -167,26 +167,50 @@ const highlightCode = () => {
   }, 50);
 };
 
-// "Copy" button on each code block.
-const addCopyButtons = () => {
+// Wrap each code block in a window-chrome card: header (traffic-light dots +
+// language label + copy button) and a line-number gutter.
+const decorateCodeBlocks = () => {
   document.querySelectorAll(".article-content pre").forEach((pre) => {
-    if (pre.querySelector(".copy-btn")) return;
+    if (pre.closest(".code-block")) return; // already decorated
     const code = pre.querySelector("code");
     if (!code) return;
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "copy-btn";
-    btn.textContent = "복사";
-    btn.addEventListener("click", async () => {
+
+    const lang = (pre.dataset.lang || "code").toUpperCase();
+    const lineCount = Math.max(1, code.textContent.replace(/\n+$/, "").split("\n").length);
+
+    const block = document.createElement("div");
+    block.className = "code-block";
+
+    const head = document.createElement("div");
+    head.className = "code-head";
+    head.innerHTML = `<span class="code-dots"><i></i><i></i><i></i></span><span class="code-lang">${lang}</span>`;
+
+    const copy = document.createElement("button");
+    copy.type = "button";
+    copy.className = "copy-btn";
+    copy.textContent = "복사";
+    copy.addEventListener("click", async () => {
       try {
         await navigator.clipboard.writeText(code.textContent);
-        btn.textContent = "복사됨";
+        copy.textContent = "복사됨";
       } catch {
-        btn.textContent = "실패";
+        copy.textContent = "실패";
       }
-      setTimeout(() => (btn.textContent = "복사"), 1500);
+      setTimeout(() => (copy.textContent = "복사"), 1500);
     });
-    pre.appendChild(btn);
+    head.appendChild(copy);
+
+    const gutter = document.createElement("span");
+    gutter.className = "code-gutter";
+    gutter.setAttribute("aria-hidden", "true");
+    gutter.textContent = Array.from({ length: lineCount }, (_, i) => i + 1).join("\n");
+
+    const scroll = document.createElement("div");
+    scroll.className = "code-scroll";
+
+    pre.replaceWith(block);
+    scroll.append(gutter, pre);
+    block.append(head, scroll);
   });
 };
 
@@ -409,7 +433,7 @@ const renderPost = (post) => {
   addHeadingAnchors();
   initMermaid();
   highlightCode();
-  addCopyButtons();
+  decorateCodeBlocks();
   initLightbox();
   typesetMath();
 };
