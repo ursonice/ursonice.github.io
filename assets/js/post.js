@@ -356,10 +356,10 @@ const setMeta = (post) => {
 const firstImage = (post) => {
   const m = (post.html || "").match(/<img[^>]+src=["']([^"']+)["']/i);
   if (!m) return `${location.origin}/assets/images/favicon.svg`;
-  let src = m[1];
-  if (/^https?:/i.test(src)) return src;
-  if (src.startsWith("/")) return location.origin + src;
-  return `${location.origin}/${src.replace(/^\.?\//, "")}`;
+  const src = m[1];
+  const abs = /^https?:/i.test(src) ? src : src.startsWith("/") ? location.origin + src : `${location.origin}/${src.replace(/^\.?\//, "")}`;
+  // Image paths in the JSON are NFD but the files are NFC → normalize so the URL resolves.
+  return encodeURI(abs.normalize("NFC"));
 };
 
 // Share bar: copy link, X, LinkedIn (URL-based) + optional KakaoTalk (needs KAKAO_KEY).
@@ -499,7 +499,7 @@ const renderPost = (post) => {
   setMeta(post);
   const article = $("[data-article]");
   const body = post.html
-    ? `<div class="article-content">${post.html}</div>`
+    ? `<div class="article-content">${post.html.normalize("NFC")}</div>`
     : `<div class="article-content"><p>${escapeHtml(post.summary || "아직 본문이 동기화되지 않은 글입니다. 노션에서 내용을 채우면 여기에 표시됩니다.")}</p></div>`;
 
   const created = formatDate(post.created);

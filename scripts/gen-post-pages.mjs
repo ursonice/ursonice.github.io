@@ -29,9 +29,9 @@ const firstImage = (html = "") => {
   const m = html.match(/<img[^>]+src=["']([^"']+)["']/i);
   if (!m) return DEFAULT_IMG;
   const src = m[1];
-  if (/^https?:/i.test(src)) return encodeURI(src);
-  if (src.startsWith("/")) return encodeURI(SITE + src);
-  return encodeURI(`${SITE}/${src.replace(/^\.?\//, "")}`);
+  const abs = /^https?:/i.test(src) ? src : src.startsWith("/") ? SITE + src : `${SITE}/${src.replace(/^\.?\//, "")}`;
+  // notion-posts.json stores image paths in NFD, but the committed files are NFC → normalize.
+  return encodeURI(abs.normalize("NFC"));
 };
 
 // Reuse post.html's <body> verbatim (kept in sync automatically) with relative→absolute paths.
