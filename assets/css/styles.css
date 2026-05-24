@@ -1554,7 +1554,7 @@ p {
 }
 
 .article-content {
-  color: var(--ink-soft);
+  color: var(--ink);
   font-size: 1.06rem;
   line-height: 1.95;
 }
