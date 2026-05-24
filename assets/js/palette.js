@@ -120,3 +120,33 @@
     }
   });
 })();
+
+// Prefetch post pages on hover → with View Transitions, navigation feels instant.
+(() => {
+  if (navigator.connection?.saveData) return;
+  const seen = new Set();
+  const isPost = (href) => {
+    try {
+      const u = new URL(href, location.href);
+      if (u.origin !== location.origin) return false;
+      if (!(u.pathname.startsWith("/posts/") || u.pathname === "/post.html")) return false;
+      // Skip same-page links (e.g. heading anchors that only change the hash).
+      return u.pathname !== location.pathname || u.search !== location.search;
+    } catch {
+      return false;
+    }
+  };
+  document.addEventListener(
+    "pointerover",
+    (e) => {
+      const a = e.target.closest?.("a[href]");
+      if (!a || seen.has(a.href) || !isPost(a.href)) return;
+      seen.add(a.href);
+      const link = document.createElement("link");
+      link.rel = "prefetch";
+      link.href = a.href;
+      document.head.appendChild(link);
+    },
+    { passive: true },
+  );
+})();

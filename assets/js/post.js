@@ -435,10 +435,33 @@ const initViewCount = (post) => {
       dot.className = "dot";
       const span = document.createElement("span");
       span.textContent = `조회 ${d.count.toLocaleString()}`;
-      meta.append(dot, span);
+      // Keep views with the date, left of the font-size control.
+      const rs = meta.querySelector(".reading-size");
+      if (rs) {
+        meta.insertBefore(dot, rs);
+        meta.insertBefore(span, rs);
+      } else {
+        meta.append(dot, span);
+      }
       if (hit === "1") sessionStorage.setItem(key, "1");
     })
     .catch(() => {});
+};
+
+// Reading font-size preference (작게/보통/크게), persisted in localStorage.
+const initReadingSize = () => {
+  const group = $(".reading-size");
+  if (!group) return;
+  const apply = (size) => {
+    document.documentElement.dataset.reading = size;
+    localStorage.setItem("reading", size);
+    group.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.readingSize === size)));
+  };
+  apply(localStorage.getItem("reading") || "md");
+  group.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-reading-size]");
+    if (btn) apply(btn.dataset.readingSize);
+  });
 };
 
 // Related posts (same category/tags) + previous/next navigation at the end of a post.
@@ -545,6 +568,11 @@ const renderPost = (post) => {
         .join("")}
       ${(post.tags || []).length ? '<span class="dot"></span>' : ""}
       ${dateMeta}
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
     </div>
     <hr class="article-divider" />
     ${body}
@@ -558,6 +586,7 @@ const renderPost = (post) => {
   buildToc();
   initShare(post);
   initViewCount(post);
+  initReadingSize();
   addHeadingAnchors();
   initMermaid();
   highlightCode();
@@ -617,6 +646,7 @@ const initTheme = () => {
   const saved = localStorage.getItem("theme");
   const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)").matches;
   document.documentElement.dataset.theme = saved || (prefersDark ? "dark" : "light");
+  document.documentElement.dataset.reading = localStorage.getItem("reading") || "md";
   applyThemeIcon();
   $("[data-theme-toggle]").addEventListener("click", () => {
     const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
