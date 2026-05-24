@@ -44,8 +44,8 @@
   /* liquid glass */
   --glass: color-mix(in srgb, var(--surface) 62%, transparent);
   --glass-strong: color-mix(in srgb, var(--surface) 78%, transparent);
-  --glass-edge: rgba(255, 255, 255, 0.65);
-  --header-edge: rgba(255, 255, 255, 0.85);
+  --glass-edge: rgba(237, 241, 248, 0.85);
+  --header-edge: rgba(240, 244, 250, 0.92);
   --glass-shade: rgba(21, 23, 28, 0.06);
   --blur: blur(22px) saturate(180%);
 
@@ -751,7 +751,7 @@ p {
   background: var(--glass);
   -webkit-backdrop-filter: var(--blur);
   backdrop-filter: var(--blur);
-  box-shadow: inset 0 1px 0 var(--glass-edge);
+  box-shadow: var(--shadow-sm), inset 0 1px 1px rgba(255, 255, 255, 0.6);
   color: var(--ink);
   font: inherit;
   font-size: 0.92rem;
@@ -2351,20 +2351,31 @@ p {
   display: block;
   margin: 28px auto 0;
   padding: 11px 28px;
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--glass-edge);
   border-radius: 999px;
-  background: var(--surface);
+  background: var(--glass);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+  box-shadow: var(--shadow-sm), inset 0 1px 0 var(--glass-edge);
   color: var(--ink);
   font: inherit;
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
-  transition: border-color 0.16s ease, color 0.16s ease, transform 0.16s ease;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease, transform 0.25s cubic-bezier(0.34, 1.3, 0.5, 1);
 }
 
 .load-more:hover {
-  border-color: var(--accent);
   color: var(--accent-ink);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--accent) 16%, var(--glass-strong)),
+    color-mix(in srgb, var(--accent) 6%, var(--glass))
+  );
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.7),
+    0 4px 14px color-mix(in srgb, var(--accent) 20%, transparent);
   transform: translateY(-1px);
 }
 
