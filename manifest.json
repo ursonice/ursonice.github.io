@@ -1,0 +1,19 @@
+{
+  "name": "Woojae Joo — Developer Note",
+  "short_name": "Developer Note",
+  "description": "AI, Robotics, Systems 공부 기록",
+  "lang": "ko",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0a0b0e",
+  "theme_color": "#0a0b0e",
+  "icons": [
+    {
+      "src": "/assets/images/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
