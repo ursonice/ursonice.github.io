@@ -9,6 +9,10 @@ const postUrl = (post) => `${location.origin}/posts/${encodeURIComponent((post.s
 // and register https://ursonice.github.io under 플랫폼 → Web. Empty = button hidden.
 const KAKAO_KEY = "6b60f0fffaa5128881dae4b76b0a165a";
 
+// View counts: paste your val.town counter URL (see scripts/view-counter.ts) to enable
+// the "조회 N" count on posts. Empty = disabled.
+const VIEW_COUNTER_URL = "";
+
 // Giscus (GitHub Discussions) comments. Each post maps to its own discussion via data-term = slug.
 const GISCUS = {
   repo: "ursonice/ursonice.github.io",
@@ -415,6 +419,28 @@ const initKakaoShare = (bar, payload) => {
   document.head.appendChild(s);
 };
 
+// "조회 N" view count (requires VIEW_COUNTER_URL). Counts once per browser session per post.
+const initViewCount = (post) => {
+  if (!VIEW_COUNTER_URL) return;
+  const meta = $(".article-meta");
+  if (!meta) return;
+  const slug = (post.slug || "").normalize("NFC");
+  const key = `viewed:${slug}`;
+  const hit = sessionStorage.getItem(key) ? "0" : "1";
+  fetch(`${VIEW_COUNTER_URL}?slug=${encodeURIComponent(slug)}&hit=${hit}`)
+    .then((r) => r.json())
+    .then((d) => {
+      if (typeof d.count !== "number") return;
+      const dot = document.createElement("span");
+      dot.className = "dot";
+      const span = document.createElement("span");
+      span.textContent = `조회 ${d.count.toLocaleString()}`;
+      meta.append(dot, span);
+      if (hit === "1") sessionStorage.setItem(key, "1");
+    })
+    .catch(() => {});
+};
+
 // Related posts (same category/tags) + previous/next navigation at the end of a post.
 const renderPostNav = (post, all) => {
   const main = $(".article-shell");
@@ -531,6 +557,7 @@ const renderPost = (post) => {
     </div>`;
   buildToc();
   initShare(post);
+  initViewCount(post);
   addHeadingAnchors();
   initMermaid();
   highlightCode();
