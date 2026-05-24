@@ -418,7 +418,8 @@ p {
 }
 
 .icon-button:hover {
-  border-color: var(--line-strong);
+  color: var(--accent-ink);
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
   transform: translateY(-1px);
 }
 
@@ -1184,7 +1185,7 @@ p {
   font-size: 0.72rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--faint);
+  color: var(--ink);
   margin-bottom: 14px;
 }
 
@@ -1417,8 +1418,8 @@ p {
 }
 
 .share-btn:hover {
-  color: var(--ink);
-  border-color: var(--line-strong);
+  color: var(--accent-ink);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
   transform: translateY(-1px);
 }
 
