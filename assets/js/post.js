@@ -302,6 +302,57 @@ const setMeta = (post) => {
   upsert('link[rel="canonical"]', () => { const l = document.createElement("link"); l.rel = "canonical"; return l; }, "href", url);
 };
 
+// Related posts (same category/tags) + previous/next navigation at the end of a post.
+const renderPostNav = (post, all) => {
+  const main = $(".article-shell");
+  const comments = document.getElementById("comments");
+  if (!main || !Array.isArray(all) || !all.length) return;
+
+  const byCreated = [...all].sort((a, b) => new Date(b.created || b.updated) - new Date(a.created || a.updated));
+  const i = byCreated.findIndex((p) => p.id === post.id);
+  const newer = i > 0 ? byCreated[i - 1] : null;
+  const older = i >= 0 && i < byCreated.length - 1 ? byCreated[i + 1] : null;
+
+  let related = byCreated.filter((p) => p.id !== post.id && p.category === post.category);
+  if (related.length < 3) {
+    const tags = new Set(post.tags || []);
+    const more = byCreated.filter(
+      (p) => p.id !== post.id && p.category !== post.category && (p.tags || []).some((t) => tags.has(t)),
+    );
+    related = [...related, ...more];
+  }
+  related = related.slice(0, 3);
+
+  const href = (p) => `post.html?slug=${encodeURIComponent(p.slug)}`;
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  const relatedHtml = related.length
+    ? `<h2 class="post-nav-title">관련 글</h2>
+       <ul class="related-list">
+         ${related
+           .map(
+             (p) =>
+               `<li><a href="${href(p)}"><span class="related-cat">${esc(p.category || "Notes")}</span><span class="related-title">${esc(p.title)}</span></a></li>`,
+           )
+           .join("")}
+       </ul>`
+    : "";
+  const prevNext =
+    newer || older
+      ? `<div class="post-nav-links">
+           ${older ? `<a class="post-nav-link" href="${href(older)}"><span>← 이전 글</span><strong>${esc(older.title)}</strong></a>` : "<span></span>"}
+           ${newer ? `<a class="post-nav-link next" href="${href(newer)}"><span>다음 글 →</span><strong>${esc(newer.title)}</strong></a>` : "<span></span>"}
+         </div>`
+      : "";
+
+  if (!relatedHtml && !prevNext) return;
+  const section = document.createElement("section");
+  section.className = "post-nav";
+  section.innerHTML = relatedHtml + prevNext;
+  if (comments) main.insertBefore(section, comments);
+  else main.appendChild(section);
+};
+
 const renderPost = (post) => {
   document.title = `${post.title} — Woojae Joo`;
   setMeta(post);
@@ -388,6 +439,7 @@ const init = async () => {
     const post = (data.posts || []).find((item) => (item.slug || "").normalize("NFC") === slug);
     if (post) {
       renderPost(post);
+      renderPostNav(post, data.posts);
       loadGiscus(post.slug);
       initJumpToComments();
       initReadProgress();

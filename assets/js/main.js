@@ -6,6 +6,8 @@ const state = {
   profile: null,
   activeTopic: "all",
   query: "",
+  pageSize: 12,
+  visible: 12,
 };
 
 const $ = (selector, scope = document) => scope.querySelector(selector);
@@ -75,9 +77,10 @@ const renderPosts = () => {
   const container = $("[data-posts]");
   const empty = $("[data-empty]");
   const posts = filteredPosts();
+  const shown = posts.slice(0, state.visible);
 
   empty.hidden = posts.length > 0;
-  container.innerHTML = posts
+  container.innerHTML = shown
     .map((post) => {
       const tags = (post.tags || []).slice(0, 2);
       const href = `post.html?slug=${encodeURIComponent(post.slug)}`;
@@ -95,6 +98,27 @@ const renderPosts = () => {
         </a>`;
     })
     .join("");
+
+  // "Load more" button (created once, kept in sync).
+  let more = $("[data-load-more]");
+  const remaining = posts.length - shown.length;
+  if (remaining > 0) {
+    if (!more) {
+      more = document.createElement("button");
+      more.type = "button";
+      more.className = "load-more";
+      more.setAttribute("data-load-more", "");
+      more.addEventListener("click", () => {
+        state.visible += state.pageSize;
+        renderPosts();
+      });
+      container.after(more);
+    }
+    more.textContent = `더 보기 (${remaining})`;
+    more.hidden = false;
+  } else if (more) {
+    more.hidden = true;
+  }
 };
 
 const renderTopics = () => {
@@ -144,6 +168,7 @@ const renderAbout = () => {
 const bindEvents = () => {
   $("[data-search]").addEventListener("input", (event) => {
     state.query = event.target.value;
+    state.visible = state.pageSize;
     renderPosts();
   });
 
@@ -151,6 +176,7 @@ const bindEvents = () => {
     const button = event.target.closest("[data-filter]");
     if (!button) return;
     state.activeTopic = button.dataset.filter;
+    state.visible = state.pageSize;
     renderFilters();
     renderPosts();
   });
@@ -159,6 +185,7 @@ const bindEvents = () => {
     const button = event.target.closest("[data-topic-jump]");
     if (!button) return;
     state.activeTopic = button.dataset.topicJump;
+    state.visible = state.pageSize;
     renderFilters();
     renderPosts();
     $("#posts").scrollIntoView({ behavior: "smooth", block: "start" });
