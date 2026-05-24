@@ -3,11 +3,27 @@ const DATA_URL = "data/notion-posts.json";
 const state = {
   posts: [],
   about: null,
+  profile: null,
   activeTopic: "all",
   query: "",
 };
 
 const $ = (selector, scope = document) => scope.querySelector(selector);
+
+// Apply contact links (GitHub / LinkedIn / Email) pulled from the Notion Profile page.
+const applyProfile = () => {
+  const p = state.profile;
+  if (!p) return;
+  document.querySelectorAll('[data-profile-link="github"]').forEach((a) => {
+    if (p.github) a.href = p.github;
+  });
+  document.querySelectorAll('[data-profile-link="linkedin"]').forEach((a) => {
+    if (p.linkedin) a.href = p.linkedin;
+  });
+  document.querySelectorAll('[data-profile-link="email"]').forEach((a) => {
+    if (p.email) a.href = `mailto:${p.email}`;
+  });
+};
 
 const formatDate = (value) => {
   if (!value) return "날짜 없음";
@@ -182,6 +198,7 @@ const init = async () => {
     const data = await response.json();
     state.posts = sortedByRecent(data.posts || []);
     state.about = data.about || null;
+    state.profile = data.profile || null;
   } catch (error) {
     console.warn("Failed to load Notion data", error);
   }
@@ -191,6 +208,7 @@ const init = async () => {
   renderPosts();
   renderTopics();
   renderAbout();
+  applyProfile();
   bindEvents();
 };
 

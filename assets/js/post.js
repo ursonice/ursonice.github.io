@@ -159,6 +159,12 @@ const init = async () => {
     const response = await fetch(DATA_URL, { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
+    const p = data.profile;
+    if (p) {
+      if (p.github) document.querySelectorAll('[data-profile-link="github"]').forEach((a) => (a.href = p.github));
+      if (p.linkedin) document.querySelectorAll('[data-profile-link="linkedin"]').forEach((a) => (a.href = p.linkedin));
+      if (p.email) document.querySelectorAll('[data-profile-link="email"]').forEach((a) => (a.href = `mailto:${p.email}`));
+    }
     const post = (data.posts || []).find((item) => item.slug === slug);
     post ? renderPost(post) : renderMissing();
   } catch (error) {

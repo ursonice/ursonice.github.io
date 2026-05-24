@@ -499,6 +499,32 @@ const fetchAbout = async (cachedAbout) => {
   };
 };
 
+// Read contact/profile links from a dedicated Notion "Profile" page whose body is
+// a bulleted list of "key: value" items (Email / LinkedIn / GitHub). Links use the
+// item's hyperlink target when present.
+const fetchProfile = async () => {
+  const config = await readConfig();
+  const id = (config.profile?.pageId || "").replace(/-/g, "");
+  if (!id) return null;
+
+  const blocks = await childrenOf(id);
+  const profile = {};
+  for (const block of blocks) {
+    if (block.type !== "bulleted_list_item") continue;
+    const rich = block.bulleted_list_item.rich_text || [];
+    const text = textFromRich(rich);
+    const href = rich.map((r) => r.href || r.text?.link?.url).find(Boolean);
+    const idx = text.indexOf(":");
+    if (idx < 0) continue;
+    const key = text.slice(0, idx).trim().toLowerCase();
+    const val = text.slice(idx + 1).trim();
+    if (key === "email") profile.email = (val || href || "").replace(/^mailto:/, "");
+    else if (key === "linkedin") profile.linkedin = (href || val || "").replace(/^http:\/\//, "https://");
+    else if (key === "github") profile.github = href || val;
+  }
+  return Object.keys(profile).length ? profile : null;
+};
+
 const readExistingOutput = async () => {
   try {
     return JSON.parse(await readFile(OUTPUT, "utf8"));
@@ -532,6 +558,13 @@ const main = async () => {
     console.warn(`about skipped: ${error.message}`);
   }
 
+  let profile = null;
+  try {
+    profile = await fetchProfile();
+  } catch (error) {
+    console.warn(`profile skipped: ${error.message}`);
+  }
+
   const payload = {
     generatedAt: new Date().toISOString(),
     site: {
@@ -540,6 +573,7 @@ const main = async () => {
     },
     sources: sources.map(({ name, dataSourceId }) => ({ name, id: dataSourceId })),
     about,
+    profile: profile || existing.profile || null,
     posts,
   };
 
