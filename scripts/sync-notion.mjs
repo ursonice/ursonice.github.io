@@ -606,7 +606,7 @@ const main = async () => {
   const SITE = process.env.SITE_URL || "https://ursonice.github.io";
   const xmlEsc = (s = "") =>
     s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" }[c]));
-  const postUrl = (p) => `${SITE}/post.html?slug=${encodeURIComponent(p.slug)}`;
+  const postUrl = (p) => `${SITE}/posts/${encodeURIComponent((p.slug || "").normalize("NFC"))}/`;
 
   const items = posts
     .slice(0, 30)

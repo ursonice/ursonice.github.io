@@ -96,7 +96,7 @@ const renderPosts = () => {
   container.innerHTML = shown
     .map((post) => {
       const tags = (post.tags || []).slice(0, 2);
-      const href = `post.html?slug=${encodeURIComponent(post.slug)}`;
+      const href = `/posts/${encodeURIComponent((post.slug || "").normalize("NFC"))}/`;
       return `
         <a class="post-card" href="${href}">
           <div class="post-meta">

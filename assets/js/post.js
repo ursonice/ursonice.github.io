@@ -1,5 +1,8 @@
-const DATA_URL = "data/notion-posts.json";
+const DATA_URL = "/data/notion-posts.json";
 const $ = (selector, scope = document) => scope.querySelector(selector);
+
+// Canonical pretty URL for a post (static per-post page with correct OG tags).
+const postUrl = (post) => `${location.origin}/posts/${encodeURIComponent((post.slug || "").normalize("NFC"))}/`;
 
 // KakaoTalk share: paste your Kakao JavaScript app key here to enable the 카카오톡 button.
 // Get one (free) at https://developers.kakao.com → 내 애플리케이션 → 앱 키 → JavaScript 키,
@@ -333,16 +336,19 @@ const initBackToTop = () => {
 // Per-post SEO/social meta (works for crawlers that run JS, e.g. Google).
 const setMeta = (post) => {
   const desc = (post.summary || "AI, Robotics, Systems 공부 기록").slice(0, 200);
-  const url = `${location.origin}/post.html?slug=${encodeURIComponent((post.slug || "").normalize("NFC"))}`;
+  const url = postUrl(post);
+  const img = firstImage(post);
   const upsert = (selector, make, attr, value) => {
     let el = document.head.querySelector(selector);
     if (!el) { el = make(); document.head.appendChild(el); }
     el.setAttribute(attr, value);
   };
+  const meta = (prop) => () => { const m = document.createElement("meta"); m.setAttribute("property", prop); return m; };
   upsert('meta[name="description"]', () => { const m = document.createElement("meta"); m.name = "description"; return m; }, "content", desc);
-  upsert('meta[property="og:title"]', () => { const m = document.createElement("meta"); m.setAttribute("property", "og:title"); return m; }, "content", post.title);
-  upsert('meta[property="og:description"]', () => { const m = document.createElement("meta"); m.setAttribute("property", "og:description"); return m; }, "content", desc);
-  upsert('meta[property="og:url"]', () => { const m = document.createElement("meta"); m.setAttribute("property", "og:url"); return m; }, "content", url);
+  upsert('meta[property="og:title"]', meta("og:title"), "content", post.title);
+  upsert('meta[property="og:description"]', meta("og:description"), "content", desc);
+  upsert('meta[property="og:url"]', meta("og:url"), "content", url);
+  upsert('meta[property="og:image"]', meta("og:image"), "content", img);
   upsert('link[rel="canonical"]', () => { const l = document.createElement("link"); l.rel = "canonical"; return l; }, "href", url);
 };
 
@@ -360,7 +366,7 @@ const firstImage = (post) => {
 const initShare = (post) => {
   const bar = $("[data-share]");
   if (!bar) return;
-  const url = `${location.origin}/post.html?slug=${encodeURIComponent((post.slug || "").normalize("NFC"))}`;
+  const url = postUrl(post);
   const title = post.title || "Woojae Joo";
 
   const x = bar.querySelector("[data-share-x]");
@@ -430,7 +436,7 @@ const renderPostNav = (post, all) => {
   }
   related = related.slice(0, 3);
 
-  const href = (p) => `post.html?slug=${encodeURIComponent(p.slug)}`;
+  const href = (p) => `/posts/${encodeURIComponent((p.slug || "").normalize("NFC"))}/`;
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
   const relatedHtml = related.length
@@ -471,7 +477,7 @@ const renderSeries = (post, all) => {
 
   const idx = parts.findIndex((p) => p.id === post.id);
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-  const href = (p) => `post.html?slug=${encodeURIComponent(p.slug)}`;
+  const href = (p) => `/posts/${encodeURIComponent((p.slug || "").normalize("NFC"))}/`;
   const items = parts
     .map((p, i) => {
       const cur = p.id === post.id;
@@ -504,12 +510,12 @@ const renderPost = (post) => {
       : `<span>작성 ${created || updated}</span>`;
 
   article.innerHTML = `
-    <a class="back-link" href="./#posts">← 글 목록</a>
+    <a class="back-link" href="/#posts">← 글 목록</a>
     <p class="eyebrow">${post.category || "Note"}</p>
     <h1>${post.title}</h1>
     <div class="article-meta">
       ${(post.tags || [])
-        .map((tag) => `<a class="meta-tag" href="index.html?tag=${encodeURIComponent(tag)}">#${escapeHtml(tag)}</a>`)
+        .map((tag) => `<a class="meta-tag" href="/index.html?tag=${encodeURIComponent(tag)}">#${escapeHtml(tag)}</a>`)
         .join("")}
       ${(post.tags || []).length ? '<span class="dot"></span>' : ""}
       ${dateMeta}
@@ -535,7 +541,7 @@ const renderPost = (post) => {
 
 const renderMissing = () => {
   $("[data-article]").innerHTML = `
-    <a class="back-link" href="./#posts">← 글 목록</a>
+    <a class="back-link" href="/#posts">← 글 목록</a>
     <p class="eyebrow">Not found</p>
     <h1>글을 찾을 수 없습니다</h1>
     <p class="article-summary">주소가 바뀌었거나 아직 노션에서 동기화되지 않은 글입니다.</p>`;
@@ -570,8 +576,10 @@ const initHeaderScroll = () => {
 const init = async () => {
   initTheme();
   initHeaderScroll();
-  // Normalize to NFC so Korean slugs match regardless of NFC/NFD form (direct URLs vs JSON).
-  const slug = (new URLSearchParams(location.search).get("slug") || "").normalize("NFC");
+  // Slug from the static per-post page's <meta name="post-slug"> (pretty /posts/<slug>/ URLs),
+  // falling back to ?slug= (the post.html SPA). Normalize to NFC so Korean slugs always match.
+  const metaSlug = document.querySelector('meta[name="post-slug"]')?.content;
+  const slug = (metaSlug || new URLSearchParams(location.search).get("slug") || "").normalize("NFC");
   try {
     const response = await fetch(DATA_URL, { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
