@@ -322,26 +322,139 @@ p {
 }
 
 .site-nav a {
-  padding: 9px 15px;
+  position: relative;
+  padding: 9px 16px;
   border-radius: 999px;
   color: var(--ink); /* black in light theme, white in dark theme */
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 500;
-  transition: color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+  isolation: isolate;
+  transition: color 0.28s ease, transform 0.4s cubic-bezier(0.34, 1.4, 0.5, 1);
 }
 
-/* Hover: a liquid-glass pill tinted with the site's accent blue. */
+/* Liquid-glass body: clear & refractive, blooms in like a moving bubble. */
+.site-nav a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.28),
+    rgba(255, 255, 255, 0.07)
+  );
+  -webkit-backdrop-filter: blur(7px) saturate(1.8) brightness(1.08);
+  backdrop-filter: blur(7px) saturate(1.8) brightness(1.08);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.75),
+    inset 0 -2px 4px rgba(255, 255, 255, 0.2),
+    0 6px 16px rgba(0, 0, 0, 0.14);
+  opacity: 0;
+  transform: scale(0.55);
+  transition: opacity 0.32s ease, transform 0.42s cubic-bezier(0.34, 1.56, 0.5, 1);
+}
+
+/* Animatable angle so the spectral rim can flow around the pill on hover. */
+@property --rim-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 130deg;
+}
+
+/* Spectral rim: chromatic dispersion at the glass edge (the "liquid" tell). */
+.site-nav a::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--rim-angle, 130deg),
+    rgba(255, 90, 170, 0),
+    rgba(90, 190, 255, 0.7),
+    rgba(150, 255, 190, 0),
+    rgba(255, 225, 110, 0.7),
+    rgba(120, 170, 255, 0),
+    rgba(255, 90, 170, 0.7),
+    rgba(255, 90, 170, 0)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transform: scale(0.55);
+  transition: opacity 0.4s ease, transform 0.42s cubic-bezier(0.34, 1.56, 0.5, 1);
+}
+
+/* Hover & keyboard focus: glass blooms in, text turns accent blue. */
 .site-nav a:hover,
 .site-nav a:focus-visible {
   color: var(--accent-ink);
-  background: color-mix(in srgb, var(--accent) 15%, transparent);
-  -webkit-backdrop-filter: blur(6px) saturate(1.5);
-  backdrop-filter: blur(6px) saturate(1.5);
+}
+
+.site-nav a:hover::after,
+.site-nav a:focus-visible::after,
+.site-nav a:hover::before,
+.site-nav a:focus-visible::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* The dispersion colors flow around the rim while hovered — alive liquid glass. */
+.site-nav a:hover::before,
+.site-nav a:focus-visible::before {
+  animation: rim-flow 5s linear infinite;
+}
+
+@keyframes rim-flow {
+  to {
+    --rim-angle: 490deg;
+  }
+}
+
+/* Press: the glass settles and pushes in a touch. */
+.site-nav a:active {
+  transform: scale(0.95);
+}
+
+/* Selected (after clicking a section): glass rests in place, pressed-in look. */
+body:has(#posts:target) .site-nav a[href="#posts"],
+body:has(#topics:target) .site-nav a[href="#topics"],
+body:has(#about:target) .site-nav a[href="#about"] {
+  color: var(--accent-ink);
+}
+
+body:has(#posts:target) .site-nav a[href="#posts"]::after,
+body:has(#topics:target) .site-nav a[href="#topics"]::after,
+body:has(#about:target) .site-nav a[href="#about"]::after {
+  opacity: 1;
+  transform: scale(1);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.34),
+    rgba(255, 255, 255, 0.13)
+  );
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--accent) 32%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4),
-    0 4px 12px color-mix(in srgb, var(--accent) 20%, transparent);
+    inset 0 2px 5px rgba(0, 0, 0, 0.18),
+    inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-nav a,
+  .site-nav a::after,
+  .site-nav a::before {
+    transition: opacity 0.2s ease, color 0.2s ease;
+    transform: none;
+    animation: none;
+  }
 }
 
 .icon-button {
