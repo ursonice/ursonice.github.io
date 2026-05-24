@@ -6,14 +6,14 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 24 May 2026 14:45:35 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 24 May 2026 14:47:20 GMT</lastBuildDate>
     <item>
       <title>MonoLift: Learning 3D Manipulation Policies from Monocular RGB via Distillation</title>
       <link>https://ursonice.github.io/posts/monolift-learning-3d-manipulation-policies-from-monocular-rgb-via-distillation/</link>
       <guid isPermaLink="false">36ab12c0-115c-8031-b1d2-e1a5a8077788</guid>
       <pubDate>Sun, 24 May 2026 14:31:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
-      <description>서론 이 논문은 단일 RGB 이미지, 즉 Monocular RGB만을 입력으로 사용하여 로봇이 3D 조작 정책을 학습할 수 있도록 하는 MonoLift framework를 제안한다. 기존 로봇 조작 연구에서는 3D 공간 정보를 얻기 위해 RGB-D camera, multi-view camera, poin</description>
+      <description>서론 이 논문은 단일 RGB 이미지(Monocular RGB)만으로 3D 로봇 조작 정책을 학습하는 MonoLift framework를 제안한다. 기존 RGB-D, multi-view, point cloud 기반 방법은 3D 정보를 잘 활용할 수 있지만, 추가 센서와 전처리 비용이 크다. 반대로 RGB-</description>
     </item>
     <item>
       <title>Learning Vision-Based Omnidirectional Navigation: A Teacher-Student Approach Using Monocular Depth Estimation 논문리뷰</title>
@@ -22,6 +22,30 @@
       <pubDate>Wed, 20 May 2026 13:37:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
       <description>서론 이 논문은 기존 2D LiDAR 기반 이동 로봇 내비게이션의 한계를 해결하기 위해, Monocular Depth Estimation(MDE) 기반 Teacher-Student framework를 제안한다. Teacher policy는 시뮬레이션에서 2D LiDAR와 로봇 자기 상태 정보를 입력으로 </description>
+    </item>
+    <item>
+      <title>[RL] DQN의 Action Space 한계</title>
+      <link>https://ursonice.github.io/posts/rl-dqn%EC%9D%98-action-space-%ED%95%9C%EA%B3%84/</link>
+      <guid isPermaLink="false">345b12c0-115c-80ad-a4a1-eb9961bbd163</guid>
+      <pubDate>Fri, 17 Apr 2026 01:38:00 GMT</pubDate>
+      <category>Reinforcement Learning</category>
+      <description>로봇이 잘 걸어가도록 하기 위해 DQN모델을 사용한다 해보자. 총 4개의 관절이 있고 각 관절은 (-90, 0, 90) 3개의 값 중 하나를 가질 수 있다. 이 경우 각 관절 당 3가지의 값을 가질 수 있으니 관절이 4개 임으로 3x3x3x3 = 81개의 조합이 만들어진다. 넘어지기 직전상태인 St에 대</description>
+    </item>
+    <item>
+      <title>TRPO - Trust Region Policy Optimizer</title>
+      <link>https://ursonice.github.io/posts/trpo-trust-region-policy-optimizer/</link>
+      <guid isPermaLink="false">35db12c0-115c-8082-9620-f701ca2b7a2f</guid>
+      <pubDate>Mon, 11 May 2026 04:49:00 GMT</pubDate>
+      <category>Reinforcement Learning</category>
+      <description>서론 기존 DDPG는 성능의 단조개선(Monotonic Improvement)가 이론적으로 보장되지 않았다.(목적함수 J(\theta))가 매 iteration마다 증가한다는 보장이 없다.) 왜냐하면 Actor( \mu )가 Ciritic(Q 함수)의 gradient를 따라가도록 학습하는데 critic </description>
+    </item>
+    <item>
+      <title>PPO</title>
+      <link>https://ursonice.github.io/posts/ppo/</link>
+      <guid isPermaLink="false">35db12c0-115c-80d1-8eee-c368710fb683</guid>
+      <pubDate>Mon, 11 May 2026 04:04:00 GMT</pubDate>
+      <category>Reinforcement Learning</category>
+      <description>목표: PPO(Proximal Policy Optimization)를 논문(academic paper) 흐름(문제정의 → 방법 → 분석/실험 → 결론)으로 정리한다. 서론 이전에 배운 TPRO는 정책의 단조 향상(Monotonic Improvement)을 이론적으로 보장한다는 강한 장점을 얻는 대가로 T</description>
     </item>
     <item>
       <title>(VLA) NaVILA 논문리뷰</title>
@@ -222,30 +246,6 @@
       <pubDate>Mon, 05 Dec 2022 05:18:00 GMT</pubDate>
       <category>ONNX-MLIR</category>
       <description>서론 이 장은 ONNX-MLIR로 모델을 컴파일 하는 방법에 대해 소개한다. Docker를 사용하거나 직접 설치해서 사용할 수 있다.(직접설치하는 방법 바로가기) 그리고 기존 onnx모델을 shared library형태에로 컴파일 한 후, Inference를 진행해본다. (환경) AMD64 Archite</description>
-    </item>
-    <item>
-      <title>GLASS 논문리뷰</title>
-      <link>https://ursonice.github.io/posts/glass-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</link>
-      <guid isPermaLink="false">a243f2c4-d437-496d-93d7-ba5d879e14ea</guid>
-      <pubDate>Tue, 30 Jul 2024 09:46:00 GMT</pubDate>
-      <category>AI/ Deep Learning</category>
-      <description>Cite Hui Zhang, Zheng Wang, Zuxuan Wu, Yu-Gang Jiang; arXiv preprint arXiv:2303.08730, 2023. https://arxiv.org/abs/2303.08730 출간일: 2023. 03. 15 목차 Abstract Introduction P</description>
-    </item>
-    <item>
-      <title>[Kubernetes] Taint &amp; Toleration</title>
-      <link>https://ursonice.github.io/posts/kubernetes-taint-toleration/</link>
-      <guid isPermaLink="false">201b12c0-115c-806b-945c-e9db77640e68</guid>
-      <pubDate>Wed, 28 May 2025 13:39:00 GMT</pubDate>
-      <category>Kubernetes</category>
-      <description>서론 Taint와 Toleration의 관계에 대해서 설명한다. Taint와 Toleration는 사람과 벌레 두 요소로 예를 들면 이해하기가 쉽다. 사람은 노드에 비유하며 벌레는 파드이다. 벌레 스프레이(Taint)를 사람(Node)에게 뿌리면 벌래(Pod)는 사람(Node)에게 접근하지 못한다. 그러</description>
-    </item>
-    <item>
-      <title>[Kubernetes] Multi Container Pods</title>
-      <link>https://ursonice.github.io/posts/kubernetes-multi-container-pods/</link>
-      <guid isPermaLink="false">220b12c0-115c-809d-8959-e42b2736a976</guid>
-      <pubDate>Sat, 28 Jun 2025 12:38:00 GMT</pubDate>
-      <category>Kubernetes</category>
-      <description>서론 쿠버네티스에서 multi container 파드를 구성할 때 두 가지 패턴(종류)가 있다. 하나는 Sidecar container와 co-located container이다. 두 컨테이너는 같은 파드 안에 존재하지만 역할과 생명주기 동작방식에서 차이가 있다. 이 두 종류에 대해서 알아보자 Sidec</description>
     </item>
   </channel>
 </rss>
