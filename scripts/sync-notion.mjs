@@ -47,6 +47,7 @@ const notion = async (path, init = {}) => {
 // Fail-soft: any error here just falls back to the explicitly-configured sources.
 const discoverSources = async () => {
   const found = [];
+  const seenTypes = {};
   let cursor;
   try {
     do {
@@ -55,16 +56,33 @@ const discoverSources = async () => {
         body: JSON.stringify({ page_size: 100, ...(cursor ? { start_cursor: cursor } : {}) }),
       });
       for (const item of res.results || []) {
+        seenTypes[item.object] = (seenTypes[item.object] || 0) + 1;
         if (item.object === "data_source") {
           found.push({ dataSourceId: item.id, name: textFromRich(item.title || []) });
         } else if (item.object === "database") {
-          for (const ds of item.data_sources || []) {
+          // The search result may or may not include data_sources — fetch the DB if not.
+          let dses = Array.isArray(item.data_sources) ? item.data_sources : null;
+          if (!dses) {
+            try {
+              const db = await notion(`/databases/${item.id}`);
+              dses = db.data_sources || [];
+            } catch (e) {
+              console.warn(`  db ${item.id} fetch failed: ${e.message}`);
+              dses = [];
+            }
+          }
+          for (const ds of dses) {
             found.push({ dataSourceId: ds.id, name: ds.name || textFromRich(item.title || []) });
           }
         }
       }
       cursor = res.has_more ? res.next_cursor : null;
     } while (cursor);
+    console.log(
+      `auto-discovery: search objects ${JSON.stringify(seenTypes)} → ${found.length} data sources [${found
+        .map((s) => s.name || s.dataSourceId)
+        .join(", ")}]`,
+    );
   } catch (error) {
     console.warn(`source auto-discovery skipped: ${error.message}`);
   }
@@ -86,7 +104,9 @@ const readSources = async () => {
   for (const s of await discoverSources()) {
     if (s.dataSourceId && !byId.has(s.dataSourceId)) byId.set(s.dataSourceId, s);
   }
-  return [...byId.values()];
+  const all = [...byId.values()];
+  console.log(`sources total: ${all.length} → [${all.map((s) => s.name || s.dataSourceId).join(", ")}]`);
+  return all;
 };
 
 let configCache;
