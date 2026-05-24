@@ -6,7 +6,15 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 24 May 2026 14:28:16 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 24 May 2026 14:33:08 GMT</lastBuildDate>
+    <item>
+      <title>MonoLift: Learning 3D Manipulation Policies from Monocular RGB via Distillation</title>
+      <link>https://ursonice.github.io/posts/monolift-learning-3d-manipulation-policies-from-monocular-rgb-via-distillation/</link>
+      <guid isPermaLink="false">36ab12c0-115c-8031-b1d2-e1a5a8077788</guid>
+      <pubDate>Sun, 24 May 2026 14:31:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description></description>
+    </item>
     <item>
       <title>Learning Vision-Based Omnidirectional Navigation: A Teacher-Student Approach Using Monocular Depth Estimation 논문리뷰</title>
       <link>https://ursonice.github.io/posts/learning-vision-based-omnidirectional-navigation-a-teacher-student-approach-usin/</link>
@@ -238,14 +246,6 @@
       <pubDate>Sat, 28 Jun 2025 12:38:00 GMT</pubDate>
       <category>Kubernetes</category>
       <description>서론 쿠버네티스에서 multi container 파드를 구성할 때 두 가지 패턴(종류)가 있다. 하나는 Sidecar container와 co-located container이다. 두 컨테이너는 같은 파드 안에 존재하지만 역할과 생명주기 동작방식에서 차이가 있다. 이 두 종류에 대해서 알아보자 Sidec</description>
-    </item>
-    <item>
-      <title>[Kubernetes] Backup and Restore</title>
-      <link>https://ursonice.github.io/posts/kubernetes-backup-and-restore/</link>
-      <guid isPermaLink="false">22fb12c0-115c-80df-b59c-e89c990a385d</guid>
-      <pubDate>Sun, 13 Jul 2025 08:34:00 GMT</pubDate>
-      <category>Kubernetes</category>
-      <description>서론 Kubernetes 클러스터를 안정적으로 운영하기 위해서는 정기적인 백업과 복원이 필요하다. 이 장에서는 Kubernetes 리소스를 백업하고 복원하는 두 가지 주요 방법에 대해 알아보자. 첫 번째는 Kube API 서버를 통해 리소스 정의를 백업하는 방식이고 두 번째는 etcd 데이터베이스 자체를</description>
     </item>
   </channel>
 </rss>

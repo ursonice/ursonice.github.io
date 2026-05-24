@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-24T14:28:16.791Z",
+  "generatedAt": "2026-05-24T14:33:08.763Z",
   "site": {
     "title": "Woojae Joo — Developer Note",
     "description": "AI, Robotics, Systems 공부 기록"
@@ -62,6 +62,19 @@
     "github": "https://github.com/ursonice"
   },
   "posts": [
+    {
+      "id": "36ab12c0-115c-8031-b1d2-e1a5a8077788",
+      "title": "MonoLift: Learning 3D Manipulation Policies from Monocular RGB via Distillation",
+      "slug": "monolift-learning-3d-manipulation-policies-from-monocular-rgb-via-distillation",
+      "category": "AI/ Deep Learning",
+      "tags": [],
+      "created": "2026-05-24T14:31:00.000Z",
+      "updated": "2026-05-24T14:32:00.000Z",
+      "readingTime": 1,
+      "summary": "",
+      "sourceUrl": "https://www.notion.so/MonoLift-Learning-3D-Manipulation-Policies-from-Monocular-RGB-via-Distillation-36ab12c0115c8031b1d2e1a5a8077788",
+      "html": ""
+    },
     {
       "id": "366b12c0-115c-800d-b636-caec12f58f18",
       "title": "Learning Vision-Based Omnidirectional Navigation: A Teacher-Student Approach Using Monocular Depth Estimation 논문리뷰",
