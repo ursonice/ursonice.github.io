@@ -167,6 +167,125 @@ const highlightCode = () => {
   }, 50);
 };
 
+// "Copy" button on each code block.
+const addCopyButtons = () => {
+  document.querySelectorAll(".article-content pre").forEach((pre) => {
+    if (pre.querySelector(".copy-btn")) return;
+    const code = pre.querySelector("code");
+    if (!code) return;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "copy-btn";
+    btn.textContent = "복사";
+    btn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(code.textContent);
+        btn.textContent = "복사됨";
+      } catch {
+        btn.textContent = "실패";
+      }
+      setTimeout(() => (btn.textContent = "복사"), 1500);
+    });
+    pre.appendChild(btn);
+  });
+};
+
+// Clickable "#" anchor on headings that also copies the section link.
+const addHeadingAnchors = () => {
+  document.querySelectorAll(".article-content h2[id], .article-content h3[id]").forEach((h) => {
+    if (h.querySelector(".heading-anchor")) return;
+    const a = document.createElement("a");
+    a.className = "heading-anchor";
+    a.href = `#${h.id}`;
+    a.textContent = "#";
+    a.setAttribute("aria-label", "이 섹션 링크 복사");
+    a.addEventListener("click", () => {
+      const url = `${location.origin}${location.pathname}${location.search}#${h.id}`;
+      navigator.clipboard?.writeText(url).catch(() => {});
+    });
+    h.appendChild(a);
+  });
+};
+
+// Click article images to view them full-screen.
+const initLightbox = () => {
+  const imgs = document.querySelectorAll(".article-content img");
+  if (!imgs.length) return;
+  let overlay = $(".lightbox");
+  if (!overlay) {
+    overlay = document.createElement("div");
+    overlay.className = "lightbox";
+    overlay.innerHTML = '<img alt="" />';
+    overlay.addEventListener("click", () => overlay.classList.remove("is-open"));
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") overlay.classList.remove("is-open");
+    });
+    document.body.appendChild(overlay);
+  }
+  const big = overlay.querySelector("img");
+  imgs.forEach((img) => {
+    img.classList.add("zoomable");
+    img.addEventListener("click", () => {
+      big.src = img.currentSrc || img.src;
+      overlay.classList.add("is-open");
+    });
+  });
+};
+
+// Render ```mermaid code blocks as diagrams (loaded from CDN on demand).
+const initMermaid = () => {
+  const blocks = [...document.querySelectorAll('.article-content pre[data-lang="mermaid"]')];
+  if (!blocks.length) return;
+  const nodes = blocks.map((pre) => {
+    const div = document.createElement("div");
+    div.className = "mermaid";
+    div.textContent = (pre.querySelector("code") || pre).textContent;
+    pre.replaceWith(div);
+    return div;
+  });
+  const render = () => {
+    if (!window.mermaid) return;
+    const theme = document.documentElement.dataset.theme === "dark" ? "dark" : "default";
+    try {
+      window.mermaid.initialize({ startOnLoad: false, theme, securityLevel: "strict" });
+      window.mermaid.run({ nodes });
+    } catch {
+      /* leave source as-is on error */
+    }
+  };
+  if (window.mermaid) return render();
+  const s = document.createElement("script");
+  s.type = "module";
+  s.textContent =
+    'import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs"; window.mermaid = mermaid; window.dispatchEvent(new Event("mermaid-ready"));';
+  window.addEventListener("mermaid-ready", render, { once: true });
+  document.head.appendChild(s);
+};
+
+// Top scroll-progress bar.
+const initReadProgress = () => {
+  const bar = $("[data-read-progress]");
+  if (!bar) return;
+  const update = () => {
+    const el = document.documentElement;
+    const max = el.scrollHeight - el.clientHeight;
+    bar.style.width = `${max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0}%`;
+  };
+  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", update, { passive: true });
+  update();
+};
+
+// Back-to-top button (appears once scrolled down).
+const initBackToTop = () => {
+  const btn = $("[data-back-to-top]");
+  if (!btn) return;
+  btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+  const update = () => btn.toggleAttribute("hidden", window.scrollY < 600);
+  window.addEventListener("scroll", update, { passive: true });
+  update();
+};
+
 const renderPost = (post) => {
   document.title = `${post.title} — Woojae Joo`;
   const article = $("[data-article]");
@@ -192,8 +311,12 @@ const renderPost = (post) => {
     <hr class="article-divider" />
     ${body}`;
   buildToc();
-  typesetMath();
+  addHeadingAnchors();
+  initMermaid();
   highlightCode();
+  addCopyButtons();
+  initLightbox();
+  typesetMath();
 };
 
 const renderMissing = () => {
@@ -250,6 +373,8 @@ const init = async () => {
       renderPost(post);
       loadGiscus(post.slug);
       initJumpToComments();
+      initReadProgress();
+      initBackToTop();
     } else {
       renderMissing();
     }

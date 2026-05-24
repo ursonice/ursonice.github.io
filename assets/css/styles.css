@@ -1405,16 +1405,36 @@ p {
   font-size: 0.8em;
 }
 
-/* Floating "jump to comments" button */
-.jump-comments {
+/* Reading progress bar */
+.read-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background: var(--accent);
+  z-index: 60;
+  transition: width 0.1s linear;
+}
+
+/* Floating action buttons (back-to-top + jump-to-comments) */
+.fab-stack {
   position: fixed;
   right: 24px;
   bottom: 24px;
   z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.fab {
   display: grid;
   place-items: center;
-  width: 48px;
-  height: 48px;
+  width: 46px;
+  height: 46px;
+  padding: 0;
   border-radius: 999px;
   border: 1px solid var(--glass-edge);
   background: var(--glass-strong);
@@ -1423,31 +1443,114 @@ p {
   box-shadow: var(--shadow-md), inset 0 1px 0 var(--glass-edge);
   color: var(--ink);
   text-decoration: none;
+  cursor: pointer;
   transition: transform 0.18s ease, border-color 0.18s ease, color 0.18s ease;
 }
 
-.jump-comments[hidden] {
+.fab[hidden] {
   display: none;
 }
 
-.jump-comments:hover {
+.fab:hover {
   transform: translateY(-2px);
   border-color: var(--accent);
   color: var(--accent-ink);
 }
 
-.jump-comments svg {
-  width: 22px;
-  height: 22px;
+.fab svg {
+  width: 21px;
+  height: 21px;
 }
 
 @media (max-width: 600px) {
-  .jump-comments {
+  .fab-stack {
     right: 16px;
     bottom: 16px;
+  }
+  .fab {
     width: 44px;
     height: 44px;
   }
+}
+
+/* Code block copy button */
+.article-content pre {
+  position: relative;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 10px;
+  border: 1px solid var(--glass-edge);
+  border-radius: var(--r-sm);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  color: var(--muted);
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.copy-btn:hover {
+  color: var(--ink);
+  border-color: var(--line-strong);
+}
+
+/* Heading anchor links (reveal on hover) */
+.heading-anchor {
+  margin-left: 8px;
+  color: var(--faint);
+  text-decoration: none;
+  font-weight: 400;
+  opacity: 0;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+
+.article-content h2:hover .heading-anchor,
+.article-content h3:hover .heading-anchor,
+.heading-anchor:focus-visible {
+  opacity: 1;
+}
+
+.heading-anchor:hover {
+  color: var(--accent);
+}
+
+/* Image lightbox */
+.article-content img.zoomable {
+  cursor: zoom-in;
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: none;
+  place-items: center;
+  padding: 24px;
+  background: rgba(10, 11, 14, 0.86);
+  cursor: zoom-out;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.lightbox.is-open {
+  display: grid;
+}
+
+.lightbox img {
+  max-width: 95vw;
+  max-height: 92vh;
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Mermaid diagrams */
+.article-content .mermaid {
+  margin: 24px 0;
+  text-align: center;
 }
 
 /* ============================ Responsive ============================ */
