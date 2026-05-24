@@ -1374,6 +1374,11 @@ p {
   line-height: 1.95;
 }
 
+/* Brighter body text in dark mode for readability. */
+[data-theme="dark"] .article-content {
+  color: #ebedf1;
+}
+
 /* Reading font-size preference (set on <html data-reading>). */
 [data-reading="sm"] .article-content {
   font-size: 0.96rem;
