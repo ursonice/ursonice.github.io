@@ -355,7 +355,7 @@ const setMeta = (post) => {
 // First image in the post body, as an absolute URL (used for the KakaoTalk share thumbnail).
 const firstImage = (post) => {
   const m = (post.html || "").match(/<img[^>]+src=["']([^"']+)["']/i);
-  if (!m) return `${location.origin}/assets/images/favicon.svg`;
+  if (!m) return `${location.origin}/assets/og/default.png`;
   const src = m[1];
   const abs = /^https?:/i.test(src) ? src : src.startsWith("/") ? location.origin + src : `${location.origin}/${src.replace(/^\.?\//, "")}`;
   // Image paths in the JSON are NFD but the files are NFC → normalize so the URL resolves.

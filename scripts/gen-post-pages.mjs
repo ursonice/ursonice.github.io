@@ -11,7 +11,7 @@
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from "node:fs";
 
 const SITE = "https://ursonice.github.io";
-const DEFAULT_IMG = `${SITE}/assets/images/favicon.svg`;
+const DEFAULT_IMG = `${SITE}/assets/og/default.png`;
 
 const data = JSON.parse(readFileSync("data/notion-posts.json", "utf8"));
 const posts = Array.isArray(data.posts) ? data.posts : [];
@@ -44,7 +44,7 @@ const head = (post, slug, url) => {
   const title = esc(post.title || "Woojae Joo");
   const desc = esc((post.summary || "AI, Robotics, Systems 공부 기록").slice(0, 200));
   const img = firstImage(post.html);
-  const card = img === DEFAULT_IMG ? "summary" : "summary_large_image";
+  const card = "summary_large_image";
   const published = post.created ? new Date(post.created).toISOString() : "";
   const modified = post.updated ? new Date(post.updated).toISOString() : published;
   const ld = JSON.stringify({
