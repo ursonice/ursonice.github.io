@@ -1920,10 +1920,18 @@ p {
   transition: color 0.16s ease, border-color 0.16s ease;
 }
 
-.article-side a:hover,
-.article-side a.is-active {
+.article-side a:hover {
   color: var(--ink);
+  border-left-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+}
+
+/* Current section while scrolling — clearly highlighted. */
+.article-side a.is-active {
+  color: var(--accent-ink);
   border-left-color: var(--accent);
+  font-weight: 650;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  border-radius: 0 7px 7px 0;
 }
 
 .article-side a.lvl-3 {
@@ -2630,4 +2638,113 @@ p {
 .series-list li.is-current .series-num {
   background: var(--accent);
   color: var(--on-accent);
+}
+
+/* ============================ Print / PDF ============================ */
+/* Strip the UI chrome and force a clean black-on-white article for
+   printing or "Save as PDF" — works even when printing from dark mode. */
+@media print {
+  :root,
+  :root[data-theme="dark"] {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --surface-2: #f4f4f4;
+    --ink: #111111;
+    --ink-soft: #1a1a1a;
+    --muted: #444444;
+    --faint: #666666;
+    --line: #cccccc;
+    --line-strong: #bbbbbb;
+    --accent-ink: #0a4fb0;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #111111 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Hide everything that isn't the article body. */
+  .site-header,
+  .site-footer,
+  .fab-stack,
+  .read-progress,
+  .article-side,
+  .comments,
+  .share-bar,
+  .reading-size,
+  .back-link,
+  .related-list,
+  .related-title,
+  .post-nav,
+  .author-box,
+  .series-box,
+  .skip-link,
+  .hero-art,
+  body::before,
+  body::after {
+    display: none !important;
+  }
+
+  .article-shell {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .article {
+    max-width: 100%;
+  }
+
+  .article-content {
+    color: #111111 !important;
+    font-size: 11.5pt;
+    line-height: 1.6;
+  }
+
+  .article-content a {
+    color: #0a4fb0 !important;
+    text-decoration: underline;
+  }
+
+  /* Flatten glassy panels for paper. */
+  .article-content pre,
+  .article-content blockquote,
+  .article-content table {
+    background: #f5f5f5 !important;
+    box-shadow: none !important;
+    border: 1px solid #dddddd !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Wrap long code lines so nothing is cut off at the page edge. */
+  .article-content pre,
+  .article-content code {
+    white-space: pre-wrap !important;
+    word-break: break-word;
+  }
+
+  /* Sensible page breaks. */
+  .article-content h1,
+  .article-content h2,
+  .article-content h3 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .article-content pre,
+  .article-content img,
+  .article-content table,
+  .article-content figure {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .article-content img {
+    max-width: 100% !important;
+  }
 }
