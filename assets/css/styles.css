@@ -674,6 +674,8 @@ p {
 /* ============================ Stat bar ============================ */
 
 .metrics {
+  position: relative;
+  overflow: hidden;
   display: flex;
   flex-wrap: wrap;
   gap: 10px 36px;
@@ -685,9 +687,80 @@ p {
   -webkit-backdrop-filter: var(--blur);
   backdrop-filter: var(--blur);
   box-shadow: var(--shadow-sm), inset 0 1px 0 var(--glass-edge);
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.2, 0.5, 1),
+    box-shadow 0.35s ease,
+    background 0.35s ease,
+    border-color 0.35s ease;
+}
+
+/* Liquid-glass response on hover: the glass lifts, brightens, and a light glints across. */
+.metrics:hover {
+  transform: translateY(-2px);
+  border-color: var(--header-edge);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--surface) 70%, transparent),
+    color-mix(in srgb, var(--surface) 38%, transparent)
+  );
+  box-shadow:
+    var(--shadow-md),
+    inset 0 1px 1px rgba(255, 255, 255, 0.9),
+    inset 0 -4px 10px rgba(255, 255, 255, 0.22);
+}
+
+.metrics::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 38%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent,
+    rgba(255, 255, 255, 0.42),
+    transparent
+  );
+  transform: translateX(-230%) skewX(-14deg);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.metrics:hover::after {
+  animation: metrics-glint 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes metrics-glint {
+  0% {
+    transform: translateX(-230%) skewX(-14deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(330%) skewX(-14deg);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .metrics {
+    transition: box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+  }
+  .metrics:hover {
+    transform: none;
+  }
+  .metrics:hover::after {
+    animation: none;
+  }
 }
 
 .metrics div {
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: baseline;
   gap: 9px;
