@@ -439,8 +439,9 @@ p {
   transform: translateY(-1px);
 }
 
-/* Mobile hamburger (injected by palette.js) — hidden on desktop, where the full nav shows. */
-.nav-toggle {
+/* Mobile menu button (injected by palette.js) — a bottom-right FAB on mobile; hidden on
+   desktop, where the full nav shows. (.fab.nav-toggle beats .fab's own display.) */
+.fab.nav-toggle {
   display: none;
 }
 
@@ -2512,16 +2513,17 @@ p {
 }
 
 @media (max-width: 900px) {
-  .nav-toggle {
+  .fab.nav-toggle {
     display: grid;
   }
 
-  /* Nav becomes a dropdown panel opened by the hamburger. */
+  /* Nav opens as a panel just above the bottom-right menu button. */
   .site-nav {
     display: none;
-    position: absolute;
-    top: calc(100% - 8px);
-    right: 0;
+    position: fixed;
+    right: 16px;
+    bottom: 74px;
+    z-index: 45;
     flex-direction: column;
     align-items: stretch;
     gap: 2px;
@@ -2533,6 +2535,8 @@ p {
     backdrop-filter: var(--blur);
     border: 1px solid var(--header-edge);
     box-shadow: var(--shadow-lg);
+    transform-origin: bottom right;
+    animation: nav-pop 0.2s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .site-header[data-nav-open] .site-nav {
@@ -2542,6 +2546,23 @@ p {
   .site-nav a {
     padding: 11px 16px;
     border-radius: 10px;
+  }
+
+  @keyframes nav-pop {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-nav {
+      animation: none;
+    }
   }
 
   /* The sliding-glass indicator is desktop-only. */

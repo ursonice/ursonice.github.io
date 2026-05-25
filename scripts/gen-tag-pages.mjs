@@ -7,7 +7,7 @@
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from "node:fs";
 
 const SITE = "https://ursonice.github.io";
-const CSS_V = "36";
+const CSS_V = "37";
 
 const data = JSON.parse(readFileSync("data/notion-posts.json", "utf8"));
 const posts = Array.isArray(data.posts) ? data.posts : [];
@@ -115,7 +115,7 @@ const page = (cat, list) => {
         var y = document.querySelector("[data-year]"); if (y) y.textContent = new Date().getFullYear();
       })();
     </script>
-    <script src="/assets/js/palette.js?v=6" defer></script>
+    <script src="/assets/js/palette.js?v=7" defer></script>
   </body>
 </html>
 `;

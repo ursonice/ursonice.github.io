@@ -328,13 +328,20 @@
 
   const btn = document.createElement("button");
   btn.type = "button";
-  btn.className = "icon-button nav-toggle";
+  btn.className = "fab nav-toggle";
   btn.setAttribute("aria-label", "메뉴 열기");
   btn.setAttribute("aria-expanded", "false");
   btn.innerHTML =
     '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
-  // Sit just left of the theme toggle (or at the end of the header).
-  header.insertBefore(btn, header.querySelector("[data-theme-toggle]"));
+  // Bottom-right floating button, in the FAB stack (post pages already have one; the
+  // menu then opens just above it — same corner as the post-page action buttons).
+  let stack = document.querySelector(".fab-stack");
+  if (!stack) {
+    stack = document.createElement("div");
+    stack.className = "fab-stack";
+    document.body.appendChild(stack);
+  }
+  stack.appendChild(btn);
 
   const setOpen = (open) => {
     header.toggleAttribute("data-nav-open", open);
@@ -351,7 +358,7 @@
     if (e.target.closest("a")) setOpen(false);
   });
   document.addEventListener("click", (e) => {
-    if (header.hasAttribute("data-nav-open") && !header.contains(e.target)) setOpen(false);
+    if (header.hasAttribute("data-nav-open") && !header.contains(e.target) && !btn.contains(e.target)) setOpen(false);
   });
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && header.hasAttribute("data-nav-open")) setOpen(false);
