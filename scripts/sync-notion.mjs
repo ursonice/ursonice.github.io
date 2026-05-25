@@ -360,12 +360,16 @@ const renderBlocks = async (blockId, context) => {
       case "paragraph":
         if (rich.length) html.push(`<p>${renderRich(rich)}</p>`);
         break;
+      // Map Notion's three heading levels to distinct tags (H1→h2, H2→h3, H3→h4) so the
+      // TOC reflects the real nesting. (h1 is reserved for the post title.)
       case "heading_1":
-      case "heading_2":
         html.push(`<h2 id="${headingAnchor(block.id)}">${renderRich(rich)}</h2>`);
         break;
-      case "heading_3":
+      case "heading_2":
         html.push(`<h3 id="${headingAnchor(block.id)}">${renderRich(rich)}</h3>`);
+        break;
+      case "heading_3":
+        html.push(`<h4 id="${headingAnchor(block.id)}">${renderRich(rich)}</h4>`);
         break;
       case "quote":
         html.push(`<blockquote>${renderRich(rich)}${await renderContainerChildren(block)}</blockquote>`);

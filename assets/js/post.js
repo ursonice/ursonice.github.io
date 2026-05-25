@@ -87,7 +87,9 @@ const escapeHtml = (value = "") =>
   value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
 
 const buildToc = () => {
-  const headings = Array.from(document.querySelectorAll(".article-content h2, .article-content h3"));
+  const headings = Array.from(
+    document.querySelectorAll(".article-content h2, .article-content h3, .article-content h4, .article-content h5"),
+  );
   if (headings.length < 2) return;
 
   const side = $("[data-article-side]");
@@ -113,11 +115,11 @@ const buildToc = () => {
     if (e.key === "Escape" && !drawer.hidden) closeDrawer();
   });
 
-  const addDrawerLink = (id, text, { lvl3 = false, comment = false } = {}) => {
+  const addDrawerLink = (id, text, { lvlClass = "", comment = false } = {}) => {
     const a = document.createElement("a");
     a.href = `#${id}`;
     a.textContent = text;
-    if (lvl3) a.classList.add("lvl-3");
+    if (lvlClass) a.classList.add(lvlClass);
     if (comment) a.classList.add("toc-comment");
     a.addEventListener("click", closeDrawer);
     drawerLinks.append(a);
@@ -131,10 +133,11 @@ const buildToc = () => {
     const link = document.createElement("a");
     link.href = `#${id}`;
     link.textContent = heading.textContent;
-    const lvl3 = heading.tagName === "H3";
-    if (lvl3) link.classList.add("lvl-3");
+    // Indent by heading depth: h2 = top level, h3/h4/h5 → lvl-3/lvl-4/lvl-5.
+    const lvlClass = heading.tagName === "H2" ? "" : `lvl-${heading.tagName[1]}`;
+    if (lvlClass) link.classList.add(lvlClass);
     side.append(link);
-    const mlink = addDrawerLink(id, heading.textContent, { lvl3 });
+    const mlink = addDrawerLink(id, heading.textContent, { lvlClass });
     links.push({ id, link, mlink });
   });
 
@@ -343,7 +346,9 @@ const decorateCodeBlocks = () => {
 
 // Clickable "#" anchor on headings that also copies the section link.
 const addHeadingAnchors = () => {
-  document.querySelectorAll(".article-content h2[id], .article-content h3[id]").forEach((h) => {
+  document
+    .querySelectorAll(".article-content h2[id], .article-content h3[id], .article-content h4[id], .article-content h5[id]")
+    .forEach((h) => {
     if (h.querySelector(".heading-anchor")) return;
     const a = document.createElement("a");
     a.className = "heading-anchor";

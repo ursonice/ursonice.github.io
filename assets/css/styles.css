@@ -1714,6 +1714,23 @@ p {
   scroll-margin-top: 90px;
 }
 
+/* Notion heading_3 → h4 (and a deeper h5 if ever present); smaller sub-levels. */
+.article-content h4 {
+  margin: 28px 0 10px;
+  font-size: 1.05em;
+  font-weight: 650;
+  color: var(--ink);
+  scroll-margin-top: 90px;
+}
+
+.article-content h5 {
+  margin: 22px 0 8px;
+  font-size: 0.95em;
+  font-weight: 650;
+  color: var(--ink-soft);
+  scroll-margin-top: 90px;
+}
+
 .article-content p,
 .article-content ul,
 .article-content ol,
@@ -1970,6 +1987,16 @@ p {
   font-size: 0.82rem;
 }
 
+.article-side a.lvl-4 {
+  padding-left: 40px;
+  font-size: 0.8rem;
+}
+
+.article-side a.lvl-5 {
+  padding-left: 54px;
+  font-size: 0.78rem;
+}
+
 .article-side a.toc-comment {
   margin-top: 12px;
   font-weight: 650;
@@ -2136,6 +2163,18 @@ p {
 .toc-drawer-links a.lvl-3 {
   padding-left: 26px;
   font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.toc-drawer-links a.lvl-4 {
+  padding-left: 44px;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.toc-drawer-links a.lvl-5 {
+  padding-left: 60px;
+  font-size: 0.86rem;
   color: var(--muted);
 }
 
@@ -2311,6 +2350,8 @@ p {
 
 .article-content h2:hover .heading-anchor,
 .article-content h3:hover .heading-anchor,
+.article-content h4:hover .heading-anchor,
+.article-content h5:hover .heading-anchor,
 .heading-anchor:focus-visible {
   opacity: 1;
 }
