@@ -59,6 +59,18 @@ const head = (post, slug, url) => {
     publisher: { "@type": "Person", name: "Woojae Joo" },
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
   }).replace(/</g, "\\u003c");
+  const cat = post.category || "Notes";
+  const catSlug =
+    cat.toLowerCase().normalize("NFC").replace(/[^a-z0-9가-힣]+/g, "-").replace(/^-+|-+$/g, "") || "topic";
+  const bc = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "홈", item: `${SITE}/` },
+      { "@type": "ListItem", position: 2, name: cat, item: `${SITE}/topics/${catSlug}/` },
+      { "@type": "ListItem", position: 3, name: post.title || "글", item: url },
+    ],
+  }).replace(/</g, "\\u003c");
   return `<!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -97,6 +109,7 @@ const head = (post, slug, url) => {
     <meta name="twitter:image" content="${esc(img)}" />
 
     <script type="application/ld+json">${ld}</script>
+    <script type="application/ld+json">${bc}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -104,7 +117,7 @@ const head = (post, slug, url) => {
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/assets/css/styles.css?v=29" />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=31" />
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>

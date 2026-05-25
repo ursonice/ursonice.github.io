@@ -4,6 +4,10 @@ const $ = (selector, scope = document) => scope.querySelector(selector);
 // Canonical pretty URL for a post (static per-post page with correct OG tags).
 const postUrl = (post) => `${location.origin}/posts/${encodeURIComponent((post.slug || "").normalize("NFC"))}/`;
 
+// Category → /topics/<slug>/ URL. Must match scripts/gen-tag-pages.mjs & main.js.
+const topicSlug = (s) =>
+  (s || "").toString().toLowerCase().normalize("NFC").replace(/[^a-z0-9가-힣]+/g, "-").replace(/^-+|-+$/g, "") || "topic";
+
 // KakaoTalk share: paste your Kakao JavaScript app key here to enable the 카카오톡 button.
 // Get one (free) at https://developers.kakao.com → 내 애플리케이션 → 앱 키 → JavaScript 키,
 // and register https://ursonice.github.io under 플랫폼 → Web. Empty = button hidden.
@@ -255,6 +259,117 @@ const addHeadingAnchors = () => {
       navigator.clipboard?.writeText(url).catch(() => {});
     });
     h.appendChild(a);
+  });
+};
+
+// Footnotes: when the body contains footnote references (<sup><a href="#...">) or a
+// footnotes list, jumping smooth-scrolls and briefly highlights the target. Dormant
+// when a post has no footnotes.
+const initFootnotes = () => {
+  const content = $(".article-content");
+  if (!content) return;
+  content.querySelectorAll("sup a[href^='#'], a.footnote-ref[href^='#']").forEach((a) => a.classList.add("fn-ref"));
+  content.addEventListener("click", (e) => {
+    const a = e.target.closest("a[href^='#']");
+    if (!a) return;
+    const isFn = a.matches("sup a, .fn-ref") || a.closest(".footnotes, ol[id^='fn'], [data-footnotes]");
+    if (!isFn) return;
+    const target = document.getElementById(decodeURIComponent(a.getAttribute("href").slice(1)));
+    if (!target || !content.contains(target)) return;
+    e.preventDefault();
+    history.replaceState(null, "", a.getAttribute("href"));
+    target.scrollIntoView({ behavior: "smooth", block: "center" });
+    target.classList.add("fn-flash");
+    setTimeout(() => target.classList.remove("fn-flash"), 1200);
+  });
+};
+
+// In-article search: highlight matches inside the post body and cycle with Enter.
+// Lives at the top of the TOC sidebar (only shown when the TOC is present).
+const initArticleSearch = () => {
+  const side = $("[data-article-side]");
+  const content = $(".article-content");
+  if (!side || side.hidden || !content) return;
+
+  const box = document.createElement("div");
+  box.className = "toc-search";
+  box.innerHTML =
+    '<input type="search" placeholder="이 글에서 검색" aria-label="이 글에서 검색" /><span class="toc-search-count" aria-live="polite" hidden></span>';
+  side.insertBefore(box, side.firstChild);
+  const input = box.querySelector("input");
+  const countEl = box.querySelector(".toc-search-count");
+  let hits = [];
+  let idx = -1;
+
+  const clear = () => {
+    content.querySelectorAll("mark.search-hit").forEach((m) => m.replaceWith(document.createTextNode(m.textContent)));
+    content.normalize();
+    hits = [];
+    idx = -1;
+    countEl.hidden = true;
+  };
+
+  const focusHit = () => {
+    hits.forEach((h, i) => h.classList.toggle("current", i === idx));
+    hits[idx]?.scrollIntoView({ behavior: "smooth", block: "center" });
+    countEl.textContent = `${idx + 1}/${hits.length}`;
+  };
+
+  const run = (q) => {
+    clear();
+    if (q.length < 2) return;
+    const re = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
+    const walker = document.createTreeWalker(content, NodeFilter.SHOW_TEXT, {
+      acceptNode: (n) =>
+        n.nodeValue.trim() && !n.parentElement.closest("pre, code, .code-block, script, style, mark") && re.test(n.nodeValue)
+          ? NodeFilter.FILTER_ACCEPT
+          : NodeFilter.FILTER_REJECT,
+    });
+    const nodes = [];
+    let node;
+    while ((node = walker.nextNode())) nodes.push(node);
+    nodes.forEach((n) => {
+      const frag = document.createDocumentFragment();
+      const s = n.nodeValue;
+      let last = 0;
+      let m;
+      re.lastIndex = 0;
+      while ((m = re.exec(s))) {
+        frag.append(document.createTextNode(s.slice(last, m.index)));
+        const mark = document.createElement("mark");
+        mark.className = "search-hit";
+        mark.textContent = m[0];
+        frag.append(mark);
+        last = m.index + m[0].length;
+        if (m.index === re.lastIndex) re.lastIndex += 1;
+      }
+      frag.append(document.createTextNode(s.slice(last)));
+      n.replaceWith(frag);
+    });
+    hits = [...content.querySelectorAll("mark.search-hit")];
+    countEl.hidden = false;
+    if (hits.length) {
+      idx = 0;
+      focusHit();
+    } else {
+      countEl.textContent = "0건";
+    }
+  };
+
+  let timer;
+  input.addEventListener("input", () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => run(input.value.trim()), 200);
+  });
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && hits.length) {
+      e.preventDefault();
+      idx = (idx + (e.shiftKey ? -1 : 1) + hits.length) % hits.length;
+      focusHit();
+    } else if (e.key === "Escape") {
+      input.value = "";
+      clear();
+    }
   });
 };
 
@@ -622,8 +737,11 @@ const renderPost = (post) => {
       : `<span>작성 ${created || updated}</span>`;
 
   article.innerHTML = `
-    <a class="back-link" href="/#posts">← 글 목록</a>
-    <p class="eyebrow">${post.category || "Note"}</p>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/${topicSlug(post.category || "Notes")}/">${post.category || "Notes"}</a>
+    </nav>
     <h1>${post.title}</h1>
     <div class="article-meta">
       ${(post.tags || [])
@@ -646,7 +764,15 @@ const renderPost = (post) => {
       <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
       <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
       <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
-    </div>`;
+    </div>
+    <aside class="post-cta">
+      <p class="post-cta-title">이 글이 도움이 되셨나요?</p>
+      <p class="post-cta-sub">새 글을 RSS로 받아보거나, 궁금한 점은 편하게 메일 주세요.</p>
+      <div class="post-cta-actions">
+        <a class="post-cta-btn primary" href="/feed.xml">RSS 구독</a>
+        <a class="post-cta-btn" href="mailto:ursonice@hanyang.ac.kr">이메일 보내기</a>
+      </div>
+    </aside>`;
   buildToc();
   initShare(post);
   initCite(post);
@@ -657,6 +783,8 @@ const renderPost = (post) => {
   highlightCode();
   decorateCodeBlocks();
   initLightbox();
+  initFootnotes();
+  initArticleSearch();
   typesetMath();
 };
 
