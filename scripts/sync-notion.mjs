@@ -301,7 +301,9 @@ const childrenOf = async (blockId) => {
   return children;
 };
 
-const renderBlocks = async (blockId, context) => {
+// `depth` bumps heading levels for content nested inside toggle-headings, so the TOC can
+// show a 4th tier (e.g. a heading inside a toggle-heading → one level deeper).
+const renderBlocks = async (blockId, context, depth = 0) => {
   const blocks = await childrenOf(blockId);
   const html = [];
   const plain = [];
@@ -319,16 +321,16 @@ const renderBlocks = async (blockId, context) => {
 
     let childHtml = "";
     if (block.has_children) {
-      const nested = await renderBlocks(block.id, context);
+      const nested = await renderBlocks(block.id, context, depth);
       childHtml = nested.html;
       plain.push(nested.plainText);
     }
     return `<li>${inner}${childHtml}</li>`;
   };
 
-  const renderContainerChildren = async (block) => {
+  const renderContainerChildren = async (block, depthDelta = 0) => {
     if (!block.has_children) return "";
-    const nested = await renderBlocks(block.id, context);
+    const nested = await renderBlocks(block.id, context, depth + depthDelta);
     plain.push(nested.plainText);
     return nested.html;
   };
@@ -361,16 +363,17 @@ const renderBlocks = async (blockId, context) => {
         if (rich.length) html.push(`<p>${renderRich(rich)}</p>`);
         break;
       // Map Notion's three heading levels to distinct tags (H1→h2, H2→h3, H3→h4) so the
-      // TOC reflects the real nesting. (h1 is reserved for the post title.)
+      // TOC reflects the real nesting (h1 is reserved for the post title). Headings nested
+      // inside a toggle-heading go one level deeper; their dropped children are now rendered.
       case "heading_1":
-        html.push(`<h2 id="${headingAnchor(block.id)}">${renderRich(rich)}</h2>`);
-        break;
       case "heading_2":
-        html.push(`<h3 id="${headingAnchor(block.id)}">${renderRich(rich)}</h3>`);
+      case "heading_3": {
+        const base = type === "heading_1" ? 2 : type === "heading_2" ? 3 : 4;
+        const lvl = Math.min(5, base + depth);
+        html.push(`<h${lvl} id="${headingAnchor(block.id)}">${renderRich(rich)}</h${lvl}>`);
+        if (block.has_children) html.push(await renderContainerChildren(block, 1));
         break;
-      case "heading_3":
-        html.push(`<h4 id="${headingAnchor(block.id)}">${renderRich(rich)}</h4>`);
-        break;
+      }
       case "quote":
         html.push(`<blockquote>${renderRich(rich)}${await renderContainerChildren(block)}</blockquote>`);
         break;
@@ -441,7 +444,7 @@ const renderBlocks = async (blockId, context) => {
         const columns = await childrenOf(block.id);
         const cols = [];
         for (const column of columns) {
-          const nested = await renderBlocks(column.id, context);
+          const nested = await renderBlocks(column.id, context, depth);
           plain.push(nested.plainText);
           cols.push(`<div class="column">${nested.html}</div>`);
         }
