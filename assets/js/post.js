@@ -408,9 +408,9 @@ const initCite = (post) => {
   year    = {${year}},
   url     = {${url}},
   urldate = {${today}},
-  note    = {Woojae Joo — Developer Note}
+  note    = {Tech Blog}
 }`;
-  const apa = `Joo, W. (${year}). ${title}. Woojae Joo — Developer Note. ${url}`;
+  const apa = `Woojae Joo. (${year}). ${title}. — Tech Blog   ${url}`;
 
   let overlay = null;
   const close = () => overlay && (overlay.hidden = true);
@@ -427,7 +427,7 @@ const initCite = (post) => {
           <pre data-cite-bibtex></pre>
         </div>
         <div class="cite-block">
-          <div class="cite-row"><span>APA</span><button type="button" class="cite-copy" data-cite="apa">복사</button></div>
+          <div class="cite-row"><span>Citation</span><button type="button" class="cite-copy" data-cite="apa">복사</button></div>
           <pre data-cite-apa></pre>
         </div>
       </div>`;
