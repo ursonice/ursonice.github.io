@@ -190,6 +190,7 @@ const renderStats = () => {
 
 const renderAbout = () => {
   const container = $("[data-about]");
+  if (!container) return; // About section moved to the standalone /cv.html page
   if (state.about?.html) {
     container.innerHTML = state.about.html;
   } else {

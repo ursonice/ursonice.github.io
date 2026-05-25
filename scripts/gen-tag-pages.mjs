@@ -7,7 +7,7 @@
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from "node:fs";
 
 const SITE = "https://ursonice.github.io";
-const CSS_V = "28";
+const CSS_V = "29";
 
 const data = JSON.parse(readFileSync("data/notion-posts.json", "utf8"));
 const posts = Array.isArray(data.posts) ? data.posts : [];
@@ -86,7 +86,6 @@ const page = (cat, list) => {
       <nav class="site-nav" aria-label="주요 메뉴">
         <a href="/#posts">Writing</a>
         <a href="/#topics">Topics</a>
-        <a href="/#about">About</a>
         <a href="/cv.html">CV</a>
         <a href="/archive.html">Archive</a>
         <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>

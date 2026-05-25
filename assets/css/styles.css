@@ -2081,6 +2081,19 @@ p {
   background: #2a313c;
 }
 
+/* Light mode: the copy button matches the light code card. */
+[data-theme="light"] .copy-btn {
+  border-color: #d0d7de;
+  background: #ffffff;
+  color: #57606a;
+}
+
+[data-theme="light"] .copy-btn:hover {
+  color: #1f2328;
+  border-color: #b8c0ca;
+  background: #eef1f4;
+}
+
 .code-scroll {
   display: flex;
   overflow-x: auto;
