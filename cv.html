@@ -14,16 +14,16 @@
       gtag("config", "G-K7VKNXKJJ7");
     </script>
 
-    <title>Archive — Woojae Joo</title>
-    <meta name="description" content="Woojae Joo 개발 노트의 전체 글 아카이브 (연도별)." />
-    <link rel="canonical" href="https://ursonice.github.io/archive.html" />
+    <title>CV — Woojae Joo</title>
+    <meta name="description" content="Woojae Joo의 이력 · 관심 분야 · 연락처를 한 페이지에 모은 CV." />
+    <link rel="canonical" href="https://ursonice.github.io/cv.html" />
     <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="/manifest.json" />
     <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
 
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Archive — Woojae Joo" />
-    <meta property="og:description" content="전체 글 아카이브 (연도별)" />
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content="CV — Woojae Joo" />
+    <meta property="og:description" content="AI · Reinforcement Learning · VLA — 이력과 관심 분야" />
     <meta property="og:image" content="https://ursonice.github.io/assets/og/default.png" />
     <meta name="twitter:card" content="summary_large_image" />
 
@@ -45,10 +45,10 @@
     <link rel="stylesheet" href="assets/css/styles.css?v=27" />
   </head>
   <body>
-    <a class="skip-link" href="#archive">본문으로 이동</a>
+    <a class="skip-link" href="#cv">본문으로 이동</a>
 
     <header class="site-header" data-header>
-      <a class="brand" href="/" aria-label="Woojae Joo home">
+      <a class="brand" href="./" aria-label="Woojae Joo home">
         <span class="brand-mark"><img src="assets/images/favicon.svg" alt="" /></span>
         <span class="brand-text">
           <span class="brand-name">Woojae Joo</span>
@@ -59,8 +59,8 @@
         <a href="/#posts">Writing</a>
         <a href="/#topics">Topics</a>
         <a href="/#about">About</a>
-        <a href="/cv.html">CV</a>
-        <a href="/archive.html" aria-current="page">Archive</a>
+        <a href="/cv.html" aria-current="page">CV</a>
+        <a href="/archive.html">Archive</a>
         <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
       </nav>
       <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
@@ -68,15 +68,53 @@
       </button>
     </header>
 
-    <main class="section shell" id="archive">
+    <main class="section shell about-section" id="cv">
       <div class="section-heading">
-        <p class="eyebrow">Archive</p>
-        <h1 id="archive-title">전체 글 <span class="archive-count" data-count></span></h1>
+        <p class="eyebrow">Curriculum Vitae</p>
+        <h1 class="sr-only">Woojae Joo — CV</h1>
       </div>
-      <div data-archive aria-live="polite"></div>
+
+      <div class="about-layout">
+        <div class="about-main">
+          <div class="about-content" data-cv-about>
+            <p>소개를 불러오는 중입니다…</p>
+          </div>
+
+          <h2 class="cv-block-title">Writing about</h2>
+          <div class="chips" data-cv-focus></div>
+
+          <div class="metrics cv-metrics">
+            <div><strong data-cv-postcount>0</strong><span>notes</span></div>
+            <div><strong data-cv-topiccount>0</strong><span>topics</span></div>
+            <div><strong data-cv-updated>–</strong><span>updated</span></div>
+          </div>
+        </div>
+
+        <aside class="about-aside">
+          <div class="profile-card">
+            <div class="avatar has-photo" aria-hidden="true"><img data-cv-avatar src="assets/images/favicon.svg" alt="" /></div>
+            <div class="name">Woojae Joo</div>
+            <div class="role">AI · RL · VLA</div>
+            <div class="profile-links">
+              <a href="https://github.com/ursonice" data-profile-link="github" target="_blank" rel="me noreferrer">GitHub</a>
+              <a href="https://www.linkedin.com/in/woojae-joo-67b5443b0" data-profile-link="linkedin" target="_blank" rel="me noreferrer">LinkedIn</a>
+              <a href="mailto:ursonice@hanyang.ac.kr" data-profile-link="email">Email</a>
+            </div>
+          </div>
+        </aside>
+      </div>
     </main>
 
-    <script src="assets/js/archive.js" type="module"></script>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p>© <span data-year></span> Woojae Joo · ursonice</p>
+        <div class="footer-links">
+          <a href="/">← Blog</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="assets/js/cv.js?v=1" type="module"></script>
     <script src="assets/js/palette.js?v=5" defer></script>
   </body>
 </html>

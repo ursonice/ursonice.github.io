@@ -2677,6 +2677,22 @@ p {
   color: var(--on-accent);
 }
 
+/* ============================ CV page ============================ */
+.cv-block-title {
+  margin: 34px 0 14px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.4rem;
+}
+
+.about-main > .cv-block-title:first-child {
+  margin-top: 0;
+}
+
+.cv-metrics {
+  margin-top: 28px;
+}
+
 /* ===================== Cite modal & keyboard help ===================== */
 .cite-modal[hidden],
 .kbd-help[hidden] {

@@ -674,6 +674,8 @@ const main = async () => {
 
   const urlEntries = [
     `  <url><loc>${SITE}/</loc></url>`,
+    `  <url><loc>${SITE}/cv.html</loc></url>`,
+    `  <url><loc>${SITE}/archive.html</loc></url>`,
     ...posts.map(
       (p) =>
         `  <url><loc>${xmlEsc(postUrl(p))}</loc><lastmod>${new Date(p.updated || p.created).toISOString().slice(0, 10)}</lastmod></url>`,
