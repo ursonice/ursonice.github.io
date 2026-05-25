@@ -76,6 +76,7 @@ GitHub Pages로 운영하는 개인 기술 개발 블로그이자 포트폴리�
 - **OG 공유 카드** — 글마다 제목이 박힌 1200×630 카드를 val.town에서 실시간 생성해 `og:image`로 사용(카카오톡 · 슬랙 · X 미리보기). 아래 "공유 카드(OG 이미지)" 참고.
 - **PWA** — `manifest.json` + 서비스 워커(`sw.js`).
 - **Google Analytics(GA4)** — 모든 페이지 `<head>`에 gtag.
+- **이미지 레이아웃 안정화(CLS)** — 동기화 때 이미지 크기를 읽어 `<img>`에 `width`/`height`를 박아(`scripts/add-image-dims.mjs`) 로딩 중 화면 덜컹임을 없앱니다.
 - **캐시 버스팅** — CSS/JS에 `?v=` 버전을 붙여 배포마다 갱신.
 
 ## 로컬 확인
