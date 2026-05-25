@@ -477,13 +477,16 @@ p {
 }
 
 .button.ghost:hover {
-  border-color: var(--header-edge);
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--header-edge));
   background: linear-gradient(
     180deg,
     color-mix(in srgb, var(--surface) 88%, transparent),
     color-mix(in srgb, var(--surface) 48%, transparent)
   );
-  box-shadow: var(--shadow-md), inset 0 1px 1px rgba(255, 255, 255, 0.92);
+  box-shadow:
+    var(--shadow-md),
+    0 6px 18px color-mix(in srgb, var(--accent) 18%, transparent),
+    inset 0 1px 1px rgba(255, 255, 255, 0.92);
   transform: translateY(-2px);
 }
 
@@ -859,7 +862,7 @@ p {
 
 /* Hover: the glass simply lifts and clears — neutral, no accent tint, no sweep. */
 .filter-button:hover {
-  border-color: var(--header-edge);
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--header-edge));
   background:
     radial-gradient(120% 95% at 30% -12%, rgba(255, 255, 255, 0.78), transparent 60%),
     linear-gradient(
@@ -869,6 +872,7 @@ p {
     );
   box-shadow:
     var(--shadow-md),
+    0 6px 18px color-mix(in srgb, var(--accent) 18%, transparent),
     inset 0 1px 1px rgba(255, 255, 255, 0.98),
     inset 0 -3px 8px rgba(255, 255, 255, 0.22);
   transform: translateY(-2px);
@@ -1265,13 +1269,16 @@ p {
 }
 
 .profile-links a:hover {
-  border-color: var(--header-edge);
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--header-edge));
   background: linear-gradient(
     180deg,
     color-mix(in srgb, var(--surface) 90%, transparent),
     color-mix(in srgb, var(--surface) 50%, transparent)
   );
-  box-shadow: var(--shadow-md), inset 0 1px 1px rgba(255, 255, 255, 0.95);
+  box-shadow:
+    var(--shadow-md),
+    0 6px 18px color-mix(in srgb, var(--accent) 18%, transparent),
+    inset 0 1px 1px rgba(255, 255, 255, 0.95);
   transform: translateY(-1px);
 }
 
@@ -2462,13 +2469,16 @@ p {
 }
 
 .load-more:hover {
-  border-color: var(--header-edge);
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--header-edge));
   background: linear-gradient(
     180deg,
     color-mix(in srgb, var(--surface) 90%, transparent),
     color-mix(in srgb, var(--surface) 50%, transparent)
   );
-  box-shadow: var(--shadow-md), inset 0 1px 1px rgba(255, 255, 255, 0.95);
+  box-shadow:
+    var(--shadow-md),
+    0 6px 18px color-mix(in srgb, var(--accent) 18%, transparent),
+    inset 0 1px 1px rgba(255, 255, 255, 0.95);
   transform: translateY(-2px);
 }
 
