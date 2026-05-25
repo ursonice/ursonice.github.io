@@ -17,11 +17,10 @@ const KAKAO_KEY = "6b60f0fffaa5128881dae4b76b0a165a";
 // the "조회 N" count on posts. Empty = disabled.
 const VIEW_COUNTER_URL = "https://ursonice--635302de577811f18749ee650bb23af1.web.val.run";
 
-// OG share-card image service (val.town, see scripts/og-image.tsx). When set, link
-// previews use a generated card with the post title; empty = the post's first image.
-// This only affects JS-running crawlers here; static /posts/ pages set it at build time
-// (scripts/gen-post-pages.mjs). Keep the two in sync.
-const OG_IMAGE_URL = "";
+// OG share-card image service (val.town, see scripts/og-image.ts). Link previews use a
+// generated card with the post title. This only affects JS-running crawlers here; static
+// /posts/ pages set it at build time (scripts/gen-post-pages.mjs). Keep the two in sync.
+const OG_IMAGE_URL = "https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/";
 const ogCardUrl = (title, category) => {
   const sep = OG_IMAGE_URL.includes("?") ? "&" : "?";
   return `${OG_IMAGE_URL}${sep}title=${encodeURIComponent((title || "Woojae Joo").slice(0, 120))}&cat=${encodeURIComponent(category || "Notes")}`;

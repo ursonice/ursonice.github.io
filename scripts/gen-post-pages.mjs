@@ -13,10 +13,11 @@ import { readFileSync, writeFileSync, mkdirSync, rmSync } from "node:fs";
 const SITE = "https://ursonice.github.io";
 const DEFAULT_IMG = `${SITE}/assets/og/default.png`;
 
-// OG share-card image service (val.town, see scripts/og-image.tsx). Set the OG_IMAGE_URL
-// env var (or a GitHub Actions variable) to your deployed val to use generated title cards
-// for link previews. Empty → fall back to the post's first image / default.png.
-const OG_IMAGE_URL = process.env.OG_IMAGE_URL || "";
+// OG share-card image service (val.town, see scripts/og-image.ts) — generated title cards
+// for link previews. Override with the OG_IMAGE_URL env var; empty → fall back to the
+// post's first image / default.png.
+const OG_IMAGE_URL =
+  process.env.OG_IMAGE_URL || "https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/";
 const ogCard = (post) => {
   const sep = OG_IMAGE_URL.includes("?") ? "&" : "?";
   const title = encodeURIComponent((post.title || "Woojae Joo").slice(0, 120));
