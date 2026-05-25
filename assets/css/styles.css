@@ -439,6 +439,11 @@ p {
   transform: translateY(-1px);
 }
 
+/* Mobile hamburger (injected by palette.js) — hidden on desktop, where the full nav shows. */
+.nav-toggle {
+  display: none;
+}
+
 /* ============================ Buttons ============================ */
 
 .button {
@@ -2507,7 +2512,40 @@ p {
 }
 
 @media (max-width: 900px) {
+  .nav-toggle {
+    display: grid;
+  }
+
+  /* Nav becomes a dropdown panel opened by the hamburger. */
   .site-nav {
+    display: none;
+    position: absolute;
+    top: calc(100% - 8px);
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    min-width: 190px;
+    padding: 8px;
+    border-radius: 16px;
+    background: var(--glass-strong);
+    -webkit-backdrop-filter: var(--blur);
+    backdrop-filter: var(--blur);
+    border: 1px solid var(--header-edge);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .site-header[data-nav-open] .site-nav {
+    display: flex;
+  }
+
+  .site-nav a {
+    padding: 11px 16px;
+    border-radius: 10px;
+  }
+
+  /* The sliding-glass indicator is desktop-only. */
+  .nav-glass {
     display: none;
   }
 

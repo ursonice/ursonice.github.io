@@ -318,3 +318,45 @@
     }
   });
 })();
+
+// Mobile menu: the nav is hidden on small screens (CSS), so inject a hamburger button
+// that toggles it open as a dropdown. Lives on every page (palette.js is global).
+(() => {
+  const header = document.querySelector(".site-header");
+  const nav = header?.querySelector(".site-nav");
+  if (!header || !nav) return;
+
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "icon-button nav-toggle";
+  btn.setAttribute("aria-label", "메뉴 열기");
+  btn.setAttribute("aria-expanded", "false");
+  btn.innerHTML =
+    '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+  // Sit just left of the theme toggle (or at the end of the header).
+  header.insertBefore(btn, header.querySelector("[data-theme-toggle]"));
+
+  const setOpen = (open) => {
+    header.toggleAttribute("data-nav-open", open);
+    btn.setAttribute("aria-expanded", String(open));
+    btn.setAttribute("aria-label", open ? "메뉴 닫기" : "메뉴 열기");
+  };
+
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    setOpen(!header.hasAttribute("data-nav-open"));
+  });
+  // Tapping a link, clicking outside, Escape, or growing past the breakpoint closes it.
+  nav.addEventListener("click", (e) => {
+    if (e.target.closest("a")) setOpen(false);
+  });
+  document.addEventListener("click", (e) => {
+    if (header.hasAttribute("data-nav-open") && !header.contains(e.target)) setOpen(false);
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && header.hasAttribute("data-nav-open")) setOpen(false);
+  });
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 900) setOpen(false);
+  });
+})();
