@@ -319,12 +319,14 @@
   });
 })();
 
-// Mobile menu: the nav is hidden on small screens (CSS), so inject a hamburger button
-// that toggles it open as a dropdown. Lives on every page (palette.js is global).
+// Mobile menu: the nav is hidden on small screens (CSS), so inject a bottom-right FAB that
+// opens it. Skipped on post pages — those already have a bottom-right 목차(TOC) button, so
+// the site-nav menu only appears where there's no TOC (home, topics, CV, archive).
 (() => {
   const header = document.querySelector(".site-header");
   const nav = header?.querySelector(".site-nav");
   if (!header || !nav) return;
+  if (document.querySelector(".article-shell")) return; // post page → TOC button owns the corner
 
   const btn = document.createElement("button");
   btn.type = "button";
