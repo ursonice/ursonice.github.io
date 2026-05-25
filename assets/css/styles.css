@@ -1775,6 +1775,10 @@ p {
 .article-content img {
   border-radius: var(--r-md);
   border: 1px solid var(--line);
+  /* With width/height attrs (added by scripts/add-image-dims.mjs) the browser reserves
+     the correct aspect-ratio box before load → no layout shift. height:auto keeps it
+     responsive within max-width:100%. */
+  height: auto;
 }
 
 .article-content figcaption {
