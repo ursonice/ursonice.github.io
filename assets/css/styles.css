@@ -458,13 +458,30 @@ p {
 }
 
 .button.primary {
+  position: relative;
+  overflow: hidden;
   background: var(--accent);
   color: var(--on-accent);
+}
+
+/* Light-blue top-edge gradient on hover — the blue button's take on the card effect. */
+.button.primary::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  background: linear-gradient(90deg, #5bc8ff, transparent);
+  opacity: 0;
+  transition: opacity 0.22s ease;
 }
 
 .button.primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 28px color-mix(in srgb, var(--accent) 38%, transparent);
+}
+
+.button.primary:hover::before {
+  opacity: 1;
 }
 
 .button.ghost {
@@ -478,19 +495,25 @@ p {
   color: var(--ink);
 }
 
+/* White-gradient top edge on hover — the white button's take on the same effect. */
 .button.ghost::before {
   content: "";
   position: absolute;
   inset: 0 0 auto;
   height: 2px;
-  background: linear-gradient(90deg, var(--accent), transparent);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.95), transparent);
   opacity: 0;
   transition: opacity 0.22s ease;
 }
 
 .button.ghost:hover {
-  border-color: color-mix(in srgb, var(--accent) 32%, var(--glass-edge));
-  box-shadow: var(--shadow-md), inset 0 1px 0 var(--glass-edge);
+  border-color: var(--header-edge);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--surface) 95%, transparent),
+    color-mix(in srgb, var(--surface) 62%, transparent)
+  );
+  box-shadow: var(--shadow-md), inset 0 1px 1px rgba(255, 255, 255, 0.95);
   transform: translateY(-2px);
 }
 
