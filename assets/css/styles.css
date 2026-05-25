@@ -1786,6 +1786,29 @@ p {
   color: var(--muted);
 }
 
+/* "그림 N." prefix on captioned figures (added by post.js numberFigures) */
+.article-content figcaption .fig-number {
+  color: var(--accent-ink);
+  font-weight: 650;
+}
+
+/* Auto-numbered display equations: (N) down the right margin (post.js numberEquations) */
+.article-content .katex-display {
+  position: relative;
+}
+
+.article-content .katex-display > .eq-number {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
 .article-content .callout {
   display: flex;
   gap: 12px;
@@ -2017,6 +2040,148 @@ p {
   .fab {
     width: 44px;
     height: 44px;
+  }
+}
+
+/* Mobile bottom-sheet TOC, opened from the floating 목차 button (.toc-fab). The
+   sticky sidebar stays for desktop; phones use the drawer instead. */
+.toc-fab {
+  display: none;
+}
+
+.toc-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: flex-end;
+}
+
+.toc-drawer[hidden] {
+  display: none;
+}
+
+.toc-drawer-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 10, 14, 0.5);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  animation: toc-fade 0.2s ease;
+}
+
+.toc-drawer-panel {
+  position: relative;
+  width: 100%;
+  max-height: 70vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 20px 28px;
+  background: var(--surface);
+  border-radius: 18px 18px 0 0;
+  border-top: 1px solid var(--glass-edge);
+  box-shadow: 0 -16px 40px rgba(8, 10, 14, 0.28);
+  animation: toc-slide-up 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.toc-drawer-head {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0 10px;
+  margin-bottom: 4px;
+  background: var(--surface);
+}
+
+.toc-drawer-head strong {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.toc-drawer-x {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.toc-drawer-links a {
+  display: block;
+  padding: 11px 12px;
+  border-left: 2px solid var(--line);
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.toc-drawer-links a.lvl-3 {
+  padding-left: 26px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.toc-drawer-links a.is-active {
+  color: var(--accent-ink);
+  border-left-color: var(--accent);
+  font-weight: 650;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  border-radius: 0 7px 7px 0;
+}
+
+.toc-drawer-links a.toc-comment {
+  margin-top: 8px;
+  font-weight: 650;
+}
+
+@keyframes toc-slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes toc-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 900px) {
+  .toc-fab {
+    display: grid;
+  }
+  .article-side {
+    display: none;
+  }
+}
+
+@media (min-width: 901px) {
+  .toc-drawer {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toc-drawer-panel,
+  .toc-drawer-backdrop {
+    animation: none;
   }
 }
 
@@ -3216,6 +3381,7 @@ mark.search-hit.current {
   .fab-stack,
   .read-progress,
   .article-side,
+  .toc-drawer,
   .comments,
   .share-bar,
   .reading-size,

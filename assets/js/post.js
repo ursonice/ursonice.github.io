@@ -17,6 +17,16 @@ const KAKAO_KEY = "6b60f0fffaa5128881dae4b76b0a165a";
 // the "조회 N" count on posts. Empty = disabled.
 const VIEW_COUNTER_URL = "https://ursonice--635302de577811f18749ee650bb23af1.web.val.run";
 
+// OG share-card image service (val.town, see scripts/og-image.tsx). When set, link
+// previews use a generated card with the post title; empty = the post's first image.
+// This only affects JS-running crawlers here; static /posts/ pages set it at build time
+// (scripts/gen-post-pages.mjs). Keep the two in sync.
+const OG_IMAGE_URL = "";
+const ogCardUrl = (title, category) => {
+  const sep = OG_IMAGE_URL.includes("?") ? "&" : "?";
+  return `${OG_IMAGE_URL}${sep}title=${encodeURIComponent((title || "Woojae Joo").slice(0, 120))}&cat=${encodeURIComponent(category || "Notes")}`;
+};
+
 // Giscus (GitHub Discussions) comments. Each post maps to its own discussion via data-term = slug.
 const GISCUS = {
   repo: "ursonice/ursonice.github.io",
@@ -85,6 +95,36 @@ const buildToc = () => {
   side.hidden = false;
   side.innerHTML = "<strong>목차</strong>";
 
+  // Mobile bottom-sheet TOC: the sidebar is desktop-only, so on phones we open the
+  // same list from a floating "목차" button instead of burying it under the article.
+  const drawer = document.createElement("div");
+  drawer.className = "toc-drawer";
+  drawer.hidden = true;
+  drawer.innerHTML = `
+    <div class="toc-drawer-backdrop" data-toc-close></div>
+    <nav class="toc-drawer-panel" aria-label="목차">
+      <div class="toc-drawer-head"><strong>목차</strong><button type="button" class="toc-drawer-x" data-toc-close aria-label="닫기">✕</button></div>
+      <div class="toc-drawer-links"></div>
+    </nav>`;
+  document.body.appendChild(drawer);
+  const drawerLinks = drawer.querySelector(".toc-drawer-links");
+  const closeDrawer = () => (drawer.hidden = true);
+  drawer.querySelectorAll("[data-toc-close]").forEach((el) => el.addEventListener("click", closeDrawer));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !drawer.hidden) closeDrawer();
+  });
+
+  const addDrawerLink = (id, text, { lvl3 = false, comment = false } = {}) => {
+    const a = document.createElement("a");
+    a.href = `#${id}`;
+    a.textContent = text;
+    if (lvl3) a.classList.add("lvl-3");
+    if (comment) a.classList.add("toc-comment");
+    a.addEventListener("click", closeDrawer);
+    drawerLinks.append(a);
+    return a;
+  };
+
   const links = [];
   headings.forEach((heading, index) => {
     const id = heading.id || `section-${index + 1}`;
@@ -92,9 +132,11 @@ const buildToc = () => {
     const link = document.createElement("a");
     link.href = `#${id}`;
     link.textContent = heading.textContent;
-    if (heading.tagName === "H3") link.classList.add("lvl-3");
+    const lvl3 = heading.tagName === "H3";
+    if (lvl3) link.classList.add("lvl-3");
     side.append(link);
-    links.push({ id, link });
+    const mlink = addDrawerLink(id, heading.textContent, { lvl3 });
+    links.push({ id, link, mlink });
   });
 
   // Jump-to-comments entry at the end of the table of contents.
@@ -105,8 +147,28 @@ const buildToc = () => {
     clink.className = "toc-comment";
     clink.textContent = "Comment";
     side.append(clink);
-    links.push({ id: "comments", link: clink });
+    const mlink = addDrawerLink("comments", "Comment", { comment: true });
+    links.push({ id: "comments", link: clink, mlink });
   }
+
+  // Floating button that opens the drawer (shown on mobile via CSS).
+  const fabStack =
+    document.querySelector(".fab-stack") ||
+    (() => {
+      const s = document.createElement("div");
+      s.className = "fab-stack";
+      document.body.appendChild(s);
+      return s;
+    })();
+  const tocFab = document.createElement("button");
+  tocFab.type = "button";
+  tocFab.className = "fab toc-fab";
+  tocFab.setAttribute("aria-label", "목차");
+  tocFab.setAttribute("title", "목차");
+  tocFab.innerHTML =
+    '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  tocFab.addEventListener("click", () => (drawer.hidden = !drawer.hidden));
+  fabStack.insertBefore(tocFab, fabStack.firstChild);
 
   // Keep the active item centered inside the (scrollable) TOC, without moving the page.
   const keepInView = (link) => {
@@ -123,9 +185,10 @@ const buildToc = () => {
     (entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
-        links.forEach(({ id, link }) => {
+        links.forEach(({ id, link, mlink }) => {
           const active = id === entry.target.id;
           link.classList.toggle("is-active", active);
+          mlink?.classList.toggle("is-active", active);
           if (active) keepInView(link);
         });
       });
@@ -152,10 +215,42 @@ const initJumpToComments = () => {
   update();
 };
 
+// Number display equations (1),(2)… down the right margin. Inline math is untouched.
+const numberEquations = (scope) => {
+  const el = scope || $(".article-content");
+  if (!el) return;
+  let n = 0;
+  el.querySelectorAll(".katex-display").forEach((eq) => {
+    if (eq.querySelector(".eq-number")) return; // idempotent
+    n += 1;
+    const tag = document.createElement("span");
+    tag.className = "eq-number";
+    tag.textContent = `(${n})`;
+    eq.appendChild(tag);
+  });
+};
+
+// Number figures that carry a caption ("그림 N." into the <figcaption>). Uncaptioned
+// images (most screenshots) are left as-is, following the usual scholarly convention.
+const numberFigures = () => {
+  const content = $(".article-content");
+  if (!content) return;
+  let n = 0;
+  content.querySelectorAll("figure").forEach((fig) => {
+    const cap = fig.querySelector("figcaption");
+    if (!cap || cap.querySelector(".fig-number")) return;
+    n += 1;
+    const tag = document.createElement("span");
+    tag.className = "fig-number";
+    tag.textContent = `그림 ${n}.`;
+    cap.prepend(tag, document.createTextNode(" "));
+  });
+};
+
 const typesetMath = () => {
   const el = $(".article-content");
   if (!el) return;
-  const run = () =>
+  const run = () => {
     window.renderMathInElement?.(el, {
       delimiters: [
         { left: "\\[", right: "\\]", display: true },
@@ -163,6 +258,8 @@ const typesetMath = () => {
       ],
       throwOnError: false,
     });
+    numberEquations(el);
+  };
   if (window.renderMathInElement) return run();
   let tries = 0;
   const timer = setInterval(() => {
@@ -456,7 +553,7 @@ const initBackToTop = () => {
 const setMeta = (post) => {
   const desc = (post.summary || "AI, Robotics, Systems 공부 기록").slice(0, 200);
   const url = postUrl(post);
-  const img = firstImage(post);
+  const img = OG_IMAGE_URL ? ogCardUrl(post.title, post.category) : firstImage(post);
   const upsert = (selector, make, attr, value) => {
     let el = document.head.querySelector(selector);
     if (!el) { el = make(); document.head.appendChild(el); }
@@ -785,6 +882,7 @@ const renderPost = (post) => {
   initLightbox();
   initFootnotes();
   initArticleSearch();
+  numberFigures();
   typesetMath();
 };
 

@@ -141,6 +141,18 @@ npm run serve                              # http://localhost:4173 에서 확인
 
 이후 노션에서 글을 올리거나 지우면 수십 초 내 사이트에 반영됩니다. 토큰은 릴레이 호스트의 환경변수에만 두고, 저장소에는 절대 커밋하지 않습니다.
 
+## 공유 카드(OG 이미지)
+
+링크를 공유했을 때(카카오톡 · 슬랙 · X) 본문 첫 이미지 대신 **글 제목이 박힌 카드**가 뜨도록, OG 이미지를 실시간 생성하는 작은 val을 둡니다. 켜기 전까지는 기존처럼 본문 첫 이미지/기본 이미지를 씁니다(끄면 아무 변화 없음).
+
+1. **val 배포**: [val.town](https://www.val.town)에서 새 HTTP val을 만들고 `scripts/og-image.tsx` 내용을 붙여넣습니다. 저장 후 공개 URL에 테스트 쿼리를 붙여 PNG가 뜨는지 확인합니다 — 예: `https://<유저>-ogimage.web.val.run/?title=테스트%20제목&cat=AI` (첫 요청은 폰트를 받느라 느립니다).
+2. **사이트에 연결**: 위 base URL(쿼리 제외)을 두 곳에 넣습니다.
+   - `scripts/gen-post-pages.mjs` — `OG_IMAGE_URL` 환경변수(GitHub Actions의 repository **Variable** `OG_IMAGE_URL`로 두는 게 가장 깔끔)
+   - `assets/js/post.js` — 상단 `const OG_IMAGE_URL = ""` 값
+3. 다음 동기화부터 `/posts/<slug>/` 페이지의 `og:image`가 생성 카드로 바뀝니다. (정적 페이지의 태그가 스크래퍼에 실제로 쓰이는 값입니다.)
+
+`og:image` 카드 디자인(색·레이아웃·폰트)은 `scripts/og-image.tsx`에서 바꿀 수 있습니다. 한글 폰트는 Pretendard(OFL)를 받아 쓰며, URL이 막히면 다른 한글 TTF/OTF로 교체하면 됩니다.
+
 ## 지원하는 노션 블록
 
 본문·제목·리스트·체크리스트(to-do)·인용·콜아웃·토글·코드(언어 라벨)·이미지(캡션)·표·다단(columns)·구분선·북마크/임베드·파일/영상 링크, 그리고 **수식**(인라인·블록)을 렌더링합니다. 수식은 글 페이지에서 KaTeX(CDN)로 표시되므로 표시에는 인터넷 연결이 필요합니다.

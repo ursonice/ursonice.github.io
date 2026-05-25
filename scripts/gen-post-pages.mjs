@@ -13,6 +13,17 @@ import { readFileSync, writeFileSync, mkdirSync, rmSync } from "node:fs";
 const SITE = "https://ursonice.github.io";
 const DEFAULT_IMG = `${SITE}/assets/og/default.png`;
 
+// OG share-card image service (val.town, see scripts/og-image.tsx). Set the OG_IMAGE_URL
+// env var (or a GitHub Actions variable) to your deployed val to use generated title cards
+// for link previews. Empty → fall back to the post's first image / default.png.
+const OG_IMAGE_URL = process.env.OG_IMAGE_URL || "";
+const ogCard = (post) => {
+  const sep = OG_IMAGE_URL.includes("?") ? "&" : "?";
+  const title = encodeURIComponent((post.title || "Woojae Joo").slice(0, 120));
+  const cat = encodeURIComponent(post.category || "Notes");
+  return `${OG_IMAGE_URL}${sep}title=${title}&cat=${cat}`;
+};
+
 const data = JSON.parse(readFileSync("data/notion-posts.json", "utf8"));
 const posts = Array.isArray(data.posts) ? data.posts : [];
 
@@ -43,7 +54,7 @@ const bodyInner = (postHtml.match(/<body>([\s\S]*?)<\/body>/i)?.[1] || "")
 const head = (post, slug, url) => {
   const title = esc(post.title || "Woojae Joo");
   const desc = esc((post.summary || "AI, Robotics, Systems 공부 기록").slice(0, 200));
-  const img = firstImage(post.html);
+  const img = OG_IMAGE_URL ? ogCard(post) : firstImage(post.html);
   const card = "summary_large_image";
   const published = post.created ? new Date(post.created).toISOString() : "";
   const modified = post.updated ? new Date(post.updated).toISOString() : published;
@@ -117,7 +128,7 @@ const head = (post, slug, url) => {
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/assets/css/styles.css?v=31" />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=33" />
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
