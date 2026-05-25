@@ -861,15 +861,7 @@ const renderPost = (post) => {
       <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
       <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
       <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
-    </div>
-    <aside class="post-cta">
-      <p class="post-cta-title">이 글이 도움이 되셨나요?</p>
-      <p class="post-cta-sub">새 글을 RSS로 받아보거나, 궁금한 점은 편하게 메일 주세요.</p>
-      <div class="post-cta-actions">
-        <a class="post-cta-btn primary" href="/feed.xml">RSS 구독</a>
-        <a class="post-cta-btn" href="mailto:ursonice@hanyang.ac.kr">이메일 보내기</a>
-      </div>
-    </aside>`;
+    </div>`;
   buildToc();
   initShare(post);
   initCite(post);
