@@ -669,15 +669,6 @@ p {
   opacity: 0.9;
 }
 
-/* Light mode: make the chart axes and their labels solid black. */
-[data-theme="light"] .trade-off-art path[stroke="currentColor"] {
-  stroke-opacity: 0.92;
-}
-
-[data-theme="light"] .trade-off-art .art-label.axis {
-  opacity: 1;
-}
-
 @media (max-width: 860px) {
   .hero-inner {
     grid-template-columns: 1fr;
