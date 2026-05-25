@@ -672,10 +672,14 @@ const main = async () => {
   const feed = `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n  <channel>\n    <title>${xmlEsc(payload.site.title)}</title>\n    <link>${SITE}/</link>\n    <atom:link href="${SITE}/feed.xml" rel="self" type="application/rss+xml"/>\n    <description>${xmlEsc(payload.site.description)}</description>\n    <language>ko</language>\n    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>\n${items}\n  </channel>\n</rss>\n`;
   await writeFile("feed.xml", feed);
 
+  const topicSlug = (s) =>
+    (s || "").toString().toLowerCase().normalize("NFC").replace(/[^a-z0-9가-힣]+/g, "-").replace(/^-+|-+$/g, "") || "topic";
+  const topicSlugs = [...new Set(posts.map((p) => topicSlug(p.category || "Notes")))];
   const urlEntries = [
     `  <url><loc>${SITE}/</loc></url>`,
     `  <url><loc>${SITE}/cv.html</loc></url>`,
     `  <url><loc>${SITE}/archive.html</loc></url>`,
+    ...topicSlugs.map((s) => `  <url><loc>${SITE}/topics/${s}/</loc></url>`),
     ...posts.map(
       (p) =>
         `  <url><loc>${xmlEsc(postUrl(p))}</loc><lastmod>${new Date(p.updated || p.created).toISOString().slice(0, 10)}</lastmod></url>`,

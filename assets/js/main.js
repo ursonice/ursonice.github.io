@@ -56,6 +56,15 @@ const uniqueTopics = (posts) => {
   return [...counts.entries()].sort((a, b) => b[1] - a[1]);
 };
 
+// Topic → URL slug. MUST match scripts/gen-tag-pages.mjs (static /topics/<slug>/ pages).
+const topicSlug = (s) =>
+  (s || "")
+    .toString()
+    .toLowerCase()
+    .normalize("NFC")
+    .replace(/[^a-z0-9가-힣]+/g, "-")
+    .replace(/^-+|-+$/g, "") || "topic";
+
 const renderFilters = () => {
   const container = $("[data-filters]");
   const topics = uniqueTopics(state.posts);
@@ -167,7 +176,7 @@ const renderTopics = () => {
   container.innerHTML = uniqueTopics(state.posts)
     .map(
       ([topic, count]) =>
-        `<button class="topic-card" type="button" data-topic-jump="${topic}"><strong>${topic}</strong><span>${count} notes</span></button>`,
+        `<a class="topic-card" href="/topics/${topicSlug(topic)}/"><strong>${topic}</strong><span>${count} notes</span></a>`,
     )
     .join("");
 };
@@ -220,16 +229,6 @@ const bindEvents = () => {
     state.visible = state.pageSize;
     renderFilters();
     renderPosts();
-  });
-
-  $("[data-topics]").addEventListener("click", (event) => {
-    const button = event.target.closest("[data-topic-jump]");
-    if (!button) return;
-    state.activeTopic = button.dataset.topicJump;
-    state.visible = state.pageSize;
-    renderFilters();
-    renderPosts();
-    $("#posts").scrollIntoView({ behavior: "smooth", block: "start" });
   });
 
   // Clicking a tag chip on a card filters by that tag (without following the card link).
