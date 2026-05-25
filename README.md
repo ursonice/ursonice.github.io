@@ -12,7 +12,7 @@ GitHub Pages로 운영하는 개인 기술 개발 블로그이자 포트폴리�
 
 - **노션으로 글 작성** → 정적 JSON으로 동기화. 방문자는 사이트 안에서 본문을 그대로 읽습니다(노션 이동 없음).
 - **실시간 반영** — 노션에서 추가/삭제/수정하면 약 1분 내 사이트에 반영됩니다(노션 웹훅 → val.town 릴레이 → `repository_dispatch`). 15분 cron은 안전망(fallback)입니다.
-- **이미지 정적화** — 노션의 만료되는 이미지 URL 대신 `assets/notion/` 아래로 내려받아 저장합니다.
+- **이미지 정적화** — 노션의 만료되는 이미지 URL 대신 `assets/notion/` 아래로 내려받아 저장합니다. HEIC은 JPEG로 변환하고(크롬·파이어폭스 호환), 폰 사진처럼 큰 이미지는 웹용(≤1600px)으로 축소합니다(`scripts/convert-heic.mjs`).
 - **다양한 노션 블록 지원** — 문단·제목·리스트·체크리스트·인용·콜아웃·토글·코드(언어 라벨)·이미지(캡션)·표·다단(columns)·구분선·북마크/임베드, 그리고 **수식**(KaTeX).
 - **RSS 피드**(`feed.xml`)와 **사이트맵**(`sitemap.xml`)을 매 동기화마다 자동 생성합니다.
 
@@ -117,6 +117,7 @@ npm run serve
 ## 처음 한 번 동기화하기 (로컬)
 
 ```bash
+npm install                                # heic-convert, sharp (이미지 변환용)
 export NOTION_TOKEN=ntn_여기에토큰          # 절대 커밋하지 마세요
 export NOTION_ABOUT_PAGE_ID=...            # About 페이지가 있으면 (선택)
 npm run sync:notion                        # data/notion-posts.json + assets/notion/ 갱신
