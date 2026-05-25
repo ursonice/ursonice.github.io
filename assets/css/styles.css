@@ -2707,6 +2707,17 @@ p {
   margin-top: 28px;
 }
 
+/* "Writing about" chips: accent-blue text with an upright (non-italic) count. */
+[data-cv-focus] .badge {
+  color: var(--accent-ink);
+}
+
+[data-cv-focus] .badge em {
+  font-style: normal;
+  margin-left: 5px;
+  font-weight: 600;
+}
+
 /* ===================== Cite modal & keyboard help ===================== */
 .cite-modal[hidden],
 .kbd-help[hidden] {
