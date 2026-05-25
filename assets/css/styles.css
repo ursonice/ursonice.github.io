@@ -1074,6 +1074,8 @@ p {
 }
 
 .topic-card {
+  position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -1088,18 +1090,28 @@ p {
   text-align: left;
   cursor: pointer;
   font: inherit;
-  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+/* Blue top-edge gradient that fades in on hover — same as the post cards. */
+.topic-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  opacity: 0;
+  transition: opacity 0.22s ease;
 }
 
 .topic-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--header-edge);
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--surface) 80%, transparent),
-    color-mix(in srgb, var(--surface) 44%, transparent)
-  );
-  box-shadow: var(--shadow-md), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--accent) 32%, var(--glass-edge));
+  box-shadow: var(--shadow-md), inset 0 1px 0 var(--glass-edge);
+}
+
+.topic-card:hover::before {
+  opacity: 1;
 }
 
 .topic-card strong {
