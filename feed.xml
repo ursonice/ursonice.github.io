@@ -6,7 +6,7 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 25 May 2026 08:30:35 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 25 May 2026 08:31:35 GMT</lastBuildDate>
     <item>
       <title>MonoLift: Learning 3D Manipulation Policies from Monocular RGB via Distillation</title>
       <link>https://ursonice.github.io/posts/monolift-learning-3d-manipulation-policies-from-monocular-rgb-via-distillation/</link>
