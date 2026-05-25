@@ -27,15 +27,15 @@
     <meta property="og:title" content="[Kubernetes] 파일 시스템 갯수 늘리기" />
     <meta property="og:description" content="서론 On-prmise에서 쿠버네티스를 사용하다보면 파일 시스템 갯수제한(파일을 열수있는 갯수) 때문에 파드를 실행하지 못하는 경우가 생긴다. 데이터베이스도 결국 파일시스템을 사용하여 내용을 유지하고 있듯이 쿠버네티스의 파드도 마찬가지이다. 파일 시스템 갯수제한 오류 오류를 봐보자 {“level”:“in" />
     <meta property="og:url" content="https://ursonice.github.io/posts/kubernetes-%ED%8C%8C%EC%9D%BC-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EA%B0%AF%EC%88%98-%EB%8A%98%EB%A6%AC%EA%B8%B0/" />
-    <meta property="og:image" content="https://ursonice.github.io/assets/og/default.png" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5BKubernetes%5D%20%ED%8C%8C%EC%9D%BC%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B0%AF%EC%88%98%20%EB%8A%98%EB%A6%AC%EA%B8%B0&amp;cat=Kubernetes" />
     <meta property="article:published_time" content="2025-04-29T05:34:00.000Z" />
     <meta property="article:modified_time" content="2025-05-03T16:44:00.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="[Kubernetes] 파일 시스템 갯수 늘리기" />
     <meta name="twitter:description" content="서론 On-prmise에서 쿠버네티스를 사용하다보면 파일 시스템 갯수제한(파일을 열수있는 갯수) 때문에 파드를 실행하지 못하는 경우가 생긴다. 데이터베이스도 결국 파일시스템을 사용하여 내용을 유지하고 있듯이 쿠버네티스의 파드도 마찬가지이다. 파일 시스템 갯수제한 오류 오류를 봐보자 {“level”:“in" />
-    <meta name="twitter:image" content="https://ursonice.github.io/assets/og/default.png" />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5BKubernetes%5D%20%ED%8C%8C%EC%9D%BC%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B0%AF%EC%88%98%20%EB%8A%98%EB%A6%AC%EA%B8%B0&amp;cat=Kubernetes" />
 
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"[Kubernetes] 파일 시스템 갯수 늘리기","description":"서론 On-prmise에서 쿠버네티스를 사용하다보면 파일 시스템 갯수제한(파일을 열수있는 갯수) 때문에 파드를 실행하지 못하는 경우가 생긴다. 데이터베이스도 결국 파일시스템을 사용하여 내용을 유지하고 있듯이 쿠버네티스의 파드도 마찬가지이다. 파일 시스템 갯수제한 오류 오류를 봐보자 {“level”:“in","image":"https://ursonice.github.io/assets/og/default.png","datePublished":"2025-04-29T05:34:00.000Z","dateModified":"2025-05-03T16:44:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/kubernetes-%ED%8C%8C%EC%9D%BC-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EA%B0%AF%EC%88%98-%EB%8A%98%EB%A6%AC%EA%B8%B0/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"[Kubernetes] 파일 시스템 갯수 늘리기","description":"서론 On-prmise에서 쿠버네티스를 사용하다보면 파일 시스템 갯수제한(파일을 열수있는 갯수) 때문에 파드를 실행하지 못하는 경우가 생긴다. 데이터베이스도 결국 파일시스템을 사용하여 내용을 유지하고 있듯이 쿠버네티스의 파드도 마찬가지이다. 파일 시스템 갯수제한 오류 오류를 봐보자 {“level”:“in","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5BKubernetes%5D%20%ED%8C%8C%EC%9D%BC%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B0%AF%EC%88%98%20%EB%8A%98%EB%A6%AC%EA%B8%B0&cat=Kubernetes","datePublished":"2025-04-29T05:34:00.000Z","dateModified":"2025-05-03T16:44:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/kubernetes-%ED%8C%8C%EC%9D%BC-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EA%B0%AF%EC%88%98-%EB%8A%98%EB%A6%AC%EA%B8%B0/"}}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Kubernetes","item":"https://ursonice.github.io/topics/kubernetes/"},{"@type":"ListItem","position":3,"name":"[Kubernetes] 파일 시스템 갯수 늘리기","item":"https://ursonice.github.io/posts/kubernetes-%ED%8C%8C%EC%9D%BC-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EA%B0%AF%EC%88%98-%EB%8A%98%EB%A6%AC%EA%B8%B0/"}]}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -101,7 +101,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=9" type="module"></script>
+    <script src="/assets/js/post.js?v=10" type="module"></script>
     <script src="/assets/js/palette.js?v=5" defer></script>
   </body>
 </html>
