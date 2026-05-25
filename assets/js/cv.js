@@ -77,12 +77,17 @@ const render = async () => {
   };
   set("[data-cv-postcount]", posts.length);
   set("[data-cv-topiccount]", Object.keys(counts).length);
-  const latest = posts
-    .map((p) => p.updated || p.created)
-    .filter(Boolean)
-    .sort()
-    .pop();
-  if (latest) set("[data-cv-updated]", fmtDate(latest));
+
+  // "Last updated" reflects THIS CV's own revision (the Notion About page's
+  // modified date), not the latest blog post.
+  if (about.updated) {
+    const time = $("[data-cv-updated]");
+    if (time) {
+      time.textContent = fmtDate(about.updated);
+      time.setAttribute("datetime", new Date(about.updated).toISOString());
+    }
+    $("[data-cv-updated-wrap]")?.removeAttribute("hidden");
+  }
 };
 
 initTheme();

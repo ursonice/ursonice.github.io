@@ -42,7 +42,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/css/styles.css?v=30" />
+    <link rel="stylesheet" href="assets/css/styles.css?v=32" />
   </head>
   <body>
     <a class="skip-link" href="#cv">본문으로 이동</a>
@@ -68,9 +68,14 @@
     </header>
 
     <main class="section shell about-section" id="cv">
-      <div class="section-heading">
+      <div class="section-heading cv-heading">
         <p class="eyebrow">Curriculum Vitae</p>
         <h1 class="sr-only">Woojae Joo — CV</h1>
+        <div class="cv-updated" data-cv-updated-wrap hidden>
+          <span class="cv-updated-dot" aria-hidden="true"></span>
+          <span class="cv-updated-label">Last updated</span>
+          <time data-cv-updated>–</time>
+        </div>
       </div>
 
       <div class="about-layout">
@@ -85,7 +90,6 @@
           <div class="metrics cv-metrics">
             <div><strong data-cv-postcount>0</strong><span>notes</span></div>
             <div><strong data-cv-topiccount>0</strong><span>topics</span></div>
-            <div><strong data-cv-updated>–</strong><span>updated</span></div>
           </div>
         </div>
 
@@ -113,7 +117,7 @@
       </div>
     </footer>
 
-    <script src="assets/js/cv.js?v=1" type="module"></script>
+    <script src="assets/js/cv.js?v=2" type="module"></script>
     <script src="assets/js/palette.js?v=5" defer></script>
   </body>
 </html>

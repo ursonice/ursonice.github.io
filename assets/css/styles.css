@@ -2707,6 +2707,93 @@ p {
   margin-top: 28px;
 }
 
+/* CV header row: eyebrow on the left, a "Last updated" pill on the right. */
+.cv-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  max-width: none;
+}
+
+.cv-heading .eyebrow {
+  margin: 0;
+}
+
+/* Glass pill showing this CV's own revision date (Notion About modified). */
+.cv-updated {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 14px 7px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  font-size: 0.78rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.cv-updated[hidden] {
+  display: none;
+}
+
+.cv-updated-dot {
+  position: relative;
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.cv-updated-dot::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  opacity: 0;
+  animation: cv-updated-pulse 2.8s ease-out infinite;
+}
+
+@keyframes cv-updated-pulse {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.cv-updated-label {
+  font-family: var(--font-mono);
+  font-size: 0.67rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.cv-updated time {
+  color: var(--ink);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cv-updated-dot::after {
+    animation: none;
+  }
+}
+
 /* "Writing about" chips: accent-blue text with an upright (non-italic) count. */
 [data-cv-focus] .badge {
   color: var(--accent-ink);
