@@ -5,5 +5,9 @@
   "scripts": {
     "sync:notion": "node scripts/sync-notion.mjs",
     "serve": "node scripts/serve.mjs"
+  },
+  "dependencies": {
+    "heic-convert": "^2.1.0",
+    "sharp": "^0.34.5"
   }
 }

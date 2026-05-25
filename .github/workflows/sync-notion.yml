@@ -25,6 +25,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
       - name: Sync posts from Notion
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
@@ -33,6 +36,7 @@ jobs:
           NOTION_VERSION: "2026-03-11"
         run: |
           node scripts/sync-notion.mjs
+          node scripts/convert-heic.mjs
           node scripts/add-image-dims.mjs
           node scripts/gen-post-pages.mjs
           node scripts/gen-tag-pages.mjs
