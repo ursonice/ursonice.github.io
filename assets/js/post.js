@@ -821,8 +821,14 @@ const renderPost = (post) => {
   document.title = `${post.title} — Woojae Joo`;
   setMeta(post);
   const article = $("[data-article]");
+  // Asset paths in the body are relative ("assets/…"); make them root-absolute so they
+  // resolve from the nested /posts/<slug>/ URL (not just the root post.html SPA route).
+  const articleHtml = (post.html || "")
+    .normalize("NFC")
+    .replace(/(src|href)="assets\//g, '$1="/assets/')
+    .replace(/(src|href)="\.\//g, '$1="/');
   const body = post.html
-    ? `<div class="article-content">${post.html.normalize("NFC")}</div>`
+    ? `<div class="article-content">${articleHtml}</div>`
     : `<div class="article-content"><p>${escapeHtml(post.summary || "아직 본문이 동기화되지 않은 글입니다. 노션에서 내용을 채우면 여기에 표시됩니다.")}</p></div>`;
 
   const created = formatDate(post.created);
