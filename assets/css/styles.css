@@ -2677,6 +2677,228 @@ p {
   color: var(--on-accent);
 }
 
+/* ===================== Cite modal & keyboard help ===================== */
+.cite-modal[hidden],
+.kbd-help[hidden] {
+  display: none;
+}
+
+.cite-modal,
+.kbd-help {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.cite-backdrop,
+.kbd-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 11, 14, 0.55);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.cite-panel,
+.kbd-panel {
+  position: relative;
+  width: min(100% - 24px, 560px);
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 20px 22px 22px;
+  border: 1px solid var(--glass-edge);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+}
+
+.cite-head,
+.kbd-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.cite-head strong,
+.kbd-head strong {
+  font-size: 1.02rem;
+}
+
+.cite-x,
+.kbd-x {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+.cite-x:hover,
+.kbd-x:hover {
+  color: var(--ink);
+  background: var(--surface-2);
+}
+
+.cite-block + .cite-block {
+  margin-top: 16px;
+}
+
+.cite-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.cite-row span {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.cite-copy {
+  border: 1px solid var(--glass-edge);
+  background: var(--glass);
+  color: var(--accent-ink);
+  border-radius: 999px;
+  padding: 3px 12px;
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cite-copy:hover {
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--glass-edge));
+}
+
+.cite-modal pre {
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.kbd-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.kbd-list li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.kbd-list kbd {
+  flex: none;
+  min-width: 64px;
+  text-align: center;
+  padding: 5px 10px;
+  border: 1px solid var(--line-strong);
+  border-bottom-width: 2px;
+  border-radius: 7px;
+  background: var(--surface-2);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--ink);
+}
+
+.kbd-list span {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+/* ===================== Light-mode syntax theme ===================== */
+[data-theme="light"] .code-block {
+  background: #ffffff;
+  border-color: #d8dee4;
+}
+
+[data-theme="light"] .code-head {
+  background: #f3f5f8;
+  border-bottom-color: #d8dee4;
+}
+
+[data-theme="light"] .code-lang {
+  color: #57606a;
+}
+
+[data-theme="light"] .code-gutter {
+  background: #f6f8fa;
+  color: #8c959f;
+  border-right-color: #e6e9ee;
+}
+
+[data-theme="light"] .article-content .hljs {
+  color: #1f2328;
+}
+
+[data-theme="light"] .hljs-comment,
+[data-theme="light"] .hljs-quote {
+  color: #6e7781;
+}
+
+[data-theme="light"] .hljs-keyword,
+[data-theme="light"] .hljs-selector-tag,
+[data-theme="light"] .hljs-literal,
+[data-theme="light"] .hljs-doctag {
+  color: #cf222e;
+}
+
+[data-theme="light"] .hljs-string,
+[data-theme="light"] .hljs-regexp,
+[data-theme="light"] .hljs-meta .hljs-string {
+  color: #0a3069;
+}
+
+[data-theme="light"] .hljs-number,
+[data-theme="light"] .hljs-built_in,
+[data-theme="light"] .hljs-attr,
+[data-theme="light"] .hljs-variable,
+[data-theme="light"] .hljs-template-variable,
+[data-theme="light"] .hljs-symbol,
+[data-theme="light"] .hljs-bullet,
+[data-theme="light"] .hljs-link {
+  color: #0550ae;
+}
+
+[data-theme="light"] .hljs-title,
+[data-theme="light"] .hljs-section,
+[data-theme="light"] .hljs-name,
+[data-theme="light"] .hljs-title.function_,
+[data-theme="light"] .hljs-title.class_ {
+  color: #8250df;
+}
+
+[data-theme="light"] .hljs-type,
+[data-theme="light"] .hljs-tag {
+  color: #116329;
+}
+
+[data-theme="light"] .hljs-attribute,
+[data-theme="light"] .hljs-meta {
+  color: #953800;
+}
+
 /* ============================ Print / PDF ============================ */
 /* Strip the UI chrome and force a clean black-on-white article for
    printing or "Save as PDF" — works even when printing from dark mode. */

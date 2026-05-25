@@ -393,6 +393,69 @@ const initShare = (post) => {
   initKakaoShare(bar, { url, title, desc: (post.summary || "").slice(0, 100), image: firstImage(post) });
 };
 
+// "Cite" button → modal with BibTeX + APA citations for this post.
+const initCite = (post) => {
+  const btn = document.querySelector("[data-share-cite]");
+  if (!btn) return;
+  const url = postUrl(post);
+  const title = (post.title || "Woojae Joo").replace(/\s+/g, " ").trim();
+  const year = new Date(post.created || post.updated || Date.now()).getFullYear();
+  const today = new Date().toISOString().slice(0, 10);
+  const key = ((post.slug || "post").normalize("NFC").replace(/[^a-zA-Z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "post").toLowerCase();
+  const bibtex = `@online{joo${year}_${key},
+  author  = {Joo, Woojae},
+  title   = {${title}},
+  year    = {${year}},
+  url     = {${url}},
+  urldate = {${today}},
+  note    = {Woojae Joo — Developer Note}
+}`;
+  const apa = `Joo, W. (${year}). ${title}. Woojae Joo — Developer Note. ${url}`;
+
+  let overlay = null;
+  const close = () => overlay && (overlay.hidden = true);
+  const build = () => {
+    overlay = document.createElement("div");
+    overlay.className = "cite-modal";
+    overlay.hidden = true;
+    overlay.innerHTML = `
+      <div class="cite-backdrop" data-cite-close></div>
+      <div class="cite-panel" role="dialog" aria-modal="true" aria-label="이 글 인용">
+        <div class="cite-head"><strong>이 글 인용</strong><button type="button" class="cite-x" data-cite-close aria-label="닫기">✕</button></div>
+        <div class="cite-block">
+          <div class="cite-row"><span>BibTeX</span><button type="button" class="cite-copy" data-cite="bibtex">복사</button></div>
+          <pre data-cite-bibtex></pre>
+        </div>
+        <div class="cite-block">
+          <div class="cite-row"><span>APA</span><button type="button" class="cite-copy" data-cite="apa">복사</button></div>
+          <pre data-cite-apa></pre>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+    overlay.querySelector("[data-cite-bibtex]").textContent = bibtex;
+    overlay.querySelector("[data-cite-apa]").textContent = apa;
+    overlay.querySelectorAll("[data-cite-close]").forEach((el) => el.addEventListener("click", close));
+    overlay.querySelectorAll("[data-cite]").forEach((b) =>
+      b.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(b.dataset.cite === "bibtex" ? bibtex : apa);
+          b.textContent = "복사됨";
+        } catch {
+          b.textContent = "실패";
+        }
+        setTimeout(() => (b.textContent = "복사"), 1500);
+      }),
+    );
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && overlay && !overlay.hidden) close();
+    });
+  };
+  btn.addEventListener("click", () => {
+    if (!overlay) build();
+    overlay.hidden = false;
+  });
+};
+
 const initKakaoShare = (bar, payload) => {
   const btn = bar.querySelector("[data-share-kakao]");
   if (!btn || !KAKAO_KEY) return; // no key → button stays hidden
@@ -582,9 +645,11 @@ const renderPost = (post) => {
       <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
       <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
       <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
     </div>`;
   buildToc();
   initShare(post);
+  initCite(post);
   initViewCount(post);
   initReadingSize();
   addHeadingAnchors();

@@ -257,3 +257,64 @@
     });
   }
 })();
+
+// Keyboard shortcuts + a "?" help overlay (works on every page).
+(() => {
+  const isTyping = () => {
+    const el = document.activeElement;
+    return !!el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable);
+  };
+
+  let overlay = null;
+  const close = () => overlay && (overlay.hidden = true);
+  const rows = [
+    ["⌘&nbsp;K", "검색 열기"],
+    ["/", "검색 열기"],
+    ["?", "이 도움말 열기"],
+    ["T", "테마 전환 (라이트 / 다크)"],
+    ["G&nbsp;H", "홈으로 이동"],
+    ["Esc", "닫기"],
+  ];
+  const build = () => {
+    overlay = document.createElement("div");
+    overlay.className = "kbd-help";
+    overlay.hidden = true;
+    overlay.innerHTML = `
+      <div class="kbd-backdrop" data-kbd-close></div>
+      <div class="kbd-panel" role="dialog" aria-modal="true" aria-label="키보드 단축키">
+        <div class="kbd-head"><strong>키보드 단축키</strong><button type="button" class="kbd-x" data-kbd-close aria-label="닫기">✕</button></div>
+        <ul class="kbd-list">${rows.map(([k, d]) => `<li><kbd>${k}</kbd><span>${d}</span></li>`).join("")}</ul>
+      </div>`;
+    document.body.appendChild(overlay);
+    overlay.querySelectorAll("[data-kbd-close]").forEach((el) => el.addEventListener("click", close));
+  };
+  const openHelp = () => {
+    if (!overlay) build();
+    overlay.hidden = false;
+  };
+
+  let gPending = 0;
+  document.addEventListener("keydown", (e) => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return; // leave ⌘K and OS shortcuts alone
+    if (isTyping()) return;
+    const k = e.key;
+    if (k === "Escape") return close();
+    if (k === "?") {
+      e.preventDefault();
+      return overlay && !overlay.hidden ? close() : openHelp();
+    }
+    if (k === "/") {
+      e.preventDefault();
+      return document.dispatchEvent(new KeyboardEvent("keydown", { key: "k", ctrlKey: true }));
+    }
+    if (k === "t" || k === "T") return document.querySelector("[data-theme-toggle]")?.click();
+    if (k === "g" || k === "G") {
+      gPending = Date.now();
+      return;
+    }
+    if ((k === "h" || k === "H") && Date.now() - gPending < 700) {
+      gPending = 0;
+      location.href = "/";
+    }
+  });
+})();
