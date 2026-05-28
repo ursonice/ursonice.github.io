@@ -6,7 +6,7 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Thu, 28 May 2026 00:16:11 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 28 May 2026 03:15:38 GMT</lastBuildDate>
     <item>
       <title>MonoLift: Learning 3D Manipulation Policies from Monocular RGB via Distillation</title>
       <link>https://ursonice.github.io/posts/monolift-learning-3d-manipulation-policies-from-monocular-rgb-via-distillation/</link>
@@ -14,6 +14,14 @@
       <pubDate>Sun, 24 May 2026 14:31:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
       <description>서론 이 논문은 단일 RGB 이미지(Monocular RGB)만으로 3D 로봇 조작 정책을 학습하는 MonoLift framework를 제안한다. 기존 RGB-D, multi-view, point cloud 기반 방법은 3D 정보를 잘 활용할 수 있지만, 추가 센서와 전처리 비용이 크다. 반대로 RGB-</description>
+    </item>
+    <item>
+      <title>Reinforcement Learning 1차시</title>
+      <link>https://ursonice.github.io/posts/reinforcement-learning-1%EC%B0%A8%EC%8B%9C/</link>
+      <guid isPermaLink="false">2edb12c0-115c-80ef-babc-d7b8ed3e3b94</guid>
+      <pubDate>Mon, 19 Jan 2026 06:08:00 GMT</pubDate>
+      <category>Reinforcement Learning</category>
+      <description>Random Variable 표본 공간을 어떤 목적에 따른 실수에 대응 시켜주는 함수를 확률 변수라고 한다. 그리고 이 실수들을 맞는 확률값에 대응시켜준 것을 확률 분포라고 한다. Conditional Probability Partion theorem Probability Density Function </description>
     </item>
     <item>
       <title>Learning Vision-Based Omnidirectional Navigation: A Teacher-Student Approach Using Monocular Depth Estimation 논문리뷰</title>
@@ -102,14 +110,6 @@
       <pubDate>Tue, 03 Feb 2026 09:40:00 GMT</pubDate>
       <category>Application</category>
       <description>Dependencies Device: Raspi 5 OS: Bookworm SD card: 128GB</description>
-    </item>
-    <item>
-      <title>Reinforcement Learning 1차시</title>
-      <link>https://ursonice.github.io/posts/reinforcement-learning-1%EC%B0%A8%EC%8B%9C/</link>
-      <guid isPermaLink="false">2edb12c0-115c-80ef-babc-d7b8ed3e3b94</guid>
-      <pubDate>Mon, 19 Jan 2026 06:08:00 GMT</pubDate>
-      <category>AI/ Theory</category>
-      <description>Random Variable 표본 공간을 어떤 목적에 따른 실수에 대응 시켜주는 함수를 확률 변수라고 한다. 그리고 이 실수들을 맞는 확률값에 대응시켜준 것을 확률 분포라고 한다. Conditional Probability Partion theorem Probability Density Function </description>
     </item>
     <item>
       <title>Docker에 VNC 설치</title>
