@@ -826,52 +826,58 @@ const renderPost = (post) => {
   document.title = `${post.title} — Woojae Joo`;
   setMeta(post);
   const article = $("[data-article]");
-  // Asset paths in the body are relative ("assets/…"); make them root-absolute so they
-  // resolve from the nested /posts/<slug>/ URL (not just the root post.html SPA route).
-  const articleHtml = (post.html || "")
-    .normalize("NFC")
-    .replace(/(src|href)="assets\//g, '$1="/assets/')
-    .replace(/(src|href)="\.\//g, '$1="/');
-  const body = post.html
-    ? `<div class="article-content">${articleHtml}</div>`
-    : `<div class="article-content"><p>${escapeHtml(post.summary || "아직 본문이 동기화되지 않은 글입니다. 노션에서 내용을 채우면 여기에 표시됩니다.")}</p></div>`;
+  // If the static page was prerendered by scripts/gen-post-pages.mjs (data-prerendered),
+  // the article DOM is already in place — skip the innerHTML overwrite and just hydrate by
+  // attaching interactive behaviors below. Otherwise (e.g. the /post.html?slug= SPA route)
+  // build the article from the JSON.
+  if (!article.hasAttribute("data-prerendered")) {
+    // Asset paths in the body are relative ("assets/…"); make them root-absolute so they
+    // resolve from the nested /posts/<slug>/ URL (not just the root post.html SPA route).
+    const articleHtml = (post.html || "")
+      .normalize("NFC")
+      .replace(/(src|href)="assets\//g, '$1="/assets/')
+      .replace(/(src|href)="\.\//g, '$1="/');
+    const body = post.html
+      ? `<div class="article-content">${articleHtml}</div>`
+      : `<div class="article-content"><p>${escapeHtml(post.summary || "아직 본문이 동기화되지 않은 글입니다. 노션에서 내용을 채우면 여기에 표시됩니다.")}</p></div>`;
 
-  const created = formatDate(post.created);
-  const updated = formatDate(post.updated);
-  const dateMeta =
-    created && updated && created !== updated
-      ? `<span>작성 ${created}</span><span class="dot"></span><span>수정 ${updated}</span>`
-      : `<span>작성 ${created || updated}</span>`;
+    const created = formatDate(post.created);
+    const updated = formatDate(post.updated);
+    const dateMeta =
+      created && updated && created !== updated
+        ? `<span>작성 ${created}</span><span class="dot"></span><span>수정 ${updated}</span>`
+        : `<span>작성 ${created || updated}</span>`;
 
-  article.innerHTML = `
-    <nav class="breadcrumb" aria-label="breadcrumb">
-      <a href="/">홈</a>
-      <span class="bc-sep" aria-hidden="true">›</span>
-      <a href="/topics/${topicSlug(post.category || "Notes")}/">${post.category || "Notes"}</a>
-    </nav>
-    <h1>${post.title}</h1>
-    <div class="article-meta">
-      ${(post.tags || [])
-        .map((tag) => `<a class="meta-tag" href="/index.html?tag=${encodeURIComponent(tag)}">#${escapeHtml(tag)}</a>`)
-        .join("")}
-      ${(post.tags || []).length ? '<span class="dot"></span>' : ""}
-      ${dateMeta}
-      <span class="reading-size" role="group" aria-label="글자 크기">
-        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
-        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
-        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
-      </span>
-    </div>
-    <hr class="article-divider" />
-    ${body}
-    <div class="share-bar" data-share>
-      <span class="share-label">Share</span>
-      <button type="button" class="share-btn" data-share-copy>Copy</button>
-      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
-      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
-      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
-      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
-    </div>`;
+    article.innerHTML = `
+      <nav class="breadcrumb" aria-label="breadcrumb">
+        <a href="/">홈</a>
+        <span class="bc-sep" aria-hidden="true">›</span>
+        <a href="/topics/${topicSlug(post.category || "Notes")}/">${post.category || "Notes"}</a>
+      </nav>
+      <h1>${post.title}</h1>
+      <div class="article-meta">
+        ${(post.tags || [])
+          .map((tag) => `<a class="meta-tag" href="/index.html?tag=${encodeURIComponent(tag)}">#${escapeHtml(tag)}</a>`)
+          .join("")}
+        ${(post.tags || []).length ? '<span class="dot"></span>' : ""}
+        ${dateMeta}
+        <span class="reading-size" role="group" aria-label="글자 크기">
+          <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+          <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+          <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+        </span>
+      </div>
+      <hr class="article-divider" />
+      ${body}
+      <div class="share-bar" data-share>
+        <span class="share-label">Share</span>
+        <button type="button" class="share-btn" data-share-copy>Copy</button>
+        <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+        <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+        <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+        <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+      </div>`;
+  }
   buildToc();
   initShare(post);
   initCite(post);

@@ -46,6 +46,70 @@ const firstImage = (html = "") => {
   return encodeURI(abs.normalize("NFC"));
 };
 
+// Topic → URL slug. MUST match scripts/gen-tag-pages.mjs / main.js / post.js.
+const topicSlug = (s) =>
+  (s || "").toString().toLowerCase().normalize("NFC").replace(/[^a-z0-9가-힣]+/g, "-").replace(/^-+|-+$/g, "") || "topic";
+
+const fmtDate = (value) => {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return new Intl.DateTimeFormat("ko-KR", { year: "numeric", month: "long", day: "numeric" }).format(date);
+};
+
+// Prerendered article HTML — mirrors post.js renderPost so Google sees the full body in the
+// STATIC /posts/<slug>/index.html instead of an empty JS-filled shell. (Without this, the page
+// looks thin to crawlers, the homepage card outranks the post for the post's own queries, and
+// "참조 페이지 없음" because the homepage's post-card links are also JS-rendered.)
+const articleHtml = (post) => {
+  const title = esc(post.title || "Woojae Joo");
+  const cat = post.category || "Notes";
+  const tagsHtml = (post.tags || [])
+    .map((t) => `<a class="meta-tag" href="/index.html?tag=${encodeURIComponent(t)}">#${esc(t)}</a>`)
+    .join("");
+  const tagDot = (post.tags || []).length ? '<span class="dot"></span>' : "";
+  const created = fmtDate(post.created);
+  const updated = fmtDate(post.updated);
+  const dateMeta =
+    created && updated && created !== updated
+      ? `<span>작성 ${esc(created)}</span><span class="dot"></span><span>수정 ${esc(updated)}</span>`
+      : `<span>작성 ${esc(created || updated)}</span>`;
+  const bodyHtml = (post.html || "")
+    .normalize("NFC")
+    .replace(/(src|href)="assets\//g, '$1="/assets/')
+    .replace(/(src|href)="\.\//g, '$1="/');
+  const body = post.html
+    ? `<div class="article-content">${bodyHtml}</div>`
+    : `<div class="article-content"><p>${esc(post.summary || "아직 본문이 동기화되지 않은 글입니다. 노션에서 내용을 채우면 여기에 표시됩니다.")}</p></div>`;
+  return `
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/${topicSlug(cat)}/">${esc(cat)}</a>
+    </nav>
+    <h1>${title}</h1>
+    <div class="article-meta">
+      ${tagsHtml}
+      ${tagDot}
+      ${dateMeta}
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    ${body}
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div>`;
+};
+
 // Reuse post.html's <body> verbatim (kept in sync automatically) with relative→absolute paths.
 const postHtml = readFileSync("post.html", "utf8");
 const bodyInner = (postHtml.match(/<body>([\s\S]*?)<\/body>/i)?.[1] || "")
@@ -72,14 +136,12 @@ const head = (post, slug, url) => {
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
   }).replace(/</g, "\\u003c");
   const cat = post.category || "Notes";
-  const catSlug =
-    cat.toLowerCase().normalize("NFC").replace(/[^a-z0-9가-힣]+/g, "-").replace(/^-+|-+$/g, "") || "topic";
   const bc = JSON.stringify({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "홈", item: `${SITE}/` },
-      { "@type": "ListItem", position: 2, name: cat, item: `${SITE}/topics/${catSlug}/` },
+      { "@type": "ListItem", position: 2, name: cat, item: `${SITE}/topics/${topicSlug(cat)}/` },
       { "@type": "ListItem", position: 3, name: post.title || "글", item: url },
     ],
   }).replace(/</g, "\\u003c");
@@ -140,14 +202,21 @@ const head = (post, slug, url) => {
   </head>`;
 };
 
+// post.html's body contains an empty <article class="article" data-article>…loading…</article>
+// shell. For each post we swap that shell for the prerendered article so the static HTML
+// carries the full content (post.js hydrates rather than re-rendering).
+const ARTICLE_SHELL_RE = /<article class="article" data-article>[\s\S]*?<\/article>/;
+
 rmSync("posts", { recursive: true, force: true });
 let count = 0;
 for (const post of posts) {
   const slug = (post.slug || "").normalize("NFC").replace(/\//g, "-").trim();
   if (!slug) continue;
   const url = `${SITE}/posts/${encodeURIComponent(slug)}/`;
+  const prerendered = `<article class="article" data-article data-prerendered>${articleHtml(post)}</article>`;
+  const bodyForPost = bodyInner.replace(ARTICLE_SHELL_RE, prerendered);
   mkdirSync(`posts/${slug}`, { recursive: true });
-  writeFileSync(`posts/${slug}/index.html`, `${head(post, slug, url)}\n  <body>${bodyInner}</body>\n</html>\n`);
+  writeFileSync(`posts/${slug}/index.html`, `${head(post, slug, url)}\n  <body>${bodyForPost}</body>\n</html>\n`);
   count += 1;
 }
 console.log(`Generated ${count} static post pages under posts/`);
