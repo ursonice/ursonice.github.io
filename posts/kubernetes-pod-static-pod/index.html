@@ -76,11 +76,124 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/kubernetes/">Kubernetes</a>
+    </nav>
+    <h1>[Kubernetes] Pod / Static Pod</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 5월 17일</span><span class="dot"></span><span>수정 2025년 6월 4일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-203b12c0115c8009a0c2fafcfb1c3a47">서론</h2>
+<p>이 장에서는 쿠버네티스에서 컨테이너를 배포하는 단위인 파드에 대해서 알아본다.</p>
+<p>또한 하나의 파드에서 하느의 컨테이너를 사용하는 경우와 하나의 파드에 여러 컨테이너를 두는 경우에 대해서도 알아본다.</p>
+<p>최종적으로는 Pod를 생성하기 위해 어떤 형태의 yaml파일을 구성해야 하는지도 알아보자.</p>
+<h2 id="block-1f6b12c0115c8055b3b1ee8acb7321b1">Pod</h2>
+<ul><li>Kubernetes의 목적은 <strong>컨테이너 형태의 애플리케이션을 워커 노드에 배포</strong>하는 것으로 컨테이너를 직접 배포하지 않는다.</li><li>대신, 컨테이너는 파드(Pod) 라는 객체에 캡슐화되어 배포된다.</li><li>파드는 Kubernetes에서 생성할 수 있는 가장 작은 단위의 객체로 하나의 파드는 일반적으로 하나의 컨테이너를 포함하며, 이것이 애플리케이션 인스턴스 한 개를 의미한다.</li></ul>
+<h2 id="block-203b12c0115c8030932fcdb1ed3abada">Single Pod</h2>
+<figure><img src="/assets/notion/kubernetes-pod-static-pod/203b12c0-115c-8028-8e93-fee27cfe481d.png" alt="" loading="lazy" width="1912" height="944" /></figure>
+<h2 id="block-1f6b12c0115c80859fadeeae8ea77862"><strong>Scaling</strong></h2>
+<ul><li>사용자 수가 늘어나면, 부하 분산을 위해 파드 인스턴스를 추가해야 하는데 이때 기존 파드에 컨테이너를 추가하지 않고, 새로운 파드를 동일한 컨테이너로 생성한다.<ul><li>ex) 하나의 노드에 두 개의 파드 생성 → 각각 파드를 하나씩 실행한다. (기존 파드에 컨테이너 추가 X)</li></ul></li><li>일반적으로 파드는 애플리케이션 컨테이너와 1:1 관계를 가지며 확장시 새 파드를 생성하는 방식으로 이루어진다.</li><li>축소해야 하는 경우에는 기존 파드를 삭제한다.</li></ul>
+<h2 id="block-1f6b12c0115c80c7856dde34101a25f4">Multi Containers in a Pod</h2>
+<figure><img src="/assets/notion/kubernetes-pod-static-pod/203b12c0-115c-80c4-a2a3-e08fa0d41feb.png" alt="" loading="lazy" width="1862" height="904" /></figure>
+<ul><li>하나의 파드에 여러 컨테이너를 넣는 경우<ul><li>파드에는 여러 개의 컨테이너를 포함시킬 수도 있지만 동일한 종류의 컨테이너(예: 같은 웹서버)를 여러 개 두는 건 일반적이지 않는다.</li><li>주로 메인 컨테이너를 위한 보조 작업을 하는 컨테이너가 필요할 때(헬퍼 컨테이너) 사용한다.</li><li>이 경우에 따라 주 애플리케이션 컨테이너를 보조하는 헬퍼 컨테이너를 함께 구성할 수 있다.<ul><li>ex) 사용자 데이터를 처리하는 컨테이너, 업로드된 파일을 처리하는 컨테이너</li></ul></li></ul></li><li>파드 단위로 함께 생성되고 종료됨<ul><li>같은 파드에 포함된 컨테이너들은 함께 생성되고, 종료된다</li><li>즉, 주 컨테이너가 죽으면 헬퍼 컨테이너도 같이 죽음 → 라이프사이클 공유한다.</li></ul></li><li>네트워크 및 저장소 공유<ul><li>파드 내 컨테이너들은 같은 네트워크 공간을 공유하기 때문에 localhost로 서로 통신 가능하다.</li><li>같은 볼륨(저장소)도 공유 가능하여 파일 등 쉽게 주고받을 수 있다.</li></ul></li></ul>
+<h2 id="block-1f7b12c0115c80cd8cd1edc546a01452">Yaml</h2>
+<p>쿠버네티스는 yaml 파일을 입력받아 파드, 레플리카셋, 디플로이먼트, 서비스와 같은 객체를 만들며 이 모든 파일은 항상 네 개의 최상위 필드가 있다.</p>
+<ul><li>apiVersion: 쿠버네티스 API 버전<div class="table-wrap"><table><tr><td>Kind</td><td>Version</td></tr><tr><td>POD</td><td>v1</td></tr><tr><td>Service</td><td>v1</td></tr><tr><td>ReplicaSet</td><td>apps/v1</td></tr><tr><td>Deployment</td><td>apps/v1</td></tr></table></div></li><li>kind: 생성할 객체의 종류를 표기한다.(ex. Pod, ReplicaSet, Deployment, Service)</li><li>metadata: 이름, 라벨 등 객체에 대한 부가정보를 작성한다.<ul><li><strong>name</strong>: 파드 이름</li><li><strong>labels</strong>: 파드를 그룹화할 식별자<ul><li>예를 들어 프런트엔드 파드 수백 개와 백엔드 파드 수백 개가 있을 때, 미리 frontend, backend, database 같은 라벨을 달아두면 나중에 필터링이 필요할 때 용이하다.</li><li>metadata 아래에는 name, labels 등 쿠버네티스가 허용하는 항목만 넣어야 하지만, 내부 키-값은 자유롭게 정할 수 있다.<ul><li>ex) <code>app: myapp, type: front-end</code></li></ul></li></ul></li></ul></li><li>spec: 생성할 객체 종류에 따라 추가 설정을 기록<ul><li><strong>containers</strong>: 리스트(배열형태로 작성)<ul><li>리스트인 이유는 파드가 여러 컨테이너를 가질 수 있기 때문이다.</li><li>YAML에서는 <code>-</code> 기호를 사용해 리스트 항목을 표시한다.</li><li><strong>name</strong>: 컨테이너 이름</li><li><strong>image</strong>: Docker Hub에 있는 nginx 이미지라고 설정</li></ul></li></ul></li></ul>
+<pre data-lang="shell"><code class="language-bash"># pod-definintion.yaml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+  labels:
+      app: myapp
+      type: front-end
+
+spec:
+  containers:
+    - name: nginx-container
+      image: nginx</code></pre>
+<h2 id="block-1f7b12c0115c8088882ee072c1a78961">Commands</h2>
+<ul><li>파드 정의 파일 만들기(create명령어는 service, deployment 등을 생성할때 사용한다. 파드는 run을사용)</li></ul>
+<pre data-lang="yaml"><code class="language-yaml"># 파드 정의 파일 생성 (실제 실행 없이 YAML 출력)
+kubectl run nginx --image=nginx --dry-run=client -o yaml &gt; nginx-pod.yaml</code></pre>
+<ul><li>정의 파일을 통해 파드 생성 </li></ul>
+<pre data-lang="yaml"><code class="language-yaml">kubectl create -f pod-definition.yaml</code></pre>
+<ul><li>생성된 파드를 확인</li></ul>
+<pre data-lang="yaml"><code class="language-yaml">kubectl get pods</code></pre>
+<ul><li>파드의 상세 정보 보기</li></ul>
+<pre data-lang="yaml"><code class="language-yaml">kubectl describe pod &lt;pod-name&gt;</code></pre>
+<ul><li>파드 수정하기</li></ul>
+<pre data-lang="yaml"><code class="language-yaml">kubectl edit pod &lt;pod-name&gt;</code></pre>
+<ul><li>파드의 특정 필드는 생성 후 수정이 불가능한 부분이 있다.</li><li>수정 사항이 거부되어 반영되지 않았다면 이는 임시공간에 저장된다.</li><li>따라서 기존파드를 삭제 후 수정사항이 적용된 임시공간에 있는 파일을 불러와 다시 생성해준다.</li></ul>
+<pre data-lang="yaml"><code class="language-yaml">kubectl edit pod webapp
+kubectl delete pod webapp
+kubectl create -f /tmp/kubectl-edit-ccvrq.yaml</code></pre>
+<h2 id="block-207b12c0115c80c898c7c1013fd7a597">Static Pod</h2>
+<p>kubelet은 kube-apiserver, kube-scheduler, controller, ETCD, master node없이도 독립적으로 노드를 관리할 수 있다.</p>
+<p>기존 파드를 생성하기 위해서는 파드 정의파일(yaml)을 만들고 이것을 kube-apiserver를 통해 kubelet에게 전달했다.</p>
+<p>그러나 API서버의 제약 없이 파드를 실행하고 관리하고 싶은 경우가 생긴다.</p>
+<p>이는 kubelet을 설정하여 특정 디렉터리에서 파드 정의 파일을 읽도록 할 수 있다.</p>
+<p>주기적으로 특정 디렉터리를 확인하여 파일을 읽고, 파드를 생성한다.</p>
+<p>이를 통해 파드를 생성하고 문제가 생기면 자동으로 다시 시작하며 디렉토리안에 있는 파드 정의 파일이 수정하면 변경사항이 반영된 파드를 재생성한다.</p>
+<p>만약 디렉토리에서 정의 파일을 삭제하면 해당 파드는 자동으로 삭제된다.</p>
+<p>이렇게 kubelet이 단독으로 생성하는, API 서버나 다른 Kubernetes 구성 요소의 개입 없이 생성되는 파드를 정적 파드(Static Pod) 라고 한다.</p>
+<p>이 방식으로는 ReplicaSet, Deployment, Service는 등은 만들 수 없으며 오직 파드만 생성할 수 있다.</p>
+<h2 id="block-207b12c0115c807da3e1f7e95846457a">정적 파드를 사용하는 이유</h2>
+<ul><li>일반적인 Pod는 Kubernetes control plane(예: API 서버, 스케줄러 등)이 있어야 생성되고 실행된다.</li><li>그런데 정적 파드(static Pod)는 kubelet이 혼자서 직접 실행할 수 있다.</li><li>즉, API 서버나 스케줄러 같은 제어 플레인 없이도 실행 가능하다는 뜻이다.</li><li>그래서 Kubernetes를 처음 설치할 때는, control plane이 아직 없으니까 control plane<strong> </strong>구성 요소들(<code>kube-apiserver</code>, <code>scheduler</code>, <code>controller-manager</code>)을 먼저 정적 파드로 실행시킨다.</li><li>이렇게 하기 위해 마스터 노드들에 kubelet을 설치한 뒤, API 서버, 컨트롤러, ETCD 등 control plane 컴포넌트의 도커 이미지를 사용하는 파드 정의 파일을 작성하고</li><li>이 정의 파일들을 지정된 manifest 폴더에 두면, kubelet이 이들을 클러스터 상의 파드로 배포한다.</li><li>만약 이들 중 어떤 서비스가 죽더라도, 정적 파드이므로 kubelet이 자동으로 재시작한다.</li><li>이 것은 kubeadm 도구가 Kubernetes 클러스터를 구성하는 방식이며, 그래서 kube-system 네임스페이스의 파드 목록을 보면 control plane 컴포넌트들이 파드로 나타나는 것이다.</li></ul>
+<p>kubeadm으로 쿠버네티스를 구축할때 kube-apiserver, etcd, kube-controller-manager, kube-scheduler와 같은 핵심 컴포넌트들은 정적 파드로 설치된다.</p>
+<p>이러한 정적파드를 실행하기 위해서는 kubelet이 필요하다.</p>
+<p>이것은 워커노드에 설치되는 컴포넌트이지만 kubeadm으로 클러스터를 초기화할 때, 마스터 노드에도 반드시 kubelet이 설치된다.</p>
+<figure><img src="/assets/notion/kubernetes-pod-static-pod/207b12c0-115c-80f4-b6af-d4d0d8973aeb.png" alt="" loading="lazy" width="1664" height="738" /></figure>
+<h2 id="block-207b12c0115c80568094eb1de6995d26">정적 파드 디렉토리 설정(Manifest Folder)</h2>
+<p>kubelet은 특정 디렉터리를 감시해서 그 안에 있는 YAML 파일로 static Pod를 자동 실행한다.</p>
+<p>이 디렉터리를 kubelet 실행 시 옵션으로 지정 해야 한다.</p>
+<p>기존 클러스터를 확인할 때는, kubelet 옵션을 확인하여 static pod 디렉터리 경로를 파악해야한다.</p>
+<h3 id="block-207b12c0115c806c87bcde9887134ed4">방법 ①: <code>kubelet</code> 실행 옵션에 직접 설정</h3>
+<ul><li>kubelet 실행 명령에 <code>-pod-manifest-path=/etc/kubernetes/manifests</code> 같은 옵션을 설정한다.</li></ul>
+<figure><img src="/assets/notion/kubernetes-pod-static-pod/207b12c0-115c-8066-b475-f97db4fdb08f.png" alt="" loading="lazy" width="1950" height="1158" /></figure>
+<h3 id="block-207b12c0115c80e89246d054c1a6fc97">방법 ②: kubelet 설정 파일(<code>config.yaml</code>)에서 설정/확인</h3>
+<ul><li>config 옵션에 yaml설정 파일을 명시(그림에서는 kubeconfig.yaml)하고 그 설정파일안에 staticPodPath경로를 입력해준다.</li><li>kubeadm을 활용해 설치된 클러스터는 이 방식을 사용한다.</li></ul>
+<figure><img src="/assets/notion/kubernetes-pod-static-pod/207b12c0-115c-809e-bcf6-cae2ec764be8.png" alt="" loading="lazy" width="2188" height="1238" /></figure>
+<ul><li>(방법 1)kubelet.service 파일 내의 pod-manifest-path 옵션을 확인한다.</li><li>(방법 2)config 옵션을 찾아 해당 config 파일이 무엇인지 확인한다. 그리고 config 파일 내에서 staticPodPath 항목을 찾는다.</li></ul>
+<h2 id="block-207b12c0115c807cbd7afec827281822">정적 파드 확인</h2>
+<h3 id="block-207b12c0115c80a8a08acb5dca4f4178">클러스터가 구축되지 않은 경우</h3>
+<ul><li>정적 파드가 생성되면 docker ps 명령어를 통해 확인할 수 있다.</li><li>kubectl명령어로 정적 파드를 확인하려면 Kubernetes 클러스터 전체가 갖춰져야 가능하다.</li><li>왜냐하면 kubectl은 kube-apiserver와 함께 동작하는데 클러스터가 구축되어 있지 않았다면 kube apiserver가 없기 때문이다.</li><li>그렇다면 클러스터가 구축되었을 경우 정적파드를 확인하려면 어떻게 해야 할까?</li></ul>
+<figure><img src="/assets/notion/kubernetes-pod-static-pod/207b12c0-115c-8088-b252-d0e7e4a0777a.png" alt="" loading="lazy" width="1884" height="336" /></figure>
+<h3 id="block-207b12c0115c80ab9823cfb3f6817b34">클러스터가 구축된 경우</h3>
+<ul><li>마스터 노드에서 kubectl get pods 명령어를 실행하면, 정적 파드도 다른 파드들과 함께 목록에 나타난다.</li><li>kubelet이 클러스터에 속해 있을 때 정적 파드를 생성하면, kubelet은 해당 static Pod에 대한 정보를 kube-apiserver에도 등록한다.</li><li>이 정보는 &quot;Mirror Pod&quot; 라는 읽기 전용 오브젝트로 생성된다.</li><li>따라서 우리가 kube-apiserver를 통해 보는 것은 단지 해당 파드의 읽기 전용 오브젝트이다.</li><li>이 파드의 정보를 볼 수는 있지만, 일반 파드처럼 수정하거나 삭제할 수는 없다.</li><li>오직 노드의 manifest 디렉터리에서 정의 파일을 수정하거나 삭제해야만 파드를 제거할 수 있다.</li><li>특징으로는 정적 파드 이름에는 자동으로 노드 이름이 붙는다.</li></ul>
+<figure><img src="/assets/notion/kubernetes-pod-static-pod/207b12c0-115c-805d-97fc-c0df8038df59.png" alt="" loading="lazy" width="2172" height="1196" /></figure>
+<h2 id="block-207b12c0115c806c8213fb6bcdd4a18e">DaemonSet vs Static Pod</h2>
+<p>DaemonSet은 <code>kube-apiserver</code>를 통해 클러스터에 등록되고, 그 후 kube-controller-manager 내부의 DaemonSet 컨트롤러에 의해 각 노드에 하나씩 Pod가 자동으로 생성된다.</p>
+<p>DaemonSet은 control plane의 개입이 필수적이다.</p>
+<p>반면, 정적 파드는 <code>kubelet</code>이 직접 관리한다.</p>
+<p>따라서 <code>/etc/kubernetes/manifests</code>와 같은 디렉터리에 YAML 파일을 두기만 하면, kube-apiserver나 control plane 없이도 실행된다.</p>
+<p>이러한 특성 때문에, Kubernetes 클러스터가 처음 부팅될 때 <code>kube-apiserver</code>, <code>kube-scheduler</code>, <code>kube-controller-manager</code>와 같은 control plane 구성요소들 자체를 정적 파드로 배포한다.</p>
+<ul><li><strong>kube-proxy는 데몬셋에 의해서 생성되고 관리되는 파드이다</strong></li></ul>
+<p>즉, control plane을 시작하기 위한 부트스트랩 방식으로 정적 파드가 사용되는 것이다.</p>
+<ul><li>부트스트랩 방식: 아직 아무것도 없는 상태에서 시스템이 자기 자신을 일으켜 세우는 과정</li></ul>
+<p>DaemonSet에 의해 생성된 파드와 정적 파드는 모두 kube-scheduler의 대상이 아니다.</p>
+<p>이 두 종류의 파드는 어느 노드에 배치될지가 이미 정해져 있으므로, kube-scheduler가 따로 스케줄링하지 않고 무시한다.</p>
+<p>참고로 DaemonSet 컨트롤러를 포함한 다양한 컨트롤러들은 <code>kube-controller-manager</code>라는 프로세스 안에서 동작하며 이 <code>kube-controller-manager</code> 자체도 Kubernetes가 처음 시작될 때, 정적 파드로 실행되도록 설계되어 있다.</p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +214,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

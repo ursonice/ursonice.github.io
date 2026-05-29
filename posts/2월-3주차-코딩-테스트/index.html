@@ -76,11 +76,216 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/coding-test/">Coding Test</a>
+    </nav>
+    <h1>2월 3주차 코딩 테스트</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 2월 20일</span><span class="dot"></span><span>수정 2025년 3월 8일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-1b0b12c0115c809fb2ddf939a8f97c23">목차</h2>
+<ol><li>금쪽이 상담소</li><li>삽질의 대가</li><li>한 번의 거짓말</li><li>제한된 비행편</li><li>전광판 컨트롤</li></ol>
+<h2 id="block-1a0b12c0115c80e5a492e74788fdecdb">1. 금쪽이 상담소</h2>
+<figure><img src="/assets/notion/2월-3주차-코딩-테스트/1a1b12c0-115c-8078-bb96-d1cca0e54cef.png" alt="" loading="lazy" width="1704" height="1112" /></figure>
+<figure><img src="/assets/notion/2월-3주차-코딩-테스트/1a1b12c0-115c-80e5-9737-f037f961379b.png" alt="" loading="lazy" width="1724" height="888" /></figure>
+<figure><img src="/assets/notion/2월-3주차-코딩-테스트/1a1b12c0-115c-8002-bf8c-f385e84b9273.png" alt="" loading="lazy" width="1682" height="542" /></figure>
+<h2 id="block-1a1b12c0115c808d8863ee2f45bd6f7e">풀이</h2>
+<pre data-lang="python"><code class="language-python">def solution(start, end, price):
+    items = [(e, s, p) for e, s, p in zip(end, start, price)]
+    items.sort()
+
+    dp = [0 for _ in range(max(end) + 1)]
+    for e, s, p in items:
+        for j in range(e, len(dp)):
+            dp[j] = max(dp[s] + p, dp[j])
+    
+    return dp[-1]</code></pre>
+<h2 id="block-1a1b12c0115c80b195e8d7621197e90b">Testcase</h2>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 [1, 5, 10, 6, 5], [5, 6, 12, 9, 12], [10, 40, 30, 20, 50]
+기댓값 〉 100
+
+# 테스트 2
+입력값 〉 [1, 2, 5, 1, 4, 11], [10, 9, 6, 3, 9, 15], [50, 20, 50, 20, 80, 40]
+기댓값 〉 140</code></pre>
+<h2 id="block-1a1b12c0115c80e8aa30e5ea2a2edf27">2. 삽질의 대가</h2>
+<figure><img src="/assets/notion/2월-3주차-코딩-테스트/1a1b12c0-115c-8050-b43a-fef843845bd8.png" alt="" loading="lazy" width="1844" height="1004" /></figure>
+<figure><img src="/assets/notion/2월-3주차-코딩-테스트/1a1b12c0-115c-803c-97dc-c62a1f93fd4b.png" alt="" loading="lazy" width="1844" height="1094" /></figure>
+<figure><img src="/assets/notion/2월-3주차-코딩-테스트/1a1b12c0-115c-8056-ad1a-d4273b9f47d1.png" alt="" loading="lazy" width="1840" height="476" /></figure>
+<figure><img src="/assets/notion/2월-3주차-코딩-테스트/1a1b12c0-115c-80b2-83d8-e04514fbe10d.png" alt="" loading="lazy" width="1830" height="1166" /></figure>
+<h2 id="block-1a1b12c0115c80b9a6abf2beacd9f562">풀이</h2>
+<pre data-lang="python"><code class="language-python">def solution(depth, n, blocks):
+    width = len(blocks[0])
+
+    dp = [[float('inf')] * width for _ in range(depth + 1)]
+
+    for j in range(width):
+        dp[0][j] = blocks[0][j]
+
+    for d in range(1, depth + 1):  
+        for j in range(width):  
+            min_energy = dp[d-1][j]  
+            if j &gt; 0:
+                min_energy = min(min_energy, dp[d-1][j-1])  
+            if j &lt; width - 1:
+                min_energy = min(min_energy, dp[d-1][j+1])
+            
+            dp[d][j] = blocks[d][j] + min_energy
+
+    return dp[depth][n]</code></pre>
+<h2 id="block-1a1b12c0115c8096b36bdaa0a6ab56f7">Testcase</h2>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 3, 3, [[5, 6, 2, 6], [1, 6, 4, 9], [5, 6, 9, 4], [55, 14, 21, 14]]
+기댓값 〉 24</code></pre>
+<h2 id="block-1a1b12c0115c80999801e71f6a73cb20">3. 한 번의 거짓말</h2>
+<figure><img src="/assets/notion/2월-3주차-코딩-테스트/1a1b12c0-115c-80f2-9806-d0270bf2b073.png" alt="" loading="lazy" width="2044" height="1008" /></figure>
+<figure><img src="/assets/notion/2월-3주차-코딩-테스트/1a1b12c0-115c-80a8-84a4-ecbcd1ea6b25.png" alt="" loading="lazy" width="2080" height="1066" /></figure>
+<figure><img src="/assets/notion/2월-3주차-코딩-테스트/1a1b12c0-115c-80d1-b2bc-ce3b1059af1a.png" alt="" loading="lazy" width="1776" height="226" /></figure>
+<h2 id="block-1a1b12c0115c8032adeecd89a88ab7c6">풀이</h2>
+<pre data-lang="python"><code class="language-python">from heapq import heappop, heappush
+
+def solution(N, friend, time):
+    visited = [False for _ in range(N)]
+
+    def dfs(node):
+        if visited[node]:
+            return
+        
+        visited[node] = True
+    
+        if all(visited):
+            return
+    
+        for f in friend[node]:
+            dfs(f)
+    
+    dfs(0)
+
+    if not all(visited):
+        return -1
+    
+
+    def dijkstra(node):
+        heap = []
+        distances = [float('inf') for _ in range(N)]
+        
+        heappush(heap, (0, node))
+        distances[node] = 0
+        
+        while heap:
+            d, i = heappop(heap)
+            if distances[i] &lt; d:
+                continue
+            for f, t in zip(friend[i], time[i]):
+                new_dist = d + t
+                if distances[f] &gt; new_dist:
+                    distances[f] = new_dist
+                    heappush(heap, (new_dist, f))
+        
+        return distances
+    
+    dists = dijkstra(0)
+    return max(dists)</code></pre>
+<h2 id="block-1a1b12c0115c8079bc93d1eed3aabb1e">Testcase</h2>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 5, [[1, 4], [2, 3], [4], [1], [0, 2]], [[5, 2], [6, 4], [9], [1], [2, 6]]
+기댓값 〉 9</code></pre>
+<h2 id="block-1a1b12c0115c80389fe9ce20e61937bc">4. 제한된 비행편</h2>
+<figure><img src="/assets/notion/2월-3주차-코딩-테스트/1a1b12c0-115c-80ba-b02d-c60693214d53.png" alt="" loading="lazy" width="1850" height="730" /></figure>
+<figure><img src="/assets/notion/2월-3주차-코딩-테스트/1a1b12c0-115c-8027-a97e-fe8b6ef992b7.png" alt="" loading="lazy" width="1890" height="1258" /></figure>
+<figure><img src="/assets/notion/2월-3주차-코딩-테스트/1a1b12c0-115c-80f0-8625-de12e3e01498.png" alt="" loading="lazy" width="1884" height="1300" /></figure>
+<h2 id="block-1a1b12c0115c8069b2c6f7d17ab1e4e3">풀이</h2>
+<pre data-lang="python"><code class="language-python">from heapq import heappush, heappop
+
+def solution(N, flight, a, b, k):
+    adj_list = [[] for _ in range(N)]
+    for src, dst, price in flight:
+        adj_list[src].append((dst, price))
+
+    best_cnt = [float('inf') for _ in range(N)]
+    heap = [(0, 0, a)]
+
+    while heap:
+        price, count, node = heappop(heap)
+
+        if best_cnt[node] &lt; count:
+            continue
+        
+        best_cnt[node] = count
+
+        if count &gt; k:
+            continue
+
+        if node == b:
+            return price
+        
+        for adj_node, add_price in adj_list[node]:
+            heappush(heap, (price + add_price, count + 1, adj_node))
+    
+    return -1
+</code></pre>
+<h2 id="block-1a1b12c0115c80fd8f0ed7a1807ea9e0">Testcase</h2>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 4, [[0, 2, 1], [1, 3, 20], [1, 0, 8], [2, 3, 1], [0, 3, 3]], 1, 3, 2
+기댓값 〉 11</code></pre>
+<h2 id="block-1a1b12c0115c80579a7bda7e58163542">5. 전광판 컨트롤</h2>
+<figure><img src="/assets/notion/2월-3주차-코딩-테스트/1a1b12c0-115c-8014-8c7b-d382bbcc6dff.png" alt="" loading="lazy" width="1868" height="1078" /></figure>
+<figure><img src="/assets/notion/2월-3주차-코딩-테스트/1a1b12c0-115c-809e-a018-d84a4bd16bb5.png" alt="" loading="lazy" width="1806" height="754" /></figure>
+<figure><img src="/assets/notion/2월-3주차-코딩-테스트/1a1b12c0-115c-80e9-9920-c0ea32f01be2.png" alt="" loading="lazy" width="1872" height="498" /></figure>
+<h2 id="block-1a1b12c0115c80689924dc1c23ee983a">풀이</h2>
+<pre data-lang="python"><code class="language-python">LINES = []
+
+LINES.append('##### --#-- #### #### #---# ##### ##### ##### ##### #####'.split(' '))
+LINES.append('#---# --#-- ---# ---# #---# #---- #---- ----# #---# #---#'.split(' '))
+LINES.append('#---# --#-- #### #### ##### ##### ##### ----# ##### #####'.split(' '))
+LINES.append('#---# --#-- #--- ---# ----# ----# #---# ----# #---# ----#'.split(' '))
+LINES.append('##### --#-- #### #### ----# ##### ##### ----# ##### ----#'.split(' '))
+
+def solution(n):
+    digits = list(map(int, list(str(n))))
+
+    lines = [[] for _ in range(len(LINES))]
+    for digit in digits:
+        for i in range(len(lines)):
+            lines[i].append(LINES[i][digit])
+    
+    for i in range(len(lines)):
+        lines[i] = ' '.join(lines[i])
+    
+    return lines</code></pre>
+<h2 id="block-1a1b12c0115c80218bdeee46fca5c9af">Testcase</h2>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 132
+기댓값 〉 [&quot;--#-- #### ####&quot;, &quot;--#-- ---# ---#&quot;, &quot;--#-- #### ####&quot;, &quot;--#-- ---# #---&quot;, &quot;--#-- #### ####&quot;]
+
+# 테스트 2
+입력값 〉 857
+기댓값 〉
+[&quot;##### ##### #####&quot;, &quot;#---# #---- ----#&quot;, &quot;##### ##### ----#&quot;, &quot;#---# ----# ----#&quot;, &quot;##### ##### ----#&quot;]
+실행 결과 〉
+실행한 결괏값 []이 기댓값 [&quot;##### ##### #####&quot;,&quot;#---# #---- ----#&quot;,&quot;##### ##### ----#&quot;,&quot;#---# ----# ----#&quot;,&quot;##### ##### ----#&quot;]과 다릅니다.</code></pre>
+<h2 id="block-1b0b12c0115c80c58150f10009474214">출처</h2>
+<p>해당 문제와 코드는 제로베이스(ZeroBase)에서 제공받았습니다.</p>
+<p>모든 자료는 저작권법에 의하여 보호받는 저작물로서 이에 대한 무단 복제 및 배포를 원칙적으로 금합니다.</p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +306,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

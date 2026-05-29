@@ -76,11 +76,229 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/onnx-mlir/">ONNX-MLIR</a>
+    </nav>
+    <h1>MLIR Inference Code</h1>
+    <div class="article-meta">
+      <a class="meta-tag" href="/index.html?tag=MLIR">#MLIR</a>
+      <span class="dot"></span>
+      <span>작성 2022년 12월 15일</span><span class="dot"></span><span>수정 2023년 6월 14일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-96a83be5ce754fc09f57303d85090d02">서론</h2>
+<p>이 장은 ONNX-MLIR을 통해 생성된 공유 라이브러리(.so)를 가지고 추론하는 코드를 공유한다.</p>
+<h2 id="block-d2e544fc56514c6dabf9b859c459372a">목차</h2>
+<ol><li><a href="#block-0e74c4ea0f354933a2f352485f6cc406">ONNX Inference Code</a> </li><li><a href="#block-5a4d052760ab444e889dab80fb583f42">MLIR Inferece Code</a> </li><li><a href="#block-9a4a7a0a89cf4ff68a5d6d624fb1d43c">Pytorch Inference Code</a> </li></ol>
+<h2 id="block-0e74c4ea0f354933a2f352485f6cc406">ONNX Inference Code</h2>
+<details class="toggle"><summary>Code</summary><div class="toggle-body"><pre data-lang="python"><code class="language-python">import cv2
+import onnx
+import numpy as np
+import os
+import onnxruntime
+import time
+
+
+def get_image(image_dirs) :
+    image_list = []
+    for roots, dirs, files in os.walk(image_dirs) :
+        for file in files :
+            image_dir = os.path.join(roots, file)
+            if image_dir.endswith(&quot;png&quot;) or image_dir.endswith(&quot;jpg&quot;) or image_dir.endswith(&quot;JPEG&quot;) :
+                image_list.append(image_dir)
+
+    return image_list
+
+
+
+def preprocess_image(image_path) :
+    image_path = image_path
+    image = cv2.imread(image_path, 1) #image read
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    image_data = cv2.resize(image, (256, 256), interpolation=cv2.INTER_LINEAR).astype(np.float32) # cv2.INTER_LINEAR
+    image_data = image_data[16:240, 16:240, :].copy()
+    
+    image_data = image_data.transpose([2, 0, 1]) # C, H, W
+    mean = np.array([0.079, 0.05, 0]) + 0.406 # 0.485, 0.456, 0.406
+    std = np.array([0.005, 0, 0.001]) + 0.224 #0.229, 0.224, 0.225
+
+    for channel in range(image_data.shape[0]): 
+        image_data[channel, :, :] = (image_data[channel, :, :] / 255 - mean[channel]) / std[channel] #RGB
+
+    image_data = np.expand_dims(image_data, axis=0)
+    
+    return image_data
+
+
+def softmax(x):
+    e_x = np.exp(x - np.max(x))
+    return e_x / e_x.sum()
+
+
+with open(&quot;imagenet_classes.txt&quot;, &quot;r&quot;) as f:
+    categories = [s.strip() for s in f.readlines()]
+
+
+model_path = &quot;./mobilenetv2-7.onnx&quot;
+
+
+data = &quot;./parrot.jpg&quot;
+#image = get_image(data)
+input_data = preprocess_image(data)
+
+
+session = onnxruntime.InferenceSession(model_path)
+input_name = session.get_inputs()[0].name
+output_name = session.get_outputs()[0].name
+
+
+output = session.run([output_name], {input_name:input_data})[0]
+output = output.flatten()
+output = softmax(output) # this is optional
+
+top1 = np.argmax(output)
+
+print(f&quot;{categories[top1]},{output[top1]}&quot;)</code></pre></div></details>
+<h2 id="block-5a4d052760ab444e889dab80fb583f42">MLIR Inferece Code</h2>
+<p>You need (.so) file</p>
+<details class="toggle"><summary>Code</summary><div class="toggle-body"><pre data-lang="python"><code class="language-python">import numpy as np
+from PyRuntime import OMExecutionSession
+import cv2
+
+with open(&quot;imagenet_classes.txt&quot;, &quot;r&quot;) as f :
+    categories = [s.strip() for s in f.readlines()]
+
+
+def softmax(x):
+    e_x = np.exp(x - np.max(x))
+    return e_x / e_x.sum()
+
+def get_image(image_dirs) :
+    image_list = []
+    for roots, dirs, files in os.walk(image_dirs) :
+        for file in files :
+            image_dir = os.path.join(roots, file)
+            if image_dir.endswith(&quot;png&quot;) or image_dir.endswith(&quot;jpg&quot;) or image_dir.endswith(&quot;JPEG&quot;) :
+                image_list.append(image_dir)
+
+    return image_list
+
+def preprocess_image(image_path) :
+    image_path = image_path
+    image = cv2.imread(image_path, 1) #image read
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    image_data = cv2.resize(image, (256, 256), interpolation=cv2.INTER_LINEAR).astype(np.float32) # cv2.INTER_LINEAR
+    image_data = image_data[16:240, 16:240, :].copy()
+    
+    image_data = image_data.transpose([2, 0, 1]) # C, H, W
+    mean = np.array([0.079, 0.05, 0]) + 0.406 # 0.485, 0.456, 0.406
+    std = np.array([0.005, 0, 0.001]) + 0.224 #0.229, 0.224, 0.225
+
+    for channel in range(image_data.shape[0]): 
+        image_data[channel, :, :] = (image_data[channel, :, :] / 255 - mean[channel]) / std[channel] #RGB
+        
+    image_data = np.expand_dims(image_data, axis=0)
+    image_data = np.ascontiguousarray(image_data.data)
+
+    return image_data
+
+
+model = './mobilenetv2-7.so' # LeNet from ONNX Zoo compiled with onnx-mlir
+
+data = &quot;./parrot.jpg&quot;
+#image = get_image(data)
+input_data = preprocess_image(data)
+
+
+session = OMExecutionSession(shared_lib_path=model)
+
+print(&quot;input signature in json&quot;, session.input_signature())
+print(&quot;output signature in json&quot;,session.output_signature())
+print(input_data.shape)
+outputs = session.run(input=[input_data])
+
+
+outputs = softmax(outputs[0][0])
+idx = np.argmax(outputs)
+print(f&quot;Label: {categories[idx]}, score: {outputs[idx]}&quot;)</code></pre></div></details>
+<h2 id="block-9a4a7a0a89cf4ff68a5d6d624fb1d43c">Pytorch Inference Code</h2>
+<details class="toggle"><summary>Code</summary><div class="toggle-body"><pre data-lang="python"><code class="language-python">import torch
+from PIL import Image
+from torchvision import transforms
+import argparse
+
+def main():
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+
+    parser.add_argument(
+      '-m', '--image', required=True, help='File path of image file.')
+    parser.add_argument(
+      '-l', '--label', help='File path of label file.')
+
+    args = parser.parse_args()
+
+    filename = args.image
+    label = args.label
+
+    # 카테고리 읽어들이기
+    # with open(&quot;imagenet_classes.txt&quot;, &quot;r&quot;) as f:
+    #     categories = [s.strip() for s in f.readlines()]
+    #filename = &quot;./parrot.jpg&quot;
+
+    #카테고리 읽어들이기
+    with open(label, &quot;r&quot;) as f:
+        categories = [s.strip() for s in f.readlines()]
+
+
+    preprocess = transforms.Compose([
+        transforms.Resize(256),
+        transforms.CenterCrop(224),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    ])
+
+    input_image = Image.open(filename)
+
+    input_tensor = preprocess(input_image)
+    input_batch = input_tensor.unsqueeze(0) # 모델에서 요구하는 형태의 미니배치 생성
+
+    model = torch.hub.load('pytorch/vision:v0.10.0', 'mobilenet_v2', pretrained=True)
+    model.eval()
+
+    if torch.cuda.is_available():
+        input_batch = input_batch.to('cuda')
+        model.to('cuda')
+
+    with torch.no_grad():
+        output = model(input_batch)
+
+    print(output[0])
+    probabilities = torch.nn.functional.softmax(output[0], dim=0)
+    #print(probabilities)
+
+    top5_prob, top5_catid = torch.topk(probabilities, 5)
+    for i in range(top5_prob.size(0)):
+        print(f&quot;{categories[top5_catid[i]]} {top5_prob[i].item()}&quot;)
+
+
+if name == 'main':
+    main()</code></pre></div></details></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +319,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

@@ -76,11 +76,141 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/ai-deep-learning/">AI/ Deep Learning</a>
+    </nav>
+    <h1>InceptionNet 논문 리뷰 및 코드 분석</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2023년 7월 10일</span><span class="dot"></span><span>수정 2024년 11월 21일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-2cee20eba57141dd9552da2e2f1b475d">서론</h2>
+<ul><li>Christian Szegedy, Wei Liu, Yangqing Jia, Pierre Sermanet, Scott Reed, Dragomir Anguelov, Dumitru Erhan, Vincent Vanhoucke, Andrew Rabinovich; Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2015, pp. 1-9, <code>&quot;Going Deeper with Convolutions (Inception v1)”</code></li><li>2015년도에 CVPR에 출간된 논문으로 GoogleLeNet이라고도 불리는 InceptionNet에 대해서 설명합니다.</li></ul>
+<h2 id="block-b4164e9b0c6c4b88b1d9c235d1e8ec2f">목차</h2>
+<ul><li><a href="#block-1ee8c495314747f5814d96d3e7cc80b4">Abstract</a> </li><li><a href="#block-fbc14b539f30446ab1167a8767effe24">Introduction, Related Work, Motivation and High Level Considerations</a> <ul><li><a href="#block-3554b65775174d0eb11c2901daa71174">background Research </a></li><li><a href="#block-89c71552609b45128540e65d493661d6">Recent Research</a> </li><li><a href="#block-769da92d1b684686831019a48175b730">Propose</a> </li></ul></li><li><a href="#block-552836f861d5493b92369630b0afee5a">Architectural Details</a> <ul><li><a href="#block-e2ac58efc2404de4b55a55f2dd14dc3e">Inception Module v1</a> </li><li><a href="#block-41c59a9c7b4a4d2cb12125e780111faf">GoogLeNet</a></li></ul></li><li><a href="#block-096ee391c4394e8092b2b5e2c1e25e69">Auxiliary Classifier</a> </li><li><a href="#block-a708fed3beee41e7ad57194b98e36727">Inception v1 Code Review</a> </li><li><a href="#block-2c26d83a843f48cca143c88561dc4e82">Inception v2</a> </li><li><a href="#block-83c8704f7de74273b70173a43effb8fb">Grid Size Reduction</a> </li><li><a href="#block-7b0058e3e85b4a3d8bc6e6e9339dbfd7">Inception v3</a> </li><li><a href="#block-6ec964afdb144be0809730c442bc3fcf">Tensor Factorization</a> </li></ul>
+<h2 id="block-1ee8c495314747f5814d96d3e7cc80b4">Abstract</h2>
+<ul><li>본 논문에서 제안하는 모델 구조는 computational budget은 일정하게 유지하면서 network의 depth와 width를 증가시켰다.</li><li>이 아키텍처의 주요 특징은 네트워크 안에서 컴퓨팅 리소스의 활용을 향상시켰다는 점이다.</li><li>GooLeNet이라고도 불리우는 LSVRC14에서 우리가 제안한 모델은 22 layers가진 deep network로classification과 detection의 두 가지 관점에서 평가되었다.</li></ul>
+<h2 id="block-fbc14b539f30446ab1167a8767effe24">Introduction, Related Work, <strong>Motivation and High Level Considerations</strong></h2>
+<h2 id="block-3554b65775174d0eb11c2901daa71174">background Research </h2>
+<p>In the last three years, mainly due to the advances of deep learning, more concretely convolutional networks the quality of image recognition and object detection has been progressing at a dramatic pace.</p>
+<ul><li>최근 3년동안 깊고 넓은 네트워크 들이 등장하면서 급격한 딥러닝의 발전으로 Image recognition과 object detection 꾀나 높은 성능을 보여주었다.</li></ul>
+<h2 id="block-89c71552609b45128540e65d493661d6">Recent Research</h2>
+<p>One encouraging news is that most of this progress is not just the result of more powerful hardware, larger datasets and bigger models, but mainly a consequence of new ideas, algorithms and improved network architectures.</p>
+<ul><li>단순히 모델의 크기를 증가시키는 것보다는, 더 효율적이고 혁신적인 네트워크 구조를 설계하고 새로운 알고리즘을 개발하는 것이 격려되었다.</li></ul>
+<p>Bigger size typically means a larger number of parameters, which makes the enlarged network more prone to overfitting, especially if the number of labeled examples in the training set is limited. </p>
+<ul><li>따라서 Deep Neural Network의 성능을 향상시키기 위해 단순히 네트워크를 크게 만드는 것은 두 가지 문제가 있는데 첫 번째는 overfitting되는 경향이 있다.</li></ul>
+<p>This can become a major bottleneck, since the creation of high quality training sets can be tricky and expensive.</p>
+<ul><li>왜냐하면 일반적으로 Network의 크기가 커짐으로 <strong>Parameter 수</strong>가 증가하게 된다. Parameter가 많을 수록 Overfiting을 하지 않기 위해서 학습에 필요한 Dataset이 더 필요하다. 하지만 우리는 보통 학습에 사용되는 Dataset은 제한되어 있기 때문에 신경망의 크기를 늘리는 것이 쉽지 않다. 그리고 High quality의 Dataset을 구하는 것은 비용이 많이 든다.</li></ul>
+<p>Increasing network size is the dramatically increased use of computational resources.</p>
+<ul><li>두 번째는 네트워크의 크기를 키우는 것은 computational resources가 많이 든다는 점이다.(연산이 비효율적)</li></ul>
+<h2 id="block-769da92d1b684686831019a48175b730">Propose</h2>
+<p>In this paper, we will focus on an efficient deep neural network architecture for computer vision, codenamed Inception.</p>
+<ul><li>따라서 효율적인 네트워크 구조를 설계하기 위해서 <code>DNN의 크기는 키우되</code>, <code>Parameter 수를 줄이고</code><strong> </strong><code>연산을 효율적</code>으로 하는 방법에 대해 제안한다.</li></ul>
+<p>The fundamental way of solving both issues would be by ultimately moving from fully connected to sparsely connected architectures, even inside the convolutions.</p>
+<ul><li><code>DNN의 크기는 키우면서</code> overfitting을 해결하기 위해서는 네트워크 구조를 sparse하게 만드는 것이다.</li></ul>
+<p>On the downside, todays computing infrastructures are very inefficient when it comes to numerical calculation on non-uniform sparse data structures. numerical libraries that allow for extremely fast dense matrix multiplication, exploiting the minute details of the underlying CPU or GPU hardware.</p>
+<ul><li>그러나 sparse한 구조는 연산을 효율적으로 할 수 없다. 따라서 <code>연산을 효율적</code>으로 하기 위해서는 matrix를 dense하게 구성해야 한다.</li></ul>
+<p><code>Parameter</code><strong><code> </code></strong><code>수를 줄이는 방법</code>에<strong> </strong>대해서는 1x1 convolution, Max-pooling을 이용하는 것이다.</p>
+<p>By adding auxiliary classifiers connected to these intermediate layers, we would expect to encourage discrimination in the lower stages in the classifier, increase the gradient signal that gets propagated back, and provide additional regularization.</p>
+<p>그리고 네트워크가 깊어질 수록 gradient vanishing문제가 생기게 되는데 깊은 layer까지 정보를 전달하기 위해 <code>auxiliary layer</code>를 사용한다.</p>
+<p>그리고 네트워크가 깊어질 수록 gradient vanishing문제가 생기게 되는데 깊은 layer까지 정보를 전달하기 위해 <code>auxiliary layer</code>를 사용한다.</p>
+<h2 id="block-552836f861d5493b92369630b0afee5a"><strong>Architectural Details</strong></h2>
+<h2 id="block-e2ac58efc2404de4b55a55f2dd14dc3e">Inception Module v1</h2>
+<ul><li>아래는 GoogLeNet에 포함되있는 Inception Module이다.</li><li>Inception 모듈은 다양한 크기의 Convolution 필터를 사용하는데, 여기서 사용된 필터 크기는 1x1, 3x3, 5x5이며, 이외에도 3x3 Max Pooling을 사용한다.</li><li>이는 다양한 feature를 뽑기 위해 <code>다양한 convolution filter</code>를 병렬로 사용한다.<ul><li>Input feature의 어떤 특징이 있다고 할 때, 그 특징들과 필터 간의 correlation이 어떻게 분포되어 있는지 모르기 때문에 다양한 필터를 사용한다.</li></ul></li><li><code>MaxPooling</code>은  invariant한 특성을 잡아낼 수 있기 때문에 사용하였다.</li><li>본 논문에서는 다양한 feature를 뽑기 위해 여러 convolution filter를 병렬로 사용하는 것을 <code>local sparse structue</code>라고 설명한다.(네트워크의 크기를 키운다)</li><li>그리고 convolution filter와 MaxPooling을 concatenation 연산으로 합쳐지는데, 이것을 논문에서는 <code>dense matrix</code> 연산으로 표현했다. (효율적인 연산)</li></ul>
+<figure><img src="/assets/notion/inceptionnet-논문-리뷰-및-코드-분석/2f67d68e-01dc-40d4-9f70-43af6a7e2716.png" alt="" loading="lazy" width="878" height="502" /></figure>
+<ul><li>위에서 Inception navie version에 이어 아래 그림을 보면 Dimension reduction을 통해 Parameter 수를 더 줄여보고자 1x1 Convolution을 적용했고 또한 concatenation되는 채널의 수를 마음대로 조정할 수 있기 때문에 유용하다.</li><li>아래 아키텍쳐의 장점은 연산량은 크게 늘리지 않으면서 네트워크의 크기를 늘릴 수 있다는 점이다.</li></ul>
+<figure><img src="/assets/notion/inceptionnet-논문-리뷰-및-코드-분석/66aba6b4-320d-4043-b1c6-faa79fa0a323.png" alt="" loading="lazy" width="826" height="512" /></figure>
+<ul><li>위와 같은 여러개의 Inception Module을 이용하여 아래와 같이 네트워크를 구성한 것이 아래그림의 <code>Inception v1(GoogLeNet)</code>이다.</li></ul>
+<figure><img src="/assets/notion/inceptionnet-논문-리뷰-및-코드-분석/7b641bdc-4a7a-47bf-89ae-527d031e710e.png" alt="" loading="lazy" width="1536" height="647" /></figure>
+<h2 id="block-41c59a9c7b4a4d2cb12125e780111faf"><strong>GoogLeNet</strong></h2>
+<p>아래는 사진은 모델 구조이다.</p>
+<figure><img src="/assets/notion/inceptionnet-논문-리뷰-및-코드-분석/d79550b1-66d6-4bcb-bebf-18ac793856ce.png" alt="" loading="lazy" width="1676" height="992" /></figure>
+<h2 id="block-096ee391c4394e8092b2b5e2c1e25e69">Auxiliary Classifier</h2>
+<ul><li>깊어진 layer에서 발생하는 vanishing gradient 문제를 개선하기 위하여 적용된 트릭이다</li><li>중간 중간에 Loss를 계산할 수 있는 layer를 추가적으로 만들어서 최종 loss에 반영하게 된다.</li><li>아래 그림을 보면 실제 output에 의해 계산된 loss가 100%라면 <code>auxiliary loss</code>에는 30%의 가중치만 준 것을 알 수 있다.</li><li>여기서 사용된 <code>auxiliary loss</code>는 training 할 때에만 사용되고 inference할 때에는 사용되지 않는다.</li></ul>
+<figure><img src="/assets/notion/inceptionnet-논문-리뷰-및-코드-분석/6f7c61b5-12da-40b2-a13f-2c3daea54822.png" alt="" loading="lazy" width="1340" height="562" /></figure>
+<h2 id="block-a708fed3beee41e7ad57194b98e36727">Inception v1 Code Review</h2>
+<p>아래 사진은 inceptionModule 이다.</p>
+<figure><img src="/assets/notion/inceptionnet-논문-리뷰-및-코드-분석/96e1849f-5541-4645-a553-e218b2189a11.png" alt="" loading="lazy" width="826" height="512" /></figure>
+<p>먼저 위 그림에서 다양한 필터 크기를 갖는 convolution을 클래스의 함수형태로 정의한다.</p>
+<figure><img src="/assets/notion/inceptionnet-논문-리뷰-및-코드-분석/3e1f2f1a-9edd-4f16-982b-91b454db5de3.png" alt="" loading="lazy" width="1926" height="1590" /></figure>
+<p>아래는 위 함수들을 가지고 초기화하는 클래스로 아래와 같은 패턴으로 구성되어 있으며  conv의 첫 번째 인자는 input channels이고 두 번째 인자는 output channels이다.</p>
+<p><strong>(in_dim, out_dim_1)</strong></p>
+<ul><li>1x1conv 입력과 최종 출력</li></ul>
+<p><strong>(in_dim, mid_dim_3, out_dim_3)</strong></p>
+<ul><li>1x1conv(in_dim, mid_dim_3) </li><li>3x3conv(mid_dim_3, out_dim3)</li></ul>
+<p><strong>(in_dim, mid_dim_5, out_dim_5)</strong></p>
+<ul><li>1x1conv(in_dim, mid_dim_5)</li><li>5x5conv(mid_dim_5, out_dim_5)</li></ul>
+<p>(in_dim, pool)</p>
+<ul><li>maxpool → 1x1conv(in_dim, pool)</li></ul>
+<figure><img src="/assets/notion/inceptionnet-논문-리뷰-및-코드-분석/3f5ed33f-3a03-4d13-81d6-0b2b98b42230.png" alt="" loading="lazy" width="1584" height="366" /></figure>
+<p>이 후 inception Module을 GoogLeNet에서 사용된다.</p>
+<p>GoogLeNet에서는 초기 앞단의<strong> Conv2d→MaxPool→Conv2d→MaxPool→inception Module … </strong>을 사용한다. 따라서 만약 (224, 224, 3)이미지가 들어온다면 아래 초기 conv block을 지나 (-1, 192, 28, 28)가 inception Module의 input으로 사용된다.</p>
+<figure><img src="/assets/notion/inceptionnet-논문-리뷰-및-코드-분석/ac880bfa-8a39-4d2c-8ed7-05ea9aaa8104.png" alt="" loading="lazy" width="1958" height="406" /></figure>
+<p>처음 base_dim은 64로 시작하며 inceptin Module이 끝나면 Dropout layer를 거쳐 classification을 위한 linear layer를 추가한다.</p>
+<figure><img src="/assets/notion/inceptionnet-논문-리뷰-및-코드-분석/04ea09e7-6824-41c8-bbbb-13b361c964d9.png" alt="" loading="lazy" width="1902" height="1148" /></figure>
+<p>파란색 박스: 1x1conv</p>
+<p>노란색 박스: 1x1conv → 3x3conv</p>
+<p>핑크색 박스: 1x1conv → 5x5conv</p>
+<p>주황색 박스: 3x3Maxpool → 1x1conv</p>
+<p>로 구성되어 있으며 위 박스들에는 input으로 전부 동일하게 [-1, 192, 28, 28] 이 들어간다.</p>
+<p>이후 concat하는 부분이 있음으로 각 박스의 최종 출력 채널을 다 더해주며 된다. </p>
+<p>64 + 128 + 32 + 32 = 256 channels가 되는 것을 볼 수 있다.</p>
+<figure><img src="/assets/notion/inceptionnet-논문-리뷰-및-코드-분석/185d9534-bc65-4cfd-8a0f-543bd427242e.png" alt="" loading="lazy" width="1112" height="890" /></figure>
+<p>다음은 GoogLeNet의 foward함수인데 </p>
+<figure><img src="/assets/notion/inceptionnet-논문-리뷰-및-코드-분석/2716dcb6-e7aa-4d7b-bddb-0e7d8412064b.png" alt="" loading="lazy" width="814" height="546" /></figure>
+<p> layer_4 Sequential layer에 <code>AvgPool2d(7, 1)</code>을 적용하게 되는데, [2, 1024, 7, 7]이 kernel=7이고 stride=1인 풀링을 거쳐 [2, 1024, 7, 7]가 [2, 1024, 1, 1]이 된다. layer_5는 dropout임으로 3의 출력도 동일하다.</p>
+<p><code>out.view(out.size(0), -1)</code> 를 통해서 [2, 1024]로 변경된다.</p>
+<figure><img src="/assets/notion/inceptionnet-논문-리뷰-및-코드-분석/c365ca9f-4bb1-419e-8222-06ac401ceda6.png" alt="" loading="lazy" width="900" height="210" /></figure>
+<p>그리고 1024를 input으로하고 class_num을 output으로 하는 classification layer를 적용한다.</p>
+<p><code>torch.summary</code> 결과도 똑같은 것을 확인할 수 있다.</p>
+<figure><img src="/assets/notion/inceptionnet-논문-리뷰-및-코드-분석/6663af15-995f-4e48-ae86-4477c8b31396.png" alt="" loading="lazy" width="872" height="174" /></figure>
+<h2 id="block-2c26d83a843f48cca143c88561dc4e82">Inception v2</h2>
+<p>위에서 살펴본 <code>Inception module</code>은 Inception v1(GoogLeNet)에 해당하는 딥러닝 네트워크이다.</p>
+<p>이후에 <code>Tensor Factorization</code>등의 최적화 기법들을 적용해 개선한 버전이 <code>v2</code>, <code>v3</code> 버전이다.</p>
+<p>기존 navie Inception Module을 오른 쪽과 같이 변경한 구조를 <code>Inception Module A</code> 라고 한다.</p>
+<p>그리고 해당 Module은 <code>Inceptionv2</code>에서 사용된다.</p>
+<figure><img src="/assets/notion/inceptionnet-논문-리뷰-및-코드-분석/741c1459-f7ea-473d-897a-a02baacf6502.png" alt="navie Inceptio Module → Inception Module A" loading="lazy" width="1148" height="489" /><figcaption>navie Inceptio Module → Inception Module A</figcaption></figure>
+<h2 id="block-83c8704f7de74273b70173a43effb8fb">Grid Size Reduction</h2>
+<ul><li>Resolution을 줄이기 위한 방법으로는 크게 2가지가 있는데 Convolution 연산 시 stride를 2 이상으로 가져가거나, Pooling을 하는 것이다.</li><li>이 때, Convolution 연산의 <code>stride</code>를 적용하여 <code>resolution을 줄이게 되면</code> <code>연산량이 다소 많아</code>지게 되고 반면 <code>Pooling</code>을 이용하여 resolution을 <code>줄이면</code> <code>Representational Bottleneck</code> 이라는 문제가 발생하는 데 말 그대로 resolution이 갑자기 확 줄어들어서 정보를 잃게 되는 것을 말합니다.</li><li>그래서 Convolution 연산의 stride 적용과 MaxPooling을 병렬적으로 하는 방법을 적용하는 <code>Grid Size Reduction</code> 방법이 <code>Inception Module v1</code>부터 전체적으로 반영이 되어있다.</li></ul>
+<figure><img src="/assets/notion/inceptionnet-논문-리뷰-및-코드-분석/99f42a67-9eb6-4faa-a176-a5141ede5998.png" alt="" loading="lazy" width="995" height="636" /></figure>
+<h2 id="block-7b0058e3e85b4a3d8bc6e6e9339dbfd7">Inception v3</h2>
+<ul><li>Tensor factorization을 이용해 <code>1xn</code>, <code>nx1</code> convolution을 적용하여 최적화 한 것을 <code>Inception Module B</code> 라고 하며 Inception v3에 적용된다. </li><li>이 모듈은 <code>Inception Module A</code>에 비해 연산량을 33% 절감하였다고 논문에서 설명한다. 예를 들어  <code>n</code>에 3을 대입하면 개선 전/후가 대응이 되는 것을 볼 수 있다.</li><li>Tensor factorization은 아래에서 자세히 설명한다.</li></ul>
+<figure><img src="/assets/notion/inceptionnet-논문-리뷰-및-코드-분석/b34c75dc-c3cd-4809-9a87-68cc48076662.png" alt="Inception Module A → Inception Module B" loading="lazy" width="1111" height="599" /><figcaption>Inception Module A → Inception Module B</figcaption></figure>
+<p>아래는 <code>Inception Module C</code>인데 직전에 언급한 <code>Representational Bottleneck 문제를 완화하기 위해서</code> 좀 더 깊게가 아닌 좀더 넓게 concatenation 하는 방법으로 만들어진 모듈이다.</p>
+<ul><li>모듈 내부에서 Convolution + stride나 Pooling이 깊게 적용되면 Representational Bottleneck문제가 더 악화되니 옆으로 쌓아보려는 시도이다. 아래 Module은 <code>Inception v3</code>에서 output 단에 사용되었습니다.</li></ul>
+<figure><img src="/assets/notion/inceptionnet-논문-리뷰-및-코드-분석/baf2672e-e4de-4f93-8249-726cea2f6c2e.png" alt="Inception Module C" loading="lazy" width="687" height="572" /><figcaption>Inception Module C</figcaption></figure>
+<p>아래 네트워크 아키텍쳐가 <code>Inception v3</code>다. 앞에서 설명한 <code>Inception Module A, B, C</code> 그리고 <code>Grid Size Reduction</code>이 적용된 형태이다. 처음에 살펴본 <code>Inception v1</code> GoogLeNet에서 적용된 Auxiliary classifier는 2개였다가 1개로 축소된 것을 볼 수 있는데 해당 layer의 효과가 크게 좋지 않았기 때문이라고 유추할 수 있다.</p>
+<figure><img src="/assets/notion/inceptionnet-논문-리뷰-및-코드-분석/e174ee5c-8d10-4c0e-a997-a3be8f282821.png" alt="" loading="lazy" width="1292" height="607" /></figure>
+<h2 id="block-6ec964afdb144be0809730c442bc3fcf">Tensor Factorization</h2>
+<div class="columns"><div class="column"><figure><img src="/assets/notion/inceptionnet-논문-리뷰-및-코드-분석/9ec91be8-3c11-450c-8bde-cc6fa0df9e9a.png" alt="" loading="lazy" width="641" height="540" /></figure></div><div class="column"><figure><img src="/assets/notion/inceptionnet-논문-리뷰-및-코드-분석/266a2f1f-a3aa-4f02-87a7-64f724c9c684.png" alt="" loading="lazy" width="432" height="551" /></figure></div></div>
+<p><code>Tensor factorization</code>은 행렬을 곱하기 전 상태의 파라미터를 저장함으로써 행렬의 곱 이후에 늘어나는 파라미터의 갯수에 대비하여 파라미터 수를 적게 저장하는 방법이다. </p>
+<p>이를 CNN에 적용하면 하나의 큰 필터를 사용하는 것보다 작은 필터 여러개를 사용하는 것이 연산량에 있어서 더 효율적이다 라는 것이다. 아래 예시를 보자</p>
+<ul><li>3x3 kernel을 이용해서 1x1 output feature를 만드는 것보다 1x3 → 3x1 의 커널을 사용하는 것이 연산량이 더 적다.<ul><li>(3x3) = <code>9</code> vs (3x1) + (1x3) = <code>6</code></li></ul></li><li>실제 계산을 해보자. 아래는 output feature에 따른 계산 공식이다</li></ul>
+<div class="math-block">\[O_h = floor(\frac{I_h - K_h+2P}{S}+1) \\Ow = floor(\frac{I_w - K_w+2P}{S}+1)\]</div>
+<ul><li>3x3 Input Image가 들어오고 3x3커널을 사용해 1x1 output feature를 만드는 결과는 아래와 같다.</li></ul>
+<div class="math-block">\[floor(\frac{3 - 3+0}{1}+1) = O_h=1\\ floor(\frac{3 - 3+0}{1}+1)=O_w=1\]</div>
+<ul><li>3x1 커널을 사용 후 1x3커널을 사용해 1x1 output feature를 만드는 결과는 아래와 같다.</li></ul>
+<div class="math-block">\[floor(\frac{3 - 3+0}{1}+1) = O_h=1\\ floor(\frac{3 - 1+0}{1}+1)=O_w=3\]</div>
+<ul><li>이 후 1x3커널을 사용하면 아래처럼 된다.</li></ul>
+<div class="math-block">\[floor(\frac{1 - 1+0}{1}+1) = O_h=1\\ floor(\frac{3 - 3+0}{1}+1)=O_w=1\]</div></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +231,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

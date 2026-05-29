@@ -76,11 +76,92 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/python/">Python</a>
+    </nav>
+    <h1>[torch] Upsampling</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2023년 7월 19일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-dd13c29e23124a548a495b9d6e9e9101">서론</h2>
+<p>이 장은 이미지 크기를 키우기 위해 transposed convolution을 사용하지 않고 pytorch의 다른 library인 Upsampling으로 이미지 크기를 키우는데 사용하는 방법, 작동 원리, 예시등을 위주로 설명한다.</p>
+<h2 id="block-07b64f032f354f4a8ec9df9be8f45816">목차</h2>
+<ol><li><a href="#block-95bca00531d34812866ff644e5810068">Dependency</a> </li><li><a href="#block-fc38f330aea442fc9248c9f525a968e9">Upsampling</a> </li><li><a href="#block-c1aa7a3206504e5794e635faeaba6508">Example</a> </li><li><a href="#block-1e9e507955df437fbf236ac08d289cd0">Result</a> </li></ol>
+<h2 id="block-95bca00531d34812866ff644e5810068">Dependency</h2>
+<p>위 library를 사용하기 위해서는<code>import torch.nn as nn</code> 시켜줘야 한다.</p>
+<h2 id="block-fc38f330aea442fc9248c9f525a968e9">Upsampling</h2>
+<p> <code>nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)</code> 과 같이 사용된다.</p>
+<ul><li><code>scale_factor</code>: input이미지의 height, width에 scale_factor만큼 곱해진다. <ul><li>예를들어 input image가 (batch, channel, 224, 224)이고 scale_factor=2라면 input image의 height, width에 2가 곱해져 (batch, channel, 448, 448) 형태로 이미지의 크기가 늘어난다.</li></ul></li><li><code>mode</code>: Interpolation 방법을 선택하는 Parameter이다. 위 코드는 bilinear알고리즘으로 이미지를 확장하는데 사용한다.</li><li><code>align_corners</code>: 이미지를 확장한 후 edge부분을 유지할지 말지에 대한 여부이다.<ul><li>만약 align_corner=True 이라면 이미지의 edge부분이 원본 픽셀과 동일하게 유지된다.</li><li>1-dimension의 이미지가 [0, 1]로 구성되고 <code>scale_factor=2</code>, <code>mode=bilinear</code>, <code>align_corners=False</code> 로 Upsampling을 하면 2배로 확장해야 하기 때문에 [-0.25, 0.25, 0.75, 1.25]로 나오게 된다.</li><li>반면에, align_corners=False인 경우는 양 끝의 픽셀은 유지하기 때문에 [0, 1/3, 2/3, 1]의 결과가 된다.</li></ul></li></ul>
+<h2 id="block-c1aa7a3206504e5794e635faeaba6508">Example</h2>
+<p>아래 코드는 이미지하나를 불러와 224, 224로 크기를 조절한 다음 Upsampling을 적용해 이미지 크기를 2배로 키우고 키운 이미지와 키우기 전 원본 이미지를 출력하는 코드이다.</p>
+<pre data-lang="python"><code class="language-python">import torch
+import torch.nn as nn
+import torchvision.transforms as transforms
+from PIL import Image
+import cv2
+import numpy as np
+
+# PIL.Image로 이미지를 로드합니다.
+image = Image.open(&quot;./image-15.webp&quot;)
+image = image.resize((224, 224))
+# 이미지를 텐서로 변환하고 [0, 1] 범위로 정규화합니다.
+transform = transforms.Compose([
+    transforms.ToTensor()
+])
+image = transform(image) # 이미지의 크기는 다음과 같다: (3, 224, 224)
+# 배치 차원을 추가한다.
+image = image.unsqueeze(0) # (1, 3, 224, 224)
+# nn.Upsample 객체를 생성한다.
+upsample = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)
+
+# 이미지를 업샘플링한다.
+upsampled_image = upsample(image)
+
+# PyTorch 텐서를 numpy 배열로 변환하고 [0, 255] 범위로 조정한다.
+# cv2는 [0, 255] 범위의 uint8 를 받는다..
+original_image_np = image[0].permute(1, 2, 0).numpy() * 255
+original_image_np = original_image_np.astype(np.uint8)
+
+# print(image.shape)
+# print(image[0].shape)
+
+upsampled_image_np = upsampled_image[0].detach().permute(1, 2, 0).numpy() * 255
+upsampled_image_np = upsampled_image_np.astype(np.uint8)
+
+# BGR to RGB 변환
+original_image_np = cv2.cvtColor(original_image_np, cv2.COLOR_BGR2RGB)
+upsampled_image_np = cv2.cvtColor(upsampled_image_np, cv2.COLOR_BGR2RGB)
+
+# 이미지의 크기를 표시한다.
+print(f&quot;Original Image:{original_image_np.shape}\nUpsampleing Image:{upsampled_image_np.shape}&quot;)
+
+# 이미지를 표시한다.
+cv2.imshow('Original Image', original_image_np)
+cv2.imshow('Upsampled Image', upsampled_image_np)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()</code></pre>
+<h2 id="block-1e9e507955df437fbf236ac08d289cd0">Result</h2>
+<figure><img src="/assets/notion/torch-upsampling/f0c265b6-a552-4469-afbc-1df6306db0cf.png" alt="" loading="lazy" width="1546" height="1180" /></figure></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +182,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

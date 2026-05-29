@@ -76,11 +76,93 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/application/">Application</a>
+    </nav>
+    <h1>augmentation &amp; folder_controller 사용방법</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2023년 5월 3일</span><span class="dot"></span><span>수정 2024년 11월 29일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-ccda8554630b4e6e87fd7bcf101f1f85">이미지 증강하기</h2>
+<h3 id="block-fab27f93b4a84b76963d945082472e4c">아래 명령어를 쉘에 입력하여 필요한 라이브러리를 설치합니다.(python==3.8.10)</h3>
+<p><strong>(Linux)</strong></p>
+<pre data-lang="shell"><code class="language-bash">$ pip3 install -r requirements.txt</code></pre>
+<figure><img src="/assets/notion/augmentation-folder-controller-사용방법/34ead095-86cd-4d29-94ee-62bc49a31849.png" alt="" loading="lazy" width="2901" height="587" /></figure>
+<p><strong>(Window)</strong></p>
+<p>본인이 작업하고자하는 디렉토리로 이동 후, 마우스 우클릭 → 터미널에서 열기</p>
+<figure><img src="/assets/notion/augmentation-folder-controller-사용방법/856e609d-f095-4576-866f-85e2991c5514.png" alt="" loading="lazy" width="1843" height="739" /></figure>
+<figure><img src="/assets/notion/augmentation-folder-controller-사용방법/9d2a68b3-7cf0-400f-b324-9935203d6bf1.png" alt="" loading="lazy" width="1588" height="998" /></figure>
+<figure><img src="/assets/notion/augmentation-folder-controller-사용방법/8f6ccaa5-924e-41b9-ac58-f28bc871fe8b.png" alt="" loading="lazy" width="2329" height="563" /></figure>
+<h3 id="block-23ff1b131a6b4b4c9ed8d3af5652dfb8">미분류_검수_완료 파일이 필요하며 다음과 같은 구조를 가지고 있어야 합니다.</h3>
+<figure><img src="/assets/notion/augmentation-folder-controller-사용방법/d8dcc2ca-5d5f-4ed8-892b-2e0860f23dc9.png" alt="" loading="lazy" width="2896" height="360" /></figure>
+<figure><img src="/assets/notion/augmentation-folder-controller-사용방법/9d02c25b-c5d0-46e7-a121-cc1f043a31e1.png" alt="" loading="lazy" width="2895" height="1130" /></figure>
+<h2 id="block-01b497b234d74356960dcbd539c69cd4">Step 1</h2>
+<h3 id="block-8618598b4ee444c09703ceb1190c5f55">이미지를 증강시켜주는 <a href="http://augmentation.py/" target="_blank" rel="noreferrer">Augmentation.py</a> 실행합니다.</h3>
+<p><strong>(Linux)</strong></p>
+<pre data-lang="javascript"><code class="language-javascript">$ python3 augmentation_class.py</code></pre>
+<figure><img src="/assets/notion/augmentation-folder-controller-사용방법/3207bfb7-5448-4ffc-b1c0-8689dfb68881.png" alt="" loading="lazy" width="1799" height="234" /></figure>
+<p><strong>(Window)</strong></p>
+<pre data-lang="javascript"><code class="language-javascript">&gt; python .\augmentation_class_window.py</code></pre>
+<figure><img src="/assets/notion/augmentation-folder-controller-사용방법/9cbe8a9d-4a04-4db9-8ed6-3c8daaec6d0e.png" alt="" loading="lazy" width="2125" height="237" /></figure>
+<h3 id="block-4f386d27daef4bb9ba37f77af3ce6dcc">실행 후<code>미분류_검수완료</code> 라는 폴더 옆에 <code>미분류_검수완료_aug</code> 라는 폴더가 생깁니다.</h3>
+<figure><img src="/assets/notion/augmentation-folder-controller-사용방법/5aca4fa1-4fc9-4716-90d7-afebfd29874c.png" alt="" loading="lazy" width="2902" height="364" /></figure>
+<h3 id="block-dbea29712e994392bb9364d65a9f1fd6"><code>미분류_검수완료_aug</code>폴더에 들어가면 만들어진 폴더구조는 아래와 같습니다.</h3>
+<figure><img src="/assets/notion/augmentation-folder-controller-사용방법/3458bab1-2525-4e0b-9083-1939fcd7d64e.png" alt="" loading="lazy" width="2899" height="1129" /></figure>
+<h3 id="block-a9a31e04f297434c9619466a2c1dba2a"><code>3006412990000</code> 폴더를 눌러보면 다음과 같이 이미지가 증강된 것을 볼 수 있습니다.</h3>
+<figure><img src="/assets/notion/augmentation-folder-controller-사용방법/c9ddd2e0-6146-4220-9ff0-154678d312f5.png" alt="" loading="lazy" width="2896" height="1364" /></figure>
+<h2 id="block-d978bf47c569441ab36d51ceac947efc">이미지 배치하기</h2>
+<h2 id="block-0e687b15292a4fc0ab044e1a6647c9fb">Step 1</h2>
+<h3 id="block-4f6a596dd27648639c1d3e77f9461d8b">배치하고자 하는 목록을 엑셀에서 텍스트 형태로 긁어와 저장합니다.</h3>
+<p><strong>대분류, 품목명, 디자인등록번호를 원하는 </strong>행부터 시작해 복사(<code>Ctrl+C</code>)합니다.</p>
+<p>이후 메모장을 열고 붙여넣기(<code>Ctrl+V</code>)합니다.</p>
+<p>파일 명은 <code>target.txt</code> 로 하고 저장합니다.</p>
+<figure><img src="/assets/notion/augmentation-folder-controller-사용방법/cba9a83b-4ec5-41fe-a34d-d9fb30c15187.png" alt="" loading="lazy" width="2279" height="1472" /></figure>
+<figure><img src="/assets/notion/augmentation-folder-controller-사용방법/e949f7c4-f506-4efc-b180-8d106ae05ff9.png" alt="" loading="lazy" width="2955" height="1299" /></figure>
+<figure><img src="/assets/notion/augmentation-folder-controller-사용방법/4447be99-6b47-4683-a493-7c27cec4bdab.png" alt="" loading="lazy" width="2043" height="585" /></figure>
+<h2 id="block-f4092a3696c04e44a26ef80b93133e5f">Step 2</h2>
+<h3 id="block-02364e9b9087400baf0902b3cd551170"><code>folder_controller.py</code>파일을 실행합니다.</h3>
+<p><strong>(Linux)</strong></p>
+<pre data-lang="shell"><code class="language-bash">$ python3 folder_controller.py</code></pre>
+<figure><img src="/assets/notion/augmentation-folder-controller-사용방법/918ad2aa-bbe6-4834-9f3f-2e41b064a123.png" alt="" loading="lazy" width="1849" height="134" /></figure>
+<p><strong>(Window)</strong></p>
+<pre data-lang="javascript"><code class="language-javascript">&gt; python .\folder_controller_window.py</code></pre>
+<figure><img src="/assets/notion/augmentation-folder-controller-사용방법/0767cdfa-2c5b-4aa0-9829-10a3c9965534.png" alt="" loading="lazy" width="2107" height="126" /></figure>
+<p>그럼 대분류에 따라 폴더들이 생성됩니다. </p>
+<figure><img src="/assets/notion/augmentation-folder-controller-사용방법/e04d297e-398a-47b2-9603-01a9d3928b05.png" alt="" loading="lazy" width="2905" height="388" /></figure>
+<p>그리고 <code>counter_without_target.txt</code>, <code>counter_with_target.txt</code> 파일이 생성됩니다.</p>
+<figure><img src="/assets/notion/augmentation-folder-controller-사용방법/524485a5-8f89-4667-b316-33344b02b283.png" alt="" loading="lazy" width="2892" height="367" /></figure>
+<p>대분류에 따라 폴더구조는 대략적으로 아래와 같습니다.</p>
+<div class="columns"><div class="column"><figure><img src="/assets/notion/augmentation-folder-controller-사용방법/0442ef76-9499-4047-a765-62c8538f870f.png" alt="" loading="lazy" width="393" height="802" /></figure></div><div class="column"><figure><img src="/assets/notion/augmentation-folder-controller-사용방법/7c32c51e-b840-4484-b952-603e01fe32d5.png" alt="" loading="lazy" width="347" height="763" /></figure></div><div class="column"><figure><img src="/assets/notion/augmentation-folder-controller-사용방법/bbbb49f7-e9b9-4267-8161-853db2479541.png" alt="" loading="lazy" width="381" height="760" /></figure></div><div class="column"><figure><img src="/assets/notion/augmentation-folder-controller-사용방법/0b528421-4270-4549-89f0-2baef8dcb3ea.png" alt="" loading="lazy" width="359" height="765" /></figure></div></div>
+<p><code>counter_with_target.txt</code>: 해당 등록번호당 이미지 총 갯수를 출력해줍니다.</p>
+<figure><img src="/assets/notion/augmentation-folder-controller-사용방법/7385a303-2de1-42e6-847d-102aeb997718.png" alt="" loading="lazy" width="1855" height="1294" /></figure>
+<p><code>counter_without_target.txt</code>: 엑셀의 이미지 개수 항목란에 쉽게 넣도록 이미지개수만 따로 저장된 txt파일입니다. </p>
+<figure><img src="/assets/notion/augmentation-folder-controller-사용방법/7720873d-5c70-4275-b086-24a535b2437e.png" alt="" loading="lazy" width="2044" height="1302" /></figure>
+<h2 id="block-5d7140c50dc345e8b5dac8e15e50f414">Step 3</h2>
+<p><code>counter_without_target.txt</code>파일을 열고 <code>Ctrl+A</code>, <code>Ctrl+C</code>합니다.</p>
+<figure><img src="/assets/notion/augmentation-folder-controller-사용방법/25561854-a8f8-4bbd-ba76-56c863402632.png" alt="" loading="lazy" width="2364" height="1284" /></figure>
+<p>엑셀에서 <code>B4:D294</code>까지 복사를 했습니다. <strong>B열 4행부터</strong> 긁어왔음으로 크롤링에 해당하는 열인 <strong>K열의 4행</strong>에 마우스를 클릭합니다.</p>
+<figure><img src="/assets/notion/augmentation-folder-controller-사용방법/030e22e2-3918-4246-995c-799b0ff69a32.png" alt="" loading="lazy" width="2624" height="1129" /></figure>
+<p>해당 부분에 마우스를 클릭하고 <code>Ctrl+V</code>입력합니다. 그러면 다음과 같이 엑셀에 순차적으로 입력 됩니다.</p>
+<figure><img src="/assets/notion/augmentation-folder-controller-사용방법/ea30a3a2-6861-46a5-9c09-d6cc0073b003.png" alt="" loading="lazy" width="2619" height="1117" /></figure></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +183,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

@@ -76,11 +76,62 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/ai-deep-learning/">AI/ Deep Learning</a>
+    </nav>
+    <h1>CLIP 논문리뷰</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2022년 12월 6일</span><span class="dot"></span><span>수정 2023년 6월 16일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-cbd71545e1cf4d358ee122bd0bf5b097">서론</h2>
+<p>이 장은 Open Ai에서 발표한 <a href="https://arxiv.org/pdf/2103.00020.pdf" target="_blank" rel="noreferrer">CLIP논문</a> 에 대해 설명한다.</p>
+<h2 id="block-e7fb249dd2b644ea8d492af0bd6202b1">목차</h2>
+<ol><li><a href="#block-0a5af984c2da464fa8df0921efb58db4">CLIP (contrastiv Language-Image Pre-Training)</a> <ol><li><a href="#block-e307e1bfc99e41ee89e2ae7cf308ee3e">Data</a> </li><li><a href="#block-e307e1bfc99e41ee89e2ae7cf308ee3e">Data</a> </li><li><a href="#block-e2d362de6c1c44c8aa11f5b431f442c8">Advantage of using Image-Text pair on Web Based </a> </li><li><a href="#block-d9407b27936e47eca0468771b89c47ff">Contrastive Pre-Training Method</a> </li><li><a href="#block-d9407b27936e47eca0468771b89c47ff">Contrastive Pre-Training Method</a> </li></ol></li><li><a href="#block-5480d569acf54bb6add66f77d8bfd8b3">Training Details</a> </li><li><a href="#block-8f3ea25210d24b1c9c61301c7c2ebc8f">Inference(Zero-shot prediction)</a> </li><li><a href="#block-99aaf2b3bb324fb3b4d3f81678704285">Inference(Prompt Engineering)</a> </li><li><a href="#block-1c392374a95c44caa801db9d8c81f8a7">Inference Code</a> </li></ol>
+<h2 id="block-0a5af984c2da464fa8df0921efb58db4">CLIP (contrastiv Language-Image Pre-Training)</h2>
+<h2 id="block-e307e1bfc99e41ee89e2ae7cf308ee3e">Data</h2>
+<ul><li>이미지를 설명하는 텍스트를 결합한 image-text par를 입력으로 사용</li><li>논문에서는 4억개의(image, text) pair를 인터넷으로 부터 수집해 학습</li></ul>
+<h2 id="block-e2d362de6c1c44c8aa11f5b431f442c8">Advantage of using Image-Text pair on Web Based </h2>
+<ul><li>Data set 크기를 무한히 키울 수 있음</li><li>Web-Based image-text pair을 사용하여 별도의 라벨링 작업이 필요없음</li><li>Vision representation만을 학습하는게 아니라 Language representation을 함께 학습하여 Downstream task에서 일반화된 특징 학습이 가능</li></ul>
+<h2 id="block-d9407b27936e47eca0468771b89c47ff">Contrastive Pre-Training Method</h2>
+<ol><li>Text Mini-Batch → Text Encoder → Text Representation</li><li>Image Mini-Batch →Image Encoder → Image Representation</li><li>Text, Image Representation을 Dot Product를 통해 (N x N)Matrix가 생성됨</li><li>Positive Pair(Diagonal of Matrix)의 cosine similarity를 Maximize하고 <p>\(N^2 -N\)개 Negative Pair의 cosine similarity Minimize하는 방향으로 학습</p></li><li>cosine similarity를 optimize하기 위해 Cross Entropy Loss 사용</li></ol>
+<h2 id="block-5480d569acf54bb6add66f77d8bfd8b3">Training Details</h2>
+<p>Image Encoder : 5 ResNets and 3 Vision Transformers.</p>
+<p>Text Encoder : Transformer (Vaswani et al., 2017) with the architecture modifications described in Radford et al. (2019).</p>
+<div class="columns"><div class="column"><figure><img src="/assets/notion/clip-논문리뷰/6a482e79-0791-43f8-a595-556898b7d9d2.png" alt="" loading="lazy" width="1924" height="1246" /></figure></div><div class="column"><figure><img src="/assets/notion/clip-논문리뷰/9927df91-339b-4bb6-816f-c5c9b9595806.png" alt="" loading="lazy" width="1066" height="932" /></figure></div></div>
+<h2 id="block-8f3ea25210d24b1c9c61301c7c2ebc8f">Inference(Zero-shot prediction)</h2>
+<p>Pretraining이 끝나면 따로 Downstream task를 진행하기 위해 fine tuning을 하지 않아도 Dot product를 통해 zero-shot prediction이 가능하다.</p>
+<figure><img src="/assets/notion/clip-논문리뷰/9ba4ec71-0f00-4d8a-a268-185b1760fb83.png" alt="" loading="lazy" width="816" height="592" /></figure>
+<h2 id="block-99aaf2b3bb324fb3b4d3f81678704285">Inference(Prompt Engineering)</h2>
+<p>별도로 labeling작업을 통해 학습시킨 것이 아닌 Web-Based image-text pair로 학습시켰기 때문에 단어들이 대부분 문장구조이다. </p>
+<ul><li>추론할 때 단어를 문장 형태로 고쳐서 사용<ul><li>동음이의어 문제를 해결하기 위함<ul><li>A photo of a {label}</li></ul></li><li>Customizing prompt text to each task<ul><li>A photo of a {label}, a type of pet</li></ul></li><li>Ensemble of different context prompts :<ul><li>A photo of a big {label} + A photo of a small {label}</li></ul></li></ul></li></ul>
+<p>아래 표는  Prompt Engineering을 적용한 것과 하지 않은 것의 정확도 지표다</p>
+<figure><img src="/assets/notion/clip-논문리뷰/0accb45e-1db4-476d-80f6-e06d75170da6.png" alt="" loading="lazy" width="754" height="722" /></figure>
+<h2 id="block-1c392374a95c44caa801db9d8c81f8a7">Inference Code</h2>
+<p>아래는 실질적으로 모델에서 추론하는 코드다.</p>
+<figure><img src="/assets/notion/clip-논문리뷰/49cef8db-8e0d-497d-9ec8-720bb1d6123f.png" alt="" loading="lazy" width="1653" height="979" /></figure>
+<p>[참조]</p>
+<p><a href="https://github.com/openai/CLIP" target="_blank" rel="noreferrer">https://github.com/openai/CLIP</a></p>
+<p><a href="https://arxiv.org/pdf/2103.00020.pdf" target="_blank" rel="noreferrer">https://arxiv.org/pdf/2103.00020.pdf</a></p>
+<p><a href="https://www.youtube.com/watch?v=HkkaKI6NN-8&amp;t=865" target="_blank" rel="noreferrer">https://www.youtube.com/watch?v=HkkaKI6NN-8&amp;t=865</a></p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +152,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

@@ -76,11 +76,201 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/ai-deep-learning/">AI/ Deep Learning</a>
+    </nav>
+    <h1>DRÆM – A discriminatively trained reconstruction embedding for surface anomaly detection 코드 리뷰</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2023년 7월 18일</span><span class="dot"></span><span>수정 2024년 11월 21일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-a9ab48367c9f464d97ab19a999ae3649">서론</h2>
+<p>DRÆM – A discriminatively trained reconstruction embedding for surface anomaly detection 모델 코드에 대해 리뷰한다.</p>
+<h2 id="block-89f4a160fbe64095906edfda88398439">목차</h2>
+<h2 id="block-c2db2728c2b54892b29dfbd44d78ea0a">코드 리뷰</h2>
+<h2 id="block-166e6d2c7bcf44d085c3fa4d7e0cef44">Dependency</h2>
+<ul><li>아래는 코드는 필요한 모듈을 import한다. learn_rate값을 가져오는  <code>get_lr</code>함수와 <code>weight_init</code>이라는 함수를 통해 conv layer와 batchNorm layer의 가중치를 초기화 한다. </li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/995b1b91-1043-40d1-bf15-233e6db30a22.png" alt="" loading="lazy" width="1404" height="886" /></figure>
+<hr />
+<h2 id="block-b551d43f1fa647d88387452e81cc480e">train_DRAEM (1)</h2>
+<h2 id="block-b5f4a2ba66054099901fa8dcc97e2204">Tensorboard</h2>
+<pre data-lang="python"><code class="language-python">visualizer = TensorboardVisualizer(log_dir=os.path.join(args.log_path, run_name+&quot;/&quot;))</code></pre>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/458829c0-5364-4eff-9a5f-74129bccb665.png" alt="" loading="lazy" width="1881" height="498" /></figure>
+<p><code>TensorboardVisualizer</code> : 학습 과정을 시각화를 위해 Tensorboard 객체를 생성한다</p>
+<ol><li><code>def visualize_image_batch(self,image_batch,n_iter,image_name='Image_batch')</code>: 이미지 배치를 시각화하는 메서드를 정의한다. <code>make_grid</code> 함수를 통해 이미지 배치를 그리드 형태로 변환하고, <code>self.writer.add_image</code>를 통해 TensorBoard에 이미지를 추가한다.</li><li><code>def plot_loss(self, loss_val, n_iter, loss_name='loss')</code>: loss를 시각화하는 메서드를 정의한다. <code>self.writer.add_scalar</code>를 통해 TensorBoard에 스칼라 값을 추가합니다. </li></ol>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/9fb50902-2878-4247-8bd3-7babdbdb6ca5.png" alt="" loading="lazy" width="1472" height="608" /></figure>
+<hr />
+<h2 id="block-a7b3fc3a71374b7f99b6709bedcf90e3">Reconstructive subnetwork</h2>
+<p>input을 3채널로 받고 base_width를 3으로 시작한다.</p>
+<pre data-lang="python"><code class="language-python">model = ReconstructiveSubNetwork(in_channels=3, out_channels=3)</code></pre>
+<p><code>ReconstructiveSubNetwork</code> : ReconstructiveSubNetwork객체를 만들어 <code>model</code>에 저장한다.</p>
+<p>ReconstructiveSubNetwork는 <code>Encoder</code>와 <code>Decoder</code>형태로 구성되어 있다.</p>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/ca46cc7e-7b72-4df3-a07c-4f14d2e8b5f0.png" alt="" loading="lazy" width="1510" height="492" /></figure>
+<hr />
+<h3 id="block-4b02183b0e7e447aa4b5439c3420fbe3">Reconstructive Encoder</h3>
+<p>Reconstructive의 Encoder를 보면 아래와 같이 구성되어 있는데, Conv2d → Batch →ReLU→MaxPool2d 형태로 layer가 반복적으로 쌓여져 있으며 CNN layer의 output dimension이 1→2→4→8 순으로 증가한다.</p>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/4017a4d4-3687-4fa0-b242-53576d2011e8.png" alt="" loading="lazy" width="1172" height="1524" /></figure>
+<hr />
+<h3 id="block-4a3f2e0ff2634c8eaea61938512c2994">Reconstructive Decoder</h3>
+<ul><li>그 다음은 Decoder에 대한 예시인데 이미지 크기를 키우기 위해서 <code>nn.Upsample</code>을 사용한다.</li><li>이 layer의 scale_factor는 input image의 height, width를 각 scale factor만큼 곱해진다.</li><li>예를들어 이미지의 크기가 (1, 3, 224, 224)이면 upsample 적용하면 (1, 3, 448, 448)이 된다.</li><li>여기서 <code>mode=bilinear</code>는 interpolation 방법이고, <code>align_corner=True</code>는 가장 끝단의 픽셀을 유지하게끔 하겠다는 의미다. 해당 layer에 대해 자세한 것은 <a href="https://www.notion.so/9a06d094333a420ab06a6b8931319ceb" target="_blank" rel="noreferrer">[torch] Upsampling</a> 에 적어놓았다.</li><li>up형태의 변수에서는 upsampling이 적용되고 db형태의 경우 Conv → Batch → ReLU 를 2번 반복하여 하나의 block을 구성한다. </li><li>Decoder 부분에서는 output dimension이 encoder와 반대로 8→4→2→1 순으로 convolution이 진행된다.</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/debf4644-ed43-48cb-86ea-fd8003965a05.png" alt="" loading="lazy" width="1642" height="1560" /></figure>
+<p>마지막단에서는 <code>output channel을 3</code>로 갖는 3x3 Conv2d layer를 적용한다. </p>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/06f296dc-6725-4422-9ec0-76e6ff25b2da.png" alt="" loading="lazy" width="1534" height="1126" /></figure>
+<hr />
+<h2 id="block-b5d7805cbeab4c8f8f1ae35c402ff53b">Discriminative subnetwork</h2>
+<pre data-lang="python"><code class="language-python">model_seg = DiscriminativeSubNetwork(in_channels=6, out_channels=2)</code></pre>
+<ul><li><code>DiscriminativeSubNetwork</code> : DiscriminativeSubNetwork객체를 만들어 <code>model_seg</code>에 저장한다.</li><li>Encoder로부터 출력 6개를 받아 decoder의 input으로 넣는다. </li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/fb477696-173f-4ada-830e-8dad14494701.png" alt="" loading="lazy" width="1644" height="643" /></figure>
+<hr />
+<h3 id="block-0b9e45a095ad4f98abe7f3407fa876dd">Discriminative encoder</h3>
+<p>Reconstructive subnetwork의 encoder와 코드와 거의 동일하며 차이점은 maxpooling과 block이 하나 더 구성돼있다. 구성은 마찬가지로 6채널로 시작해 1 → 2 → 4 → 8 → 8 형태로 간다.</p>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/0f45766f-bfa2-468a-bdf6-fa10a532a179.png" alt="" loading="lazy" width="1368" height="1668" /></figure>
+<p>여기까지(위 코드)는 Reconstructive subnetwork의 encoder와 동일하나 아래 부분에 차이가 있음</p>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/50374f3f-3ea6-4b7e-96e0-fb3d978daec1.png" alt="" loading="lazy" width="1681" height="352" /></figure>
+<p>또한 Reconstructive subnetwork의 encoder는 최종네트워크만 출력하는 반면 Discriminative subnetwork는 구성된 block 6개를 전부 출력(return)한다.</p>
+<hr />
+<h3 id="block-2de9d95befef498daa19ae82be6061bb">Discriminative decoder</h3>
+<p>전체적 코드는 아래와 같은데 특이한 점은 111번 줄에 있는 <code>nn.Conv2d(base_width*(8+8), base_width*8, kernel_size=3, padding=1)</code> 부분이다. (8+8)을 해주는 이유는 Discriminative decoder의 마지막 <code>block6</code>의 출력이 <code>up_b layer</code>의 <code>input</code>으로 들어오고 <code>up_b layer</code>의 <code>output</code>이 Discriminative decoder의 <code>block5</code>와  <code>concat</code>되어 채널이 8개가 더 늘어나기 때문이다.</p>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/ad54a434-6633-4ddf-ab80-7cf35eecbb1d.png" alt="" loading="lazy" width="995" height="915" /></figure>
+<p>따라서 up block에서는 단순히 input하나가 들어와 2배씩 늘려가나며 db block에서는 기존 dis encoder의 출력을 concat하고 입력으로 들어가는 구조가 반복된다. </p>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/61f5c86e-5a62-403d-b977-9cf476ecf9ef.png" alt="" loading="lazy" width="1839" height="1683" /></figure>
+<p>이후 마지막 fin_out layer에서는 3x3 conv를 이용해 out_channels=2로 출력한다.</p>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/602d4763-0a91-4926-a8b4-10d4f597f62f.png" alt="" loading="lazy" width="1799" height="1129" /></figure>
+<p>이 모델은 obj_names(class)별로 Recon, Disc subnetwork를 생성한다. 만약 class가 10개이면 각 class에 대한 Recon, Disc subnetwork를 10개 만든다는 것이다.</p>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/f29785c4-7eb1-4bdf-b2a2-844bc5e063fa.png" alt="" loading="lazy" width="1770" height="411" /></figure>
+<hr />
+<h2 id="block-7d55ef43937e4f5799c2ebb82cc0afce">train_DRAEM (2)</h2>
+<ul><li><code>optimizer</code> : ReconstructiveSubNetwork와 DiscriminativeSubNetwork의 optimizer Adam으로 설정한다.</li><li><code>scheduler</code> : scheduler를 통해 learning rate를 조절한다.</li><li><code>loss_l2</code> : l2 Loss(MSE) , <code>loss_ssim</code> : SSIM, <code>loss_focal</code>: Focal Loss</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/0d8b5b7a-8247-448a-8f8f-e7c9f3021609.png" alt="" loading="lazy" width="1882" height="370" /></figure>
+<ul><li>MVTec dataset을 만들고 dataloader로 랩핑한다.</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/e74c1609-3f02-4969-8ffd-c8bf94e6e71e.png" alt="" loading="lazy" width="2686" height="222" /></figure>
+<h2 id="block-f77f3e3d5ed14a3f838e56657405f559">DataLoader(train)</h2>
+<ul><li><code>self.image_paths</code> : 원본 이미지 셋</li><li><code>resize_shape</code> : 기본 256, 256</li><li><code>anomaly_source_paths</code> : 원본 이미지와 상관 없는 합성에 쓰일 재료 이미지</li><li><code>augmenters</code> : 논문에 나온 RandAugment 종류는 7개 였으나 코드에는 10개를 사용</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/74740ab6-bbf3-4cc7-b3d9-faa2082f42ca.png" alt="" loading="lazy" width="648" height="128" /></figure>
+<ul><li>또한 정상 이미지에 대해서는 -45, 45도 회전을 적용했다 했으나, 해당 회전은 증강 기법에 포함됨.</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/062afc50-2960-4ce9-9414-913def7c0426.png" alt="" loading="lazy" width="650" height="222" /></figure>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/ab614231-f5fa-47f1-954f-6ccecd70c7b2.png" alt="" loading="lazy" width="1564" height="1150" /></figure>
+<ul><li>증강 기법에 3개를 뽑아서 randAug를 진행한다.</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/3cf98d27-07ca-4ae8-a02e-1004233d7725.png" alt="" loading="lazy" width="1604" height="324" /></figure>
+<ul><li>자세한 사항은 주석 참조.</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/dadbcbbb-1d95-4427-828b-c6a06b1c8489.png" alt="" loading="lazy" width="2126" height="1080" /></figure>
+<ul><li>논문에서 아래 공식에서 보여주는 beta의 위치가 상의한것 빼고는 공식과 같다.</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/24c1763a-fca5-4b47-81a1-43bfee8d34ff.png" alt="" loading="lazy" width="1818" height="198" /></figure>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/c8a7131b-eba2-4a47-a626-174ca220b8c5.png" alt="" loading="lazy" width="1238" height="112" /></figure>
+<ul><li>이후 no_anomaly가 0~1 사이의 랜덤 소수값을 생성하고 50%의 확률로 그냥 원본 이미지를 return할 것인지 masking이미지를 return할지 결정한다.</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/a7004a90-abb7-40e9-b1e8-4b4c8445e3b9.png" alt="" loading="lazy" width="1948" height="588" /></figure>
+<ul><li>다만 위 코드에서 불필요한 부분이 있는데, 138번째줄에 해당하는 <code>augmented_image = msk * augmented_image + (1-msk)*image</code> 코드이다.</li><li>실질적으로 코드를 일부 수정해 확인을 해보았더니 필요없는 코드로 판단된다.</li></ul>
+<details class="toggle"><summary><strong>확인 코드</strong></summary><div class="toggle-body"><pre data-lang="python"><code class="language-python">import torch
+import numpy as np
+import cv2
+from perlin import rand_perlin_2d_np
+import matplotlib.pyplot as plt
+
+resize_shape = (256, 256)
+anomaly_source_path = &quot;./source.jpeg&quot;
+image = cv2.imread(&quot;./original.jpeg&quot;, 1)
+image = cv2.resize(image, dsize=(resize_shape[1], resize_shape[0]))
+image = np.array(image).reshape((image.shape[0], image.shape[1], image.shape[2])).astype(np.float32) / 255.0
+
+num_iterations = 3
+row = 5
+plt.figure(figsize=(10, num_iterations * row))
+
+for i in range(num_iterations):
+    # image 출력
+    plt.subplot(num_iterations, row, i*row + 1)
+    plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+    plt.title(&quot;Original Image&quot;)
+
+    perlin_scale = 6
+    min_perlin_scale = 0
+    anomaly_source_img = cv2.imread(anomaly_source_path)
+
+    anomaly_img_augmented = cv2.resize(anomaly_source_img, dsize=(resize_shape[1], resize_shape[0]))
+
+    perlin_scalex = 2 ** (torch.randint(min_perlin_scale, perlin_scale, (1,)).numpy()[0])
+    perlin_scaley = 2 ** (torch.randint(min_perlin_scale, perlin_scale, (1,)).numpy()[0])
+
+    # perlin noise 이미지 생성
+    perlin_noise = rand_perlin_2d_np((resize_shape[0], resize_shape[1]), (perlin_scalex, perlin_scaley))
+    
+    plt.subplot(num_iterations, row, i*row + 2)
+    plt.imshow(cv2.cvtColor((perlin_noise*255).astype(np.uint8), cv2.COLOR_BGR2RGB))
+    plt.title(&quot;perlin_noise Image&quot;)
+    threshold = 0.5
+
+    perlin_thr = np.where(perlin_noise &gt; threshold, np.ones_like(perlin_noise), np.zeros_like(perlin_noise))
+    perlin_thr = np.expand_dims(perlin_thr, axis=2)
+    
+    plt.subplot(num_iterations, row, i*row + 3)
+    plt.imshow(cv2.cvtColor((perlin_thr*255).astype(np.uint8), cv2.COLOR_BGR2RGB))
+    plt.title(&quot;perlin_thr Image&quot;)
+    threshold = 0.5
+
+    img_thr = anomaly_img_augmented.astype(np.float32) * perlin_thr / 255.0 # 패턴을 가진 마스크만 남음
+
+    plt.subplot(num_iterations, row, i*row + 4)
+    plt.imshow(cv2.cvtColor((img_thr*255).astype(np.uint8), cv2.COLOR_BGR2RGB))
+    plt.title(&quot;img_thr Image&quot;)
+    
+    beta = torch.rand(1).numpy()[0] * 0.8
+
+    augmented_image = image * (1 - perlin_thr) + (1 - beta) * img_thr + beta * image * (perlin_thr)
+
+    # augmented_image 출력
+    plt.subplot(num_iterations, row, i*row + 4)
+    plt.imshow(cv2.cvtColor((augmented_image*255).astype(np.uint8), cv2.COLOR_BGR2RGB))
+    plt.title(&quot;augmented_image Image&quot;)
+
+    augmented_image = augmented_image.astype(np.float32)
+    msk = (perlin_thr).astype(np.float32)
+    augmented_image = msk * augmented_image + (1-msk)*image
+
+    # 여기에 augmented_image 출력
+    plt.subplot(num_iterations, row, i*row + 5)
+    plt.imshow(cv2.cvtColor((augmented_image*255).astype(np.uint8), cv2.COLOR_BGR2RGB))
+    plt.title(&quot;final augmented_image Image&quot;)
+plt.show()</code></pre></div></details>
+<ul><li>아래는 직접 이미지가 생성되어가는 부분을 출력해본 결과로 final_augment_image Image 부분은 위에 설명한 불필요한 코드(if문 안에있는)를 지난 이후의 출력값이다.</li><li>따라서 if문 밖에있는(베타 곱해주는 부분)부분 이미지 augmented_image와 비교해보면 차이가 없는 것을 볼 수 있다.</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/03320638-a5f9-4f68-91fe-5f22a748c8c3.png" alt="" loading="lazy" width="3102" height="1534" /></figure>
+<h2 id="block-0e0b7bcd3ea444639dbcd92131509bd3">train_DRAEM (3)</h2>
+<ul><li>이 후 class 별로 학습을 수행한다.</li><li><code>gray_batch = sample_batched[&quot;image&quot;].cuda()</code> : 원본 이미지 \(I\)</li><li><code>aug_gray_batch = sample_batched[&quot;augmented_image&quot;].cuda()</code>: 합성 이미지 \(I_a\)</li><li><code>anomaly_mask = sample_batched[&quot;anomaly_mask&quot;].cuda()</code> : 마스킹 이미지 \(M_a\)</li><li><code>gray_rec</code> : output of Reconstructive subnetwork </li><li><code>joined_in</code> :\(I \), gray_rec을 concat</li><li><code>out_mask</code> : output of Disc subnetwork</li><li>해당 코드에서 논문과의 차이점은 \(\lambda\) 를 loss에서 사용하지 않는다는 점이다.</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/2df16a9b-a08c-4e1b-859d-98818ba382a3.png" alt="" loading="lazy" width="2130" height="920" /></figure>
+<h2 id="block-2ff3057c53794759b43bfb1dc2acb1a9">test_DRAEM</h2>
+<ul><li><code>Image level</code>과 <code>pixel level</code>의 auc와 average precision 두 지표를 출력하는 부분.</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/89c2f9e1-b7f3-414b-8948-317dd2929186.png" alt="" loading="lazy" width="1462" height="1250" /></figure>
+<ul><li><code>obj_ap_pixel_list</code> : 각 객체에 대해 계산된 Average Precision (AP) 값을 <strong>픽셀 수준</strong>에서 저장하는 리스트.</li><li><code>obj_auroc_pixel_list</code> : 각 객체에 대해 계산된 Area Under the Receiver Operating Characteristic curve (AUROC) 값을 <strong>픽셀 수준</strong>에서 저장하는 리스트.</li><li><code>obj_ap_image_list</code> : 각 객체에 대해 계산된 AP 값을 <strong>이미지 수준</strong>에서 저장하는 리스트. </li><li><code>obj_auroc_image_list</code> : 각 객체에 대해 계산된 AUROC 값을 <strong>이미지 수준</strong>에서 저장하는 리스트.</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/e9e2727f-672d-4616-824e-2920ae6344a2.png" alt="" loading="lazy" width="2194" height="1022" /></figure>
+<ul><li><code>anomaly_score_gt</code>: ground truth에 해당하며 0 또는 1 값을 갖는다.<ul><li>정상 이미지면 0, 비정상 이미지면 1</li></ul></li><li><code>anomaly_score_prediction</code>: 모델의 최종출력 이후 <code>softmax → AvgPool → np.max</code>를 통해서 나온 예측값</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/c9175ff3-381c-4215-a400-56f582045e38.png" alt="" loading="lazy" width="1582" height="848" /></figure>
+<ul><li>주석 참조.</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/c1e7ecd9-46f0-4faf-ba17-73c2089a900f.png" alt="" loading="lazy" width="1568" height="862" /></figure>
+<ul><li>이 코드는 저장만 하고 딱히 어떠한 출력을 하는 용도로 사용되지 않는데, 추후 모델의 출력 이미지나(image-level) 바이너리 이미지(pixel-level)를 저장하고 싶을 때 사용되는 코드로 추측한다.</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/d4ef70f8-6b05-4e57-b39e-702b37480d1e.png" alt="" loading="lazy" width="1170" height="536" /></figure>
+<ul><li><code>out_mask_cv</code>: softmax 이후 전처리 된 확률 값으로 추후 pixel level score를 도출</li><li><code>out_mask_averaged</code>: softmax 이후 전처리 된 확률값을 Avg_pool을 적용한다.<ul><li>np.max 를 통해 image_score 도출(image-level)</li></ul></li><li><code>flat_true_mask</code>: true_mask_cv 를 flatten한 1D상태(ground truth of binary image)<ul><li>true_mask_cv는 Perlin mask 이미지</li></ul></li><li><code>flat_out_mask</code>: out_mask_cv를 flatten한 1D상태(prediction of binary image)</li><li>반복문 이후 <code>Image level</code>의 <code>anomaly_score_prediction</code>, <code>anomaly_score_gt</code>(0 or 1) 값을 비교</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/b4159f10-78bf-4013-a320-4eff72d9ebb4.png" alt="" loading="lazy" width="2144" height="968" /></figure>
+<ul><li>이 후 Pixel leve의 <code>total_gt_pixel_scores(ground truth)</code>, <code>total_pixel_scores(flat_out_mask)</code>과 비교</li><li>최종 출력은 아래와 같다.</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/b1e620b2-bd29-4e11-b355-95d950aaefba.png" alt="" loading="lazy" width="1664" height="800" /></figure>
+<h2 id="block-56acff71a46348a89c1434dff1680e50">전체 Flow</h2>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/528bb975-ca0d-4e90-97ab-14af530e9f4b.png" alt="" loading="lazy" width="2378" height="1046" /></figure></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +291,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

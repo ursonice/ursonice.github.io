@@ -76,11 +76,41 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/reinforcement-learning/">Reinforcement Learning</a>
+    </nav>
+    <h1>[RL] DQN의 Action Space 한계</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2026년 4월 17일</span><span class="dot"></span><span>수정 2026년 5월 24일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><p>로봇이 잘 걸어가도록 하기 위해 DQN모델을 사용한다 해보자.</p>
+<p>총 4개의 관절이 있고 각 관절은 (-90, 0, 90) 3개의 값 중 하나를 가질 수 있다.</p>
+<p>이 경우 각 관절 당 3가지의 값을 가질 수 있으니 관절이 4개 임으로 3x3x3x3 = 81개의 조합이 만들어진다.</p>
+<figure><img src="/assets/notion/rl-dqn의-action-space-한계/345b12c0-115c-8086-93cd-f4bf1c6640fe.png" alt="" loading="lazy" width="2140" height="612" /></figure>
+<p>넘어지기 직전상태인 St에 대하여 입력을 넣었다고 가정해보자.</p>
+<p>그러면 신경망은 총 81개의 갚을 쭉 출력한다. 넘어지면 마이너스 넘어지지 않으면 플러스 점수가 나오도록 학습되었다)</p>
+<figure><img src="/assets/notion/rl-dqn의-action-space-한계/345b12c0-115c-8075-9561-c6c8181aa647.png" alt="" loading="lazy" width="1128" height="544" /></figure>
+<p>DQN은 저중에 최대값을 선택한다. 즉 a42행동이 선택되어진다. 그러면 위 표를 바탕으로 a42번인 </p>
+<p>[0, 90, -90, 0] 의 조합이 된다. 이처럼 DQN은 복수의 관절 값을 결정할 때 각 관절을 따로따로 계산하는 것이 아니라, '모든 경우의 수가 다 묶여있는 81개의 선택지' 중 가장 점수가 높은 1개의 선택지를 고르고, 그 선택지 안에 묶여있던 4개의 값을 풀어서 사용하는 방식으로 작동한다.</p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +131,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

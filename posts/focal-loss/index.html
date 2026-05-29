@@ -76,11 +76,72 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/ai-theory/">AI/ Theory</a>
+    </nav>
+    <h1>Focal Loss</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2023년 7월 18일</span><span class="dot"></span><span>수정 2023년 7월 26일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-7aba42a2acd54d5f8e5aef0c19742546">서론</h2>
+<p><code>Focal Loss</code>는 2017년 말에 Facebook AI Research(Meta AI Research)에서 발표한 논문 <code>Focal Loss for Dense Object Detection</code>에서 처음 소개되었다.</p>
+<p>Focal loss는 Object Detection에서 주로 사용되며 주로 두 가지 유형의 알고리즘이 사용된다. </p>
+<ol><li>R-CNN 계열의 <code>two-stage detector</code>로, 먼저 객체의 위치를 찾아내는(localization)단계와 그 다음에 어떤 객체인지를 분류하는(classification) 단계로 순차적으로 진행한다.</li><li>YOLO, SSD 등의 <code>one-stage detector</code>로, 객체의 위치를 찾고 해당 객체를 분류하는 과정을 동시에 수행한다.</li></ol>
+<p>정확도와 성능으로는 <code>two-stage detector</code>가 좋지만 연산 속도가 오래 걸리는 단점이 있다.</p>
+<p>일반적으로, <code>two-stage detector</code>는 정확도는 높으나 속도는 느리며 <code>one-stage detector</code>는 속도는 빠르지만, two-stage에 비해 정확도가 떨어지는 경향이 있다.</p>
+<ul><li><code>Focal Loss</code>는 one-stage detector의 정확도 성능을 개선하기 위하여 고안되었다. one-stage detector가 two-stage detector에 비해 가지고 있는 문제점은 <code>학습 중 클래스 불균형 문제</code>가 심하다는 것이다.</li><li>예를 들어 학습 중 배경(Background)에 대하여 박스를 친 것과 실제 객체(Foreground)에 대하여 박스를 친 것의 비율을 살펴보면 압도적으로 배경에 대하여 박스를 친 것이 많다는 것이다. 학습 중에서 배경에 대한 박스를 출력하면 오류라고 학습이 되지만 그 빈도수가 너무 많다는 것이 학습에 방해가 된다는 뜻이다. (SSD에서는 학습 시 한 이미지 당 만개 이상의 background에 대한 박스가 있다고 한다.)</li><li>이와 같은 문제점이 발생하는 이유는 <code>dense sampling of anchor boxes(possible object locations)</code>(anchor box를 이미지 전체에 대해 밀도 높게 배치함) 알려져 있다. 예를 들어 RetinaNet에서는 각각의 pyramid layer에서 anchor box가 수천개가 추출된다.</li><li>정리하면 이와 같은 클래스 불균형 문제는 다음 2가지 문제의 원인이 된다.</li><li>대부분 Object detection에서 Location은 <code>Easy Negative</code> 이므로 학습에 비효율적이다.</li><li><code>Easy Negative</code>는 높은 확률로 객체가 아님을 잘 구분할 수 있다. 즉, 각각의 <code>Loss</code>값이 작다. 하지만 비율이 굉장히 크므로 전체 <code>loss</code> 및 <code>gradient</code>를 계산할 때 <strong>easy negative의 영향이 압도적으로 커지는 문제가 발생한다.</strong></li><li>이러한 문제를 해결하기 위해 Focal Loss개념이 등장한다.</li><li>Focal Loss는 간단히 말하면 <code>Cross Entropy</code>의 클래스 불균형 문제를 다루기 위한 개선된 버전이라고 말할 수 있으며 <strong>어렵거나 쉽게 오분류되는 케이스에 대하여 더 큰 가중치를 주는 방법</strong>을 사용한다.</li><li>반대로 쉬운 케이스의 경우 상대적으로 낮은 가중치를 반영한다.</li><li>Paper: <a href="https://arxiv.org/pdf/1708.02002.pdf" target="_blank" rel="noreferrer">https://arxiv.org/pdf/1708.02002.pdf</a></li></ul>
+<h2 id="block-5ccbd230c9e14a4d8db288363e07c6a2">용어 정리</h2>
+<ul><li><strong>Dense Prediction:</strong> 주로 이미지나 공간 데이터에 대한 픽셀 또는 공간 좌표별 예측을 의미한다. 예를 들어, Segmentation, Object Detection에서는 이미지가 어떤 클래스 인지 분류하지 않고 이미지 내의 각 픽셀에 대한 레이블을 예측한다. 즉, 각 픽셀이 어떤 객체에 속하는지를 예측한다. 따라서 입력에 대한 상세한 예측을 제공하며, 픽셀 수준의 세밀한 정보를 얻는 데 사용된다.</li><li><strong>Easy Negative</strong>: 모델이 쉽게 <code>구분할 수 있는</code> Negative Sample로 주로 학습 데이터셋에서 positive 클래스(정답)와 유사성이 크게 없는 샘플을 의미한다. 예를들어 고양이를 분류하는 모델을 훈련시킬 때, 자동차나 건물 이미지는 easy negative가 된다. 왜냐하면 고양이와 특성이 거의 겹치지 않기 때문이다.</li><li><strong>Hard Negative</strong>:<strong> </strong>모델이 쉽게 <code>구분할 수 없는</code> Negative Sample로 Positive 클래스와 유사성이 큰 샘플을 말한다. 예를들어 고양이를 분류하는 모델을 훈련시킬 때, 강아지 이미지는 hard negative가 되는데 강아지는 고양이와 특성(예를 들면, 모양, 색상, 크기 등)이 많이 겹치기 때문이다.</li><li><strong>Easy Example</strong>: 모델이 정확하게 분류하거나 <code>예측하기 쉬운</code> 샘플을 의미한다. 예를 들어,독특하고 명확한 특징을 가진 이미지(예: 매우 특이한 색상 또는 모양의 객체가 있는 이미지)일 수 있다.</li><li><strong>Hard Example:</strong>  모델이 분류하거나 <code>예측하기 어려운</code> 샘플을 의미한다. 예를 들어, 여러 객체가 겹쳐 있거나, 희미하게 보이는 이미지일 수 있다.</li></ul>
+<h2 id="block-4b93acc062f441eb8ad79baa2844dcb2">Cross Entropy Loss의 문제점</h2>
+<ul><li>Cross Entropy Loss의 경우 잘 분류한 경우 보다 잘못 예측한 경우에 대해 패널티를 부여하는 것에 초점을 둔다.</li><li>이진 분류에 대한 Cross Entropy Loss는 다음과 같다.(\(y\)는 정답)</li></ul>
+<figure><img src="/assets/notion/focal-loss/4ec3320a-52b6-4bc0-a31a-074a10032698.png" alt="" loading="lazy" width="688" height="104" /></figure>
+<ul><li>만약 모델의 예측(\(p\))의 값이 1이면 \(CE(p, y)=0\)이 된다. </li><li>잘 예측했지만 보상이 없으며 페널티가 없어진다.</li><li>반면 모델의 예측(\(p\))을 0에 가깝게 예측할 수록 \(CE(p,y)\approx \infin\) 가 된다.</li><li>즉 페널티가 굉장히 커지게 된다.</li></ul>
+<figure><img src="/assets/notion/focal-loss/53cc6749-1d1f-4cbc-8cf6-3382f29f0b98.png" alt="" loading="lazy" width="1042" height="677" /></figure>
+<ul><li>위 그래프에서 Focal loss는 \(\text{FL}(p_t)\) 이고 cross entropy는 \(\text{FL}(p_t)\)의 식에서 \(\gamma\)가 0일때와 동일하다.</li><li>식을 비교해보면 기본적인 cross entropy loss에 \((1-p_t)^\gamma\) 가 곱해진 것을 확인할 수 있는데 \((1-p_t)^\gamma\)의 역할은 easy example에 사용되는 loss의 가중치를 줄이기 위함이다.</li><li>다음과 같은 2가지 경우를 예시로 들어보자</li><li>첫번째는 <code>Foreground</code> 케이스(어떤 객체)이며 이 때, \(y=1\)이라고 하고 정답에 대해 \(p=0.95\)(예측)라고 가정하겠다. </li><li>두번째는 <code>Background</code> 케이스이며(배경) 이 때, \(y=0\)이라고 하고 오답에 대해 \(p=0.05\)(예측) 라고 가정하겠다.</li></ul>
+<div class="math-block">\[\text{CE(Foreground})=-\log (0.95) =0.05\]</div>
+<div class="math-block">\[\text{CE(Background})=-\log (1-0.05) =0.05\]</div>
+<ul><li>\(\text{CE(Foreground})\)식은 Foreground 객체에 대해 높은 확율인 0.95로 잘 예측하였고 그 결과 Loss가 0.05로 작은 것을 알 수 있다.</li><li></li><li>유사하게 \(\text{CE(Background})\)식은 Background임에 따라 낮은 확률인 0.05로 잘 예측하였고 그 결과 Loss가 0.05로 작은 것을 알 수 있다.</li><li>여기서 발생하는 문제점은 Foreground 경우와 Background 경우 모두 같은 Loss값을 가진다는 것이다.</li><li>Background의 class가 많아 Background에 대해 Loss값이 훨씬 더 많이 업데이트 되기 때문에 Backgorund에 대해서 학습이 훨씬 많이 될 것이고 이 작업이 계속 누적되면 Foreground에 대한 학습량이 현저히 줄어들기 때문이다.</li><li>예를 들어, 우리가 사람을 인식하는 모델을 학습하고 있다면, 사람은 Foreground가 되고, 사람 외의 모든 것들(건물, 나무, 도로 등)은 Background가 된다.</li><li>문제는 대부분의 이미지에서 Foreground보다 Background가 더 많게 나타나 Foreground와 Background가 항상 같은 <code>비율</code>로 나타나지 않는다는 것이다.  </li><li>Background가 훨씬 더 많다면 모델은 Background에 대해 더 많이 배우게 될 것이다. 왜냐하면 Background에 대한 정보가 더 많기 때문이다.</li><li>이 과정이 계속되면 모델은 Foreground에 대해 배우는 것이 점점 줄어들고, 대신 Background에 대해 더욱 집중하게 된다.</li><li>결국, 우리가 원하는 것은 Foreground, 즉 사람에 대해 더 많이 배우는 것이지만, 실제로는 Background에 대해 더 많이 배우게 되는 상황이 발생한다. </li></ul>
+<h2 id="block-b780b781ebd949318b9f8445e2aa52ed">Balanced Cross Entropy Loss의 한계</h2>
+<ul><li>Cross Entropy에서 발생하는 문제인 Foreground와 Background 케이스의 비율이 다른 점을 개선하기 위해 Corss Entropy Loss자체에 비율을 보상하기 위한 Weight를 추가로 곱해주는 방법을 사용할 수 있다.</li><li>각 클래스의 Loss 비율을 조절하는 weight  \(w_t\)를 곱해줘서 imbalance class문제에 대한 개선을 하고자 하는 방법이 <code>Balanced Cross Entropy Loss</code>라고 한다.</li><li>일반적으로 \(0\leq w_t \leq 1\)범위의 값을 사용하며 다음과 같다.</li></ul>
+<div class="math-block">\[\text{CE}(p_t) = -w_t\log (p_t) \]</div>
+<ul><li><code>Cross Entropy Loss</code>의 근본적인 문제가 Foreground 대비 Background의 객체가 굉장히 많이 나오는 class imbalance 문제에 해당했다. 따라서 <code>Balanced Cross Entropy Loss</code>의 <code>weight</code> \(w\) 를 이용해 해결할 수 있었다. 즉, Forground의 weight는 크게 Background의 weight는 작게 적용하는 방향으로 개선하고자 하는 것이다.</li><li>하지만 이와 같은 방법에는 문제점이 있다. 바로, Easy/Hard example 구분을 할 수 없다는 점이다. 단순히 갯수가 많다고 Easy라고 판단하거나 Hard라고 판단하는 것에는 오차가 발생할 수 있다.</li><li>Balanced Cross Entropy Loss를 사용하면 클래스의 수에 따라 가중치를 조절할 수는 있지만, 각 예제가 얼마나 'Easy'하거나 'Hard'한지는 고려하지 못한다는 것이다.</li><li>결국, 단순히 객체의 수가 많다고 해서 그 예제들이 모두 'Easy'하다고 판단하거나, 수가 적다고 해서 그 예제들이 모두 'Hard'하다고 판단하는 것은 오차가 발생할 수 있다.</li><li>예를들어 0.95의 확률로 Foreground 객체라고 분류한 Foreground에 weight 0.75를 주는 경우와 0.05의 확률로 Foreground 객체라고 분류(즉, 0.95의 확률로 Background 객체라고 분류)한 Background 케이스에 weight 0.25를 주는 경우를 살펴보자.</li></ul>
+<div class="math-block">\[\text{CE(FG)} = -0.75\log(0.95)=0.038\]</div>
+<div class="math-block">\[\text{CE(BG)}=-(1-0.75)\log(1-0.05)=0.0128\]</div>
+<ul><li>앞에서 설명한 바와 같이 통상적으로 Background 객체의 수가 많으므로 더 낮은 Loss를 반영하기 위해 더 작은 weight를 반영하도록 반영했다.</li><li>그리고 식을 살펴보면 <code>Easy/Hard Example</code>에 대한 반영은 전혀 없는 것 또한 알 수 있다.</li><li>따라서, <code>Easy/Hard Example</code>을 반영하기 위하여 <code>Focal Loss</code>에 대해 설명하겠다.</li></ul>
+<h2 id="block-00cd018102554432b08de6558b58bb7d">Focal Loss</h2>
+<ul><li>Focal loss는 Easy example의 weight는 줄이고 Hard Negative Example에 대한 학습에 초점을 맞추는 cross entropy loss의 확장판이라 볼 수 있다.</li><li>Cross Entropy Loss와 달리 Loss에 곱해지는 항인 \((1-p_t)^\gamma\) 에서 \(\gamma \geq 0\) 의 값을 잘 조절해야 좋은 성능을 얻을 수 있으며 전체적인 Loss 값을 조절하는 \(\alpha\)값 또한 논문에서 사용되어 \(\alpha, \gamma\) 값을 조절하였다. 논문에서는 \(\alpha=0.25, \gamma=2\) 를 사용했다.</li><li>Focal loss의 식은 아래와 같다.</li></ul>
+<div class="math-block">\[FL(p_t)=-\alpha_t(1-p_t)^\gamma \log(p_t)\]</div>
+<ul><li>위 식에서 Foreground에 대해서는 \(\alpha=0.25\)가 적용되면 Background에 대해서는 \(\alpha =0.75\)가 적용되도록 사용된다.</li></ul>
+<figure><img src="/assets/notion/focal-loss/922f2cfb-15c5-40ab-8236-3f419187e3f3.png" alt="" loading="lazy" width="1042" height="677" /></figure>
+<ul><li>위 그래프는 \(\gamma\) 가 0 ~ 5 까지 변화할 때의 변화를 나타내며 \(\gamma=0\) 일 때, Cross Entropy Loss와 같고 \(\gamma\)가  커질수록 Easy Example에 대한 Loss가 크게 줄어들며 Easy Examle에 대한 범위도 더 커진다.</li><li>위 그래프를 통하여 Focal Loss의 속성을 크게 3가지 분류할 수 있다.<ol><li>잘못 예측해 \(p_t\)가 작아지게 되면 \((1-p_t)^\gamma\)가 1에 가까워짐으로 \(\log(p_t)\)가 커져서 Loss에 반영된다.</li><li>잘 예측하여 \(p_t\)가 1에 가까워지면 \((1-p_t)^\gamma\)은 0에 가까워지고 Cross Entropy Loss와 동일하게 \(\log(p_t)\)값 또한 줄어들게 된다.</li><li>\((1-p_t)^\gamma\)에서 \(\gamma\)를 <code>focusing parameter</code> 라고 하며 <strong>Easy Example에 대한 Loss의 비중을 낮추는 역할</strong>을 한다.</li></ol></li></ul>
+<h2 id="block-d8dbadb9267244dda1c8bd007fe3c832">Example</h2>
+<p>아래 그림에서 빨간색 케이스(A)의 경우 Hard 케이스의 문제이며 초록색(B)의 경우 Easy 케이스의 문제이다.</p>
+<p>아래 그림에서는 \(\alpha=1,\gamma=1\)이다.</p>
+<div class="math-block">\[\text{CE}(p_t)=-\log (p_t)\]</div>
+<div class="math-block">\[\text{FL}(p_t)=-(1-p_t)\log(p_t)\]</div>
+<ul><li>A에서 Cross Entropy:  \(p_t=0.1\), \(\text{CE}(0.1)=-\log(0.1)\approx2.3\)</li><li>A에서 Focal Loss: \(\text{FL}(0.1)=-(1-0.1)\log(0.1) \approx2.1\)</li><li>B에서 Cross Entropy:  \(p_t=0.9\), \(\text{CE}(0.9)=-\log(0.9)\approx0.1\)</li><li>B에서 Focal Loss: \(\text{FL}(0.9)=-(1-0.9)\log(0.9) \approx0.01\)</li><li>Hard 케이스 보다 <strong>Easy 케이스의 경우 weight가 더 많이 떨어짐을 통하여 기존에 문제가 되었던 Easy Negative 케이스에 의한 Loss가 누적되는 문제를 개선한다</strong>.</li></ul>
+<figure><img src="/assets/notion/focal-loss/74ad2827-c0f2-4499-8e7e-613b04af5800.png" alt="" loading="lazy" width="1776" height="1843" /></figure>
+<h2 id="block-edd9276542174568a39c358dc86499e4">Conclusion</h2>
+<ul><li>Background과 같은 <code>Easy Negative</code> 케이스는 딥러닝 모델의 정확도가 높기 때문에 loss는 작다. 하지만 <code>Easy Negative</code> 케이스의 갯수가 많아서 loss값이 누적 되면 전체 loss 값은 커지게 됩니다.</li><li>반면 Foreground는 상대적으로 Hard 한 문제이고 따라서 loss 값은 크지만 갯수가 작기 때문에 일반적으로 Foreground 추정에 필요한 loss의 총합보다 Background에 사용된 loss의 총합이 커지는 문제가 발생한다.</li><li><code>Focal loss</code>는 <code>Cross Entropy</code>의 이러한 문제를 개선하고자 Cross Entropy에서 사용되는 모델의 예측 확률값\((p)\)이 큰 Easy 케이스에 대해서는 Loss를 크게 줄이고 확률값(\(p\))이 낮은 Hard 케이스는 Loss를 Easy 케이스 대비 덜 줄이는 역할을 한다.</li><li>기본적으로 <code>Cross Entropy</code>는 확률이 낮은 케이스에 페널티를 주는 역할만 하고 확률이 높은 케이스에 어떠한 보상도 주지 않지만 <code>Focal Loss</code>는 확률이(\(p\)) 높은 케이스에는 확률이(\(p\)) 낮은 케이스 보다 Loss를 더 크게 낮추는 보상을 준다는것이 차이점이다.</li></ul></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +162,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

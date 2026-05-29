@@ -76,11 +76,78 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/kubernetes/">Kubernetes</a>
+    </nav>
+    <h1>[Kubernetes] NodeAffinity</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 5월 29일</span><span class="dot"></span><span>수정 2025년 5월 30일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-202b12c0115c80afbd4fe847d0fb4866">서론</h2>
+<p>NodeSelector를 활용하여 단순 레이블을 바탕으로 파드를 특정 노드에 배치할 수 있도록 하는 역할을 하였다.</p>
+<p>그러나 NodeAffinity를 활용하면 좀 더 세부적인 설정을 바탕으로 파드를 특정 노드에 배치할 수 있게 된다.</p>
+<p>따라서 이번 포스트에서는 NodeAffinity에 대해서 알아본다.</p>
+<h2 id="block-202b12c0115c80a2a40bedbbf4a5e63c">NodeAffinity</h2>
+<ul><li>파드를 특정 노드에만 제한적으로 배치하기 위한 기능</li><li>왼쪽은 NodeSelector, 오른쪽은 NodeAffinity이다.</li></ul>
+<figure><img src="/assets/notion/kubernetes-nodeaffinity/202b12c0-115c-80aa-8c23-e2b7cc60a90f.png" alt="" loading="lazy" width="2194" height="1194" /></figure>
+<pre data-lang="yaml"><code class="language-yaml"># Pod Definition
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  labels:
+    app: nginx
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: size
+            operator: In
+            values:
+            - Large
+
+    </code></pre>
+<h2 id="block-202b12c0115c8022b44fd253b3c8caab">Affinity Type</h2>
+<h3 id="block-202b12c0115c807c9709d27398a08fa0">required</h3>
+<ul><li>스케줄러는 반드시 Affinity조건을 만족하는 노드에만 파드를 배치한다. (만족하지 않으면 배치하지 않는다)<ul><li> 파드의 배치가 매우 중요한 경우</li></ul></li></ul>
+<h3 id="block-202b12c0115c80afad3bf5eda449921f">preferred</h3>
+<ul><li>조건에 맞는 노드를 찾지 못하더라도, 스케줄러는 노드 어피니티 규칙을 무시하고 사용 가능한 아무 노드에 파드를 배치합니다.<ul><li>파드의 배치보다 작업을 실행하는 것이 더 중요한 경우</li></ul></li></ul>
+<h3 id="block-202b12c0115c802b936cce68cdff1a95"><strong>During scheduling</strong></h3>
+<ul><li>파드가 아직 존재하지 않고 처음 생성될 때의 상태</li></ul>
+<h3 id="block-202b12c0115c80a0b641d66426e9098a">During execution</h3>
+<ul><li>파드가 이미 실행 중이고 노드 어피니티에 영향을 미치는 환경 변경이 일어나는 상태</li><li>예를 들어, 노드의 라벨이 변경되는 경우</li></ul>
+<h3 id="block-202b12c0115c80e7b0a8da971e7212be">requiredDuringSchedulingIgnoredDuringExecution</h3>
+<ul><li>파드가 처음 생성될 때(DuringScheduling) 조건에 만족(required)하는 노드에만 파드를 배치하고 </li><li>이미 파드가 이미 배치되었고 이후 node affinity조건이 변경된 경우(DuringExecution)에는 무시한다(Ignored).</li></ul>
+<h3 id="block-202b12c0115c8092be78f7f2b6766f6b">preferredDuringSchedulingIgnoredDuringExecution</h3>
+<ul><li>파드가 처음 생성될 때(DuringScheduling) 조건에 맞는 노드를 찾지 못하더라도(preferred) 스케줄러는 노드 어피니티 규칙을 무시하고, 사용 가능한 아무 노드에 파드를 배치</li><li>이미 파드가 이미 배치되었고 이후 node affinity조건이 변경된 경우(DuringExecution)에는 무시한다(Ignored).</li></ul>
+<h3 id="block-202b12c0115c8087991cc109c0b1610f">requiredDuringSchedulingRequiredDuringExecution</h3>
+<ul><li>파드가 처음 생성될 때(DuringScheduling) 조건에 만족(required)하는 노드에만 파드를 배치하고 </li><li>이미 파드가 이미 배치되었고 이후 node affinity조건이 변경된 경우(DuringExecution)에는 파드를 종료시킨다(required).</li></ul>
+<h2 id="block-202b12c0115c8016ab54cc72e3bd6572"><strong>Operator</strong></h2>
+<ul><li>In: 값 목록에 포함되면 일치</li><li>Not In: 목록에 포함되지 않으면 일치</li><li>Exists: 해당 key 라벨이 존재하면 일치(value값은 확인하지 않음)</li><li>DoesNotExist: key가 존재하지 않으면 일치</li></ul></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +168,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

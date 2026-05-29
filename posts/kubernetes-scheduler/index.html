@@ -76,11 +76,40 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/kubernetes/">Kubernetes</a>
+    </nav>
+    <h1>[Kubernetes] Scheduler</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 5월 17일</span><span class="dot"></span><span>수정 2025년 5월 30일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-203b12c0115c80d69890dab0604ac95e">서론</h2>
+<p>스케줄러는 어떤 파드를 어떤 노드에 배치할지를 결정(명령)하는 역할을 한다.</p>
+<p>직접 파드를 노드에 배치(수행)하는 것은 kubelet의 역할이다.</p>
+<p>따라서 스케줄러는 단지 “어디에 배치할지”만 결정만한다.</p>
+<p>이 장에서는 스케줄러가 실제로 어떻게 작동하는지 좀 더 자세히 살펴본다.</p>
+<h2 id="block-203b12c0115c80c3909dc7388f2f8f29">Scheduler</h2>
+<figure><img src="/assets/notion/kubernetes-scheduler/203b12c0-115c-8025-87e7-edae5a5089d0.png" alt="" loading="lazy" width="2138" height="1084" /></figure>
+<ul><li>많은 노드와 많은 파드가 있을 때, 효율적으로 파드를 노드에 배치되도록 해야 합니다.</li><li>예를 들어, 각 노드의 사양은 다르고 리소스는 제한적이다.</li><li>먼저 파드를 수용할 수 있는 노드인지 확인해야 한다.</li><li>Kubernetes에서는 스케줄러가 특정 기준에 따라 어떤 노드에 파드를 배치할지를 결한다.</li><li>파드가 요구되는 CPU, 메모리를 충족 못 하는 노드, taint가 맞지 않는 노드 등을 먼저 탈락시킨다.</li><li>스케줄링 방식<ul><li>남은 노드에 0 ~ 10 점수를 매겨 최고 점수를 받은 노드를 선택한다.</li><li>점수시스템 외에 리소스 요구·Limit, taints &amp; tolerations, node selector, (anti)-affinity 같은 규칙을 추가해 배치 전략을 세밀하게 조정할 수 있다. (필요하면 Go로 <strong>자체 스케줄러</strong>를 작성해 쿠버네티스와 병행 실행도 가능하다.)<strong>배포 방법</strong></li></ul></li><li>설치<ul><li>kubeadm 사용 시 → 마스터 노드 kube-system 네임스페이스에 파드로 자동 배포된다.</li></ul></li><li>설정·옵션은 아래 경로에서 확인가능하다.<ul><li>kubeadm 환경: /etc/kubernetes/manifests/kube-scheduler.yaml</li></ul></li></ul></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +130,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

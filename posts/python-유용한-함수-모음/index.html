@@ -76,11 +76,52 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/python/">Python</a>
+    </nav>
+    <h1>[Python] 유용한 함수 모음</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2023년 5월 29일</span><span class="dot"></span><span>수정 2023년 8월 20일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-fe7004d203a74dc2ade4dd77f234ce2b">서론</h2>
+<p>이 장은 파이썬에서 사용되는 유용한 함수에 대해서 설명한다.</p>
+<h2 id="block-d2e0fb7e91c248c5a89feeb0a1977d33">목차</h2>
+<ol><li><a href="#block-0c38b9415685439eabbe55e8d2b71842">functools.reduce</a> <ol><li><a href="#block-860416864d3a4a03928d9fe411d4c365">join</a> </li><li><a href="#block-f3c1f5491486408e94e03b2857a90dd4">map 함수</a> </li><li><a href="#block-acfa88cb4aa741078b9c891287b16e6c">funct.tools.redudce</a> </li></ol></li></ol>
+<h2 id="block-0c38b9415685439eabbe55e8d2b71842">functools.reduce</h2>
+<h3 id="block-860416864d3a4a03928d9fe411d4c365">join</h3>
+<p>a = [1, 2, 3, 4, 5] 로 숫자형으로 이뤄진 리스트가 있을 때 이를 하나로 합치는 방법</p>
+<pre data-lang="shell"><code class="language-bash">&gt;&gt;&gt; ''.join(str(e) for e in a)</code></pre>
+<p>output: ‘12345’</p>
+<h3 id="block-f3c1f5491486408e94e03b2857a90dd4">map 함수</h3>
+<pre data-lang="shell"><code class="language-bash">&gt;&gt;&gt; ''.join(map(str, a))</code></pre>
+<p>output: ‘12345’</p>
+<h3 id="block-acfa88cb4aa741078b9c891287b16e6c">funct.tools.redudce</h3>
+<p>(초깃값이 0인 경우)</p>
+<pre data-lang="shell"><code class="language-bash">result = functools.reduce(lambda x, y: 10*x + y, a, 0)</code></pre>
+<p>마지막의 0은 초기값을 타나낸다. <code>a = [1, 2, 3, 4, 5]</code> 일 때 계산 방식은 아래와 같다.</p>
+<ol><li><strong>f(1, 2)</strong> → 10*1 + 2 = <strong>12</strong></li><li>f(1, 2), 3) →<strong>f(12, 3)</strong> → 10*12 + 3 = <strong>123</strong></li><li>f(f(f(1, 2), 3) , 4) → f(f(12, 3), 4) → <strong>f(123, 4)</strong> → 10*123 + 4 = <strong>1234</strong></li><li>f(f(f(f(1, 2), 3) , 4), 5) → f(f(12, 3), 4), 5) → f(f(123, 4), 5) → <strong>f(1234, 5)</strong> → 10*1234 + 5 = <strong>12345</strong></li></ol>
+<p>(초깃값이 10인 경우)</p>
+<pre data-lang="shell"><code class="language-bash">result = functools.reduce(lambda x, y: 10*x + y, a, 10)</code></pre>
+<ol><li>f(10, 1) → 10*10 + 1 = 101</li><li>f(101, 2) → 10*101 + 2 = 1010+2 = 1012</li><li>f(1012, 3) → 10*1012 + 3 = 10120 + 3 = 10123</li><li>f(10123, 4) → 10*10123 + 4 = 101230 + 4 = 101234</li><li>f(101234, 5) → 10*101234 + 5 = 1012340 + 5 = 1012345</li></ol></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +142,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

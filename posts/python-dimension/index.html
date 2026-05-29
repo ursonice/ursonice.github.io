@@ -76,11 +76,412 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/python/">Python</a>
+    </nav>
+    <h1>[Python] Dimension</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2023년 6월 19일</span><span class="dot"></span><span>수정 2023년 6월 21일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-f46bcb9c609b48a09d4571e51dcf6010">서론</h2>
+<p>이 장은 Image의 채널이 어떤식으로 픽셀에서 자리잡고(위치) 있는지 확인해보고 직접 픽셀별 출력해보는 실습을 진행한다.</p>
+<h2 id="block-0c86d76f398a4764b25d847f7fa10512">목차</h2>
+<ol><li><a href="#block-2ff118b0c6d84c4cb8677f731ade1a43">가상의 Array를 생성하고 shape 확인해보기</a> <ol><li><a href="#block-ed67fc8b9f544fe1b84aff05860bb6ff">2D Array</a> </li><li><a href="#block-d959ad4f336f40e9b01ca2066c20e59e">3D Array</a> </li></ol></li><li><a href="#block-95da1c15af9b4f61a366e0afb9fd0298">⚠️Library별 shape 표기</a> </li><li><a href="#block-173d01209ede474c9710a60c76b5a967">Real Image shape 확인해보기</a> <ol><li><a href="#block-1d0815affd614dac87110540f50c6cd7">Print out 3-channel Image Pixel</a> </li><li><a href="#block-d79257de76ed4c5f899b289e451f1a66">Check red-channel pixel place</a> </li><li><a href="#block-396d9b0b43b5441aab23cedb725d24f2">Check green-channel pixel place</a> </li><li><a href="#block-241d70c72a8640ffa44376ea57cae655">Check blue-channel pixel place</a> </li></ol></li><li><a href="#block-40782cf5685d49e2be27f558855e157a">Pytorch의 Shape</a> <ol><li><a href="#block-3fefee7bec2d46e3aebf8f7c1c091c93">Transpose</a> </li></ol></li><li><a href="#block-56e3f5411b204771a39edd8479d7d3ea">Channel별 이미지 출력해보기</a> <ol><li><a href="#block-8f65e3d83b4c4b78826f05795d65bb34">cmap을 지정하지 않은 경우</a> </li><li><a href="#block-08e1f57939b746d4815f8e4093a42a67">cmap을 지정한 경우</a> </li></ol></li><li><a href="#block-75ec271a29a6400da24b3fbd9e13ded8">CV2로 이미지 채널별 출력하기</a> </li></ol>
+<h2 id="block-2ff118b0c6d84c4cb8677f731ade1a43">가상의 Array를 생성하고 shape 확인해보기</h2>
+<h3 id="block-ed67fc8b9f544fe1b84aff05860bb6ff">2D Array</h3>
+<p>다음과 같은 2차원의 배열을 만들고 shape을 찍어보자.</p>
+<pre data-lang="python"><code class="language-python">test = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+    [10, 11, 12]
+])
+
+# print(test)
+# print(test.shape) # (4, 3)</code></pre>
+<p>결과: <code>(4, 3)</code></p>
+<h3 id="block-d959ad4f336f40e9b01ca2066c20e59e">3D Array</h3>
+<p>3차원의 배열을 만들고 찍어보자 </p>
+<pre data-lang="python"><code class="language-python">test = np.array([
+    [
+        [1, 2],
+        [4, 5],
+        [7, 8],
+        [10, 11]
+    ],
+    [
+        [2, 3],                 
+        [5, 6],
+        [8, 9],
+        [11, 12]
+    ],
+    [
+        [3, 4],
+        [6, 7],
+        [9, 10],
+        [12, 13]
+    ]
+])
+
+print(test)
+print(f&quot;test.shape{test.shape}&quot;) # (2, 4, 3)</code></pre>
+<p>결과: <code>(3, 4, 2)</code></p>
+<p>그럼 (2, 4)의 크기를 갖는 2채널을 갖는 이미지라 가정하고 0번째 채널을 찍어보자.</p>
+<pre data-lang="python"><code class="language-python">print(f&quot;0-channel: \n{test[:,:,0]}&quot;)</code></pre>
+<p>결과 : </p>
+<pre data-lang="python"><code class="language-python">test.shape(3, 4, 2)
+0-channel: 
+[[ 1  4  7 10]
+ [ 2  5  8 11]
+ [ 3  6  9 12]]</code></pre>
+<p>즉 아래 열을 쭉 나열한 것을 볼 수 있다.</p>
+<p>두번째 채널을 찍어보자.</p>
+<pre data-lang="python"><code class="language-python">print(f&quot;1-channel: \n{test[:,:,1]}&quot;)</code></pre>
+<p>결과:</p>
+<pre data-lang="python"><code class="language-python">test.shape(3, 4, 2)
+1-channel: 
+[[ 2  5  8 11]
+ [ 3  6  9 12]
+ [ 4  7 10 13]]</code></pre>
+<p>이번에는 두번째 열을 쭉 나열한 것을 볼 수 있다.</p>
+<figure><img src="/assets/notion/python-dimension/98468f1f-e896-473f-933a-e8a79ed47b97.png" alt="" loading="lazy" width="1411" height="833" /></figure>
+<p>그럼 여기서 이미지가 3채널이라면 하나의 열이 추가적으로 생성될 것이라는 것을 알 수 있다.</p>
+<p>실제 이미지를 불러와서 확인해보자.</p>
+<h2 id="block-95da1c15af9b4f61a366e0afb9fd0298">⚠️Library별 shape 표기</h2>
+<h2 id="block-173d01209ede474c9710a60c76b5a967">Real Image shape 확인해보기</h2>
+<p>먼저 이미지를 읽고 <code>numpy array</code>로 변경해보겠다.</p>
+<pre data-lang="python"><code class="language-python">image = Image.open('./1.jpg')
+image = image.resize((5, 6))
+image = np.array(image)
+print(f&quot;numpy-image: {image.shape}&quot;) # numpy-image: (6, 5, 3)</code></pre>
+<h3 id="block-1d0815affd614dac87110540f50c6cd7">Print out 3-channel Image Pixel</h3>
+<pre data-lang="python"><code class="language-python">[[[200 121  76]
+  [153  98  48]
+  [185 110  54]
+  [226 136  59]
+  [228 135  62]]
+
+ [[189 126  67]
+  [147 132  81]
+  [162 128  43]
+  [171 133  44]
+  [212 165  58]]
+
+ [[107  84  63]
+  [108 103  80]
+  [168 126  43]
+  [158 128  63]
+  [156 116  45]]
+
+ [[132 108  48]
+  [115  98  67]
+  [112  86  37]
+  [121 102  62]
+  [150 123  51]]
+
+ [[114 101  25]
+  [123 102  58]
+  [ 95  70  35]
+  [119  96  45]
+  [113 101  29]]
+
+ [[100  77  26]
+  [110  69  31]
+  [134  91  30]
+  [124  84  26]
+  [ 95  79  23]]]</code></pre>
+<h3 id="block-d79257de76ed4c5f899b289e451f1a66">Check red-channel pixel place</h3>
+<p>0번째 채널인 <code>R채널</code>을 출력해보면 다음과 같은 위치에 출력된다.</p>
+<pre data-lang="python"><code class="language-python">image = Image.open('./1.jpg')
+image = image.resize((5, 6)) # 세로(height), 가로(width)
+image = np.array(image)
+print(image)
+red_channel = image[:, :, 0]
+print('='*100)
+print(red_channel)</code></pre>
+<p>결과:</p>
+<pre data-lang="python"><code class="language-python">[[200 153 185 226 228]
+ [189 147 162 171 212]
+ [107 108 168 158 156]
+ [132 115 112 121 150]
+ [114 123  95 119 113]
+ [100 110 134 124  95]]</code></pre>
+<p>Array를 가상으로 만든 것과 마찬가지로 <code>R채널</code>에 해당되는 픽셀값들은 아래와 같은 곳에서 모아짐을 알 수 있다.</p>
+<figure><img src="/assets/notion/python-dimension/6ff4b565-9ee5-4cd0-9d7c-875e0d0474cb.png" alt="" loading="lazy" width="1405" height="1429" /></figure>
+<h3 id="block-396d9b0b43b5441aab23cedb725d24f2">Check green-channel pixel place</h3>
+<p>1번째 채널인 <code>B채널</code>을 출력해보면 다음과 같은 위치에 출력된다.</p>
+<pre data-lang="python"><code class="language-python">image = Image.open('./1.jpg')
+image = image.resize((5, 6)) # 세로(height), 가로(width)
+image = np.array(image)
+print(image)
+green_channel = image[:, :, 1]
+print('='*100)
+print(green_channel)</code></pre>
+<p>결과:</p>
+<pre data-lang="python"><code class="language-python">[[121  98 110 136 135]
+ [126 132 128 133 165]
+ [ 84 103 126 128 116]
+ [108  98  86 102 123]
+ [101 102  70  96 101]
+ [ 77  69  91  84  79]]</code></pre>
+<p>Array를 가상으로 만든 것과 마찬가지로 <code>G채널</code>에 해당되는 픽셀값들은 아래와 같은 곳에서 모아짐을 알 수 있다.</p>
+<figure><img src="/assets/notion/python-dimension/c26b1ac0-02f0-44f7-b68b-c271ea185016.png" alt="" loading="lazy" width="1370" height="1458" /></figure>
+<h3 id="block-241d70c72a8640ffa44376ea57cae655">Check blue-channel pixel place</h3>
+<p>2번째 채널인 <code>B채널</code>을 출력해보면 다음과 같은 위치에 출력된다.</p>
+<pre data-lang="python"><code class="language-python">image = Image.open('./1.jpg')
+image = image.resize((5, 6)) # 세로(height), 가로(width)
+image = np.array(image)
+print(image)
+blue_channel = image[:, :, 2]
+print('='*100)
+print(blue_channel)</code></pre>
+<p>결과:</p>
+<pre data-lang="python"><code class="language-python">[[76 48 54 59 62]
+ [67 81 43 44 58]
+ [63 80 43 63 45]
+ [48 67 37 62 51]
+ [25 58 35 45 29]
+ [26 31 30 26 23]]</code></pre>
+<p>Array를 가상으로 만든 것과 마찬가지로 <code>G채널</code>에 해당되는 픽셀값들은 아래와 같은 곳에서 모아짐을 알 수 있다.</p>
+<figure><img src="/assets/notion/python-dimension/7ddf46e7-b975-4995-8f74-90a2b23bfade.png" alt="" loading="lazy" width="1371" height="1486" /></figure>
+<h2 id="block-40782cf5685d49e2be27f558855e157a">Pytorch의 Shape</h2>
+<p><code>numpy</code> 배열에서는 일반적으로 이미지 데이터는 <code>(h, w, c)</code> 형식으로 표현되지만, <code>PyTorch</code>에서는 <code>(c, h, w)</code> 형식으로 표현된다.</p>
+<p>앞서 설명한 각 열의 값들을 모아서 channel을 형성한 것을 생각하면서 transpose로 shape을 변경해보자.</p>
+<pre data-lang="python"><code class="language-python">import numpy as np
+import torch
+
+torch.manual_seed(42)
+
+arr = np.random.randint(0, 10, size=(2, 4, 3)) # (h, w, c)
+print(arr.shape)
+print(arr)
+transpose_arr = np.transpose(arr,(2, 0, 1)) # (c, h, w)
+print(transpose_arr.shape)
+print(transpose_arr)</code></pre>
+<p>결과: </p>
+<pre data-lang="python"><code class="language-python">(2, 4, 3)
+[[[6 3 7]
+  [4 6 9]
+  [2 6 7]
+  [4 3 7]]
+
+ [[7 2 5]
+  [4 1 7]
+  [5 1 4]
+  [0 9 5]]]
+
+(3, 2, 4)
+[[[6 4 2 4]
+  [7 4 5 0]]
+
+ [[3 6 6 3]
+  [2 1 1 9]]
+
+ [[7 9 7 7]
+  [5 7 4 5]]]</code></pre>
+<p>다음과 같이 변경된 것을 볼 수 있다</p>
+<figure><img src="/assets/notion/python-dimension/cd1b7303-943b-4a30-9e51-dfe4642f9b1e.png" alt="" loading="lazy" width="1396" height="902" /></figure>
+<p>그럼 이번엔 (2, 4, 3)이 아닌 <code>(2, 4, 6)</code>의 Dimension을 봐보자. (수정)</p>
+<pre data-lang="python"><code class="language-python">arr = np.random.randint(0, 10, size=(2, 4, 6)) # (h, w, c)
+print(arr.shape)
+print(arr)
+transpose_arr = np.transpose(arr,(2, 0, 1))
+print(transpose_arr.shape)
+print(transpose_arr)</code></pre>
+<p>결과:</p>
+<p>채널이 6개로 늘어나면서 6개의 열이 생긴 것을 볼 수 있다.</p>
+<pre data-lang="python"><code class="language-python">(2, 4, 6)
+[[[6 3 3 1 5 8]
+  [4 3 5 1 3 9]
+  [0 7 7 8 2 7]
+  [1 7 9 3 0 5]]
+
+ [[2 1 4 4 9 1]
+  [1 0 1 6 0 1]
+  [5 4 9 9 0 6]
+  [9 5 1 9 6 8]]]
+
+(6, 2, 4)
+[[[6 4 0 1]
+  [2 1 5 9]]
+
+ [[3 3 7 7]
+  [1 0 4 5]]
+
+ [[3 5 7 9]
+  [4 1 9 1]]
+
+ [[1 1 8 3]
+  [4 6 9 9]]
+
+ [[5 3 2 0]
+  [9 0 0 6]]
+
+ [[8 9 7 5]
+  [1 1 6 8]]]</code></pre>
+<p>각 열들이 하나의 Matrix로 이뤄져 채널을 형성하는 모습을을 볼 수 있다.</p>
+<figure><img src="/assets/notion/python-dimension/cd163150-3fb7-4959-8f9e-2180d82dead7.png" alt="" loading="lazy" width="1387" height="1285" /></figure>
+<h3 id="block-3fefee7bec2d46e3aebf8f7c1c091c93">Transpose</h3>
+<p>(h, w, c)를 가지는 (2, 3, 4) 형태의 Matrix를 Transpose 시켜서 (4, 3, 2) 형태로 만들어보자</p>
+<pre data-lang="python"><code class="language-python">arr = np.random.randint(0, 10, size=(2, 3, 4)) # (h, w, c)
+arr = torch.tensor(torch.tensor(arr))
+print(f&quot;(h, w, c)_image:{arr.shape}&quot;)
+print(arr)
+
+print('='*50)
+transpose_arr = np.transpose(arr,(2, 0, 1)) # (4, 3, 2)
+print(f&quot;(c, h, w)_image:{transpose_arr.shape}&quot;)
+print(transpose_arr)</code></pre>
+<p>결과:</p>
+<pre data-lang="python"><code class="language-python">(h, w, c)_image:torch.Size([2, 3, 4])
+tensor([[[7, 7, 4, 0],
+         [8, 8, 6, 5],
+         [9, 9, 1, 6]],
+
+        [[7, 2, 5, 7],
+         [8, 1, 3, 6],
+         [1, 6, 0, 4]]])
+==================================================
+(c, h, w)_image:torch.Size([4, 2, 3])
+tensor([[[7, 8, 9],
+         [7, 8, 1]],
+
+        [[7, 8, 9],
+         [2, 1, 6]],
+
+        [[4, 6, 1],
+         [5, 3, 0]],
+
+        [[0, 5, 6],
+         [7, 6, 4]]])</code></pre>
+<p>아래 처럼 각 열이(채널)이 Matrix형태로 변환되는 것을 볼 수 있다.</p>
+<figure><img src="/assets/notion/python-dimension/c0599ceb-8a2e-44e2-9058-7c3034947bdb.png" alt="" loading="lazy" width="2144" height="760" /></figure>
+<h2 id="block-56e3f5411b204771a39edd8479d7d3ea">Channel별 이미지 출력해보기</h2>
+<ul><li><code>matplotlib(plt)</code>의 <code>imshow</code>함수는 입력 받은 데이터를 color map으로 설정한 색상으로 변환된다.</li><li>기본 컬러 맵은 <code>viridis(녹색 계열)</code>을 사용하며 따로 cmap을 지정해주 않으면 모든 채널 이미지가 같은 색상(녹색 계열)으로 보이게 된다. </li><li>각 채널을 해당 색상으로 표시하기 위해서는 <code>cmap</code> 인자를 사용해 적절한 컬러 맵을 지정해야 한다.</li></ul>
+<p>따라서 다음과 같이 cmap을 지정해주지 않을 경우 아래 처럼 이미지가 표시된다.</p>
+<h3 id="block-8f65e3d83b4c4b78826f05795d65bb34">cmap을 지정하지 않은 경우</h3>
+<pre data-lang="python"><code class="language-python">import matplotlib.pyplot as plt
+from PIL import Image
+import numpy as np
+
+image = Image.open('./1.jpg')
+image = image.resize((300, 300)) 
+image = np.array(image)
+
+red_channel = image[:, :, 0]
+green_channel = image[:, :, 1]
+blue_channel = image[:, :, 2]
+
+fig, axs = plt.subplots(1, 3, figsize=(10, 4))
+
+axs[0].imshow(red_channel)
+axs[0].set_title('Red Channel')
+axs[0].axis('off')
+
+axs[1].imshow(green_channel)
+axs[1].set_title('Green Channel')
+axs[1].axis('off')
+
+axs[2].imshow(blue_channel)
+axs[2].set_title('Blue Channel')
+axs[2].axis('off')
+
+plt.show()</code></pre>
+<p>결과:</p>
+<figure><img src="/assets/notion/python-dimension/66caadf6-5039-48b6-8993-36681b87a802.png" alt="" loading="lazy" width="1943" height="753" /></figure>
+<h3 id="block-08e1f57939b746d4815f8e4093a42a67">cmap을 지정한 경우</h3>
+<p>예를 들어, <code>cmap='Reds'</code> 을 사용하면 0의 값은 흰색에 가깝고, 1의 값은 빨간색에 가깝다. 따라서 분리된 각 채널의 픽셀값이 클수록 색상이 더 짙은 빨간색으로 표시된다.</p>
+<pre data-lang="python"><code class="language-python">import matplotlib.pyplot as plt
+from PIL import Image
+import numpy as np
+
+image = Image.open('./1.jpg')
+image = image.resize((300, 300)) 
+image = np.array(image)
+
+red_channel = image[:, :, 0]
+green_channel = image[:, :, 1]
+blue_channel = image[:, :, 2]
+
+fig, axs = plt.subplots(1, 3, figsize=(10, 4))
+
+axs[0].imshow(red_channel, cmap='Reds')
+axs[0].set_title('Red Channel')
+axs[0].axis('off')
+
+axs[1].imshow(green_channel, cmap='Greens')
+axs[1].set_title('Green Channel')
+axs[1].axis('off')
+
+axs[2].imshow(blue_channel, cmap='Blues')
+axs[2].set_title('Blue Channel')
+axs[2].axis('off')</code></pre>
+<p>결과:</p>
+<figure><img src="/assets/notion/python-dimension/3c410e55-916d-42c3-b13c-f55de228be2a.png" alt="" loading="lazy" width="1962" height="755" /></figure>
+<h2 id="block-75ec271a29a6400da24b3fbd9e13ded8">CV2로 이미지 채널별 출력하기</h2>
+<p>matplotlib의 imshow의 특성 때문에 cmap의 색상을 일일이 지정해줘야 했다. </p>
+<p>그럼 OpenCV의 경우는 어떨까?</p>
+<pre data-lang="python"><code class="language-python">import cv2
+import numpy as np
+
+# 이미지를 불러온다.
+img = cv2.imread('1.jpg')
+
+# 이미지를 BGR 형태로 분리한다.
+b, g, r = cv2.split(img)
+
+# Blue 채널을 보여주는 이미지를 만든다.
+blue_img = cv2.merge([b, np.zeros_like(b), np.zeros_like(b)])
+
+# Green 채널을 보여주는 이미지를 만든다.
+green_img = cv2.merge([np.zeros_like(g), g, np.zeros_like(g)])
+
+# Red 채널을 보여주는 이미지를 만든다.
+red_img = cv2.merge([np.zeros_like(r), np.zeros_like(r), r])
+
+# 이미지를 보여준다.
+cv2.imshow('Blue Channel', blue_img)
+cv2.imshow('Green Channel', green_img)
+cv2.imshow('Red Channel', red_img)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()</code></pre>
+<p><code>zeros</code>는 말 그대로 <code>zero들로 가득찬 array</code>를 만든다.</p>
+<pre data-lang="python"><code class="language-python">test = np.zeros([3, 5])
+print(test)
+# 결과: 
+[[0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0.]]</code></pre>
+<p><code>zeros_like</code>는 <strong>어</strong>떤 특정 array와 같은(like) 사이즈(size), 크기(shape)의 zeros array를 만든다.</p>
+<pre data-lang="python"><code class="language-python">test = np.zeros([3, 5])
+print(np.zeros_like(test))
+# 결과: 
+[[0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0.]]</code></pre>
+<p><code>blue_img = cv2.merge([b, np.zeros_like(b), np.zeros_like(b)])</code> 는 <code>b, g, r</code> 로 구성된 openCV의 경우에 <code>b-channel</code>을 제외한 <code>g, r</code>채널을 <code>0</code>으로 만들어 주는 것이다.</p>
+<p>따라서 3채널의 이미지이지만 g, r채널을 다 0으로 만들어줌으로써 b채널의 값만 보이게 된다.</p>
+<div class="columns"><div class="column"><figure><img src="/assets/notion/python-dimension/5b369a4e-c745-4c2e-a79e-369f97e7d1b3.png" alt="" loading="lazy" width="1489" height="1186" /></figure></div><div class="column"><figure><img src="/assets/notion/python-dimension/631a2af6-f340-473d-a60a-82823b7dd9be.png" alt="" loading="lazy" width="1484" height="1192" /></figure></div><div class="column"><figure><img src="/assets/notion/python-dimension/33a20729-69f3-4446-8369-dd0da0fb85ad.png" alt="" loading="lazy" width="1474" height="1176" /></figure></div></div></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +502,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

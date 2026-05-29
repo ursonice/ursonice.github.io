@@ -76,11 +76,70 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/ai-theory/">AI/ Theory</a>
+    </nav>
+    <h1>Activation Function</h1>
+    <div class="article-meta">
+      <a class="meta-tag" href="/index.html?tag=Activation%20Function">#Activation Function</a>
+      <span class="dot"></span>
+      <span>작성 2022년 11월 20일</span><span class="dot"></span><span>수정 2025년 4월 25일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-f327bbb319864fbdac5c31b8e4744d7d">서론</h2>
+<p>이 장은 AI에서 가장 기본적인 활성화 함수에 대해 소개한다</p>
+<h2 id="block-cec94ccb046a4117ac54f0a48231ea55">목차</h2>
+<ol><li><a href="#block-8b1d6019f17148149c393cf0820e6e5c">Sigmoid</a> </li><li><a href="#block-2bcb1749bf334a72afcab265dd39250d">하이퍼볼릭 탄젠트(Hyperbolic Tangent Function - Tanh)</a> </li><li><a href="#block-24436be4f6da4758835ab8c98ecbd16c">소프트맥스(SoftMax Function)</a> </li><li><a href="#block-e9a2768024c8494cb0d03860210d1f2d">렐루(Relu -Rectified Linear Unit Function)</a> </li></ol>
+<h2 id="block-8b1d6019f17148149c393cf0820e6e5c">Sigmoid</h2>
+<div class="math-block">\[\sigma(x) = \frac{1}{1+e^{-x}},\; e=2.718281...\]</div>
+<figure><img src="/assets/notion/activation-function/5871702e-9fec-446e-a7cf-a4c2c31fba1e.png" alt="" loading="lazy" width="1708" height="536" /></figure>
+<p>시그모이드 함수 <em>σ</em>(<em>x</em>)의 출력은 (0, 1)의 범위를 갖으며 미분가능한 함수이다.</p>
+<p>이 함수는 <code>이진 분류(Binary Classification</code>에서 자주 사용된다.</p>
+<p>시그모이드의 단점으로는 0과 1로 강제 출력하는 부분에서는 학습이 잘 이루이지지 않는다. </p>
+<p>이는 기울기 소실(Gradient Vanishing)이 일어나기 때문이다. </p>
+<p>시그모이드의 미분함수를 보면 기울기가 \(x=0\) 에서 최대값 \(\frac{1}{4}\)을 가지고, \(x\)값이 증가함에 따라 미분값이 0에 수렴하게 된다. </p>
+<p>즉, 역전파되는 과정에서 출력값이 현저하게 감소되는 결과를 낳는다.(0에 가까운 값끼리 곱하면 0에 계속 가까워지듯이)</p>
+<hr />
+<h3 id="block-2bcb1749bf334a72afcab265dd39250d">하이퍼볼릭 탄젠트(Hyperbolic Tangent Function - Tanh)</h3>
+<p>시그모이드 함수를 변형한 쌍곡선 함수이다. </p>
+<div class="math-block">\[tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}\]</div>
+<figure><img src="/assets/notion/activation-function/344d942a-7681-4c56-b44e-71e09df3a188.png" alt="" loading="lazy" width="1716" height="476" /></figure>
+<p>Tanh 함수와 Tanh미분 함수의 개형이다. 미분값의 최대값은 1로 시그모이드에 비해 4배가 크다.</p>
+<p>하지만 여전히 시그모이드 함수의 단점인 Gradient Vanishing 문제를 해결하지 못했다.</p>
+<hr />
+<h3 id="block-24436be4f6da4758835ab8c98ecbd16c">소프트맥스(SoftMax Function)</h3>
+<p>
+</p>
+<div class="math-block">\[softmax(x_i) = \frac{e^{x_i}}{\sum^n_{j=1}e^{x_j}},\\n=total\;class\;number, \; x_i=i번째\;class\]</div>
+<p>시그모이드 함수를 통해 얻은 확률값은 서로 독립적이다.(출력값의 확률의 총합이 1이 넘을수도 있고 아닐 수도 있다)</p>
+<p>소프트맥스 함수는 입력값을 [0, 1]사이의 값으로 모두 정규화하여 출력하며 출력값들의 총합은 항상 1이 되는 특성을 가진 함수이다. </p>
+<p>따라서 <code>다중분류(Multi-class classification)</code>문제에서 사용한다.</p>
+<p>예를들어 총 3개의 클래스가 있다고한다면 결과는 다음과 같다. </p>
+<div class="math-block">\[softmax(x) = [\frac{e^{x_1}}{e^{x_1}+e^{x_2}+e^{x_3}},\;\frac{e^{x_2}}{e^{x_1}+e^{x_2}+e^{x_3}},\;\frac{e^{x_3}}{e^{x_1}+e^{x_2}+e^{x_3}}] = [p_1,\;p_2,\;p_3]\]</div>
+<blockquote>https://henrypaik1.github.io/2019/11/09/softmax-func-derivative/</blockquote>
+<hr />
+<h3 id="block-e9a2768024c8494cb0d03860210d1f2d">렐루(Relu -Rectified Linear Unit Function)</h3>
+<div class="math-block">\[f(x) = max(0, x)\]</div>
+<figure><img src="/assets/notion/activation-function/5dc717a0-e324-47a6-ad31-5f15e2e9d83e.png" alt="" loading="lazy" width="867" height="564" /></figure>
+<p>Relu는 자주 딥러닝에 많이 사용 되는 활성화 함수이다.</p>
+<p>렐루는 출력값의 범위가 넓고 양수인 경우 자기 자신을 그대로 반환하기 때문에 신경망에서 Sigmoid와 tanh가 갖는 Gradient Vanishing 문제를 해결하기 위한 함수이다.</p>
+<p>장점으로는 기존 활성화 함수에 비해 학습 속도가 매우 빠르며 단점으로는 입력값이 음수일 경우 가중치 업데이트가 되지 않아 해당 뉴런은 0만 반환하여 죽은 뉴런이 생길 수 있다는 단점이 있다.</p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +160,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

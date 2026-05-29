@@ -76,11 +76,87 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/reinforcement-learning/">Reinforcement Learning</a>
+    </nav>
+    <h1>PPO</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2026년 5월 11일</span><span class="dot"></span><span>수정 2026년 5월 24일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><div class="callout"><span class="callout-icon">💡</span><div class="callout-body"><strong>목표:</strong> PPO(Proximal Policy Optimization)를 논문(academic paper) 흐름(문제정의 → 방법 → 분석/실험 → 결론)으로 정리한다.</div></div>
+<h2 id="block-35db12c0115c80cc9cfae06ad16733b5">서론</h2>
+<ul><li>이전에 배운 TPRO는 정책의 단조 향상(Monotonic Improvement)을 이론적으로 보장한다는 강한 장점을 얻는 대가로 Trust Region의 KL Contrant와 그로부터 비롯되는 Hessian 행렬 계산 비용 때문에 구현과 연산이 매우 무거워진다는 단점이 있었다.</li><li>핵심은 KL Contrant를 통째로 제거하고 정책의 변화량 자체를 Importance ratio로 두고 여기에 Clipping하는 Clipped surrogate objective를 도입한다.</li></ul>
+<h2 id="block-35db12c0115c80deb980c75cc24a7b49">목차</h2>
+<ul><li>ㅇ</li><li>ㅇ</li><li>ㅇ</li></ul>
+<h2 id="block-20320f021c4b416ea86aab6bafbc8de3">TPRO Summary</h2>
+<ul><li>TRPO는 KL 제약을 통해 안정적 업데이트를 제공하지만, 2차 근사/구현 복잡도가 높다.</li><li>Surrogate objective:<ul><li>\(L^{TRPO}(\theta)=\mathbb{E}_{s\sim\rho_{\theta_{old}},\,a\sim\pi_{\theta_{old}}}\left[r_t(\theta)\,A_{\theta_{old}}(s,a)\right]\)</li><li>\(r_t(\theta)=\dfrac{\pi_\theta(a\|s)}{\pi_{\theta_{old}}(a\|s)}\)</li></ul></li><li>Trust region (KL Concentration):<ul><li>\(\max_\theta\ L^{TRPO}(\theta)\ \ \text{s.t.}\ \ \mathbb{E}_{s\sim\rho_{\theta_{old}}}\left[D_{KL}\!\left(\pi_{\theta_{old}}(\cdot\|s)\ \|\ \pi_\theta(\cdot\|s)\right)\right]\le \delta\)</li></ul></li></ul>
+<h3 id="block-35db12c0115c805f998df5757fcf52c4">Minorization-Maximization Algorithm</h3>
+<p>직접 최적화하기 어려운 진짜 목적함수 대신하여 보다 계산하기 용이하면서 진짜 목적함수의 하한 역할을 하는 surrogate objective 함수를 만들고 이를 최대화하는 방향으로 업데이트 하면서 원래 목적함수도 안정적으로 개선되도록 하는 방법이다.</p>
+<figure><img src="/assets/notion/ppo/35db12c0-115c-80b0-b55a-c038543e00d9.png" alt="" loading="lazy" width="2976" height="1000" /></figure>
+<ul><li>여기서 Surrogate function을 찾기위해 2차함수 형태로 만들어서 conjugate gradient</li><li>PPO는 TRPO의 핵심을 유지하면서, 1차 최적화(SGD)로 쉽게 구현 가능한 목적함수를 제안한다.</li></ul>
+<h2 id="block-a21bcd3c77d24a6abe774513555bee4e">2. Background / Preliminaries</h2>
+<h3 id="block-42fa66cc5c7643d888925a18a8237797">2.1 Markov Decision Process</h3>
+<ul><li>상태 \(s_t\), 행동 \(a_t\), 보상 \(r_t\), 할인율 \(\gamma\)</li><li>정책 \(\pi_\theta(a\|s)\), 리턴 \(G_t=\sum_{k\ge 0}\gamma^k r_{t+k}\)</li></ul>
+<h3 id="block-070ccb1ef045411cb6e0367aee3c45e0">2.2 Policy Gradient</h3>
+<ul><li>목표: \(J(\theta)=\mathbb{E}_{\pi_\theta}\left[\sum_t \gamma^t r_t\right]\)</li><li>정책 그래디언트:<ul><li>\(\nabla_\theta J(\theta)=\mathbb{E}[\nabla_\theta \log \pi_\theta(a\|s)\, A^\pi(s,a)]\)</li></ul></li></ul>
+<h3 id="block-85045e2f45b9447a92357db8f1360794">2.3 Actor-Critic and Advantage</h3>
+<ul><li>Advantage: \(A(s,a)=Q(s,a)-V(s)\)</li><li>Actor(정책)와 Critic(가치함수)을 함께 학습하여 분산을 줄인다.</li></ul>
+<h2 id="block-d858bd131b6b4d06be67d08ab03b88fd">3. Related Work</h2>
+<ul><li>REINFORCE, A2C/A3C 등 policy gradient 계열</li><li>TRPO(Trust Region Policy Optimization): KL constraint 기반 안정적 업데이트<ul><li>(실무 구현) 2차 근사로 natural gradient step을 구하고 line search로 KL 제약을 만족시키도록 업데이트</li></ul></li><li>(비교 관점) off-policy actor-critic(SAC/DDPG 등): 데이터 효율 vs 안정성/편향 이슈</li></ul>
+<h2 id="block-1f7bb4e49df5460792d8069428ad3ecf">4. Method (PPO)</h2>
+<h3 id="block-1af42a4166004e44ae96afabe582b1ec">4.1 Motivation: Constraining Policy Updates</h3>
+<ul><li>새 정책이 이전 정책에서 너무 멀어지면(분포 이동) 학습이 불안정해진다.</li><li>TRPO는 KL 제약으로 이를 직접 제어하나, 구현이 복잡하다.</li></ul>
+<h3 id="block-99af7bbdd87d4a4ab79e78a82ccf242a">4.2 Importance Sampling Ratio</h3>
+<ul><li>중요도 비율:<ul><li>\(r_t(\theta)=\dfrac{\pi_\theta(a_t\|s_t)}{\pi_{\theta_{old}}(a_t\|s_t)}\)</li></ul></li></ul>
+<h3 id="block-c26706fc386944f09d4f696a0ee38c4a">4.3 Clipped Surrogate Objective (PPO-Clip)</h3>
+<ul><li>기본 surrogate: \(\mathbb{E}[r_t(\theta)A_t]\)</li><li>PPO clipped objective:<ul><li>\(L^{CLIP}(\theta)=\mathbb{E}\left[\min\left(r_t(\theta)A_t,\ \text{clip}(r_t(\theta),1-\epsilon,1+\epsilon)A_t\right)\right]\)</li></ul></li><li>직관:<ul><li>\(A_t&gt;0\)일 때 \(r_t\)가 너무 커지면(과도한 확률 증가) 이득을 제한</li><li>\(A_t&lt;0\)일 때 \(r_t\)가 너무 작아지면(과도한 확률 감소) 손실을 제한</li></ul></li></ul>
+<h3 id="block-b33eb7728b4e4dc6959d7bb101f17237">4.4 Full Objective (Policy + Value + Entropy)</h3>
+<ul><li>실무에서 자주 쓰는 합성 손실:<ol><li>정책 손실: \(-L^{CLIP}(\theta)\)</li><li>가치함수 손실: \(c_1 \\, \mathbb{E}\left[(V_\theta(s_t)-\hat{V}_t)^2\right]\)</li><li>엔트로피 보너스: \(-c_2 \\, \mathbb{E}[H(\pi_\theta(\cdot\|s_t))]\)</li></ol></li></ul>
+<h3 id="block-ec3ddc8ee4b1424f9e2534ef209ee638">4.5 Advantage Estimation with GAE</h3>
+<ul><li>TD 오차: \(\delta_t=r_t+\gamma V(s_{t+1})-V(s_t)\)</li><li>GAE:<ul><li>\(A_t^{GAE(\gamma,\lambda)}=\sum_{l=0}^{\infty}(\gamma\lambda)^l\delta_{t+l}\)</li></ul></li><li>\(\lambda\): bias-variance trade-off (보통 0.95 전후)</li></ul>
+<h3 id="block-2b971af01de64674bea40c21d36ff227">4.6 Algorithm</h3>
+<ol><li>\(\pi_{\theta_{old}}\)로 rollout 데이터 수집(trajectory batch)</li><li>\(\hat{A}_t\), \(\hat{V}_t\) 계산(GAE 등)</li><li>여러 epoch 동안 미니배치 SGD로 \(\theta\) 업데이트</li><li>\(\theta_{old}\leftarrow\theta\)로 갱신 후 반복</li></ol>
+<h2 id="block-290e999aa6604ebd863bb0779e9bc711">5. Discussion / Analysis</h2>
+<h3 id="block-eafaab0eba004cbfa9a6725ef1df6ae2">5.1 Clipping vs KL Penalty</h3>
+<ul><li>PPO-Clip: 클리핑으로 업데이트 크기 간접 제한</li><li>PPO-KL: KL 패널티/target KL로 제어(모니터링 용이)</li></ul>
+<h3 id="block-c329692ad82b4cdf905092ae7d3387cf">5.2 Practical Stability Signals (Logging)</h3>
+<ul><li>평균 리턴, value loss, policy loss</li><li>entropy, approx KL, clip fraction</li><li>gradient norm, (옵션) value clipping 유무</li></ul>
+<h2 id="block-20fc0d154818485d8c08f3b37bd8da6f">6. Experiments (Template)</h2>
+<h3 id="block-1c563e9c28f641249a0c78c7070b6a60">6.1 Benchmarks</h3>
+<ul><li>Atari, MuJoCo 등</li></ul>
+<h3 id="block-9fdfdb54a8c8434caec43d0e6501c18a">6.2 Implementation Details</h3>
+<ul><li>네트워크 구조, optimizer, learning rate</li><li>batch size, minibatch size, epochs</li><li>clip range \(\epsilon\), entropy coefficient, value loss coefficient</li><li>advantage normalization, reward scaling/clipping</li></ul>
+<h3 id="block-e65e223fe2cf4a628eb5e2b8da939dc5">6.3 Baselines</h3>
+<ul><li>TRPO, A2C (및 필요 시 SAC/DDPG)</li></ul>
+<h3 id="block-39a4c8d5a5b94d2490f7b72e12fcfedd">6.4 Results</h3>
+<ul><li>학습 곡선(성능/샘플 효율)</li><li>안정성 비교(붕괴 빈도, 분산)</li></ul>
+<h3 id="block-4a5626e3f6804601a9b6269cb77b2f62">6.5 Ablation Study</h3>
+<ul><li>\(\epsilon\), epochs/minibatch, \(\lambda\), entropy coef 변화 영향</li></ul>
+<h2 id="block-e2a1465ffc8342589ef1f1546ead432f">7. Limitations</h2>
+<ul><li>on-policy 특성으로 데이터 효율 한계</li><li>하이퍼파라미터 민감도 및 환경 의존성</li></ul>
+<h2 id="block-ee7baee5fce74539ab3a4458ac10cc69">8. Conclusion</h2>
+<ul><li>PPO는 trust region 아이디어를 간단한 clipped objective로 구현하여 안정성과 구현 용이성을 동시에 확보한다.</li><li>향후 방향: adaptive KL, recurrent PPO, 대규모 모델/환경에서의 안정화 기법 등</li></ul>
+<h2 id="block-2499307c0d6f48bc95cc396b0d724a1f">References (Placeholder)</h2>
+<ul><li>Schulman et al., “Proximal Policy Optimization Algorithms”, 2017.</li><li>(추가) TRPO, GAE 관련 논문들</li></ul></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +177,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

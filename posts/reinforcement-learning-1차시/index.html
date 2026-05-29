@@ -76,11 +76,105 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/ai-theory/">AI/ Theory</a>
+    </nav>
+    <h1>Reinforcement Learning 1차시</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2026년 1월 19일</span><span class="dot"></span><span>수정 2026년 1월 23일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-2edb12c0115c8040b2a1dee442c7e910">Random Variable</h2>
+<p>표본 공간을 어떤 목적에 따른 실수에 대응 시켜주는 함수를 확률 변수라고 한다.</p>
+<p>그리고 이 실수들을 맞는 확률값에 대응시켜준 것을 확률 분포라고 한다.</p>
+<h2 id="block-2edb12c0115c805795f6cd8fffde0900">Conditional Probability</h2>
+<div class="math-block">\[P(\text{A}|\text{B}) = \frac{P(\text{A} \cap \text{B})}{P(B)}\]</div>
+<h2 id="block-2edb12c0115c8068bf88e03adedc805a">Partion theorem</h2>
+<div class="math-block">\[P(\text{B}) = \Sigma_{i}P(\text{B|A}_i) \times P(\text{A}_i)\]</div>
+<h2 id="block-2edb12c0115c80d98a53e0c639126636">Probability Density Function</h2>
+<ul><li>한국남자의 키</li></ul>
+<div class="math-block">\[P(\text{a}\le \text{x}\le \text{b}) = \int_{a}^{b}{f(x)dx}\]</div>
+<div class="math-block">\[\frac{1}{\sigma\sqrt{2\pi}}
+e^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2}\]</div>
+<h2 id="block-2efb12c0115c806692a3ca2e3d5a9790"><strong>Probability Mass Function</strong></h2>
+<ul><li>주사위 눈의 수</li></ul>
+<div class="math-block">\[P(a \le X \le b)
+= \sum_{x=a}^{b} p(x)\]</div>
+<h2 id="block-2edb12c0115c80ed85ead4d32a938b5d">Expectation of Discrete Random Variable</h2>
+<div class="math-block">\[\mathbb{E}[X] = \sum_x x \, P(X=x)\]</div>
+<h2 id="block-2edb12c0115c80ef8a8af1ffbdc2d1d3">Expectation of conditional probability</h2>
+<ul><li>Y조건이 무었이냐에 따라 기댓값이 달라진다.</li></ul>
+<div class="math-block">\[\mathbb{E}[\text{X}|\text{Y}=y] = \Sigma_x \text{x}\cdot P(\text{X}=x|\text{Y}=y)\]</div>
+<h2 id="block-2edb12c0115c80d5a1f2c9edbecc65bf">Law of total Expectation</h2>
+<div class="math-block">\[\mathbb{E}[\mathbb{E}[\text{X}|\text{Y}] = \mathbb{E}[\text{X}]\]</div>
+<h2 id="block-2edb12c0115c80dd818fe46cecb007b2">CTL: Central Limit Theorem</h2>
+<ul><li>표본의 크기가 커지면 커질 수록 표본평균의 분포는 모평균을 중심으로 하는 정규분포를 따른다.</li><li>단, 이러한 데이터들은 independent identical distribution을 만족해야 한다.</li></ul>
+<div class="math-block">\[\frac{\sqrt{n}(\bar{X}_n - \mu)}{\sigma}\;\xrightarrow{d}\;\mathcal{N}(0,1)\quad (n \to \infty)\]</div>
+<h2 id="block-2eeb12c0115c80829e37c31467d88035">Random Walk</h2>
+<div class="math-block">\[\text{Set } X_0 = 0 \\ W_t =\begin{cases}\ \ \ 1, &amp; \text{(go forward)} \\-1, &amp; \text{(go backward)}\end{cases}\]</div>
+<div class="math-block">\[X_n = \text{position after } n \text{ steps} \\
+X_n= X_0 + \sum_{i=1}^{n} W_i= X_{n-1} + W_n
+\begin{cases}P(X_n = j \mid X_{n-1} = j-1) = p, \\P(X_n = j \mid X_{n-1} = j+1) = q.\end{cases}\]</div>
+<h2 id="block-2eeb12c0115c80c088e2c872c739dbfb">Stochastic Process</h2>
+<p>확률과정 X(t)는 시간 t에 따라 변하는 확률변수들의 집합, 이때의 다 다른 확률변수에 대응하는 분포는 다 다를 수도, 같을 수도 있다.</p>
+<div class="math-block">\[X(t) = \{ X(t) \mid{t}\in T \}\]</div>
+<h2 id="block-2eeb12c0115c80bf806bff652b90d714">Discrete Time &amp; State</h2>
+<div class="math-block">\[T = \{t_0,\ t_1,\ t_2,\ \ ... \}\\X(t) \rarr S = \{S_1,\ S_2 , ... \ S_n \} \]</div>
+<h2 id="block-2eeb12c0115c8055b5cfd5f8e759f391">Markov Chain(Markov Process)</h2>
+<ul><li>Markov Property: 지금 상태(\(S_t\))는 이전상태(\(S_{t-1}\))만 영향을 미친다.</li></ul>
+<div class="math-block">\[P(x_{n + 1} | x_{n}, x_{n-1}, \ldots , x _ { 0 } ) = P( x _ { n + 1 } | x _ { n } )\]</div>
+<h2 id="block-2eeb12c0115c805cbca1c33f645198ce">Markov Process</h2>
+<ul><li>시간에 따라 상태가 변화는 확률과정 중에서, Markov Property를 만족하는 확률변수의 열을 말한다.</li></ul>
+<div class="math-block">\[S = \{S_1,\ S_2,\ S_3 \ ...\ ,\ S_n\}\]</div>
+<h2 id="block-2eeb12c0115c80ef9f0fd12594a19123">Transition Matrix</h2>
+<div class="math-block">\[P =\begin{pmatrix}p_{11} &amp; p_{12} &amp; \cdots &amp; p_{1m} \\p_{21} &amp; p_{22} &amp; \cdots &amp; p_{2m} \\\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\p_{m1} &amp; p_{m2} &amp; \cdots &amp; p_{mm}\end{pmatrix}\\p_{ij} \ge 0, \qquad \sum_{j=1}^{m} p_{ij} = 1
+\]</div>
+<div class="math-block">\[p^{(0)} =\begin{pmatrix}p_1^{(0)} &amp; p_2^{(0)} &amp; \cdots &amp; p_m^{(0)}\end{pmatrix}, \ p^{0}_j=p(X_0 = j)\\ p^{(1)} =\begin{pmatrix}p_1^{(1)} &amp; p_2^{(1)} &amp; \cdots &amp; p_m^{(1)}\end{pmatrix}, \ p^{1}_j=p(X_1 = j)\\ p^{(2)} =\begin{pmatrix}p_1^{(2)} &amp; p_2^{(2)} &amp; \cdots &amp; p_m^{(2)}\end{pmatrix},\ p^{2}_j=p(X_2 = j)\\ \cdot \\ \cdot \\ \cdot \\ p^{(n)} =\begin{pmatrix}p_1^{(n)} &amp; p_2^{(n)} &amp; \cdots &amp; p_m^{(n)}\end{pmatrix}, \ p^{n}_j=p(X_n = j)\]</div>
+<ul><li>\(X_1\)이 \(j\)일 확률을 구해보자</li></ul>
+<div class="math-block">\[p^{1}_{j} = p_1^{(0)}\, p_{1j}+ p_2^{(0)}\, p_{2j}+ \cdots+ p_m^{(0)}\, p_{mj}\]</div>
+<h2 id="block-2eeb12c0115c8095baf0d1703e2461eb">Chapman-Kolmogorov Equation</h2>
+<ul><li>미래시점(n+m)의 확률을 구할 때 처음(0)에서 부터 한 스탭씩 전이확률을 반복해서 계산할 수도 있지만, 처프만-콜모그로프 방정식을 이용하면 중간지점 n까지의 전이확률과 이후 m스텝 동안의 전이확률을 곱해서 n+m시점의 확률을 계산할 수 있다.</li></ul>
+<div class="math-block">\[P^{(n)}= P^{(0)}P^{n} = P^{n-1}P\]</div>
+<h2 id="block-2eeb12c0115c80f997e9c53dee6eb33f">Limiting Distribution</h2>
+<ul><li>처음 어떤 상태( \(P^{(0)}\))로 시작했는지와 상관없이 시간이(\(\text{step n} \rarr \infin\)) 무한히 흐르면 도달하게 되는 확률분포</li><li> \(n \rarr \infin\)갔을 때 값이 존재해야 한다.</li></ul>
+<div class="math-block">\[P^{\infin}=P^{(0)}\lim_{n \rarr \infin}P^{(n)}\]</div>
+<h2 id="block-2eeb12c0115c8013a5e4c0f68c585f49">Example: Weather</h2>
+<div class="math-block">\[S = \{ 1 = \text{Sunny},\; 2 = \text{Cloudy} \}, \ \
+P =\begin{pmatrix}\frac{2}{3} &amp; \frac{1}{3} \\\frac{1}{2} &amp; \frac{1}{2}\end{pmatrix}\]</div>
+<div class="math-block">\[p_{11} = P(\text{Sunny} \to \text{Sunny}) = \frac{2}{3}, \quad p_{12} = P(\text{Sunny} \to \text{Cloudy}) = \frac{1}{3}\]</div>
+<div class="math-block">\[p_{21} = P(\text{Cloudy} \to \text{Sunny}) = \frac{1}{2}, \quad p_{22} = P(\text{Cloudy} \to \text{Cloudy}) = \frac{1}{2}\]</div>
+<h2 id="block-2eeb12c0115c80b68b97f2ecb3d23cc6">Stationary Distribution</h2>
+<ul><li>기존 상태분포는 초기상태분포와 Transition Matrix의 영향을 받았다. 원래는 시간이 흐를수록(n-step) 상태분포가 계속 변해야 정상이지만 T.M.(Transition Matrix)의 특성과 맞아 떨어지는 어떤 상태분포로 시작했다면 시간이 흘러도 상태분포가 변하지 않는다.</li><li>이 특성과 맞아 떨어지는 확률상태 분포를 정상분포라고 한다.</li></ul>
+<div class="math-block">\[\pi_{1}+\pi_{2}+\pi_{3}+ \cdot\cdot\cdot \ + \pi_{n} = 1\]</div>
+<div class="math-block">\[\pi p = \pi\]</div>
+<h2 id="block-2eeb12c0115c8090a414e58b9dd90c00">Reducible &amp; Irreducible</h2>
+<ul><li>Reducible: 상태가 분리되어 오갈 수 없는 경우가 존재</li><li>Irreducible: 모든 상태가 서로 오갈 수 있음</li></ul>
+<h2 id="block-2eeb12c0115c80a9b88be9425a087654">Recurrent &amp; Transient</h2>
+<ul><li>서로 Communicate(i↔j)하는 상태들은 같은 Communication class에 잇고, 그 class에 속한 상태들은 전부 <code>recurrent</code>하거나 <code>transient</code>하다.</li></ul>
+<div class="math-block">\[f_{ij}^{(n)}=P\bigl(X_n = j,\;X_r \neq j \ (r=1,\ 2,\ 3,\ n-1)\mid X_0 = i\bigr)\]</div>
+<div class="math-block">\[\sum_{n=1}^{\infty} f_{ij}^{(n)}=P\bigl(\text{X}_0 = i \text{에서 출발해 언젠가 상태 } j \text{에 도달할 확률}\bigr)=f_{ij} \]</div>
+<div class="math-block">\[\sum_{n=1}^{\infty} f_{ii}^{(n)}=f_{ii} \ \begin{cases}f_{ii} = 1, &amp; \text{상태 } i \text{는 recurrent 상태} \\[6pt]f_{ii} &lt; 1, &amp; \text{상태 } i \text{는 transient 상태}\end{cases}\]</div>
+<h2 id="block-2eeb12c0115c80f7bcd0ff376c730883">Markov Chain의 Ergodic Theorem(에르고딕 정리)</h2>
+<ul><li>충분히 시간이 지나면 초기 상태와 무관하게 상태분포는 하나의 고정된 분포로 수렴한다.</li><li>이 결과가 성립하려면 아래 3가지 조건을 만족해야한다.</li></ul>
+<ol><li>irredicible: 모든 상태가 연결되어 있다.</li><li>Recurrent: 모든 상태에 언젠가 다시 되돌아온다.(1조건이 만족하면 2조건도 자동으로 만족)</li><li>Aperiodic(비주기성): 주기(1 → 2 → 1 → 2)가 없어야 한다.</li></ol></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +195,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

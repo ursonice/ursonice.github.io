@@ -76,11 +76,563 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/coding-test/">Coding Test</a>
+    </nav>
+    <h1>3월 4주차 코딩테스트</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 3월 28일</span><span class="dot"></span><span>수정 2025년 4월 6일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-1c4b12c0115c8004a28beb9984efc364">목차</h2>
+<ul><li>미로 탈출 넘버원 (1)</li><li>지도와 폭탄 (1)</li><li>테트리스</li><li>알까기 챔피언 (1)</li><li>최소 합차 (1)</li></ul>
+<h2 id="block-1c4b12c0115c80feb739ce638552f25e">1. 미로 탈출 넘버원 (1)</h2>
+<figure><img src="/assets/notion/3월-4주차-코딩테스트/1c4b12c0-115c-8027-8272-d57434a74651.png" alt="" loading="lazy" width="2324" height="912" /></figure>
+<figure><img src="/assets/notion/3월-4주차-코딩테스트/1c4b12c0-115c-804b-ae01-d5cd42a16da5.png" alt="" loading="lazy" width="2320" height="1250" /></figure>
+<figure><img src="/assets/notion/3월-4주차-코딩테스트/1c4b12c0-115c-802f-83d5-ec0d77202dc6.png" alt="" loading="lazy" width="2224" height="198" /></figure>
+<h2 id="block-1c4b12c0115c80ee9502d5c7b47917ac">풀이</h2>
+<pre data-lang="python"><code class="language-python">import collections
+
+def solution(N, M, maze):
+    rows = N
+    cols = M
+
+    def bfs():
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+        visited = [[False]*M for _ in range(N)]
+
+        que = collections.deque()
+        que.append((0, 0, 0)) # x, y, 거리
+        visited[0][0] = True
+        
+        while que:
+            x, y, dist = que.popleft()
+
+            if (x, y) == (N-1, M-1):
+                return dist
+            
+            for dx, dy in directions:
+                nx, ny = x + dx, y + dy
+
+                if 0 &lt;= nx &lt; rows and 0 &lt;= ny &lt; cols:
+                    if not visited[nx][ny] and maze[nx][ny] == 0:
+                        visited[nx][ny] = True
+                        que.append((nx, ny, dist+1))
+        return -1
+
+    return bfs()
+</code></pre>
+<h2 id="block-1c4b12c0115c809b83c4f463cc48ab24">Testcase</h2>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 6, 6, [[0, 0, 0, 0, 0, 0], [0, 1, 1, 1, 1, 0], [0, 1, 0, 0, 0, 0], [1, 1, 0, 1, 0, 1], [0, 0, 0, 0, 1, 0], [1, 1, 1, 0, 0, 0]]
+기댓값 〉 16</code></pre>
+<h2 id="block-1c4b12c0115c80d98562d2a9c49d378d">2. 지도와 폭탄 (1)</h2>
+<figure><img src="/assets/notion/3월-4주차-코딩테스트/1c4b12c0-115c-8035-87ce-c71039bfe7ec.png" alt="" loading="lazy" width="2350" height="1054" /></figure>
+<figure><img src="/assets/notion/3월-4주차-코딩테스트/1c4b12c0-115c-807d-9281-d2b0e2b8a710.png" alt="" loading="lazy" width="2396" height="964" /></figure>
+<figure><img src="/assets/notion/3월-4주차-코딩테스트/1c4b12c0-115c-807b-b006-ce1000aad685.png" alt="" loading="lazy" width="902" height="1244" /></figure>
+<h2 id="block-1c4b12c0115c8021bc5fc2c320fd8f46">풀이</h2>
+<p>내 코드</p>
+<pre data-lang="python"><code class="language-python">import collections
+
+def solution(N, M, maze):
+    rows = N
+    cols = M
+    directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+
+    def bfs(dmaze):
+        visited = [[False]*N for _ in range(M)]
+        
+        que = collections.deque()
+        que.append((0, 0, 0))
+        visited[0][0] = True
+
+        while que:
+            x, y, dist = que.popleft()
+
+            if (x, y) == (N-1, M-1):
+                return dist
+
+            for dx, dy in directions:
+                nx, ny = x + dx, y + dy
+
+                if 0 &lt;= nx &lt; rows and 0 &lt;= ny &lt; cols:
+                    if not visited[nx][ny] and maze[nx][ny] == 0:
+                        visited[nx][ny] = True
+                        que.append((nx, ny, dist + 1))
+        
+        return -1
+    
+    # 1인 곳 찾기
+    blocks = []
+    for i in range(N):
+        for j in range(M):
+            if maze[i][j] == 1:
+                blocks.append((i, j))
+
+    results = []
+    for a, b in blocks:
+        maze[a][b] = 0
+        retv = bfs(maze)
+        if retv != -1:
+            results.append(retv)
+        maze[a][b] = 1
+
+    results.sort()
+
+    return -1 if len(results) == 0 else results[0]</code></pre>
+<p>정답코드</p>
+<pre data-lang="python"><code class="language-python">def solution(N, M, maze):
+    q = []
+    q.append((0, 0, 1))
+
+    di = [0, 0, 1, -1]
+    dj = [1, -1, 0, 0]
+
+    visited = [[[0 for _ in range(2)] for _ in range(M)] for _ in range(N)]
+
+    while q:
+        i, j, k = q.pop(0)
+
+        if (i, j) == (N-1, M-1):
+            return visited[i][j][k]
+
+        for di_, dj_ in zip(di, dj):
+            new_i = i + di_
+            new_j = j + dj_
+
+            if new_i &lt; 0 or new_i &gt;= N or new_j &lt; 0 or new_j &gt;= M:
+                continue
+
+            if visited[new_i][new_j][k] &gt; 0:
+                continue
+
+            if maze[new_i][new_j] == 1 and k == 1:
+                q.append((new_i, new_j, k-1))
+                visited[new_i][new_j][k-1] = visited[i][j][k] + 1
+
+            if maze[new_i][new_j] == 0:
+                q.append((new_i, new_j, k))
+                visited[new_i][new_j][k] = visited[i][j][k] + 1
+
+    return -1
+
+</code></pre>
+<h2 id="block-1c4b12c0115c809b88f5e9f02ce4ca12">Testcase</h2>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 6, 6, [[0, 0, 0, 0, 0, 0], [0, 1, 1, 1, 1, 0], [0, 1, 0, 0, 0, 0], [1, 1, 0, 1, 0, 1], [0, 0, 0, 0, 1, 0], [1, 1, 1, 0, 0, 0]]
+기댓값 〉 10</code></pre>
+<h2 id="block-1c4b12c0115c80aba613f9aed7dbabfb">3. 테트리스</h2>
+<figure><img src="/assets/notion/3월-4주차-코딩테스트/1c4b12c0-115c-805a-916f-fdd997cf17be.png" alt="" loading="lazy" width="1366" height="1166" /></figure>
+<figure><img src="/assets/notion/3월-4주차-코딩테스트/1c4b12c0-115c-8098-8e07-f5bf1ade8de4.png" alt="" loading="lazy" width="1316" height="1258" /></figure>
+<figure><img src="/assets/notion/3월-4주차-코딩테스트/1c4b12c0-115c-8040-8b64-c0f32842eea9.png" alt="" loading="lazy" width="1322" height="1162" /></figure>
+<figure><img src="/assets/notion/3월-4주차-코딩테스트/1c4b12c0-115c-8065-8ad7-f15d72eafaa6.png" alt="" loading="lazy" width="1322" height="1208" /></figure>
+<figure><img src="/assets/notion/3월-4주차-코딩테스트/1c4b12c0-115c-80e2-a66d-d808d7753309.png" alt="" loading="lazy" width="1332" height="984" /></figure>
+<h2 id="block-1c4b12c0115c80349600c4d9fa4009ac">풀이</h2>
+<pre data-lang="python"><code class="language-python">&quot;&quot;&quot;
+ * 시뮬레이션 문제로, 모두가 익숙한 테트리스 문제입니다.
+ * 차근 차근 구현하면 어렵지 않지만, 빠르고 정확하게 구현하는 것이 관건입니다.
+ * 익숙한 대상으로 시뮬레이션 연습을 하고, 추후에는 새로운 시뮬레이션 대상이
+ * 문제로 주어졌을 때 해결하는 연습을 하도록 합시다.
+&quot;&quot;&quot;
+
+# 테트리스의 블록별 기본형과 변형 형태는 코드로 주어집니다.
+TETRIS_BLOCK = []
+
+BLOCK = []
+TETRIS_BLOCK.append(BLOCK)
+
+BLOCK = [[[0, 0, 0, 0],
+          [0, 1, 1, 1],
+          [0, 0, 0, 1]],
+          [[0, 0, 1],
+           [0, 0, 1],
+           [0, 1, 1]],
+          [[0, 0, 0, 0],
+           [0, 1, 0, 0],
+           [0, 1, 1, 1]],
+          [[0, 1, 1],
+           [0, 1, 0],
+           [0, 1, 0]]]
+TETRIS_BLOCK.append(BLOCK)
+
+BLOCK = [[[0, 0, 0, 0],
+          [0, 1, 1, 1],
+          [0, 1, 0, 0]],
+          [[0, 1, 1],
+           [0, 0, 1],
+           [0, 0, 1]],
+          [[0, 0, 0, 0],
+           [0, 0, 0, 1],
+           [0, 1, 1, 1]],
+          [[0, 1, 0],
+           [0, 1, 0],
+           [0, 1, 1]]]
+TETRIS_BLOCK.append(BLOCK)
+
+BLOCK = [[[0, 0, 1, 0],
+          [0, 1, 1, 1]],
+         [[0, 0, 1, 0],
+          [0, 0, 1, 1],
+          [0, 0, 1, 0]],
+         [[0, 0, 0, 0],
+          [0, 1, 1, 1],
+          [0, 0, 1, 0]],
+         [[0, 0, 1],
+          [0, 1, 1],
+          [0, 0, 1]]]
+TETRIS_BLOCK.append(BLOCK)
+
+BLOCK = [[[0, 0, 1],
+          [0, 1, 1],
+          [0, 1, 0]],
+         [[0, 0, 0],
+          [1, 1, 0],
+          [0, 1, 1]]]
+TETRIS_BLOCK.append(BLOCK)
+
+BLOCK = [[[0, 1, 0],
+          [0, 1, 1],
+          [0, 0, 1]],
+         [[0, 0, 0],
+          [0, 1, 1],
+          [1, 1, 0]]]
+TETRIS_BLOCK.append(BLOCK)
+
+BLOCK = [[[0, 0, 1],
+          [0, 0, 1],
+          [0, 0, 1],
+          [0, 0, 1]],
+         [[0, 0, 0, 0],
+          [1, 1, 1, 1]]]
+TETRIS_BLOCK.append(BLOCK)
+
+BLOCK = [[[0, 1, 1],
+          [0, 1, 1]]]
+TETRIS_BLOCK.append(BLOCK)
+
+def solution(blocks, commands):
+    WIDTH = 10
+    HEIGHT = 15
+    board = [[0 for _ in range(WIDTH)] for _ in range(HEIGHT)]
+
+    if len(blocks) == 0:
+        return 0
+
+    block_ind = 0
+    pos = 0
+    score = 0
+    shape = 0
+    ind = 0
+    while True:
+        if ind &gt;= len(commands) or block_ind &gt;= len(blocks):
+            break
+        
+        curr_blocks = TETRIS_BLOCK[blocks[block_ind]]
+        curr_block = curr_blocks[shape]
+
+        if commands[ind] == 'u':
+            shape = (shape + 1) % len(curr_blocks)
+
+        elif commands[ind] == 'l':
+            is_possible = True
+            for i in range(len(curr_block)):
+                for j in range(len(curr_block[0])):
+                    if j + pos - 1 &lt; 0 and curr_block[i][j] == 1:
+                        is_possible = False
+                        break
+                if not is_possible:
+                    break
+            if is_possible:
+                pos -= 1
+
+        elif commands[ind] == 'r':
+            is_possible = True
+            for i in range(len(curr_block)):
+                for j in range(len(curr_block[0])):
+                    if j + pos + 1 &gt;= WIDTH and curr_block[i][j] == 1:
+                        is_possible = False
+                        break
+                if not is_possible:
+                    break
+            if is_possible:
+                pos += 1
+
+        elif commands[ind] == 'd':
+            for i in range(len(curr_block)):
+                for j in range(len(curr_block[0])):
+                    if curr_block[i][j] == 1 and board[i][j + pos] == 1:
+                        return score
+            
+            pos_y = 0
+            is_done = False
+            while True:
+                for i in range(len(curr_block)):
+                    for j in range(len(curr_block[0])):
+                        if curr_block[i][j] == 1 and i + pos_y + 1 &gt;= HEIGHT:
+                            is_done = True
+                        elif curr_block[i][j] == 1 and board[i+pos_y+1][j+pos] == 1:
+                            is_done = True
+                        if is_done:
+                            break
+                    if is_done:
+                        break
+                if is_done:
+                    break
+                pos_y += 1
+
+            for i in range(len(curr_block)):
+                for j in range(len(curr_block[0])):
+                    if curr_block[i][j] == 1:
+                        board[i+pos_y][j+pos] = 1
+
+            lines_lut = []
+            for i in range(HEIGHT):
+                if sum(board[i]) == WIDTH:
+                    score += 1
+                    lines_lut = [-1] + lines_lut
+                else:
+                    lines_lut.append(i)
+            
+            for i, di in enumerate(lines_lut):              
+                for j in range(WIDTH):
+                    if di &lt; 0:
+                        board[i][j] = 0
+                    else:
+                        board[i][j] = board[di][j]
+            
+            pos = 0
+            shape = 0
+            block_ind += 1
+
+        ind += 1
+
+    return score
+
+
+# blocks = [1, 3, 6, 2, 4, 7, 4, 5, 3]
+# commands = &quot;uulduuuldurrrrrdrrurrrrrduulldrrrldrdrlrrruudurrrrd&quot;
+# print(solution(blocks, commands))</code></pre>
+<h2 id="block-1c4b12c0115c80d3bb6ef8b35b802eeb">Testcase</h2>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 [1, 3, 6, 2, 4, 7, 4, 5, 3], &quot;uulduuuldurrrrrdrrurrrrrduulldrrrldrdrlrrruudurrrrd&quot;
+기댓값 〉 2</code></pre>
+<h2 id="block-1c4b12c0115c80d38b15e4666130755c">4. 알까기 챔피언 (1)</h2>
+<figure><img src="/assets/notion/3월-4주차-코딩테스트/1c4b12c0-115c-800f-ab48-e6e2361c01f5.png" alt="" loading="lazy" width="1736" height="1018" /></figure>
+<figure><img src="/assets/notion/3월-4주차-코딩테스트/1c4b12c0-115c-804b-b6d1-f3430a078462.png" alt="" loading="lazy" width="1726" height="1154" /></figure>
+<figure><img src="/assets/notion/3월-4주차-코딩테스트/1c4b12c0-115c-80cc-93c7-c0c1b57c0ce9.png" alt="" loading="lazy" width="1322" height="1186" /></figure>
+<h2 id="block-1c4b12c0115c801da1e6cd49c53cd397">풀이</h2>
+<pre data-lang="python"><code class="language-python">&quot;&quot;&quot;
+ * 이 문제는 DFS로 탐색하는 문제입니다.
+ * 탐색 아이디어 자체는 간단하지만, 조건에 맞게 구현하는 난이도가 상당한 문제입니다.
+ * 각 돌을 상하좌우로 치는 경우를 모두 따져보되, 다른 돌과 부딛히면 연쇄적으로 처리하는 것이 핵심입니다.
+ * board를 매번 만들어서 dfs하도록 구현하였지만, board를 사용하지 않을 경우 더 효율적인 구현이 됩니다.
+ * 단, 난이도가 높아져서 구현하는 시간이 더 오래 걸리니, 메모리가 부족한 경우 구현을 고려해볼 수 있습니다.
+ */
+&quot;&quot;&quot;
+
+
+from copy import deepcopy
+
+def solution(enemies, players):
+    result = float('inf')
+    
+    def dfs(count, enemies, players):
+        nonlocal result
+        
+        board = make_board(enemies, players)
+
+        H = len(board)
+        W = len(board[0])
+        
+        if len(enemies) == 0:
+            if result &gt; count:
+                result = count
+            return
+        
+        if len(players) == 0:
+            return
+        
+        if count &gt;= result:
+            return
+        
+        for x, y in players:
+            # direction 1
+            new_board = deepcopy(board)
+            curr = new_board[y][x]
+            moved_y = y
+            while curr:
+                new_board[moved_y][x] = 0
+                while moved_y - 1 &gt;= 0 and new_board[moved_y - 1][x] == 0:
+                    moved_y -= 1
+                if moved_y == 0:
+                    break
+                else:
+                    new_board[moved_y][x] = curr
+                    curr = new_board[moved_y - 1][x]
+                    moved_y -= 1
+            e, p = rocks_from_board(new_board)
+            dfs(count + 1, e, p)
+            
+            # direction 2
+            new_board = deepcopy(board)
+            curr = new_board[y][x]
+            moved_y = y
+            while curr:
+                new_board[moved_y][x] = 0
+                while moved_y + 1 &lt; H and new_board[moved_y + 1][x] == 0:
+                    moved_y += 1
+                if moved_y == H - 1:
+                    break
+                else:
+                    new_board[moved_y][x] = curr
+                    curr = new_board[moved_y + 1][x]
+                    moved_y += 1
+            e, p = rocks_from_board(new_board)
+            dfs(count + 1, e, p)
+
+            # direction 3
+            new_board = deepcopy(board)
+            curr = new_board[y][x]
+            moved_x = x
+            while curr:
+                new_board[y][moved_x] = 0
+                while moved_x - 1 &gt;= 0 and new_board[y][moved_x - 1] == 0:
+                    moved_x -= 1
+                if moved_x == 0:
+                    break
+                else:
+                    new_board[y][moved_x] = curr
+                    curr = new_board[y][moved_x - 1]
+                    moved_x -= 1
+            e, p = rocks_from_board(new_board)
+            dfs(count + 1, e, p)
+
+            # direction 4
+            new_board = deepcopy(board)
+            curr = new_board[y][x]
+            moved_x = x
+            while curr:
+                new_board[y][moved_x] = 0
+                while moved_x + 1 &lt; W and new_board[y][moved_x + 1] == 0:
+                    moved_x += 1
+                if moved_x == W - 1:
+                    break
+                else:
+                    new_board[y][moved_x] = curr
+                    curr = new_board[y][moved_x + 1]
+                    moved_x += 1
+            e, p = rocks_from_board(new_board)
+            dfs(count + 1, e, p)
+    
+    dfs(0, enemies, players)
+    return result
+
+def make_board(enemies, players):
+    x_min = min((x[0] for x in enemies + players))
+    x_max = max((x[0] for x in enemies + players))
+    y_min = min((x[1] for x in enemies + players))
+    y_max = max((x[1] for x in enemies + players))
+
+    for i in range(len(enemies)):
+        enemies[i] = [enemies[i][0] - x_min, enemies[i][1] - y_min]
+    
+    for i in range(len(players)):
+        players[i] = [players[i][0] - x_min, players[i][1] - y_min]
+    
+    W = x_max - x_min + 1
+    H = y_max - y_min + 1
+
+    board = [[0 for _ in range(W)] for _ in range(H)]
+    
+    for x, y in enemies:
+        board[y][x] = 1
+    
+    for x, y in players:
+        board[y][x] = 2
+
+    return board
+
+def rocks_from_board(board):
+    enemies = []
+    players = []
+    for i in range(len(board)):
+        for j in range(len(board[0])):
+            if board[i][j] == 1:
+                enemies.append([j, i])
+            elif board[i][j] == 2:
+                players.append([j, i])
+    return enemies, players
+</code></pre>
+<h2 id="block-1c4b12c0115c80128c42c2541e916bd9">Testcase</h2>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 [[0, 12], [9, 14], [9, 9], [4, 0]], [[4, 5], [9, 4]]
+기댓값 〉 4</code></pre>
+<h2 id="block-1c4b12c0115c802f9590f90aaba88549">5. 최소 합차 (1)</h2>
+<figure><img src="/assets/notion/3월-4주차-코딩테스트/1c4b12c0-115c-808d-a445-cf947e39ec55.png" alt="" loading="lazy" width="2160" height="1126" /></figure>
+<figure><img src="/assets/notion/3월-4주차-코딩테스트/1c4b12c0-115c-80dd-b967-f7c8cd74d29c.png" alt="" loading="lazy" width="2038" height="824" /></figure>
+<h2 id="block-1c4b12c0115c80d0a4ace85cb20ab81b">풀이</h2>
+<pre data-lang="python"><code class="language-python">&quot;&quot;&quot;
+ * 이 문제는 누적합을 이용하여 연산을 최소화 하는 문제입니다.
+ * 수학적인 센스가 필요한 문제라고 할 수 있겠습니다!
+&quot;&quot;&quot;
+
+def solution(nums):
+    n = len(nums) // 3
+    
+    cumsum = [0 for _ in range(len(nums))]
+    cumsum[0] = nums[0]
+    for i in range(1, len(nums)):
+        cumsum[i] = cumsum[i-1] + nums[i]
+        
+    min_diff = float('inf')
+    
+    sum_second = cumsum[3*n-1] - cumsum[2*n-1]
+    for i in range(n):
+        if i == 0:
+            sum_first = cumsum[2*n-1] - cumsum[n-1]
+        else:
+            sum_first = cumsum[i-1] + cumsum[2*n-1] - cumsum[n-1+i]
+        
+        diff = sum_first - sum_second
+        min_diff = min(min_diff, diff) 
+        
+    sum_first = cumsum[n-1]
+    for i in range(n+1):
+        sum_second = cumsum[2*n-1-i] - cumsum[n-1] + cumsum[3*n-1] - cumsum[3*n-1-i]    
+        diff = sum_first - sum_second
+        min_diff = min(min_diff, diff)
+    
+    return min_diff</code></pre>
+<h2 id="block-1c4b12c0115c8050bd06ce806b9f3b6b">Testcase</h2>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 [7, 9, 5, 8, 1, 3]
+기댓값 〉 3
+
+# 테스트 2
+입력값 〉 [5, 2, 3, 5, 9, 14, 2, 3, 15, 19, 4, 6]
+기댓값 〉 -32</code></pre>
+<h2 id="block-1c5b12c0115c80f48340cd044cabddde">출처</h2>
+<p>해당 문제와 코드는 제로베이스(ZeroBase)에서 제공받았습니다.</p>
+<p>모든 자료는 저작권법에 의하여 보호받는 저작물로서 이에 대한 무단 복제 및 배포를 원칙적으로 금합니다.</p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +653,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

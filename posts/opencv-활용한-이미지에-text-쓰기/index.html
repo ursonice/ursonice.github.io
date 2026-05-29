@@ -76,11 +76,190 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/python/">Python</a>
+    </nav>
+    <h1>OpenCV 활용한 이미지에 Text 쓰기</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2023년 4월 19일</span><span class="dot"></span><span>수정 2023년 6월 14일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-e09e99c694d1463a9a4821f6a4d7fff1">서론</h2>
+<p>이 장은 이미지위에 Text를 쓰는 방법에 대해서 설명한다.</p>
+<h2 id="block-80afc498095e4e18901b36c5c3f416ba">목차</h2>
+<ol><li><a href="#block-54efc7bd7ac641f498e3256df78e3ff9">텍스트 색상 설정하기</a> </li><li><a href="#block-70494e08d1fe47278da810cc764c6eee">경로 설정하기</a> </li><li><a href="#block-222b036db0a542ad9170a2c54fc5b384">Text 설정</a> </li><li><a href="#block-ab8e7edb811a425d903c825a7f7c71a1">Text 위치 설정하기</a> </li><li><a href="#block-f4da184885644fd585c9ebd3cbbb69d5">Text 배경 설정하기</a> </li><li><a href="#block-3e2d846e91e54db187db8507d7329cd6">그리기</a> </li></ol>
+<h2 id="block-54efc7bd7ac641f498e3256df78e3ff9">텍스트 색상 설정하기</h2>
+<p>컬러 이미지의 경우 보통 3개의 채널(R,G,B)로 구성되어 있는데, RGB의 조합으로 색상을 만들 수 있다.</p>
+<p>나는 일일이 확인하기 귀찮아서 Enum이라는 것을 사용해 색상 입력을 쉽게하도록 했다.</p>
+<p>예를들어 빨강색의 RGB 값으로 접근하고 싶다면 <code>Color.Red.value</code> 등의 형태로 접근하면된다.</p>
+<pre data-lang="python"><code class="language-python">class Color(Enum) :
+    Red = (255, 0, 0)
+    Green = (0, 255, 0)
+    Blue = (0, 0, 255)
+    Yellow = (255, 255, 0)
+    White = (255, 255, 255)
+    Orange = (255, 165, 0)</code></pre>
+<h2 id="block-70494e08d1fe47278da810cc764c6eee">경로 설정하기</h2>
+<p>이미지에 Text를 쓰기 위해 재료가될 이미지의 경로를 읽어들이고 저장할 경로를 따로 설정해준다.</p>
+<pre data-lang="python"><code class="language-python"># 이미지 파일 경로
+path = &quot;./fire_sample/&quot;
+image_paths = glob.glob(path+&quot;*.jpg&quot;)
+
+# save directory
+save_dir = './predict'
+
+os.makedirs(save_dir,exist_ok=True)</code></pre>
+<h2 id="block-222b036db0a542ad9170a2c54fc5b384">Text 설정</h2>
+<p>Text의 크기를 고정시켜서 쓰게 되면 이미지 크기가 너무 크면 작게 보일 것이고 작으면 너무 크게 보일 것이다. 이를 위해서 이미지 크기에 따라 텍스트의 크기를 설정해주는 것이 좋다.</p>
+<p>또한 텍스트를 쓰기 위해서는 쓰려는 텍스트의 <code>.ttf</code> 의 확장자를 가지는 폰트 파일이 필요하다.</p>
+<p>따라서 먼저 이미지의 크기를 구하고 원하는 비율을 곱해주어 폰트의 크기를 설정해주자.</p>
+<pre data-lang="python"><code class="language-python">for i, image_path in enumerate(image_paths) :
+
+    # 이미지 불러오기
+    print(f&quot;Read Image: {image_path}&quot;)
+    im = Image.open(image_path)
+
+    # 이미지 크기 구하기
+    w, h = im.size
+
+    # 이미지 크기에 따른 글자 크기 설정
+    font_size = int(min(w, h)*0.1)
+
+    # 폰트 설정
+    font=ImageFont.truetype(&quot;./font/D2Coding.ttf&quot;, font_size)
+
+    # 색상 설정
+    color = Color.Red.value
+
+    # text 내용
+    text_context = &quot;Hello World&quot;</code></pre>
+<details class="toggle"><summary><strong>Font Download</strong></summary><div class="toggle-body"><p><a href="https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/ab9a8459-0996-4608-a3fd-18c0505af74a/D2Coding.ttf?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB466SHM2BIY2%2F20260522%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260522T054104Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEE0aCXVzLXdlc3QtMiJGMEQCIDp1ro0z79e4IkBqVn7eCGzntrNMpWGgk%2B65u0mYAoFiAiA3j6tnW3C0uVqjD592sBmWfUDd6gthn%2BVP1wai%2F6kdBSr%2FAwgWEAAaDDYzNzQyMzE4MzgwNSIMlhAE%2B%2FM0N7jA5OWRKtwDCBqla%2B73mSCD%2FSp9mLQd6cexBMQqsjxMZh5wUkFlC9ey5FaJHSDVeqkAD11iCA0oKb5PidI7Yp2ZuYqH4z4Yw%2Bm3UWLwz51WQfsrxLAHUPKKMErbrRybQOhs9e3up7ri1GvgVD01SbymW2ofrftoXw%2Fy6eJHMhDq80abTxDbH5guGC%2FdTKqk%2BSjI28FTc545b5%2FAfPY7n1ffQZA8uSQomUnwRn7x4G1Z1cNfjnX7sCUXt9It07KURAUJ%2FjYYG%2F4NV6txbhVvseNPGbmskJluz%2FAZlLwB%2Fv5BPKnvX5AF7BTxbiNvKU0Au4BeN3gMyJd%2B%2FAelRp1znuDl%2FbeSvQMEZuBDn3rqvkpRNfyJ9yOyJSbaGnS%2FsNJSVm3pG%2Bjc0LWvLm%2FV3Hrwz5NQGxHlhFiGyABetrB4oCFZUO9xW7ZhzsQCyeCUORdSK%2BuQ%2FfXfxzZAF3%2FRrsoLeVE6JSzKNWwPPgHCAUhfNKFKd27SYKfM60WUZ70P4fVkT0vRUKaWyBeLJvoYlOzpxsabfnaTaEXzoAiXkbGlWL6Vchdd7wjOjJv%2FObetrBycJUF4LGl75vtPJpq0WsANHMSv6QTyPJu6D9qCI3pFZC9GEWmYW1ESjkhLUBprSUaWyUaIqF4w4rq%2F0AY6pgEGhdGven5UMdWdIWsJkhVERW94N%2B1fEO2kgrA5jWWkLG0DXrRQCbhCQmDTro%2BzG%2B0G1r2s0LvTTxSTCrvOoQVXVM23AP9j4uCHVQYieA%2FKr3ESYdjy1KamkL22grnj0AbAOvYEUio4wzPThqnQMmJRY61YI0J7A71Vv6zhh5xj3n%2F818PlFnpbTmXmaY1Tv06xYkekYuibkT%2BdNufmziBV6XSYDcZN&amp;X-Amz-Signature=bc08cb5a88980d1143220fd159dc1bee7a528d5018abf15bcfea1c05d7aa21eb&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject" target="_blank" rel="noreferrer">https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/ab9a8459-0996-4608-a3fd-18c0505af74a/D2Coding.ttf?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB466SHM2BIY2%2F20260522%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260522T054104Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEE0aCXVzLXdlc3QtMiJGMEQCIDp1ro0z79e4IkBqVn7eCGzntrNMpWGgk%2B65u0mYAoFiAiA3j6tnW3C0uVqjD592sBmWfUDd6gthn%2BVP1wai%2F6kdBSr%2FAwgWEAAaDDYzNzQyMzE4MzgwNSIMlhAE%2B%2FM0N7jA5OWRKtwDCBqla%2B73mSCD%2FSp9mLQd6cexBMQqsjxMZh5wUkFlC9ey5FaJHSDVeqkAD11iCA0oKb5PidI7Yp2ZuYqH4z4Yw%2Bm3UWLwz51WQfsrxLAHUPKKMErbrRybQOhs9e3up7ri1GvgVD01SbymW2ofrftoXw%2Fy6eJHMhDq80abTxDbH5guGC%2FdTKqk%2BSjI28FTc545b5%2FAfPY7n1ffQZA8uSQomUnwRn7x4G1Z1cNfjnX7sCUXt9It07KURAUJ%2FjYYG%2F4NV6txbhVvseNPGbmskJluz%2FAZlLwB%2Fv5BPKnvX5AF7BTxbiNvKU0Au4BeN3gMyJd%2B%2FAelRp1znuDl%2FbeSvQMEZuBDn3rqvkpRNfyJ9yOyJSbaGnS%2FsNJSVm3pG%2Bjc0LWvLm%2FV3Hrwz5NQGxHlhFiGyABetrB4oCFZUO9xW7ZhzsQCyeCUORdSK%2BuQ%2FfXfxzZAF3%2FRrsoLeVE6JSzKNWwPPgHCAUhfNKFKd27SYKfM60WUZ70P4fVkT0vRUKaWyBeLJvoYlOzpxsabfnaTaEXzoAiXkbGlWL6Vchdd7wjOjJv%2FObetrBycJUF4LGl75vtPJpq0WsANHMSv6QTyPJu6D9qCI3pFZC9GEWmYW1ESjkhLUBprSUaWyUaIqF4w4rq%2F0AY6pgEGhdGven5UMdWdIWsJkhVERW94N%2B1fEO2kgrA5jWWkLG0DXrRQCbhCQmDTro%2BzG%2B0G1r2s0LvTTxSTCrvOoQVXVM23AP9j4uCHVQYieA%2FKr3ESYdjy1KamkL22grnj0AbAOvYEUio4wzPThqnQMmJRY61YI0J7A71Vv6zhh5xj3n%2F818PlFnpbTmXmaY1Tv06xYkekYuibkT%2BdNufmziBV6XSYDcZN&amp;X-Amz-Signature=bc08cb5a88980d1143220fd159dc1bee7a528d5018abf15bcfea1c05d7aa21eb&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject</a></p></div></details>
+<h3 id="block-4cce5a47c0994b24aa22010bcbe09e9b">🙌 만약 색상을 직접 주거나 랜덤으로 주고 싶다면 아래처럼 작성한다.</h3>
+<pre data-lang="python"><code class="language-python"># color = (0, 0, 0) 텍스트 색상을 흰색으로 고정 설정
+# color = (random.randint(10, 255), random.randint(10, 255), random.randint(10, 255)) # 텍스트 색상을 랜덤으로 설정</code></pre>
+<h2 id="block-ab8e7edb811a425d903c825a7f7c71a1">Text 위치 설정하기</h2>
+<p>Text의 색상 폰트 등의 설정이 끝났다면 이제 이 Text를 어디에 위치할 것인지 설정해야한다.</p>
+<p>하지만 Text의 내용이 길어짐에 따라 Text의 길이가 달라지니 이 또한 dynamic하게 구현해줘야 한다.</p>
+<p>Text의 길이는 어떤 내용이냐에 따라 달라짐으로 그 크기를 먼저 구해준다.</p>
+<pre data-lang="python"><code class="language-python">		# text 길이에 따른 텍스트의 크기 구하기
+    text_width, text_height = ImageDraw.Draw(im).textsize(text_context, font=font)</code></pre>
+<p>나는 Text를 우측 상단에 넣는 것을 기준으로 포지셔닝 하겠다.</p>
+<p>따라서 Text가 너무 우측 상단에 딱 붙을 수 있으니 이미지 가로 세로의 길이 중에서 값이 더 작은 길이에 대해 1%정도 띄워준다.</p>
+<pre data-lang="python"><code class="language-python">		# 텍스트의 위치가 이미지의 가쪽으로 부터 얕간 띄워지게 조율
+    x, y = w - text_width - min(w,h)*0.01, min(w,h)*0.01</code></pre>
+<p>Text 좌표는 Text의 좌상단을 기준으로 한다.</p>
+<figure><img src="/assets/notion/opencv-활용한-이미지에-text-쓰기/94b014bd-db24-4a3a-88bc-b61497354b7c.png" alt="x, y = w - text_width, 0 인 상태를 그린 그림이다." loading="lazy" width="1199" height="545" /><figcaption>x, y = w - text_width, 0 인 상태를 그린 그림이다.</figcaption></figure>
+<h2 id="block-f4da184885644fd585c9ebd3cbbb69d5">Text 배경 설정하기</h2>
+<p>이미지의 색상에 따라서 Text가 안 보일수 있다. 이를 위해 뒤에 배경을 설정해줄 것이다.</p>
+<p>배경은 Text의 크기보다 좀 더 커야 함으로 나는 2%의 비율로 설정해줬다.</p>
+<ul><li><code>box_x1, box_y1</code> : 좌측 상단의 좌표</li><li><code>box_x2, box_y2</code> : rectangle의 width, height</li></ul>
+<pre data-lang="python"><code class="language-python">		# 텍스트 배경 그리기 (검정색 배경)
+    box_x1, box_y1 = x - x*0.02, y - y*0.02
+    box_x2, box_y2 = x + text_width + x*0.01, y + text_height + y*0.5</code></pre>
+<figure><img src="/assets/notion/opencv-활용한-이미지에-text-쓰기/672a37b9-0f30-4611-a9a8-23f90dc040cf.png" alt="" loading="lazy" width="1282" height="576" /></figure>
+<h2 id="block-3e2d846e91e54db187db8507d7329cd6">그리기</h2>
+<p>위치 설정이 끝났으면 배경을 그려야 한다. fill의 경우는 배경의 색상 RGB parameter이며 (0, 0, 0)은 검정을 의미한다.</p>
+<p>주의할 점은 배경을 먼저 그리고 난 후에 Text를 그려야 Text가 배경 위에 나타나게 된다.</p>
+<pre data-lang="python"><code class="language-python">		# 배경을 그린다.
+		draw_rect = ImageDraw.Draw(im)
+    draw_rect.rectangle((box_x1, box_y1, box_x2, box_y2), fill=(0, 0, 0)) </code></pre>
+<p>배경을 그리고 난 후 Text를 그린다.</p>
+<pre data-lang="python"><code class="language-python">		# 텍스트(글자) 쓰기
+    draw = ImageDraw.Draw(im)
+    draw.text((x, y), text_context, font=font, fill=color))</code></pre>
+<p>그린 이미지를 저장해준다.</p>
+<pre data-lang="python"><code class="language-python">		# 저장할 이미지 경로+이름 설정 (save_dir/이미지명_i.jpg)
+    save_image_name = save_dir+'/'+image_path.split('/')[-1].split('.')[0]+'_'+str(i)+'.jpg'
+    im.save(save_image_name)</code></pre>
+<details class="toggle"><summary><strong>전체 코드</strong></summary><div class="toggle-body"><pre data-lang="python"><code class="language-python">from PIL import Image
+from PIL import Image, ImageFont, ImageDraw
+from IPython.display import display
+import glob
+from enum import Enum
+import os
+
+class Color(Enum) :
+    Red = (255, 0, 0)
+    Green = (0, 255, 0)
+    Blue = (0, 0, 255)
+    Yellow = (255, 255, 0)
+    White = (255, 255, 255)
+    Orange = (255, 165, 0)
+
+# 이미지 파일 경로
+path = &quot;./fire_sample/&quot;
+image_paths = glob.glob(path+&quot;*.jpg&quot;)
+
+# save directory
+save_dir = './predict'
+
+os.makedirs(save_dir,exist_ok=True)
+
+
+for i, image_path in enumerate(image_paths) :
+
+    # 이미지 불러오기
+    print(f&quot;Read Image: {image_path}&quot;)
+    im = Image.open(image_path)
+
+    # 이미지 크기 구하기
+    w, h = im.size
+
+    # 글자 크기 설정
+    font_size = int(min(w, h)*0.1)
+
+    # 폰트 설정
+    font=ImageFont.truetype(&quot;./font/D2Coding.ttf&quot;, font_size)
+
+    # 색상 설정
+    color = Color.Red.value
+
+    # text 내용
+    text_context = &quot;Hello World&quot;
+    
+    # text 길이에 따른 텍스트의 크기 구하기
+    text_width, text_height = ImageDraw.Draw(im).textsize(text_context, font=font)
+
+    # 텍스트의 위치가 이미지의 가쪽으로 부터 얕간 띄워지게 조율
+    x, y = w - text_width - min(w,h)*0.01, min(w,h)*0.01
+
+    # color = (0, 0, 0) 텍스트 색상을 흰색으로 고정 설정
+    # color = (random.randint(10, 255), random.randint(10, 255), random.randint(10, 255)) # 텍스트 색상을 랜덤으로 설정
+
+    # 텍스트뒤에 배경 그리기 (검정색 배경)
+    draw_rect = ImageDraw.Draw(im)
+    box_x1, box_y1 = x - x*0.02, y - y*0.02
+    box_x2, box_y2 = x + text_width + x*0.01, y + text_height + y*0.5
+    draw_rect.rectangle((box_x1, box_y1, box_x2, box_y2), fill=(0, 0, 0))
+
+    # 텍스트(글자) 쓰기
+    draw = ImageDraw.Draw(im)
+    draw.text((x, y), text_context, font=font, fill=color)
+
+    # 저장할 이미지 경로+이름 설정 (save_dir/이미지명_i.jpg)
+    save_image_name = save_dir+'/'+image_path.split('/')[-1].split('.')[0]+'_'+str(i)+'.jpg'
+    im.save(save_image_name)</code></pre></div></details>
+<h2 id="block-c9e511b67d1c4245af80a673315d573d">결과 </h2>
+<p>왼쪽은 Original Image이고 오른쪽은 그리기 한 후의 이미지다.</p>
+<div class="columns"><div class="column"><figure><img src="/assets/notion/opencv-활용한-이미지에-text-쓰기/2db2384f-81ae-4b5f-866f-b118114b4f87.jpg" alt="" loading="lazy" width="406" height="720" /></figure></div><div class="column"><figure><img src="/assets/notion/opencv-활용한-이미지에-text-쓰기/3bbd2190-54d2-41d2-b39d-205c0062f928.jpg" alt="" loading="lazy" width="406" height="720" /></figure></div></div></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +280,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

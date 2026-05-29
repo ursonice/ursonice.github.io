@@ -76,11 +76,296 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/c-c/">C/ C++</a>
+    </nav>
+    <h1>C/C++ Template</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2023년 2월 14일</span><span class="dot"></span><span>수정 2023년 6월 14일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-6942b67eb04b4c538223d0c51e505abf">서론</h2>
+<p>이 장은 C++에서 사용되는 Template개념에 대해서 설명한다.</p>
+<h2 id="block-d1674bdc98a042beaf6b8025f6e1be4e">목차</h2>
+<ol><li><a href="#block-040e915d89a34cb7b7732d13589df41b">Template 기본개념</a> </li><li><a href="#block-207a68b85dd449129c1a3391d7238d85">Class Template</a> </li><li><a href="#block-9d0a564ac26548218f3577a8c95556cd">Template Specialization(템플릿 특수화)</a> </li><li><a href="#block-0417742584824c56aafafba4258c4480">함수의 템플릿(Function Template)</a> </li><li><a href="#block-f0b7191af61b4bc28d1875c52f114fdd">Function Object(Functor)</a> </li><li><a href="#block-2bd95384610b4463baa8786a7b037c86">Meta Programming</a> </li></ol>
+<h2 id="block-040e915d89a34cb7b7732d13589df41b">Template 기본개념</h2>
+<p>함수나 클래스를 개별적으로 다시 작성하지 않아도 여러 자료 형으로 사용할 수 있도록 하게 만들어 놓은 틀</p>
+<p>함수 템플릿(Function Template)과 클래스 템플릿(Class Template)으로 나눠진다.</p>
+<h2 id="block-207a68b85dd449129c1a3391d7238d85">Class Template</h2>
+<h3 id="block-185e8d1b87a84e09acd0a31e8f85f940">전체 코드</h3>
+<pre data-lang="c++"><code class="language-cpp">// 템플릿 첫 활용
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+template &lt;typename T&gt;
+class Vector {
+  T* data;
+  int capacity;
+  int length;
+
+ public:
+  // 생성자
+  Vector(int n = 1) : data(new T[n]), capacity(n), length(0) {}
+
+  // 맨 뒤에 새로운 원소를 추가한다.
+  void push_back(T s) {
+    if (capacity &lt;= length) {
+      T* temp = new T[capacity * 2];
+      for (int i = 0; i &lt; length; i++) {
+        temp[i] = data[i];
+      }
+      delete[] data;
+      data = temp;
+      capacity *= 2;
+    }
+
+    data[length] = s;
+    length++;
+  }
+
+  // 임의의 위치의 원소에 접근한다.
+  T operator[](int i) { return data[i]; }
+
+  // x 번째 위치한 원소를 제거한다.
+  void remove(int x) {
+    for (int i = x + 1; i &lt; length; i++) {
+      data[i - 1] = data[i];
+    }
+    length--;
+  }
+
+  // 현재 벡터의 크기를 구한다.
+  int size() { return length; }
+
+  ~Vector() {
+    if (data) {
+      delete[] data;
+    }
+  }
+};
+
+int main() {
+  // int 를 보관하는 벡터를 만든다.
+  Vector&lt;int&gt; int_vec;
+  int_vec.push_back(3);
+  int_vec.push_back(2);
+
+  std::cout &lt;&lt; &quot;-------- int vector ----------&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;첫번째 원소 : &quot; &lt;&lt; int_vec[0] &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;두번째 원소 : &quot; &lt;&lt; int_vec[1] &lt;&lt; std::endl;
+
+  Vector&lt;std::string&gt; str_vec;
+  str_vec.push_back(&quot;hello&quot;);
+  str_vec.push_back(&quot;world&quot;);
+  std::cout &lt;&lt; &quot;-------- std::string vector -------&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;첫번째 원소 : &quot; &lt;&lt; str_vec[0] &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;두번째 원소 : &quot; &lt;&lt; str_vec[1] &lt;&lt; std::endl;
+}</code></pre>
+<p>template &lt;class T&gt;와 template &lt;typename T&gt;는 서로 동일한 의미를 갖는다.</p>
+<p>❗<em>typename 키워드를 사용하기를 권장한다.</em></p>
+<pre data-lang="c++"><code class="language-cpp">template &lt;typename T&gt;
+class Vector {
+  T* data;
+  int capacity;
+  int length;
+}</code></pre>
+<p>Template의 인자에 값을 전달하기 위해서는 <code>&lt; &gt;</code> 키워드를 사용한다.</p>
+<p>아래 코드는 <code>T</code>에 <code>int</code>라는 <code>type</code>이 전달된다.</p>
+<pre data-lang="c++"><code class="language-cpp">Vector&lt;int&gt; int_vec;</code></pre>
+<p>따라서 아래 코드처럼 T가 int로 치환된다고 봐도 무방하다. 만약 <code>Vector&lt;std::string&gt;</code>의 경우 T→string으로 치환된다.</p>
+<p><code>class template instantiation</code> : 클래스 템플릿에 인자를 전달해서 실제 코드를 생성하는 것 </p>
+<h2 id="block-9d0a564ac26548218f3577a8c95556cd">Template Specialization(템플릿 특수화)</h2>
+<p>일부 타입(경우)에 대해서 따로 처리하는 것</p>
+<pre data-lang="c++"><code class="language-cpp">template &lt;typename A, typename B, typename C&gt;
+class test {};</code></pre>
+<p><code>A</code>가 <code>int</code>고 <code>C</code>가 <code>double</code> 인 경우에 대해 따로 처리</p>
+<pre data-lang="c++"><code class="language-cpp">template &lt;typename B&gt;
+template &lt;int, B, double&gt; {};</code></pre>
+<h2 id="block-0417742584824c56aafafba4258c4480">함수의 템플릿(Function Template)</h2>
+<p>함수의 경우 클래스에서 사용된 <code>&lt; &gt;</code> 와 달리 변수의 타입을 보고 자동으로 인스턴스화(max&lt;int&gt; (a, b) 해준다.</p>
+<pre data-lang="c++"><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+template &lt;typename T&gt;
+T max&lt;T&amp; a, T&amp; b) {
+	return a &gt; b ? a : b;
+}
+
+int main() {
+  int a = 1, b = 2;
+  std::cout &lt;&lt; &quot;Max (&quot; &lt;&lt; a &lt;&lt; &quot;,&quot; &lt;&lt; b &lt;&lt; &quot;) ? : &quot; &lt;&lt; max(a, b) &lt;&lt; std::endl;
+
+  std::string s = &quot;hello&quot;, t = &quot;world&quot;;
+  std::cout &lt;&lt; &quot;Max (&quot; &lt;&lt; s &lt;&lt; &quot;,&quot; &lt;&lt; t &lt;&lt; &quot;) ? : &quot; &lt;&lt; max(s, t) &lt;&lt; std::endl;
+}
+
+</code></pre>
+<h2 id="block-f0b7191af61b4bc28d1875c52f114fdd">Function Object(Functor)</h2>
+<p>아래는 전체 코드다.</p>
+<pre data-lang="c++"><code class="language-cpp">#include &lt;iostream&gt;
+
+template &lt;typename T&gt;
+
+class Vector {
+    T* data;
+    int capacity;
+    int length;
+
+
+public :
+    typedef T value_type;
+
+    Vector(int n=1) : data(new T[n]), capacity(n), length(0) {}
+
+    void push_back(int s) {
+        if(capacity &lt;= length) {
+            int* temp = new T[capacity*2];
+            for(int i=0; i&lt; length; i++){
+                temp[i] = data[i];
+            }
+            delete[] data;
+            data = temp;
+            capacity *= 2;
+        }
+
+        data[length] = s;
+        length++;
+    }
+
+    T operator[](int i){ return data[i];}
+
+    void remove(int x){
+        for(int i=x+1; i&lt; length; i++) {
+            data[i-1] = data[i];
+        }
+        length--;
+    }
+
+    int size() { return length; }
+
+    void swap(int i, int j) {
+        T temp = data[i];
+        data[i] = data[j];
+        data[j] = temp;
+    }
+
+    ~Vector(){
+        if(data){
+            delete[] data;
+        }
+    }
+};
+
+template &lt;typename Cont&gt;
+void bubble_sort(Cont&amp; cont){
+    for(int i=0; i &lt; cont.size(); i++){
+        for(int j=i+1; j&lt;cont.size(); j++){
+            if (cont[i] &gt; cont[j]){
+                cont.swap(i, j);
+            }
+        }
+    }
+}
+
+template &lt;typename Cont, typename Comp&gt;
+void bubble_sort(Cont&amp; cont, Comp&amp; comp){
+    for (int i=0; i &lt; cont.size(); i++){
+        for (int j=i+1; j&lt;cont.size(); j++){
+            if(!comp(cont[i], cont[j])){
+                cont.swap(i, j);
+            }
+        }
+    }
+}
+
+struct Comp1 {
+    bool operator()(int a, int b) { return a &gt; b; }
+};
+
+struct Comp2 {
+    bool operator()(int a, int b) { return a &lt; b;}
+};
+
+
+int main() {
+    Vector&lt;int&gt; int_vec;
+    int_vec.push_back(3);
+    int_vec.push_back(1);
+    int_vec.push_back(2);
+    int_vec.push_back(8);
+    int_vec.push_back(5);
+    int_vec.push_back(3);
+
+    std::cout &lt;&lt; &quot;정렬 이전 ---- &quot; &lt;&lt; std::endl;
+
+    for (int i = 0; i &lt; int_vec.size(); i++) {
+        std::cout &lt;&lt; int_vec[i] &lt;&lt; &quot; &quot;;
+    }
+
+    Comp1 comp1;
+    bubble_sort(int_vec, comp1);
+
+    std::cout &lt;&lt; std::endl &lt;&lt; std::endl &lt;&lt; &quot;내림차순 정렬 이후 ---- &quot; &lt;&lt; std::endl;
+
+    for(int i=0; i &lt; int_vec.size(); i++){
+        std::cout &lt;&lt; int_vec[i] &lt;&lt; &quot; &quot;;
+    }
+    std::cout &lt;&lt; std::endl;
+
+    Comp2 comp2;
+    bubble_sort(int_vec, comp2);
+
+    std::cout &lt;&lt; std::endl &lt;&lt; &quot;오름차순 정렬 이후 ----- &quot; &lt;&lt; std::endl;
+
+    for (int i =0; i&lt; int_vec.size(); i++){
+        std::cout &lt;&lt; int_vec[i] &lt;&lt; &quot; &quot;;
+    }
+    std::cout &lt;&lt; std::endl;
+
+
+}</code></pre>
+<p>위 코드 중에서 아래부분을 보면 다음과 같은 부분이 있는데 이는 <code>operator()</code> 만 정의하고 있다.</p>
+<p>이 처럼 함수는 아니지만 함수 인 척하는 객체를 함수 객체(Function Object) → <code>Functor</code> 이라고 한다.</p>
+<pre data-lang="c++"><code class="language-cpp">template &lt;typename Cont, typename Comp&gt;
+void bubble_sort(Cont&amp; cont, Comp&amp; comp) {
+  for (int i = 0; i &lt; cont.size(); i++) {
+    for (int j = i + 1; j &lt; cont.size(); j++) {
+      if (!comp(cont[i], cont[j])) { //이 부분!!
+        cont.swap(i, j);
+      }
+    }
+  }
+}
+
+struct Comp1 {
+    bool operator()(int a, int b) { return a &gt; b; }
+};
+
+struct Comp2 {
+    bool operator()(int a, int b) { return a &lt; b;}
+};
+</code></pre>
+<h2 id="block-2bd95384610b4463baa8786a7b037c86">Meta Programming</h2>
+<p>타입은 컴파일 타임에 정해져야 함으로 컴파일 타임에 연산이 완료된다. 이렇게 타입을 가지고 <code>컴파일 타임에 생성되는 코드로 프로그래밍</code> </p>
+<p>C++의 경우 템플릿을 가지고 이러한 작업을 하기 때문에 <code>Template Meta Programming</code>(템플릿 메타프로그래밍) 이라고 한다.</p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +386,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

@@ -76,11 +76,49 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/kubernetes/">Kubernetes</a>
+    </nav>
+    <h1>[Kubernetes] Kuberntes History</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 5월 4일</span><span class="dot"></span><span>수정 2025년 5월 29일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-1e8b12c0115c802d982eea5d0ce9086e">서론</h2>
+<p>이 장에서는 지금까지 쿠버네티스가 어떻게 발전해 왔는지에 대해서 설명한다.</p>
+<h2 id="block-1f0b12c0115c80b39e49d583fd482e39">History of Kubernetes</h2>
+<ul><li>초기 쿠버네티스는 Docker Engine을 직접 호출해서 컨테이너를 실행시켰다.</li><li>도커 이외의 다수의 컨테이너 런타임을 지원하기 위해 CRI(Container Runtime Interface)가 등장하면서 쿠버네티스는 CRI를 통해 컨테이너 오케스트레이션이 가능해졌다.</li><li>하지만 도커 엔진은 자체적인 고유 API를 사용했기 때문에 쿠버네티스가 설계한 CRI와 호환되지 않았다.</li><li>이 문제를 해결하기 위해 쿠버네티스는 도커 엔진을 CRI에 맞추기 위한 어댑터 모듈(Dockershim)을 내장했다.<figure><img src="/assets/notion/kubernetes-kuberntes-history/202b12c0-115c-809c-b0b1-ec2cedc7c4c8.png" alt="" loading="lazy" width="2482" height="1320" /></figure></li><li>이 모듈은 쿠버네티스와 도커 엔진이 통신을 할 때 CRI 명령을 도커 네이티브 API 형식으로 변환하는 번역계층을 수행했다.</li></ul>
+<blockquote>쿠버네티스가 CRI 표준을 도입하면서 컨테이너 런타임과의 통신 방식을 재정의했다.
+하지만 당시 도커 엔진은 CRI를 지원하지 않았기 때문에, dockershim을 개발한 것이다.</blockquote>
+<ul><li>그런데 도커 엔진이 업데이트될 때마다 쿠버네티스의 dockershim도 수정해야 했기 때문에 유지보수가 어려웠다.</li><li>이를 없애기 위해  dockershim 없이 쿠버네티스와 컨테이너 런타임 간 CRI만 쓰고, 런타임 내부에서 OCI Image/Runtime Spec으로 컨테이너를 실행하는 구조로 전환했다.</li></ul>
+<figure><img src="/assets/notion/kubernetes-kuberntes-history/202b12c0-115c-80a9-a7be-dc9f3e30b51c.png" alt="" loading="lazy" width="2458" height="1450" /></figure>
+<ul><li>다시 말해 containerd · CRI‑O 같은 런타임은 CRI를 구현하면 쿠버네티스와 통신이 가능했고, 자신 안에서는 OCI 표준을 따라 runc 등 저수준 런타임을 호출한다.<ul><li><strong> 컨테이너 “런타임”이란?</strong><ul><li><strong>Docker Engine</strong>: CLI·빌드·이미지 관리·컨테이너 실행 <strong>모두 포함</strong>한 “종합세트”.</li><li><strong>containerd, CRI-O</strong>: <em>빌드</em>는 빼고 <strong>실행(core runtime)</strong> 기능에 집중한 경량화 버전.</li><li><strong>Docker Engine = 런타임+@</strong></li><li><strong>containerd/CRI-O = 런타임 코어”</strong></li></ul></li></ul>
+<hr /></li><li>따라서 1.24 버전 이후에는 dockershim이 완전히 제거되면서 CRI를 직접 구현한 런타임만 지원하는 형태가 확정되었다.</li><li>crictl:  <em>CRI 소켓</em>에 붙어 쿠버네티스 시점으로 컨테이너를 들여다보는 디버그 CLI <ul><li>crictl은 <strong>Kubelet과 동일한 API</strong>를 사용해 <em>파드·컨테이너·이미지</em> 정보를 가져옴<ul><li><strong>kubectl</strong> : <strong>사용자 → API Server</strong> 통신용 CLI</li><li><strong>kubelet</strong> : <strong>API Server → 노드(런타임)</strong> 연결 담당 에이전트<ul><li>API Server의 지시에 따라 <strong>CRI</strong> 호출로 컨테이너를 만든다.</li></ul></li><li><strong>crictl</strong> : kubelet과 마찬가지로 <strong>CRI</strong>를 직접 호출하는 CLI</li></ul></li></ul></li><li>ctr·nerdctl: <em>containerd 소켓</em>에 붙어 containerd를 직접 조종하는 CLI(ctr=저수준, nerdctl=일상용).<ul><li><strong>containerd 내부 객체(Task, Snapshot 등)</strong> 를 직접 만져야 할 때 사용.
+</li></ul></li></ul>
+<p><a href="https://velog.io/@gun_123/Kubernetes-Fundamentals-Docker%EC%99%80-ContainerD-%EC%B0%A8%EC%9D%B4%EC%A0%90%EA%B3%BC-%EA%B4%80%EB%A0%A8-CLI-%EB%8F%84%EA%B5%AC%EB%93%A4" target="_blank" rel="noreferrer">https://velog.io/@gun_123/Kubernetes-Fundamentals-Docker%EC%99%80-ContainerD-%EC%B0%A8%EC%9D%B4%EC%A0%90%EA%B3%BC-%EA%B4%80%EB%A0%A8-CLI-%EB%8F%84%EA%B5%AC%EB%93%A4</a></p>
+<h2 id="block-1e8b12c0115c804597dfde12af381f77">Control Plane(마스터 노드)</h2>
+<p>쿠버네티스 클러스터의 전반적인 작업을 관리</p>
+<ul><li>Kube-api server: 개발자가 마스터 노드에 어떤 요청을 보내면 이를 받아 실행시켜주는 역할</li><li>etcd: 쿠버네티스 클러스터에 존재하는 worker node들에 대한 상태 정보를 key-value 형태로 저장하는 저장소</li><li>Kube-scheduler: 파드를 실행시킬 노드를 선택</li><li>Kube-Controller-manager: 클러스터 상태를 모니터링</li><li>Pod: 하나의 목적을 위해 구성된 컨테이너를 그룹화한 것</li></ul>
+<h2 id="block-1e8b12c0115c8038a048eac3f7d3503d">Worker Node</h2>
+<ul><li>Kubelet: 모든 워커 노드에 존재하며 워커 노드를 총괄하는 역할</li><li>Kube-proxy: 쿠버네티스의 네트워크 동작을 관리, CNI를 통해 노드에 존재하는 파드들이 쿠버네티스 내부/외부 통신을 가능하도록 함</li><li>Container Runtime Engine: 컨테이너를 실행하는 엔진(Containerd, CRI-O ..)</li></ul></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +139,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

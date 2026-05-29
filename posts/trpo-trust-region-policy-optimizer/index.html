@@ -76,11 +76,108 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/reinforcement-learning/">Reinforcement Learning</a>
+    </nav>
+    <h1>TRPO - Trust Region Policy Optimizer</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2026년 5월 11일</span><span class="dot"></span><span>수정 2026년 5월 24일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-35db12c0115c8090a7bdf60f019a4e46">서론</h2>
+<p>기존 DDPG는 성능의 단조개선(Monotonic Improvement)가 이론적으로 보장되지 않았다.(목적함수 \(J(\theta)\))가 매 iteration마다 증가한다는 보장이 없다.)</p>
+<p>왜냐하면 Actor( \(\mu\) )가 Ciritic(Q 함수)의 gradient를 따라가도록 학습하는데 critic 자체도 학습중이라 부정확하다.</p>
+<p>또한 Gradient는 현재 시점에 대한 선형근사 정보(한 점에서의 방향정보)뿐이여서 그 정보가 어디까지 유요할지 알 수 없다.(Step size를 모름)</p>
+<p>이러한 문제를 해결하기위해 MM(Minimization - Maximization)알고리즘과 Trust Region Concept을 도입한다.</p>
+<h2 id="block-35db12c0115c80ed97aed956386e0b91">목차</h2>
+<ul><li>Trust Region</li><li>Objective Function</li><li>ㅇ</li></ul>
+<h2 id="block-35db12c0115c807489a2d242b3147a7d">Trust Region</h2>
+<p>Trust Region 내부에서 정책파라미터 \(\theta\)를 업데이트하면 목적함수 \(J(\theta)\)의 단조개선이 이론적으로 보장된다.</p>
+<p>이 Trust Region은 KL Divergence 제약조건으로 신뢰 영억을 정의한다.</p>
+<p>그 영역 안에서는 Gradient 방향으로 이동해도 항상 성능이 개선된다는 것을 보장한다.</p>
+<p>따라서 step-size를 고려하지 않고 Trust region영역안에서 가장 좋은 점으로 이동하면 된다.</p>
+<figure><img src="/assets/notion/trpo-trust-region-policy-optimizer/35db12c0-115c-8097-80f5-cc7bb2844352.png" alt="" loading="lazy" width="1925" height="1000" /></figure>
+<h2 id="block-35db12c0115c80209db0e7b9e2093533">Objective Function</h2>
+<ul><li>Maximizing the Expected Return </li></ul>
+<div class="math-block">\[\eta(\pi)
+=
+\mathbb{E}_{s_0, a_0, \ldots}
+\left[\sum_{t=0}^{\infty} \gamma^{t} r(s_t)\right] \tag{1}
+\]</div>
+<ul><li>\(s_0,\;a_0,\;...\): 주어진 Policy(\(\pi\))에 의해 만들어진 모든 에피소드에 대하여</li><li>\(\sum_{t=0}^{\infty} \gamma^{t} r(s_t)\): 단일 에피소드에 대한 return 값</li><li>모든 에피소드에 대하여 받을 수 있는 보상의 기대값을 계산함</li><li>목적함수의 의미는 수식 (1)와 같으나 실제로는 아래 수식(2)를 통해서 \(\eta(\pi)\)를 구한다.</li></ul>
+<div class="math-block">\[\eta(\pi)-\eta(\pi_{\text{old}})=\mathbb{E}_{\tau\sim\pi}\left[\sum_{t=0}^{\infty}\gamma^tA_{\pi_{\text{old}}}(s_t,a_t)\right]\tag{2}\]</div>
+<details class="toggle"><summary><strong>[증명]</strong></summary><div class="toggle-body"><figure><img src="/assets/notion/trpo-trust-region-policy-optimizer/35db12c0-115c-8028-b38f-dca3649a1a51.png" alt="" loading="lazy" width="999" height="1545" /></figure>
+<figure><img src="/assets/notion/trpo-trust-region-policy-optimizer/35db12c0-115c-8025-9574-dcfe885c0982.png" alt="" loading="lazy" width="1000" height="1480" /></figure>
+<figure><img src="/assets/notion/trpo-trust-region-policy-optimizer/35db12c0-115c-80a2-b63f-ff8fb8bb52f2.png" alt="" loading="lazy" width="1659" height="1000" /></figure></div></details>
+<div class="math-block">\[\eta(\pi)=\eta(\pi_{\text{old}})+\mathbb{E}_{\tau\sim\pi}\left[\sum_{t=0}^{\infty}\gamma^tA_{\pi_{\text{old}}}(s_t,a_t)\right]\\\quad=\eta(\pi_{\text{old}})+\sum_s\rho_\pi(s)\sum_a\pi(a|s)A_{\pi_{\text{old}}}(s,a) \tag{3}\]</div>
+<ul><li>그리고 수식(3)번 처럼 변경할 수 있다.</li></ul>
+<h2 id="block-35eb12c0115c809fb5a4e38bb1915199">State Visitng Frequency</h2>
+<ul><li>\(\rho\)는 각 상태를 얼마나 방문하는지에 대한 방문 빈도이다.</li></ul>
+<div class="math-block">\[\text{State visiting frequency: }\rho_\pi(s)=\sum_{t=0}^{\infty}\gamma^tP(s_t=s \mid \pi)\]</div>
+<details class="toggle"><summary><strong>[증명]</strong></summary><div class="toggle-body"><figure><img src="/assets/notion/trpo-trust-region-policy-optimizer/35db12c0-115c-80b8-a34f-fbd2d5bebd90.png" alt="" loading="lazy" width="1215" height="1000" /></figure></div></details>
+<h3 id="block-35eb12c0115c80c7a670f00983bf82cb">Statue Visiting Frequency를 곱하는 이유</h3>
+<ul><li>\(G_t\)는 실제 trajectory를 따라가며 얻은 보상의 누적 합이다.</li><li>따라서 같은 상태를 여러 번 방문하면 그때마다 보상이 return에 반영된다.</li><li>\(V_{\pi}(s),\;Q_{\pi}(s,\;a)\)는 상태 s에 이미 도착한 이후의 평균 return이다. </li><li>따라서 그 직후 trajectroy의 방문 빈도는 포함하지만, 처음 시작 상태에서 s까지 얼마나 자주 도착하는지는 포함하지 않는다.<ul><li>[Example]<ul><li>정책 \(\pi\)가 아래처럼 행동한다고 해보자<ul><li>\(s_0\) → A : 99%</li><li>\(s_0\)→ B :  1%</li></ul></li><li>이때 B를 거쳐가야만 G에 도달가능하고 G에 도달한 경우 보상을 크게 받는다고 하자.<div class="math-block">\[V_{\pi}(G) = 100\]</div></li><li>만약 각 상태에서 받을 보상의 평균만 계산했다면 방문빈도는 계산되지 않아 마치 A, B 둘다 동일한 가중치로 방문한다고 가정하고 계산하는 것임으로 실제로는 오차가 생길 수 있다.</li></ul></li></ul></li></ul>
+<h2 id="block-35db12c0115c80a4ac59f902a2480913">Objective Function의 의미</h2>
+<div class="math-block">\[\eta(\pi) - \eta(\pi_{\text{old}})
+=
+\sum_s
+\rho_\pi(s)
+\left[
+\sum_a
+\pi(a|s)
+Q_{\pi_{\text{old}}}(s,a)
+-
+V_{\pi_{\text{old}}}(s)
+\right]\]</div>
+<ul><li>\(\mathbb{E}_{\tau \sim \pi}\left[\sum_{t=0}^{\infty}\gamma^tA_{\pi_{\text{old}}}(s_t,a_t)\right]=\sum_s
+\rho_\pi(s)
+\left[
+\sum_a
+\pi(a|s)
+Q_{\pi_{\text{old}}}(s,a)
+-
+V_{\pi_{\text{old}}}(s)
+\right]\)</li><li> \(\eta(\pi_{\text{old}})\): 상태 s에서 어떤 행동 a를 한 번 시도해보고 그 이후에는 옛 정책(\(\pi_{old}\))를 따랐을 때의 가치</li><li>\(\pi(a|s)
+Q_{\pi_{\text{old}}}(s,a)\):  상태 s에서 새 정책 \(\pi\)를 따라 한 번 행동을 고르고 그 이후에는 옛 정책(\(\pi_{old}\))를 따라 간다. 이렇게 했을 때 첫 스탭에서 새 정책 \(\pi\)에 의해 결정되는 모든 행동 에 대한 기대값 </li><li></li></ul>
+<ol><li>Law of Total Expectation 적용</li></ol>
+<div class="math-block">\[\mathbb{E}_{\tau\sim\pi}\left[\mathbb{E}_{S_{t+1}\sim p(\,\cdot\,|S_t,a_t)}[V_{\pi_{old}}(S_{t+1})]\right]
+= \mathbb{E}_{\tau\sim\pi}\left[V_{\pi_{old}}(S_{t+1})\right]\]</div>
+<p>(because \(\mathbb{E}[X]=\mathbb{E}[\mathbb{E}[X|Y]]\))</p>
+<ol><li>텔레스코핑 합(Telescoping sum)</li></ol>
+<p>먼저 첫 항은</p>
+<div class="math-block">\[\sum_{t=0}^{\infty}\gamma^t \mathbb{E}_{\tau\sim\pi}[r(S_t)] = \eta(\pi)\]</div>
+<p>이고, 나머지 두 항은</p>
+<div class="math-block">\[\begin{aligned}
+\sum_{t=0}^{\infty}\gamma^t \mathbb{E}_{\tau\sim\pi}\left[\gamma V_{\pi_{old}}(S_{t+1}) - V_{\pi_{old}}(S_t)\right]
+&amp;= \mathbb{E}_{\tau\sim\pi}\left[\sum_{t=0}^{\infty}\left(\gamma^{t+1}V_{\pi_{old}}(S_{t+1}) - \gamma^t V_{\pi_{old}}(S_t)\right)\right] \\
+&amp;= -\mathbb{E}_{S_0\sim\rho_0}\left[V_{\pi_{old}}(S_0)\right]
+\end{aligned}\]</div>
+<p>(모든 항이 소거되고 \(t=0\)의 항만 남음)</p>
+<ol><li>최종 결론</li></ol>
+<p>따라서</p>
+<div class="math-block">\[\mathbb{E}_{\tau\sim\pi}\left[\sum_{t=0}^{\infty}\gamma^t A_{\pi_{old}}(S_t,a_t)\right]
+= \eta(\pi) - \mathbb{E}_{S_0\sim\rho_0}\left[V_{\pi_{old}}(S_0)\right]\]</div>
+<p>또한 \(\mathbb{E}_{S_0\sim\rho_0}[V_{\pi_{old}}(S_0)] = \eta(\pi_{old})\) 이므로</p>
+<div class="math-block">\[\eta(\pi)-\eta(\pi_{old})
+=\mathbb{E}_{\tau\sim\pi}\left[\sum_{t=0}^{\infty}\gamma^t A_{\pi_{old}}(S_t,a_t)\right].\]</div></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +198,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

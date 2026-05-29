@@ -76,11 +76,83 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/ai-deep-learning/">AI/ Deep Learning</a>
+    </nav>
+    <h1>GLASS 논문리뷰</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2024년 7월 30일</span><span class="dot"></span><span>수정 2025년 7월 19일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-866116c83c7a4954946b9c7245143433">Cite </h2>
+<p>Hui Zhang, Zheng Wang, Zuxuan Wu, Yu-Gang Jiang; arXiv preprint arXiv:2303.08730, 2023.</p>
+<ul><li><a href="https://arxiv.org/abs/2303.08730" target="_blank" rel="noreferrer">https://arxiv.org/abs/2303.08730</a></li><li>출간일: 2023. 03. 15</li></ul>
+<h2 id="block-cfeb0e64b9804b659b8e28955cb5df05">목차</h2>
+<ul><li>Abstract</li><li>Introduction</li><li>Proposed Method</li><li>Inference</li><li>Experiments</li></ul>
+<h2 id="block-09185bdce13b43faaa2803f027108547">Abstract</h2>
+<p>Normal 이미지를 합성하여 비정상 이미지를 만들어 내는(Anomaly Synthesis strategies) 전략</p>
+<p>은 비지도 학습기법을 사용한 Anomaly Detection 성능을 향상시키는데 효과적으로 기여하였습니다.</p>
+<p>그러나 기존 방법들은 주로 특정 종류의 Anomaly만을 감지하며 다양한 형태의 Anomaly을 잘 감지하지 못합니다. 또한 Normal 이미지와 유사하게 생긴 약간의 결함과 같은 부분에 대해서는 잘 잡아내지 못하고 있습니다.</p>
+<p>이를 해결하기 위해 본 논문에서는 <code>Feature Level</code>에서의 전반적인 이미지의 분포를 학습하고(Global Anomaly Synthesis), <code>Image Level</code>에서의 지엽적인 정보를 습득하는(Local Anomaly Synthesis) 통합된 새로운 프레임워크를 고안합니다.</p>
+<p>우리가 사용한 이미지 합성 방법은 Gradient ascent를 활용한 Guaussian noise와 truncated projection라는 기법이 사용됩니다.</p>
+<h2 id="block-450e720c16354a36b87f849dfdd02a4d">Introduction</h2>
+<figure><img src="/assets/notion/glass-논문리뷰/68b7ab60-4df9-4c0b-be5d-6b686956c553.png" alt="" loading="lazy" width="2216" height="1106" /></figure>
+<ul><li><code>회색 삼각형</code>은 정상 이미지로 부터 Anomaly 합성으로 만들어진 <code>Image Level</code>에서의 특징들(LAS)을 나타냅니다. </li><li><code>빨간 삼각형</code>은 합성이 아닌 실제 Anomaly를 나타냅니다.</li><li><code>핑크색 다이아몬드</code>는 정상 이미지로 부터 전반적인 Anomaly합성으로 만들어진 <code>feature Level</code>에서의(GAS) 특징입니다.</li><li><code>파란 네모 박스</code>는 Anomaly합성 이미지의 분포를 Gradient Ascent를 사용하여 실제 Anomaly Image의 분포와 유사하도록 Control하기 위한 정보를 가지고 있습니다.</li></ul>
+<h3 id="block-2d4702eb614848efa45014ce0f0eeb10">회색 삼각형</h3>
+<p>Image level에서는 매우 정밀하게 Anomaly를 생성해 낼 수 있습니다. 그러나 Anomaly를 생성해내는 다양성이 부족하다는 단점이 있습니다.</p>
+<ul><li>예를들어 직물 공장에서 찢어진 부분을 감지해야 한다면 매우 정밀하게 찢어진 Anomaly를 생성해낼 수 있다. 그러나 실제로는 다양한 형태와 크기의 찢어진 부분이 존재할 수 있는데, 이러한 다양성을 충분히 반영하지 못한다.</li></ul>
+<h3 id="block-237cb2a25a4845ec9e7127e9e627793c">핑크색 다이아몬드</h3>
+<p>feautre level에서는 Image level보다 feature map의 사이즈가 작기 때문에 학습에 효과적일 수 있지만 Anomaly의 특정패턴이나 강도, 위치등을 세밀하게 조절하기에는 어렵다는 단점이 있습니다.</p>
+<ul><li>예를 들어, 고해상도 이미지를 검사할 때, 매우 작은 결함이나 미세한 색상 변화 등을 정확히 감지하고 생성하기 어렵습니다.</li></ul>
+<h3 id="block-c8463623149a49909e853fc78d9f626d">회색 삼각형 + 핑크색 다이아몬드</h3>
+<p>본 논문에서는 Gaussian noise와 gradient ascent를 사용하여 보다 Anomaly합성을 정교하고 조절 가능 하여 실제 Anomaly 이미지의 특징을 잘 반영하며 다양한 이상에 대해서도 탐지할 수 있도록 한다는 것입니다.</p>
+<p>쉽게 말해 이 둘을(회색 삼각형 + 핑크 다이아몬드)  이용해 깊고 광범위하게 Anomaly를 생성하겠다는 것입니다.</p>
+<h2 id="block-5da3a24d760b4348a9770edc48381d0c">Proposed Method</h2>
+<figure><img src="/assets/notion/glass-논문리뷰/b04dd032-c8c7-4c0c-a9ad-405407c0cada.png" alt="" loading="lazy" width="2246" height="1498" /></figure>
+<p>아래 3가지의 요소를 사용해 학습합니다.</p>
+<ol><li>Normal Branch</li><li>GAS branch</li><li>LAS branch</li></ol>
+<h3 id="block-5239d2d4026640c6908fb7a6171260e3">1. Normal branch</h3>
+<ul><li>(E)는 Resnet wide를 backbone으로 했으며 학습하지 않고 특징 추출기로 사용합니다.</li><li>특징 추출기(E)로 부터 정상 이미지의 일반적인 특징을 추출합니다. </li><li>이미지에 특화된 특징을 학습합니다(A)</li></ul>
+<h3 id="block-aa8d8bcf420a456697c7dc75dc3760bb">2. GAS Branch</h3>
+<ul><li>1번에서 추출된 특징을 기반으로 기반으로 이미지의 전반적인 Anomaly 특징을 학습합니다.</li><li>가우시안 필터를 기반으로 Grandient Ascent에 의해 필터의 모양이나 패턴을 조정합니다. </li></ul>
+<h3 id="block-8267e97ea8c0497e9d4110a4be24dc2f">3. LAS Branch</h3>
+<ul><li>국소적인 Anomaly를 생성하기 위해 기존 정상 이미지에서 Mask(모양을 가지고있고 무늬는 없음)와 Texture(모양은 없고 무늬가 있음)를 이미지에 투영시킵니다.</li><li>특징 추출기(E)로 부터 일반적인 특징을 추출합니다</li><li>이미지 Anomaly 특화된 특징을 학습합니다(A)</li></ul>
+<p>위 3가지 요소의 정보를 전부 Discriminator에 반영하고 총 3개의 Loss Function을 사용해 학습합니다.</p>
+<h2 id="block-82aaffc9b8aa4620bf33f290471c1803">Inference</h2>
+<p>Noraml Branch 경로를 통해 추론합니다.</p>
+<h2 id="block-49c3dbb23a7846378dbe9cfd6b3d0142">Experiments</h2>
+<h3 id="block-80612896b12746e0a4ccd48e0f76e4c7">Train</h3>
+<ul><li>Backbone: WideResnet50</li><li>Image Size: 288 x 288 (Center Crop)</li><li>Optimizer: Adam (lr: 0.0001 ~ 0.0002)</li><li>Epoch: 640</li><li>Batch_size: 8</li><li>GPU: NVIDIA Tesla A800</li><li>CPU: Inter Xeon Gold 6346 CPU @3.10GHz</li></ul>
+<figure><img src="/assets/notion/glass-논문리뷰/8af02073-2469-45e0-b748-8d02a4e8775f.png" alt="" loading="lazy" width="1982" height="1000" /></figure>
+<p>위 표는 MVTec AD DataSet 학습을 가지고 학습시킨 여러 모델 성능지표를 나타냅니다.</p>
+<p>‘/’를 기준으로 왼쪽에 표시된 지표는 이미지 자체가 정상 이미지인지 Anomaly이미지 인지를 구분하는 정확도이며 오른쪽은 이미지 내의 Anomaly가 발생한 위치의 정확도 입니다.</p>
+<h3 id="block-6d6c63b779244015935e509a55fe39d6">Used Model</h3>
+<ul><li>Glass-m (Global Anomaly Synthesis with Masked Reconstruction)<ul><li>Grandient Ascent를 통해 가우시안 노이즈를 조정하는 기법을 사용한 학습 모델</li><li>Global anomaly synthesis (GAS) with masked reconstruction focuses on synthesizing anomalies at the feature level, leveraging Gaussian noise uided by gradient ascent.</li></ul></li><li>GLASS-h (Hybrid Anomaly Synthesis)<ul><li> GAS와 LAS 기법을 둘다 사용합니다. 분리된 가중치를 사용합니다.</li><li>Hybrid anomaly synthesis (GLASS-h) <code>combines</code> both GAS and LAS, enabling the detection of both global and local anomalies.”</li></ul></li><li>Glass-j (Joint Anomaly Synthesis)<ul><li>GAS와 LAS를 통합하여 사용합니다. 하나의 가중치를 사용합니다.</li><li>Joint anomaly synthesis (GLASS-j) <code>integrates</code> both GAS and LAS techniques to improve the detection of various types of anomalies.”</li></ul></li></ul>
+<figure><img src="/assets/notion/glass-논문리뷰/895b0de9-bb87-4ab1-a190-6122d6161a14.png" alt="" loading="lazy" width="2204" height="1000" /></figure>
+<p>위 표는 4개의 Datset을 가지고 타 모델들과의 성능 비교를 나타냅니다.</p>
+<figure><img src="/assets/notion/glass-논문리뷰/22db1cb2-c51f-4723-a4a0-b8ebf75c5c6b.png" alt="" loading="lazy" width="3332" height="1000" /></figure>
+<p>MAD-man, MAD-sys로 위 표는 Glass-m 이라는 모델을 사용해 다른 모델과의 성능을 비교한다.</p>
+<ul><li>MAD-man: 15개의 카테고리중 5개의 카테고리를 선택했으며 5명의 개개인이 독립적으로 week data를 sampling해 구성한 데이터 셋.</li><li>MAD-sys: MVTec-AD 데이터셋 중 5개의 카테고리중 4개의 카테고리를 선발한 데이터셋으로 다양한 결함으로 구성한 데이터셋 입니다. </li></ul>
+<figure><img src="/assets/notion/glass-논문리뷰/d2adfa7b-e1a8-465b-8587-c1965fa39d48.png" alt="" loading="lazy" width="2538" height="1000" /></figure>
+<p>아래는 논문에 나오는 MAD-man과 MAD-sys데이터셋 일부 예시입니다.</p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +173,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

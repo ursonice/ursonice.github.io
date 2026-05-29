@@ -76,11 +76,83 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/kubernetes/">Kubernetes</a>
+    </nav>
+    <h1>[Kubernetes] Backup and Restore</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 7월 13일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-22fb12c0115c8029974dd8e9c1408080">서론</h2>
+<p>Kubernetes 클러스터를 안정적으로 운영하기 위해서는 정기적인 백업과 복원이 필요하다.</p>
+<p>이 장에서는 Kubernetes 리소스를 백업하고 복원하는 두 가지 주요 방법에 대해 알아보자.</p>
+<ul><li>첫 번째는 Kube API 서버를 통해 리소스 정의를 백업하는 방식이고</li><li>두 번째는 etcd 데이터베이스 자체를 백업하는 방식이다.</li></ul>
+<h2 id="block-22fb12c0115c8047ba94d245c98de67b">Kube API Backup</h2>
+<p>Kubernetes에서 배포된 애플리케이션은 Deployment, Pod, Service 등으로 이루어져 있다.</p>
+<p>이때 워크로드를 생성하는 방식이 2가지가 있다:</p>
+<ul><li>명령형 방식(imperative): 명령어로 직접 리소스를 생성 (kubectl create ...)</li><li>선언형 방식(declarative): YAML 정의 파일을 만들고 kubectl apply로 적용</li></ul>
+<p>선언형 방식은 yaml파일을 그대로 남겨두기 때문에 이들을 소스코드와 함께 Github 저장소에 보관하면 백업을 쉽게 할 수 있다.</p>
+<p>하지만 명령형 방식으로 워크로드를 만들었다면 yaml파일이 없다.</p>
+<p>이런 경우에는 kubectl get 명령어로 Kube API 서버에서 현재 클러스터의 워크로드 정보를 추출하여 백업할 수 있다.</p>
+<pre data-lang="bash"><code class="language-bash">kubectl get all --all-namespaces -o yaml &gt; cluster-backup.yaml</code></pre>
+<p>(자동 백업을 원한다면 Velero와 같은 백업 도구를 사용하면 된다)</p>
+<figure><img src="/assets/notion/kubernetes-backup-and-restore/22fb12c0-115c-8097-89b6-ef07b6ddc024.png" alt="" loading="lazy" width="1886" height="1078" /></figure>
+<h2 id="block-22fb12c0115c80b491a7dbcfc4eaa2ae">ETCD Backup</h2>
+<p>etcd는 Kubernetes 클러스터의 모든 상태 정보를 저장하는 핵심 데이터베이스이다.</p>
+<p>클러스터의 노드, 네임스페이스, 리소스 구성 등이 모두 etcd에 저장되어 있기 때문에, etcd 자체를 백업하면 전체 클러스터를 한 번에 복원할 수 있다.</p>
+<p>etcd는 etcdctl 명령어를 통해 스냅샷(snapshot) 을 생성하고 복원할 수 있다.</p>
+<p>우선 etcdctl을 백업 등의 작업에 사용하려면 API 버전이 3.x인지 확인해야 한다.(etcdctl은 etcd를 위한 커맨드라인 클라이언트이다.)</p>
+<pre data-lang="bash"><code class="language-bash">etcdctl version</code></pre>
+<h2 id="block-22fb12c0115c8096a294fd1c88c80169">Snapshot-based Backup</h2>
+<p>etcd가 실행중인 서버에서 백업을 생성하려면 아래의 명령어를 사용한다.</p>
+<pre data-lang="bash"><code class="language-bash">ETCDCTL_API=3 etcdctl \
+  --endpoints=https://127.0.0.1:2379 \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key \
+  snapshot save /backup/etcd-snapshot.db
+</code></pre>
+<h3 id="block-22fb12c0115c80788a88cd5abf4f2aff"><strong>옵션 설명</strong></h3>
+<ul><li>-endpoints는 etcd 서버의 주소 지정(기본값: localhost:2379)</li><li>-cacert는 CA 인증서의 경로</li><li>-cert는 클라이언트 인증서의 경로</li><li>-key는 클라이언트 키의 경로</li></ul>
+<h3 id="block-22fb12c0115c80c3a65dde57a9dd4d67"><strong>Checking Snapshot Status</strong></h3>
+<p>스냅샷 파일의 메타데이터를 확인하려면 아래 명령어를 사용한다.</p>
+<pre data-lang="shell"><code class="language-bash">
+etcdctl snapshot status /backup/etcd-snapshot.db \
+  --write-out=table</code></pre>
+<h2 id="block-22fb12c0115c805ba5a9daf0a7724f5a">Restoring ETCD</h2>
+<p>스냅샷을 새로운 데이터 디렉토리에 복원하면 아래 명령어를 사용한다.</p>
+<p>backup/etcd-snapshot.db 에 있는 백업파일을 /var/lib/etcd-restored에 복원하라는 뜻이다.</p>
+<pre data-lang="shell"><code class="language-bash">etcdutl snapshot restore /backup/etcd-snapshot.db \
+  --data-dir /var/lib/etcd-from-backup</code></pre>
+<p>이후 나중에 복원하기 위해 etcd.yaml에 들어가 호스트 디렉토리를 업데이트 해주면된다.(etcd가 static pod로 실행되는 경우 파드 내부에서는 /var/lib/etcd에 파일을 저장하지만 실제는 호스트 디렉토리에 저장된다.</p>
+<pre data-lang="bash"><code class="language-bash">vim /etc/kubernetes/manifests/etcd.yaml</code></pre>
+<pre data-lang="yaml"><code class="language-yaml"> ...
+  volumes:
+  - hostPath:
+      path: /var/lib/etcd-from-backup # Newly restored backup directory
+      type: DirectoryOrCreate
+    name: etcd-data</code></pre>
+<h3 id="block-22fb12c0115c80af85ebfd113f1b7cee">Referece</h3>
+<p><a href="https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/#backing-up-an-etcd-cluster" target="_blank" rel="noreferrer">https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/#backing-up-an-etcd-cluster</a></p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +173,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

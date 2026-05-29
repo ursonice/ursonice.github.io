@@ -76,11 +76,129 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/kubernetes/">Kubernetes</a>
+    </nav>
+    <h1>[Kubernetes] LimitRange &amp; ResourceQuota</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 5월 31일</span><span class="dot"></span><span>수정 2025년 6월 1일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-204b12c0115c8086a1e5ce0accb042d7">서론</h2>
+<p>파드의 리소스 또는 컨테이너의 리소스를 제안하고싶다면 어떻게 해야하는지에 대해서 알아본다.</p>
+<h2 id="block-204b12c0115c80f0833acb0c5566319d">Container단위의 Resources 할당/제한</h2>
+<pre data-lang="yaml"><code class="language-yaml"># pod-definition.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: resource-nginx-pod
+  labels:
+    app: nginx
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      resources:
+        requests:
+          cpu: &quot;250m&quot;        # 최소 0.25 core 보장
+          memory: &quot;128Mi&quot;    # 최소 128MiB 메모리 보장
+        limits:
+          cpu: &quot;500m&quot;        # 최대 0.5 core 사용 제한
+          memory: &quot;256Mi&quot;    # 최대 256MiB 메모리 사용 제한
+</code></pre>
+<h2 id="block-204b12c0115c8058aefacf83030148d4">LimitRange</h2>
+<p>LimitRange를 생성하거나 수정한 이후에 만들어지는 새 파드에만 적용됩니다.</p>
+<ul><li>이미 존재하는 파드에는 영향을 주지 않고 파드가 생성될 때 적용된다.</li></ul>
+<h3 id="block-204b12c0115c802298a8c6792ddd1120">CPU</h3>
+<h3 id="block-204b12c0115c8001b730d83d189fc1d6">limits.default, limits.defaultRequest</h3>
+<ul><li>사용자가 리소스를 명시하지 않았을 때 자동 적용된다.</li><li><code>default</code>: Limit 미지정 시 기본 제한값 (500m)</li><li><code>defaultRequest</code>: Request 미지정 시 기본 요청량 (200m)</li></ul>
+<h3 id="block-204b12c0115c80dc82c9f8dc719e6260">limits.max, limits.min</h3>
+<ul><li>사용자가 명시적으로 리소스를 지정할 때 적용된다.</li><li>컨테이너당 CPU Request/Limit이 반드시 <code>min</code>(100m) 이상, <code>max</code>(1) 이하여야 한다.</li><li>이를 벗어나면 파드 생성 거부한다. (네임스페이스 전체에 적용됨)</li></ul>
+<h3 id="block-204b12c0115c80c59924f3354c0ec4f6">limits.type</h3>
+<ul><li>파드의 전체 CPU 사용량이 아닌, 파드안에 여러 컨테이너가 있는 경우 개별 컨테이너의 설정값을 적용한다.</li></ul>
+<pre data-lang="yaml"><code class="language-yaml"># limit-range-cpu.yaml
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: cpu-resource-constraint
+  namespace: my-namespace
+spec:
+  limits:
+  - default:
+      cpu: &quot;500m&quot;      # 파드에 resource를 따로 명시주지 않았을 때 적용되는 cpu limit
+    defaultRequest:
+      cpu: &quot;200m&quot;      # 파드에 resource를 따로 명시주지 않았을 때 적용되는 cpu request
+    max:              
+      cpu: &quot;1&quot;         # 파드에 명시 여부와 상관없이 cpu limit
+    min:
+      cpu: &quot;100m&quot;      # 파드에 명시 여부와 상관없이 cpu request
+    type: Container
+</code></pre>
+<h3 id="block-204b12c0115c80268f6ac5b77ee9b670">Memory</h3>
+<h3 id="block-204b12c0115c8013a589da0fe9b6686a">limits.default, limits.defaultRequest</h3>
+<ul><li>사용자가 리소스를 명시하지 않았을 때 자동 적용된다.</li><li><code>default</code>: Limit 미지정 시 기본 제한값 (1Gi)</li><li><code>defaultRequest</code>: Request 미지정 시 기본 요청량 (500Mi)</li></ul>
+<h3 id="block-204b12c0115c8087acdfe4a53b633434">limits.max, limits.min</h3>
+<ul><li>사용자가 명시적으로 리소스를 지정할 때 적용된다.</li><li>컨테이너당 Memory Request/Limit이 반드시 <code>min</code>(100Mi) 이상, <code>max</code>(2Gi) 이하여야 한다.</li><li>이를 벗어나면 파드 생성 거부한다. (네임스페이스 전체에 적용됨)</li></ul>
+<h3 id="block-204b12c0115c805dac82c8f98a832203">limits.type</h3>
+<ul><li>파드의 전체 Memory 사용량이 아닌, 파드안에 여러 컨테이너가 있는 경우 개별 컨테이너의 설정값을 적용한다.</li></ul>
+<pre data-lang="yaml"><code class="language-yaml"># limit-range-cpu.yaml
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: memory-resource-constraint
+  namespace: my-namespace
+spec:
+  limits:
+  - default:
+      memory: &quot;1Gi&quot;      # 파드에 resource를 따로 명시주지 않았을 때 적용되는 memory limit
+    defaultRequest:
+      memory: &quot;500Mi&quot;      # 파드에 resource를 따로 명시주지 않았을 때 적용되는 memory request
+    max:              
+      memory: &quot;2Gi&quot;         # 파드에 명시 여부와 상관없이 memory limit
+    min:
+      memory: &quot;100Mi&quot;      # 파드에 명시 여부와 상관없이 memory request
+    type: Container
+</code></pre>
+<h2 id="block-204b12c0115c801293a0e3494a79e963">ResourceQuota</h2>
+<p>네임스페이스에 속한 모든 파드의 자원 사용량(합산된)을 제한하고 싶다면 ResourceQuota를 사용하면 된다.</p>
+<h3 id="block-205b12c0115c802ca8e3c34925c99a98">hard.requests.cpu</h3>
+<p>네임스페이스 내 요청가능한(request) 총 CPU 4개</p>
+<h3 id="block-205b12c0115c80459c02cefcdad52c13">hard.requests.memory</h3>
+<p>네임스페이스 내 요청가능한(request) 총 Memory 10GiB</p>
+<h3 id="block-205b12c0115c80ea9828f3d92ff8084b">hard.limits.cpu</h3>
+<p>모든 파드가 사용할 수 있는 CPU 최대치를 10GiB</p>
+<h3 id="block-205b12c0115c80f59cd1c3d5c1c5f090">hard.limits.memory</h3>
+<p>메모리 최대치를 10GiB</p>
+<pre data-lang="yaml"><code class="language-yaml"># limit-range-cpu.yaml
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: my-resource-quota
+  namespace: my-namespace
+spec:
+  hard:
+    requests.cpu: 4
+	  requests.memory: 4Gi
+	  limits.cpu: 10
+	  limits.memory: 10Gi</code></pre></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +219,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

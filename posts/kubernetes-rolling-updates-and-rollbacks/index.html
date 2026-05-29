@@ -76,11 +76,57 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/kubernetes/">Kubernetes</a>
+    </nav>
+    <h1>[Kubernetes] Rolling Updates and Rollbacks</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 6월 18일</span><span class="dot"></span><span>수정 2025년 6월 21일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-219b12c0115c809a952fccac33fd6c79">서론</h2>
+<p>Kubernetes에서 애플리케이션을 안정적으로 운영하기 위해서는 배포(Deployment)할 때 서비스 중단 없이</p>
+<p>애플리케이션을 업그레이드하거나 문제가 발생했을 때 이전 상태로 되돌리는 롤아웃(Rollout)과 롤백(Rollback) 기능에 대해서 알아본다.</p>
+<h2 id="block-219b12c0115c80a89e68cb760eddbfd9">Rollout &amp; Rollback</h2>
+<p>Kubernetes에서 디플로이먼트를 생성하면, 자동으로 롤아웃(Rollout)이 발생하며 revision 1이라는 초기 버전이 저장된다.</p>
+<p>이후 이미지 버전 변경 등으로 업데이트가 이루어질 때마다 새로운 롤아웃이 생성되고, 디플로이먼트는 revision 2, 3, … 와 같은 방식으로 버전 히스토리를 관리한다.</p>
+<p>이러한 구조는 향후 문제가 발생했을 때 Rollback을 가능하게 해준다.</p>
+<ul><li>롤아웃 상태 보는 명령어</li></ul>
+<pre data-lang="python"><code class="language-python"> kubectl rollout status {deployment_name}</code></pre>
+<ul><li>롤아웃 히스토리 보는 명령어</li></ul>
+<pre data-lang="python"><code class="language-python"> kubectl rollout history {deployment_name}</code></pre>
+<ul><li>롤백 명령어</li></ul>
+<pre data-lang="python"><code class="language-python">kubectl rollout undo {deployment_name}</code></pre>
+<figure><img src="/assets/notion/kubernetes-rolling-updates-and-rollbacks/219b12c0-115c-80b8-92c8-c4c7833c1e7b.jpg" alt="" loading="lazy" width="1600" height="764" /></figure>
+<h2 id="block-219b12c0115c805ca6f8ebf9c3454b62">Deployment 배포 전략</h2>
+<p>디플로이먼트에는 크게 두 가지 배포 전략이 존재한다:</p>
+<ul><li>RollingUpdate (기본값): 파드를 하나씩 점진적으로 교체하며 무중단 배포를 가능하게 한다.</li><li>Recreate: 기존 파드를 모두 중단한 후 새로운 파드를 배포하는 방식으로, 배포 중 애플리케이션이 일시적으로 중단된다.</li></ul>
+<figure><img src="/assets/notion/kubernetes-rolling-updates-and-rollbacks/219b12c0-115c-8010-ae48-f162067edfb5.jpg" alt="" loading="lazy" width="1600" height="769" /></figure>
+<figure><img src="/assets/notion/kubernetes-rolling-updates-and-rollbacks/219b12c0-115c-8081-ba58-cc0f69faf7ac.jpg" alt="" loading="lazy" width="1600" height="763" /></figure>
+<p>Rolling Update가 수행되면 Kubernetes는 내부적으로 새로운 ReplicaSet을 생성하고, 해당 ReplicaSet이 새 파드들을 실행하게 된다.</p>
+<p>이때 이전 ReplicaSet은 점차 축소되고, 새 ReplicaSet이 활성화된다.</p>
+<figure><img src="/assets/notion/kubernetes-rolling-updates-and-rollbacks/219b12c0-115c-80d8-bb7e-d27ecbc851cf.jpg" alt="" loading="lazy" width="1600" height="767" /></figure>
+<figure><img src="/assets/notion/kubernetes-rolling-updates-and-rollbacks/219b12c0-115c-80dc-a9b0-f4c00a991fbf.jpg" alt="" loading="lazy" width="1600" height="853" /></figure>
+<p>만약 롤백이 수행될 경우 이 관계가 역전되어 이전 ReplicaSet이 다시 활성화된다.</p>
+<figure><img src="/assets/notion/kubernetes-rolling-updates-and-rollbacks/219b12c0-115c-8091-a566-dbe0c783f81e.jpg" alt="" loading="lazy" width="1600" height="785" /></figure></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +147,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

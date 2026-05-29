@@ -76,11 +76,42 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/application/">Application</a>
+    </nav>
+    <h1>Jenkins Build Scheduling 방법</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2024년 5월 16일</span><span class="dot"></span><span>수정 2024년 8월 21일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-addbdc0b0bd74ef586c5035be5d94222">서론</h2>
+<ul><li>Jenkins의 파이프라인을 만들었다. 그리고 이 파이프라인이 완료되는데 까지 무려 1시간이 걸린다고 가정해보자.</li><li>개발자 10명이 동일한 깃 프로젝트 레포지토리에 10번을 30분안에 커밋했다.</li><li>그럼 `Push Trigger`에 의해 Jenkins는 10번에 대한 파이프라인이 동작할 것이고 최종적으로 10시간이 걸리게 된다. </li><li>이는 파이프라인이 빈번한 push 이벤트에 의해 과도하게 트리거되어 비효율적으로 동작한다는 것이다.</li><li>이를 방지하기 위해서는 두가지 전략 방법이 있다.</li><li>하나는 <code>Quiet Period</code> 설정과 <code>Throttle Builds</code> 가 있다</li><li>위 두 가지중에 대해서 집중적으로 알아보겠다.</li></ul>
+<h2 id="block-facb526f073547baa6f2bcea2f0a8014">Throttle Build</h2>
+<ul><li>Throttle Concurrent Builds 플러그인을 사용해 동시에 수행할 수 있는 빌드 수를 제한 할 수 있다.</li><li>설정을 한 번에 최대 2개의 빌드만 실행되도록 설정하여 서버의 부하를 줄여 각각 빌드시 충분한 리소스를 확보할 수 있도록 한다고 가정해보자.</li><li><strong>시간 0분</strong>: 파이프라인 A가 트리거되어 빌드가 시작된다.</li><li><strong>시간 1분</strong>: 파이프라인 B가 트리거된다. 이 빌드도 즉시 시작된다.</li><li><strong>시간 2분</strong>: 파이프라인 C가 된다. 하지만, A와 B가 이미 실행 중이므로 C는 대기열에서 대기하게 된다.</li><li><strong>시간 10분</strong>: 파이프라인 A가 완료되면 이 시점에서 대기 중이던 파이프라인 C가 실행을 시작한다.</li></ul>
+<h2 id="block-3aa946e86c274e4d8ae65f872923055b"><strong>Quiet Period</strong></h2>
+<ul><li>Quiet Period 동안에는 여러 개의 푸시가 발생하면, Jenkins는 이 기간이 종료되는 시점에 가장 최신의 커밋의 빌드만을 수행한다.</li><li>예를 들어, Quiet Period를 10분으로 설정했다고 해보자.</li></ul>
+<ol><li><strong>시간 0분</strong>: <strong><code>a</code></strong>라는 커밋(push)이 발생했다. 이때부터 Quiet Period가 시작되며, Jenkins는 10분 동안 추가 커밋(푸쉬)을 기다린다.</li><li><strong>시간 2분</strong>: <strong><code>b</code></strong><strong>하</strong>는 커밋(push)가 발생한다. 8분이 남았음으로 여전히 추가 커밋(푸쉬)을 기다린다.</li><li><strong>시간 7분</strong>: <strong><code>c</code></strong>라는 커밋(push)이 발생한다. 3분이 남았음으로 여전히 추가 커밋(푸쉬)을 기다린다.</li><li><strong>시간 11분</strong>: <strong><code>d</code></strong>라는 커밋(push)이 발생한다. 이미 10분이 지났음으로 <code>d</code>라는 커밋(푸쉬)는 다시 10분을 카운팅하기 시작하며 <code>c</code>커밋은 <code>a</code>와 <code>b</code>커밋을 포함한 가장 최신 상태의 커밋일 것임으로 <code>c</code>푸쉬 시점 코드 상태를 기반으로 파이프라인을 실행한다.(따라서 a와 b의 커밋은 빌드는 실행되지 않는다)</li></ol>
+<h2 id="block-d892364aeac14b5293cf273fb910c5cf">적용 방법</h2>
+<p>나는 Quiet Period를 적용했으며 사용방법은 아래와 같다. 120초를 설정했음으로 2분안에 여러 커밋이 왔을때 가장 최신의 커밋을 빌드후 실행한다.</p>
+<figure><img src="/assets/notion/jenkins-build-scheduling-방법/61496357-3f51-460d-bb27-a5ba2438f0f3.png" alt="" loading="lazy" width="2258" height="1344" /></figure></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +132,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

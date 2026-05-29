@@ -76,11 +76,167 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/python/">Python</a>
+    </nav>
+    <h1>클래스 변수/메소드</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 4월 20일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-1dbb12c0115c8016ad46fd9f050e507f">서론</h2>
+<p>클래스 내에서 인스턴스 변수가 아닌 클래스 변수로 두었을 때 차이점과 언제 사용하는지에 대해 알아보겠다.</p>
+<h2 id="block-1dbb12c0115c80fea9d1f9f294558f79">클래스 변수</h2>
+<pre data-lang="python"><code class="language-python">class TreeNode:
+    val = 0
+    left = None
+    right = None</code></pre>
+<p>위 처럼 TreeNode라는 클래스가 있다고 가정해보자.</p>
+<p>그 후에 인스턴스를 만들어 값을 변경해본다.</p>
+<pre data-lang="python"><code class="language-python">a = TreeNode()
+b = TreeNode()
+
+a.val = 1
+print(b.val)  # 0
+
+TreeNode.val = 5
+print(a.val)  # 여전히 1 (인스턴스에서 덮어썼기 때문)
+print(b.val)  # 5 (공유 중인 클래스 변수의 변경을 반영)</code></pre>
+<p>a.val을 1로 바꾸어도 b.val이 0인 이유는 a.val = 1을 함으로써 인스턴스 변수로 덮어씌웠기 때문이다.</p>
+<p>이번엔 클래스명으로 직접 접근을 하고 val을 변경하면 a.val은 인스턴스로 덮어씌웠기 때문에 변경되지 않지만 b의 경우에는 값이 변경되는 것을 볼 수 있다.</p>
+<h2 id="block-1dbb12c0115c8007bf9fe1399ff7f5e8">클래스 변수는 언제 사용할까?</h2>
+<p>클래스 변수는 모든 인스턴스가 공통으로 공유해야 할 때 사용한다.</p>
+<pre data-lang="python"><code class="language-python">class Car:
+    wheels = 4  # 모든 자동차는 바퀴가 4개
+
+print(Car.wheels)  # 4
+
+c1 = Car()
+c2 = Car()
+print(c1.wheels, c2.wheels)  # 4, 4</code></pre>
+<p>또는 아래처럼 구현하여 인스턴스 갯수를 셀 수 있다.</p>
+<pre data-lang="python"><code class="language-python">class User:
+    count = 0  # 클래스 전체에서 사용자 수 추적
+
+    def __init__(self, name):
+        self.name = name
+        User.count += 1
+
+print(User.count)  # 0
+u1 = User(&quot;Alice&quot;)
+u2 = User(&quot;Bob&quot;)
+print(User.count)  # 2</code></pre>
+<p>마지막으로는 공통자원 캐싱과 같은 역할로 사용가능하다.</p>
+<pre data-lang="python"><code class="language-python">class Database:
+    _connection_pool = []
+
+    @classmethod
+    def add_connection(cls, conn):
+        cls._connection_pool.append(conn)</code></pre>
+<h2 id="block-1dbb12c0115c80b9be3ee24b771a86b0">클래스 메소드</h2>
+<p>클레스 메소드는 클래스명 자체를 인자로 받는 메소드이다.</p>
+<pre data-lang="python"><code class="language-python">class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+        
+a = TreeNode()</code></pre>
+<p>인스턴스 메소드 같은경우 생성자 함수를 보면 self에 a라는 인스턴스 주소가 자동으로 입력되어지지만 클래스 메소드의 경우 클래스 명이 입력되어진다.</p>
+<pre data-lang="python"><code class="language-python">class Example:
+    count = 0
+
+    @classmethod
+    def show_class(cls):
+        print(&quot;cls is:&quot;, cls)
+        print(&quot;count is:&quot;, cls.count)
+
+e = Example()
+e.show_class() 
+&quot;&quot;&quot;
+출력결과: 
+cls is: &lt;class '__main__.Example'&gt;
+count is: 0
+&quot;&quot;&quot; 
+
+Example().show_class()
+&quot;&quot;&quot;
+출력결과: 
+cls is: &lt;class '__main__.Example'&gt;
+count is: 0
+&quot;&quot;&quot;</code></pre>
+<p>이는 인스턴스를 만들어 접근하나, 클래스명으로 접근하나 같은결과가 보여진다.</p>
+<h2 id="block-1dbb12c0115c808f99d0f7a5e030aa9d">클래스 메소드는 언제 사용할까?</h2>
+<p>클래스명으로 접근하는 클래스 변수에 접근할 때 사용한다</p>
+<pre data-lang="python"><code class="language-python">class Database:
+    _connection_pool = []
+
+    @classmethod
+    def add_connection(cls, conn):
+        cls._connection_pool.append(conn)
+
+a = Database()
+a.add_connection(&quot;hello&quot;)
+Database().add_connection(&quot;world&quot;)
+
+print(a._connection_pool) # ['hello', 'world']
+Database()._connection_pool # ['hello', 'world']</code></pre>
+<p>클래스 기반으로 객체를 생성할 때도 사용한다.</p>
+<pre data-lang="python"><code class="language-python">class Animal:
+    def __init__(self, species):
+        self.species = species
+
+    @classmethod
+    def create(cls, animal_type):
+        if animal_type == &quot;dog&quot;:
+            return Dog()
+        elif animal_type == &quot;cat&quot;:
+            return Cat()
+        else:
+            return cls(&quot;Unknown&quot;)
+
+class Dog(Animal):
+    def __init__(self):
+        super().__init__(&quot;Dog&quot;)
+
+class Cat(Animal):
+    def __init__(self):
+        super().__init__(&quot;Cat&quot;)
+
+# 팩토리 메서드로 객체 생성
+a1 = Animal.create(&quot;dog&quot;)
+a2 = Animal.create(&quot;cat&quot;)
+a3 = Animal.create(&quot;dragon&quot;)
+
+print(a1.species)  # Dog
+print(a2.species)  # Cat
+print(a3.species)  # Unknown</code></pre>
+<h3 id="block-1dbb12c0115c80299255c5130e623882">참고</h3>
+<p>스테틱 메소드와 햇갈릴 수도 있는데 이는 클래스의 어떠한 속성에도 변화를 일으키지 않는 함수로 입력이 들어오면 항상 같은 출력을 반환하는 함수들이 이에 해당된다. (클래스나 인스턴스에 의존하지 않는 함수)</p>
+<pre data-lang="python"><code class="language-python">class MathUtils:
+    @staticmethod
+    def add(a, b):
+        return a + b
+
+print(MathUtils.add(3, 5))  # 8</code></pre></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +257,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

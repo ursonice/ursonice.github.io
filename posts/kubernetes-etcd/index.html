@@ -76,11 +76,45 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/kubernetes/">Kubernetes</a>
+    </nav>
+    <h1>[Kubernetes] ETCD</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 5월 16일</span><span class="dot"></span><span>수정 2025년 5월 29일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-202b12c0115c8088a30df3bfe122eba3">서론</h2>
+<p>이 장에서는 Kubernetes에서 etcd가 수행하는 역할에 대해 알아본다.</p>
+<figure><img src="/assets/notion/kubernetes-etcd/202b12c0-115c-80a6-a8d7-f465c7a1dd25.png" alt="" loading="lazy" width="2016" height="1232" /></figure>
+<h2 id="block-202b12c0115c80209a4ee8cc7d375c13"><strong>etcd</strong></h2>
+<ul><li>Kubernetes 클러스터의 모든 상태 정보(노드 · 파드 · Config · Secret · RBAC 등)를 저장하는 키-값 데이터베이스이다.</li><li><code>kubectl get</code> 명령어로 확인하는 모든 정보는 etcd 서버에서 가져온다.</li><li>노드 또는 파드를 추가하거나 ReplicaSet을 배포하는 등 클러스터에 일어나는 모든 변경 사항은 etcd 서버에 업데이트된다.</li><li>변경 사항이 etcd 서버에 반영되어야만 정식으로 변경이 완료된 것으로 간주되기 때문이다.</li></ul>
+<h2 id="block-202b12c0115c8088a770ca8d76b8ee6d">etcd 구축방식</h2>
+<p>직접 설치하는 경우</p>
+<ul><li><strong>advertised client URL 옵션 설정</strong><ul><li>이 주소(advertised client URL<strong>)</strong>는 etcd가 listen 하고 있는(클라이언트 요청을 받는)주소이다.</li><li>기본적으로 서버의 IP 주소와 포트 2379를 사용하며, 이는 etcd의 기본 포트이다.</li><li>Kube API Server가 etcd에 접근할 때 이 URL을 설정해주어야 한다.</li><li>kubeadm으로 클러스터를 구성한 경우, etcd는 자동으로 kube-system 네임스페이스의 파드로 배포된다.</li><li>이 파드 안에서 <strong>etcdctl 명령어</strong>를 사용해 etcd 데이터베이스를 탐색할 수 있다.</li></ul>
+<figure><img src="/assets/notion/kubernetes-etcd/202b12c0-115c-80ba-ba44-f7c50e092d1e.png" alt="" loading="lazy" width="2474" height="1298" /></figure>
+<ul><li>이렇게 사용자가 etcd 바이너리를 직접 다운로드, 설치해야하며  <code>--advertise-client-urls=https://&lt;IP&gt;:2379</code> 등 수많은 TLS·클러스터 옵션을 수동 설정해야 한다.</li></ul></li><li><strong>kubeadm 설치</strong><ul><li> <code>kubeadm init</code> 시 etcd를 kube-system 네임스페이스의 etcd파드에 들어가 터미널에서 <code>etcdctl</code>로 데이터 탐색 가능하다.</li></ul>
+<figure><img src="/assets/notion/kubernetes-etcd/202b12c0-115c-8051-a705-da4fa371405c.png" alt="" loading="lazy" width="1878" height="1450" /></figure></li></ul>
+<h2 id="block-1f6b12c0115c80d185eae0fd71e87335"><strong>etcd 저장 데이터 구조</strong></h2>
+<ul><li>최상위 프리픽스 <code>/registry</code> 아래에 <code>nodes/</code>, <code>pods/</code>, <code>replicasets/</code> … 식으로 리소스별로 디렉터리에 계층적으로 저장된다.</li></ul></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +135,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

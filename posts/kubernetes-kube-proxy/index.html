@@ -76,11 +76,49 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/kubernetes/">Kubernetes</a>
+    </nav>
+    <h1>[Kubernetes] kube-proxy</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 5월 17일</span><span class="dot"></span><span>수정 2025년 5월 30일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-203b12c0115c800fa861da66d5c18764">서론</h2>
+<p>쿠버네티스 클러스터 내에서는 Pod Network를 통해 모든 파드가 서로 통신할 수 있다.</p>
+<p>Pod Network는 모든 노드를 어우르는 내부 가상 네트워크이며, 모든 파드가 이 네트워크에 연결되어 이를 통해 서로 통신할 수 있다.</p>
+<figure><img src="/assets/notion/kubernetes-kube-proxy/203b12c0-115c-80b2-a118-da7002e01733.png" alt="" loading="lazy" width="1982" height="1124" /></figure>
+<p>예를 들어, 첫 번째 노드에는(위 그림에서의 왼쪽) Web Application을, 두 번째 모드에는 DB Application을 배포했다고 가정하자.</p>
+<p>Web Application은 파드의 IP(10.32.0.14)를 사용하여 DB에 접근할 수 있다.</p>
+<p>하지만 데이터베이스 파드의 IP(10.32.0.15)가 항상 동일할 것이라는 보장할 수 없다.</p>
+<p>왜냐하면 파드에 문제가 생겨 파드가 재배포된 경우 파드의 아이피 주소가 변경될 것이기 때문이다.</p>
+<p>웹 애플리케이션이 데이터베이스에 접근하는 더 나은 방법은 서비스를 이용하는 것이다.</p>
+<p>그래서 클러스터 전체에 데이터베이스 애플리케이션을 노출시키기 위해 서비스를 생성하게 된다.</p>
+<p>서비스를 생성하게 되면 자동으로 DNS 엔트리가 생성되며, 덕분에 파드들은 해당 서비스를 도메인 이름으로 접근할 수 있다.(ex. servicename.namespace.svc.local.cluster)</p>
+<p>또한 서비스에도 IP 주소가 할당된다. 그리고 이 지점에서 kube-proxy가 사용된다.</p>
+<p>이제 kube-proxy에 대해서 알아보자.</p>
+<h2 id="block-203b12c0115c80f4b14fd79cddd6bebe">Kube Proxy</h2>
+<ul><li>kube-proxy는 쿠버네티스 클러스터 내의 각 노드에서 실행되는 프로세스이다.</li><li>kube-proxy의 역할은 새로 생성된 서비스를 감지하고, 새로운 서비스가 생성될 때마다 각 노드에 트래픽을 파드로 전달할 수 있도록 적절한 iptables 규칙을 사용한다.</li><li>이 경우, 각 노드에 iptables 규칙을 만들어 서비스의 IP(10.96.0.12)로 향하는 트래픽을 실제 파드의 IP(10.32.0.15)로 전달한다.</li></ul>
+<figure><img src="/assets/notion/kubernetes-kube-proxy/203b12c0-115c-800d-9cb2-e44ca3cee601.png" alt="" loading="lazy" width="1982" height="1124" /></figure>
+<ul><li>Kube-proxy는 데몬셋으로 배포되며 클러스터의 각 노드에 하나씩 파드가 생성된다.</li></ul></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +139,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

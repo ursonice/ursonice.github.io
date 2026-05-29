@@ -76,11 +76,749 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/application/">Application</a>
+    </nav>
+    <h1>Jenkins Git Hub 연동</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2024년 6월 11일</span><span class="dot"></span><span>수정 2024년 10월 27일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-fa51d46d44d541f28c742b6557907787">서론</h2>
+<p>이 장은 Jenkins에서 CI/CD를 하기 위한 아래 이미지에 표기된 <code>Webhook</code> 방법에 대해서 설명한다.</p>
+<p>GitHub에서 연결하는 방법과 Git에서 연결하는 방법 두 가지 설명한다.</p>
+<h2 id="block-f17187610a194f39a157e512d5bd1b5a">GitHub 이벤트와 Jenkins 연결</h2>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/1a291815-3445-4056-987c-a012ffd04b80.jpg" alt="" loading="lazy" width="4326" height="2484" /></figure>
+<h2 id="block-fc6583cb344648c88f3e13c41c9bab23">동작방식</h2>
+<ul><li>Dev PC와 Jenkins는 동일한 PC에서 진행했다.</li><li>이때 Jenkins는 MacOS를 사용하며 Service PC는 Linux를 사용한다.</li><li>따라서 Jenkins가 MacOS 에서 진행됐다는 점을 참고한다.</li></ul>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/77caf07b-cae1-4eae-b968-b2aba55ea676.png" alt="" loading="lazy" width="2246" height="1110" /></figure>
+<h2 id="block-8de5213db0b94a1c9798d474cef46b08">1. Jenkins DNS 설정 </h2>
+<p>WebHook을 설정하기 위해 먼저 Jenkins를 외부에서 접속이 가능해야 한다. 즉 DNS설정을 해줘야한다. 나는 Ngrok을 사용했다.</p>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/8bf670f4-9ebf-43b6-b681-aac0ee897319.png" alt="" loading="lazy" width="1756" height="818" /></figure>
+<h2 id="block-454620b45b65476b99147d3ed30bbacb">2. Jenkins 플러그인 설치</h2>
+<p>GitHUB관련 기능을 사용하기 위한 플러그인들을 설치해두자.</p>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/b20d7aed-fa41-4d15-8a6f-02281ddcc6ee.png" alt="" loading="lazy" width="3794" height="864" /></figure>
+<p><code>Dashboard → Manage jenkins → Plugins</code>에서 <code>Avaliable plugins</code> 탭의 검색부분에 <code>ssh agent</code> 플러그인을 설치한다.</p>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/8be4012e-a58b-4375-af0e-7a8ed2ff2554.png" alt="" loading="lazy" width="3692" height="1060" /></figure>
+<p>플러그인 설치 후 Jenkins를 재시작한다.</p>
+<pre data-lang="bash"><code class="language-bash">brew services restart jenkins-lts</code></pre>
+<h2 id="block-7acef64e2484442ca0d430931f91f446">3. SSH 키 생성 </h2>
+<ul><li>Jenkins가 Service PC에 접속가능하도록 하기 위해 공개-비공개 키를 생성해 등록해주자.</li><li>먼저 클라이언트(Jenkins가 설치된 환경)에서 공개, 비공개 키를 생성하고, 서버(Service PC)에 공개키를 등록한다.</li><li>이를 통해 클라이언트가 서버에 접속할 때 비밀번호 없이 접속이 가능하다.</li></ul>
+<p>아래 명령어를 통해 키를 새성한다.</p>
+<pre data-lang="bash"><code class="language-bash">ssh-keygen -t rsa</code></pre>
+<p>아래 명령어를 통해 키를 등록해주자 groupai@XXX.XXX.XX.XXX ⇒ 서버주소</p>
+<pre data-lang="bash"><code class="language-bash">ssh-copy-id -i ~/.ssh/id_rsa.pub -p {port_number} g__ai@21X.XXX.XX.216</code></pre>
+<h2 id="block-b6e27a4354064eaa98d8a42dff7ff29a">5. Creating SSH Credentials</h2>
+<ul><li><code>Dashboard → Manage Jenkins → Credentials</code> 에서 global 버튼을 누르고 Add Credentials를 클릭한다.</li></ul>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/4cf8c6b8-b552-4c7a-8f22-0b946ccdcb11.png" alt="" loading="lazy" width="3624" height="1530" /></figure>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/d92d1378-ac16-4919-b59b-0f312153948b.png" alt="" loading="lazy" width="3168" height="218" /></figure>
+<ul><li>이때 클라이언트의(Jenkins Server)  <strong>개인키</strong><strong> </strong>내용을 입력해줘야하는데  <code>-----BEGIN RSA PRIVATE KEY---—</code> 와 <code>-----END RSA PRIVATE KEY---—</code> 도 같이 입력해줘야한다.(헤더와 푸터)</li></ul>
+<pre data-lang="bash"><code class="language-bash">cat ~/.ssh/id_rsa</code></pre>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/23eab2b5-6b93-4f13-a7b6-aede3287b9e1.png" alt="" loading="lazy" width="3356" height="2380" /></figure>
+<ul><li>작성을 완료하면 아래처럼 생긴다.</li></ul>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/68519446-2dee-44ee-8d71-843d26fbc530.png" alt="" loading="lazy" width="2476" height="606" /></figure>
+<h2 id="block-736a219042f948918559bff5a7612830">6. Creating Github Access Token </h2>
+<p>깃허브 토큰 접속 토큰 생성하기</p>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/20785fc8-9289-4a47-9af0-fac757ea2598.png" alt="" loading="lazy" width="3022" height="1568" /></figure>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/133685a3-628d-48d3-a5e6-72037a3a0672.png" alt="" loading="lazy" width="2480" height="856" /></figure>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/d19c8b89-7234-4d1e-a9b8-f673634978ad.png" alt="" loading="lazy" width="2506" height="2378" /></figure>
+<p>이렇게하면 토큰이 생성된다. 토큰이 생성된 화면은 벗어나면 다시 토큰을 찾을 방법이 없음으로 다시 생성해야 한다. 그러니 메모장 같은 곳에 잘 메모해두자.</p>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/3b951b20-4984-4d20-b855-5fd4fdd337c4.png" alt="" loading="lazy" width="2002" height="404" /></figure>
+<h2 id="block-4a16b8ec63ae48d9ab547b06fc1e203c">7. Setting WebHook</h2>
+<p>WebHook을 설정하고자 하는 레포지토리를 클릭 후 Settings → Webhooks 클릭</p>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/d9b31d93-6bf6-44c9-abf6-f6425105ab59.png" alt="" loading="lazy" width="2844" height="1920" /></figure>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/bbecbbf9-c017-4077-95dc-7f25917e23fa.png" alt="" loading="lazy" width="2610" height="1192" /></figure>
+<ul><li><strong>Payload URL</strong>: Ngrok에서 생성한 <code>Jenkins 서버주소</code>에 <code>/github-webhook/</code> 를 추가해준다.</li><li><strong>Content type:</strong> <code>application/json</code> 으로 변경한다.</li><li>Add webhook 버튼을 클릭한다</li></ul>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/82c1adcf-8398-44f7-8d92-ffd856bbf7e4.png" alt="" loading="lazy" width="2426" height="1788" /></figure>
+<h2 id="block-587930a021f44172aab118815f1a820f">8. Creating Git Hub Credentials </h2>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/61601cf3-7956-489c-96da-94e9a1d3611c.png" alt="" loading="lazy" width="2404" height="2052" /></figure>
+<p><strong>Credentials 등록 화면 이동</strong></p>
+<ul><li>(global) 링크를 눌러 <code>Credentials</code> 등록 화면으로 이동한다.</li></ul>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/57b2dadf-9221-47d7-b217-b95db482083f.png" alt="" loading="lazy" width="3144" height="600" /></figure>
+<ul><li>Add Credentials를 클릭한다.</li></ul>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/e17c8bf8-9b0b-4580-9170-602eef0229ad.png" alt="" loading="lazy" width="3138" height="316" /></figure>
+<ul><li>Credential을 아래와 같이 작성한다.</li></ul>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/363916c4-4c98-456a-b3e7-3556092a95ce.png" alt="" loading="lazy" width="2002" height="1590" /></figure>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/cbde69e0-8580-4f91-b0b8-1d5b4c6527e9.png" alt="" loading="lazy" width="3152" height="428" /></figure>
+<p><a href="https://junhyunny.github.io/information/jenkins/github/jenkins-github-webhook/" target="_blank" rel="noreferrer">https://junhyunny.github.io/information/jenkins/github/jenkins-github-webhook/</a></p>
+<h2 id="block-7833d9be141b4aa09e2cac4d2c074bd9">9. Making Pipeline</h2>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/5490572f-52a2-49ca-812b-da90e5a36cc9.png" alt="" loading="lazy" width="1960" height="1340" /></figure>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/8b979133-1014-4ef3-af54-956d23030928.png" alt="" loading="lazy" width="2746" height="1890" /></figure>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/0d9dbaad-8945-4fc3-8467-7b50b99f2567.png" alt="" loading="lazy" width="3622" height="1862" /></figure>
+<p>Quiet Period는 특정시간동안 많은 빌드 요청이 온 경우 가장 최신 커밋만을 빌드하도록하는 스케쥴링 같은 옵션이다. 웹 훅이랑은 상관이없는 부분이니 신경쓰지말자.</p>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/590994fe-62e5-4458-a9ac-87e1eaf70089.png" alt="" loading="lazy" width="1722" height="1556" /></figure>
+<p>그리고 아래처럼 파이프라인을 설정한다.</p>
+<p>Credential에는 <a href="#block-587930a021f44172aab118815f1a820f">8. Creating Git Hub Credentials </a> 에서 생성했던 인증서를 넣어주면 된다.</p>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/e610ee80-48a2-4a3d-87a7-fe242b375865.png" alt="" loading="lazy" width="3212" height="2128" /></figure>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/b578f774-078e-4597-82b8-8dd81cafcfbb.png" alt="" loading="lazy" width="3180" height="1478" /></figure>
+<p>여기까지 했다면 기본적인 준비는 끝이 났다. </p>
+<p><code>Pipeline script from SCM</code> 으로 설정한 경우 내가 위에서 설정한 <code><a href="https://github.com/woorej/test_jenkins2.git" target="_blank" rel="noreferrer">https://github.com/woorej/test_jenkins2.git</a></code> 이 레포지토리에 Jenkinsfile 이름으로 가진 파일이 있어야한다. 파이프라인 설정에서 Script path경로에 있는 <strong>Jenkinsfile</strong>을 찾기 때문이다.</p>
+<p>아래 깃 리포지토리를 보면 Jenkins파일이 있는 것을 확인할 수 있다.</p>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/b7c7865a-0912-4f22-a0fe-a1e9bcca8a84.png" alt="" loading="lazy" width="2084" height="1332" /></figure>
+<p>스크립트 코드는 아래 공유한다. 테스트 용도라 대충 만든 것이니 흐름과 문법 이해하도록..</p>
+<ol><li><strong>Checkout</strong>: jenkins가 github에 있는 pipline이 적혀진 Jenkinsfile을 요청한다. 따라서 checkout 스테이지를 추가한다.</li><li><strong>Prepare Environment</strong>: 서버에 접속해 디렉토리가 있으면 프로젝트가 있다고 간주하고 pull만하며 없는 경우에만 clone을한다.</li><li><strong>Setup Virtual Environment</strong>: 파이썬 가상환경을 만들고 필요한 라이브러리들을 설치한다.</li><li><strong>Run Tests</strong>: Unit Test 코드를 실행한다.</li><li><strong>Build and Deploy</strong>: 스테이지 이름이 Deploy가 적혀있는데 나는 빌드까지만 하고 끝냈다.</li></ol>
+<p>아래 파이프라인이 깃허브 프로젝트의 최상위 디렉토리에 Jenkinsfile로 있으면 젠킨스가 파이프라인을 읽어서 순차적으로 실행하는 원리이다.</p>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/146ed704-0c44-4662-acae-adeac332b5dd.png" alt="" loading="lazy" width="1464" height="620" /></figure>
+<pre data-lang="bash"><code class="language-bash">pipeline {
+    agent any
+    environment {
+        SERVER_IP = &quot;218.xxx.xx.xxx&quot;
+        SERVER_PORT = &quot;xxxxx&quot;
+        SERVER_USER = &quot;groupai&quot;
+        REPO_URL = 'https://github.com/woorej/test_jenkins2.git'
+        PROJECT_DIR = '/home/groupai/workspace/test_jenkins2'
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm: [ $class: 'GitSCM', branches: [[name: '*/master']],
+                                userRemoteConfigs: [[credentialsId: 'github-access-token',
+                                url: 'https://github.com/woorej/test_jenkins2.git']]]
+            }
+        }
+        stage('Prepare Environment') {
+            steps {
+                script {
+                    sshagent(['server_7']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no -p ${SERVER_PORT} ${SERVER_USER}@${SERVER_IP} '
+                        if [ ! -d &quot;${PROJECT_DIR}&quot; ]; then
+                            echo &quot;Directory does not exist. Cloning repository...&quot;
+                            git clone ${REPO_URL} ${PROJECT_DIR}
+                        else
+                            echo &quot;Directory exists. Pulling latest changes...&quot;
+                            cd ${PROJECT_DIR}
+                            git pull
+                        fi
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+        }
+        stage('Setup Virtual Environment') {
+            steps {
+                script {
+                    sshagent(['server_7']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no -p ${SERVER_PORT} ${SERVER_USER}@${SERVER_IP} '
+                        if [ ! -d &quot;${PROJECT_DIR}/venv&quot; ]; then
+                            echo &quot;Creating virtual environment...&quot;
+                            /usr/bin/python3.11 -m venv ${PROJECT_DIR}/venv
+                        fi
+                        source ${PROJECT_DIR}/venv/bin/activate
+                        pip3 install -r ${PROJECT_DIR}/requirements.txt
+                        deactivate
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+        }
+        stage('Run Tests') {
+            steps {
+                script {
+                    sshagent(['server_7']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no -p ${SERVER_PORT} ${SERVER_USER}@${SERVER_IP} '
+                        source ${PROJECT_DIR}/venv/bin/activate
+                        python3 -m pytest ${PROJECT_DIR}/tests
+                        deactivate
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+        }
+        stage('Build and Deploy') {
+            steps {
+                script {
+                    sshagent(['server_7']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no -p ${SERVER_PORT} ${SERVER_USER}@${SERVER_IP} '
+                        source ${PROJECT_DIR}/venv/bin/activate
+                        pip3 freeze | grep calculator &amp;&amp; pip3 uninstall -y calculator
+                        pip3 install ${PROJECT_DIR}
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+        }
+    }
+}</code></pre>
+<p><a href="https://github.com/woorej/test_jenkins2/tree/master" target="_blank" rel="noreferrer">https://github.com/woorej/test_jenkins2/tree/master</a></p>
+<h2 id="block-9a3665d38b2346e680c333337405f652">10. Test 동작확인</h2>
+<p>성공적으로 동작한다.</p>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/6ba48dab-1067-4bb0-9cc3-953c86e0b012.png" alt="" loading="lazy" width="3122" height="1360" /></figure>
+<p><a href="https://1minute-before6pm.tistory.com/52" target="_blank" rel="noreferrer">https://1minute-before6pm.tistory.com/52</a></p>
+<hr />
+<h2 id="block-5d3c04adbe81435bb27738b83633b9a6">Git 이벤트와 Jenkins 연결</h2>
+<p>아래 3대의 서버는 전부 다 같은 네트워크 망에 있다고 가정하고 설명한다. 또한 운영체제는 전부 우분투 리눅스가 설치되어 있다.</p>
+<ul><li>Git Server (# 22)</li><li>Service Server (# 8)</li><li>Jenkins Server (# 6)</li></ul>
+<p>이번 챕터에서는Jenkins가 Linux Ubuntu에서 진행되었음을 참고하자.</p>
+<ul><li>깃허브는 Access Token이라는 것을 발급받아서 동작했었다.</li><li>그러나 Hub가 아닌 사내에서 사용하는 git은 결국 ssh key로 인증을 받고 통신한다.</li></ul>
+<h2 id="block-cbcd5c7d88db48d4b27b79a70111bcf1">동작 방식</h2>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/e4e1effc-f4d5-4d9f-a863-739f5d3d206c.png" alt="" loading="lazy" width="2260" height="1178" /></figure>
+<h2 id="block-a0938a4846a341fc9777d1e1ab25a2d4">1. Jenkins 플러그인 설치</h2>
+<p>설명한 플러그인들이 설치되어야 한다: <a href="#block-454620b45b65476b99147d3ed30bbacb">2. Jenkins 플러그인 설치</a> </p>
+<h2 id="block-7e4cab0fa86a4ca6b81c8d28e1e71a54">2. SSH키 &amp; Jenkins Credentials 생성하기</h2>
+<p>위 동작방식에서는 3개의 키가 필요하다.</p>
+<ol><li>Jenkins(6번) 서버 -&gt; 깃 서버(22번) 서버로의 바로 접속이 가능해야 깃서버에서 Jenkinsfile을 가져와 실행이 가능하다.</li></ol>
+<ul><li>따라서 6번의 공개키를 등록해야한다.</li></ul>
+<ol><li>Jenkins(6번) 서버 -&gt; Service PC(8번) 서버로의 접속이 가능해야 Service PC에서 프로젝트를 빌드하고 실행할 수 있다.</li></ol>
+<ul><li>따라서 6번의 공개키를 등록해야한다.</li></ul>
+<ol><li>Service PC(8번)에서 깃 서버(22번) 8번서버에서 git clone을 해야한다.</li></ol>
+<ul><li>따라서 8번의 공개키가 <u>필요하다.</u> </li><li>그러나 Jenkins의 Credential에 등록할 필요는 없다. 왜냐하면 Jenkins가 8번에 ssh로 접속해 스크립트를 실행하는 것이기 때문이다. </li><li>주체가 Jenkins가 클라이언트가 아닌 8번이 클라이언트로 22번에 접근하기 때문이다</li></ul>
+<h2 id="block-de3fa086a9984fa885b25041bbc44a4b">2-1. 1번 키 등록</h2>
+<h3 id="block-a8c11d0e61724d1eaac9ddf71b8f23ec">깃 서버의 공개키를 Jenkins서버에 등록</h3>
+<p>먼저 6번서버에서 깃 서버의 SSH키를 <a href="#block-7acef64e2484442ca0d430931f91f446">3. SSH 키 생성 </a> 이 방식으로 했더니 아래와 같은 에러가 생긴다. </p>
+<p>RSA의 형식이 아닌 ED25519 포멧을 원하는것 처럼 보인다..</p>
+<p>이는 젠킨스 서버(6번)에서 깃서버(22번)SSH Key를 읽지 못해서 생기는 문제이다. </p>
+<pre data-lang="bash"><code class="language-bash">Failed to connect to repository : Command &quot;git ls-remote -h -- ssh://git@192.168.1.22/git/temp/hello_world.git HEAD&quot; returned status code 128:
+stdout:
+stderr: No ED25519 host key is known for 192.168.1.22 and you have requested strict checking.
+Host key verification failed.
+fatal: Could not read from remote repository.</code></pre>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/cc2e3e81-c95e-4240-8fc9-c9c7e92b9d73.png" alt="" loading="lazy" width="2662" height="1672" /></figure>
+<p>참고로 ssh 접속관련 로그는 아래 명령어를 통해 확인가능하다.</p>
+<pre data-lang="bash"><code class="language-bash">sudo tail -f /var/log/auth.log</code></pre>
+<ul><li>해결 방법은 깃 서버(22번)에 접속해서 ED25519 형식의 키값을 생성하여 해당 공개키를 Jenkins서버의 <code>/var/lib/jenkins/.ssh/known_hosts</code> 위치에 등록해줘야 하면 된다.</li><li>Git서버(22번)에 접속해서 아래 명령어를 타이핑한다. 이메일주소는 그냥 대충입력해도 상관없다.</li></ul>
+<pre data-lang="bash"><code class="language-bash">ssh-keygen -t ed25519 -C &quot;your_email@example.com&quot;</code></pre>
+<ul><li>계속 엔터를 눌러서 passphrase 없이 설정가능하도록 해주자.</li><li><code>192.168.1.22</code>의 <code>ed25519</code> 유형의 SSH 공개 키를 출력하라는 의미이다. 출력값을 복사해두자.</li></ul>
+<pre data-lang="bash"><code class="language-bash">ssh-keyscan -t ed25519 192.168.1.22</code></pre>
+<ul><li>Jenkins 서버에 접속한다.  <code>/var/lib/jenkins/.ssh/known_hosts</code> 위치에 복사한 값을 붙여넣기 해준다.</li><li>나의 경우 .ssh 디렉토리가 없어 mkdir로 생성해주었고 known_hosts파일 또한 vim으로 열어 붙여넣기해주었다.</li></ul>
+<h3 id="block-fbd4ebcfdb2346d0b3e4a4f66f19388f">Jenkins서버의 공개키를 깃 서버에 등록</h3>
+<ul><li>Jenkins 서버에서 ED25519 키를 생성한다.</li></ul>
+<pre data-lang="bash"><code class="language-bash">ssh-keygen -t ed25519 -C &quot;your_email@example.com&quot;</code></pre>
+<ul><li>생성된 공개키는 깃서버(22번)에  등록해준다.</li></ul>
+<pre data-lang="bash"><code class="language-bash">ssh-copy-id -i ~/.ssh/id_ed25519.pub -p {port_number} git@XXX.XXX.XX.22</code></pre>
+<h2 id="block-5e243c704ce2499db9718de1c4eb2308">Jenkins의 Credential 등록</h2>
+<p>나는 아래처럼 생성했다.</p>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/354d4654-7d81-47e6-aaab-b74252e50dc4.png" alt="" loading="lazy" width="3534" height="1822" /></figure>
+<p>Jenkins서버에서 아래 명령어를 입력해 나온 출력값을 저 add를 눌러 넣어준다.</p>
+<pre data-lang="bash"><code class="language-bash">cat ~/.ssh/id_ed25519</code></pre>
+<p>Head: -----BEGIN OPENSSH PRIVATE KEY---—</p>
+<p>Footer: -----END OPENSSH PRIVATE KEY---—</p>
+<p>까지 전부 포함되어있어야 한다.</p>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/5aaac5fe-6cdb-47ed-b475-093d11e42754.png" alt="" loading="lazy" width="3404" height="676" /></figure>
+<p>그리고 저장해준다.</p>
+<p>그럼 이제 6번서버에서 22번 Jenkins 서버로 에러없이 접속이 가능하다는 것을 알 수 있다.</p>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/6ba67a1d-f435-410d-8a66-f09d5a34fd43.png" alt="" loading="lazy" width="3476" height="1732" /></figure>
+<h2 id="block-6748aefcc2694b05acc67ed46aaeb16c">2-2. 2번 키 등록</h2>
+<p>이 경우는 그냥 rsa타입의 ssh를 키를 등록해주면된다.</p>
+<p><a href="#block-7acef64e2484442ca0d430931f91f446">3. SSH 키 생성 </a> 마찬가지로 Jenkins Server(# 6)에서 키를 만들어 공개키를 Service PC(# 8)에 전송하면 된다.</p>
+<h2 id="block-4581e85d2208434f9f3bb6714091ed28">Jenkins의 Credential 등록</h2>
+<p>Key는 마찬가지로  Jenkins Server(# 6)의 개인키를 넣어주면 된다.</p>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/5ca91cd1-2d23-4cf9-af30-69e4ad7d5d98.png" alt="" loading="lazy" width="2286" height="2288" /></figure>
+<h2 id="block-c91e608d74e943deb7f44ac97d53e77e">2-3. 3번 키 등록</h2>
+<p>마찬가지로 rsa타입의 ssh를 키를 등록해주면된다.</p>
+<p><a href="#block-7acef64e2484442ca0d430931f91f446">3. SSH 키 생성 </a> 마찬가지로 Service PC(# 8)에서 키를 만들어 공개키를 깃 서버(# 22)에 전송하면 된다. </p>
+<p>다만 Jenkins가 직접적으로 컨트롤하는 영역이 아니기 때문에 Jenkins의 Credential에 등록해 줄 필요는 없다.</p>
+<h2 id="block-6ae6313f576d495b862facc507db32be">3. Git Webhook</h2>
+<p>깃을 사용시 커밋 또는 푸쉬가 발생한 경우 이때 같이 어떤 스크립트가 실행되면서 이벤트를 발생하는 원리이다.</p>
+<p>훅은 클라이언트단에서 훅이 있고 깃 서버단에서의 훅이 있다.</p>
+<h2 id="block-d1f79320d37046df8c0923dff6734c69">프로세스</h2>
+<h3 id="block-e81aa68e50294fa6bc864bff744de344">깃 서버에서의 훅</h3>
+<ul><li>깃 서버에서 후킹을 발생하도록 하는 경우 푸쉬가 들어온 후에 스크립트가 실행되는 원리</li></ul>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/75fbed76-10d8-4fd4-9018-89dd4127c711.png" alt="" loading="lazy" width="1772" height="724" /></figure>
+<h3 id="block-07718a0a31c14580bf897234455401c6">클라이언트에서의 훅</h3>
+<ul><li>클라이언트에서는 push가 일어난 후에 훅이 발생하는 <code>post-push</code> 와 같은 기능은 없다.</li><li>대신 <code>pre-push</code> 훅이 존재하는데  <code>git push</code> 명령을 실행하면 동작하지만 리모트(깃서버)로 데이터를 전송하기 전에 동작한다. </li></ul>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/03f1004d-8fb4-447d-b99b-799b03c0a6a6.png" alt="" loading="lazy" width="1322" height="826" /></figure>
+<p>서버에서의 훅과 클라이언트 훅 둘중 하나를 선택해서 설정해주면 된다.</p>
+<h2 id="block-04af7e9f2708470eb680b99c0dfaaf6d">깃 서버에서의 훅</h2>
+<ul><li>git 서버(# 22)에 접속하고 후킹을 하고싶은 레포지토리에 들어간다.  </li><li>나는 hello_world.git 이라는 레포지토리를 만들었다.</li><li>그리고 해당. 레포지토리에 hooks라는 폴더에 들어가보면 아래 처럼 <code>.sample</code> 이라는 확장자를 가진 파일들이 나열되어 있다.</li><li><code>post-receive.sample</code> 이라는 파일을 수정해야한다.</li><li>만약 없다면 post-receive 파일을 생성해준다(이 때 실행가능한 권한을 부여해야한다.)<pre data-lang="bash"><code class="language-bash">chmod +x post-receive</code></pre></li><li><code>.sample</code>은 샘플파일들로 실행되지 않는다. 따라서 동작을 원한다면 <code>.sample</code>이라는 확장자를 제거해주면 된다</li></ul>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/6c57ed5f-8492-482a-99e0-b3f67997b77a.png" alt="" loading="lazy" width="1954" height="162" /></figure>
+<p><a href="https://www.git-scm.com/book/ko/v2/Git맞춤-Git-Hooks" target="_blank" rel="noreferrer">https://www.git-scm.com/book/ko/v2/Git맞춤-Git-Hooks</a></p>
+<ul><li>post-receive를 열어보면 아래 처럼 작성해준다.</li></ul>
+<pre data-lang="bash"><code class="language-bash">vim post-receive</code></pre>
+<details class="toggle"><summary><strong>Script</strong></summary><div class="toggle-body"><pre data-lang="bash"><code class="language-bash">git@rev-devel:~/git/hmlf/ai_client.git/hooks$ cat post-receive 
+JENKINS_URL=&quot;https://33e1-218-233-16-216.ngrok-free.app&quot;
+JENKINS_JOB=&quot;ai_client&quot;
+JENKINS_USER=&quot;admin&quot;
+JENKINS_TOKEN=&quot;&lt;my_token&gt;&quot;
+
+TRIGGER_URL=&quot;${JENKINS_URL}/job/${JENKINS_JOB}/build?token=${JENKINS_TOKEN}&quot;
+
+
+LOG_FILE=&quot;/tmp/post-receive.log&quot;
+
+{
+  echo &quot;[$(date)] Triggering Jenkins Job&quot;
+  echo &quot;Jenkins URL: ${TRIGGER_URL}&quot;
+
+  RESPONSE=$(curl -X POST &quot;${TRIGGER_URL}&quot; --user &quot;${JENKINS_USER}:${JENKINS_TOKEN}&quot; -w &quot;%{http_code}&quot;)
+
+  echo &quot;Jenkins Response: ${RESPONSE}&quot;
+} &gt;&gt; &quot;${LOG_FILE}&quot; 2&gt;&amp;1</code></pre></div></details>
+<ul><li>JENKINS_URL: git Server에서 Jenkins에 접속가능한 주소</li><li>JENKINS_JOB: Pipeline 생성시 사용했던 이름</li></ul>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/ae7fb58f-fb8e-4c09-b2bd-3bffc04c5ad4.png" alt="" loading="lazy" width="2814" height="1594" /></figure>
+<ul><li>JENKINS_USER: 사용자 계정입력</li><li>JENKINS_TOKEN: <a href="https://www.notion.so/62b0a5fca29349139e346122af535e66#6b3ca2d163544b4493174b04e8f2acef" target="_blank" rel="noreferrer">Jenkins에서 토큰 발급(WebUI 접속필요)</a> 여기서 생만들어 뒀던 토큰 값 입력</li><li>그 후 아래는 그냥 복사 해주면 된다. 다만 LOG_FILE 디렉토리에 파일을 미리 만들어두자.</li></ul>
+<h2 id="block-ecdc6b1c3ed04bf18b447c11d589de22">클라이언트에서의 훅</h2>
+<p>클라이언트에서의 훅은 깃 서버(# 22)번이 아닌 클라이언트 환경에서 해야한다.</p>
+<p>먼저 git clone을 통해 설정하고자 하는 레포지토리를 내려받고 프로젝트 디렉토리로 이동해 .git으로 들어간다.</p>
+<p>그리고 pre-push를 수정해준다. 스크립트 내용은 동일하니 생략하겠다.</p>
+<pre data-lang="bash"><code class="language-bash">cd hello_world/.git/hooks
+cp pre-push.sample pre-push
+chmod +x pre-push
+vim pre-push</code></pre>
+<h2 id="block-cf81fadecc0a4914907f82251bd9b04d">4. Making Pipeline</h2>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/09ee92f2-ac6a-440f-9b4a-f36606e87e58.png" alt="" loading="lazy" width="1960" height="1340" /></figure>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/30ea1521-2a49-48fc-a1e6-d705dad5f5d2.png" alt="" loading="lazy" width="2746" height="1890" /></figure>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/be8f0a7f-72b2-4ae9-98e5-190ae9ef5feb.png" alt="" loading="lazy" width="2806" height="2088" /></figure>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/62920a9d-84eb-4ba7-a618-2eaae50fac32.png" alt="" loading="lazy" width="3298" height="2044" /></figure>
+<figure><img src="/assets/notion/jenkins-git-hub-연동/fc2abec3-8118-4070-88a8-3064a10aecae.png" alt="" loading="lazy" width="3280" height="1066" /></figure>
+<p>저장을 눌러주고 ai_client.git에 푸쉬를 한다. 그리고 트리거가 발생하는지 확인하면된다.</p>
+<p>또는 수동으로하고싶다면 아래 명령어를 실행한다.</p>
+<pre data-lang="bash"><code class="language-bash">curl -X POST &quot;https://33e1-218-233-16-216.ngrok-free.app/job/ai_client/build?token={JENKINS_TOKEN}&quot; --user &quot;admin:&lt;JENKINS_TOKEN&gt;&quot; -w &quot;%{http_code}&quot;</code></pre>
+<p>이 명령어는 Jenkins Job을 수동으로 트리거하며, 응답 코드를 출력한다. </p>
+<p>응답 코드가 200 또는 201이면 성공적으로 트리거된 것이다.</p>
+<h2 id="block-d2674a9bbe624b05a06c83167c1f4950">스크립트</h2>
+<details class="toggle"><summary><strong>Script</strong></summary><div class="toggle-body"><pre data-lang="bash"><code class="language-bash">def unit_test_failed = false
+
+pipeline {
+    agent any
+    environment {
+        SERVER_IP = &quot;192.168.x.x&quot;
+        REPORT_IP = &quot;http://192.168.x.x:8080&quot;
+        SERVER_USER = &quot;test&quot;
+        REPO_URL = 'ssh://git@192.168.x.x/git/ai_core_service.git'
+        ENGINE_REPO_URL = 'ssh://git@192.168.x.x/ai_engine.git'
+        TRAIN_REPO_URL = 'ssh://git@192.168.x.x/ai_train_engine.git'
+        COMMON_LIB_REPO = 'ssh://git@192.168.x.x/ai_fw_utility.git'
+        AUTHENTICATION_REPO = 'ssh://git@192.168.x.x/ai_sw.git'
+        STARTKIT_REPO = 'ssh://git@192.168.x.x/ai_starterkit.git'
+        CUSTOM_BUILD_URL = &quot;${REPORT_IP}/job/${env.JOB_NAME}/${env.BUILD_NUMBER}/&quot;
+    }
+    stages {
+        stage('Notify Build Start') {
+            steps {
+                script {
+                    slackSend (channel: 'C078T1XJE57', color: 'good', message: &quot;Build STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${CUSTOM_BUILD_URL})&quot;)
+                }
+            }
+        }
+        stage('Prepare Environment') {
+            steps {
+                script {
+                    sshagent(['jenkins_to_service_key']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                        set -e
+                        HOME_DIR=\$(echo ~${SERVER_USER})
+                        WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+                        REPO_NAME=\$(basename -s .git ${REPO_URL})
+                        VENV_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}_venv&quot;
+
+                        if [ ! -d &quot;\${WORKSPACE_DIR}&quot; ]; then
+                            echo &quot;Directory does not exist. Creating workspace directory...&quot;
+                            mkdir -p \${WORKSPACE_DIR}
+                            echo &quot;\${WORKSPACE_DIR} successfully created&quot;
+                        fi
+
+                        if [ ! -d &quot;\${VENV_DIR}&quot; ]; then
+                            echo &quot;Creating virtual environment...&quot;
+                            /usr/bin/python3.11 -m venv --system-site-packages \${VENV_DIR}
+                        fi
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        slackSend (channel: 'C078T1XJE57', color: 'danger', message: &quot;Build FAILED in stage '${env.STAGE_NAME}': Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${CUSTOM_BUILD_URL})&quot;)
+                    }
+                }
+            }
+        }
+        stage('Pip install Project') {
+            steps {
+                script {
+                    sshagent(['jenkins_to_service_key']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                        set -e
+                        HOME_DIR=\$(echo ~${SERVER_USER})
+                        WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+                        REPO_NAME=\$(basename -s .git ${REPO_URL})
+                        PROJECT_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}&quot;
+                        VENV_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}_venv&quot;
+
+                        source \${VENV_DIR}/bin/activate
+                        pip3 install setuptools wheel
+
+                        if [ ! -d &quot;\${PROJECT_DIR}&quot; ]; then
+                            echo &quot;Project directory does not exist. Cloning repository...&quot;
+                            cd \${WORKSPACE_DIR}
+                            git clone ${REPO_URL}
+                            cd \${PROJECT_DIR}
+                            pip3 install ./
+                        else
+                            echo &quot;Project directory exists. Pulling latest changes...&quot;
+                            cd \${PROJECT_DIR}
+                            git pull
+                            pip3 uninstall \${REPO_NAME} -y || true
+                            pip3 install ./
+                        fi
+                        deactivate
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        slackSend (channel: 'C078T1XJE57', color: 'danger', message: &quot;Build FAILED in stage '${env.STAGE_NAME}': Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${CUSTOM_BUILD_URL})&quot;)
+                    }
+                }
+            }
+        }
+        stage('Pip install Dependency') {
+            steps {
+                script {
+                    sshagent(['jenkins_to_service_key']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                        set -e
+                        HOME_DIR=\$(echo ~${SERVER_USER})
+                        WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+                        REPO_NAME=\$(basename -s .git ${REPO_URL})
+                        VENV_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}_venv&quot;
+                        
+                        source \${VENV_DIR}/bin/activate
+                        pip3 install torch torchvision torchaudio
+
+                        for REPO_URL in ${COMMON_LIB_REPO} ${ENGINE_REPO_URL} ${TRAIN_REPO_URL}; do
+                            REPO_NAME=\$(basename -s .git \${REPO_URL})
+                            REPO_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}&quot;
+                            if [ ! -d &quot;\${REPO_DIR}&quot; ]; then
+                                echo &quot;Cloning repository \${REPO_NAME}...&quot;
+                                cd \${WORKSPACE_DIR}
+                                git clone \${REPO_URL}
+                            else
+                                echo &quot;Repository \${REPO_NAME} exists. Pulling latest changes...&quot;
+                                cd \${REPO_DIR}
+                                git pull
+                                pip3 uninstall \${REPO_NAME} -y || true
+                            fi
+                            cd \${REPO_DIR}
+                            pip3 install ./
+                        done
+
+                        pip3 install -U Pillow
+                        deactivate
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        slackSend (channel: 'C078T1XJE57', color: 'danger', message: &quot;Build FAILED in stage '${env.STAGE_NAME}': Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${CUSTOM_BUILD_URL})&quot;)
+                    }
+                }
+            }
+        }
+        stage('Pip install Authentication') {
+            steps {
+                script {
+                    sshagent(['jenkins_to_service_key']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                        set -e
+                        HOME_DIR=\$(echo ~${SERVER_USER})
+                        WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+                        REPO_NAME=\$(basename -s .git ${REPO_URL})
+                        VENV_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}_venv&quot;
+                        
+                        source \${VENV_DIR}/bin/activate
+                        for REPO_URL in ${AUTHENTICATION_REPO}; do
+                            REPO_NAME=\$(basename -s .git \${REPO_URL})
+                            REPO_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}&quot;
+                            if [ ! -d &quot;\${REPO_DIR}&quot; ]; then
+                                echo &quot;Cloning repository \${REPO_NAME}...&quot;
+                                cd \${WORKSPACE_DIR}
+                                git clone \${REPO_URL}
+                            else
+                                echo &quot;Repository \${REPO_NAME} exists. Pulling latest changes...&quot;
+                                cd \${REPO_DIR}
+                                git pull
+                                pip3 uninstall \${REPO_NAME} -y || true
+                            fi
+                            cd \${REPO_DIR}
+                            pip3 install ./
+                        done
+                        deactivate
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        slackSend (channel: 'C078T1XJE57', color: 'danger', message: &quot;Build FAILED in stage '${env.STAGE_NAME}': Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${CUSTOM_BUILD_URL})&quot;)
+                    }
+                }
+            }
+        }
+        stage('Unit Test') {
+            steps {
+                script {
+                    sshagent(['jenkins_to_service_key']) {
+                        def result = sh(
+                            script: &quot;&quot;&quot;
+                            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                            set -e
+                            HOME_DIR=\$(echo ~${SERVER_USER})
+                            WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+                            REPO_NAME=\$(basename -s .git ${REPO_URL})
+                            VENV_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}_venv&quot;
+                            PROJECT_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}&quot;
+                            source \${VENV_DIR}/bin/activate
+                            cd \${PROJECT_DIR}
+                            pip3 install pytest
+                            pip3 install pytest-mock
+                            pip3 install pytest-html
+                            pytest --html=\${REPO_NAME}_report.html --self-contained-html
+                            RESULT=\$?
+                            if [ \${RESULT} -ne 0 ]; then
+                                echo &quot;Error: Unit test failed&quot;
+                                # exit 1
+                            fi
+                            deactivate
+                            exit \${RESULT}
+                            '
+                            &quot;&quot;&quot;, returnStatus: true
+                        )
+
+                        if (result != 0) {
+                            unit_test_failed = true
+                        }
+                    }
+                }
+            }
+            post {
+                always {
+                    sshagent(['jenkins_to_service_key']) {
+                        script {
+                            def HOME_DIR = sh(script: &quot;ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} 'echo ~${SERVER_USER}'&quot;, returnStdout: true).trim()
+                            def WORKSPACE_DIR = &quot;${HOME_DIR}/workspace&quot;
+                            def REPO_NAME = sh(script: &quot;basename -s .git ${REPO_URL}&quot;, returnStdout: true).trim()
+                            def REMOTE_FILE_PATH = &quot;${WORKSPACE_DIR}/${REPO_NAME}/${REPO_NAME}_report.html&quot;
+                            def LOCAL_FILE_PATH = &quot;${env.WORKSPACE}/${REPO_NAME}_report.html&quot;
+
+                            echo &quot;HOME_DIR: ${HOME_DIR}&quot;
+                            echo &quot;WORKSPACE_DIR: ${WORKSPACE_DIR}&quot;
+                            echo &quot;REPO_NAME: ${REPO_NAME}&quot;
+                            echo &quot;REMOTE_FILE_PATH: ${REMOTE_FILE_PATH}&quot;
+                            echo &quot;LOCAL_FILE_PATH: ${LOCAL_FILE_PATH}&quot;
+                            
+                            sh &quot;scp -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP}:${REMOTE_FILE_PATH} ${LOCAL_FILE_PATH}&quot;
+
+                            slackUploadFile (
+                                channel: 'C078T1XJE57',
+                                filePath: &quot;${REPO_NAME}_report.html&quot;,
+                                initialComment: &quot;Unit Test Report for Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${CUSTOM_BUILD_URL})&quot;
+                            )
+
+                            if (unit_test_failed) {
+                                slackSend (
+                                    channel: 'C078T1XJE57',
+                                    attachments: [
+                                        [
+                                            color: &quot;warning&quot;,
+                                            text: &quot;Unit Test Failed for Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'. Please check the report for details.&quot;
+                                        ]
+                                    ]
+                                )
+                            } else {
+                                slackSend (
+                                    channel: 'C078T1XJE57',
+                                    attachments: [
+                                        [
+                                            color: &quot;success&quot;,
+                                            text: &quot;Unit Test Succeeded for Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'. Please check the report for details.&quot;
+                                        ]
+                                    ]
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        stage('Clone StartKit') {
+            steps {
+                script {
+                    sshagent(['jenkins_to_service_key']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                        set -e
+                        HOME_DIR=\$(echo ~${SERVER_USER})
+                        WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+                        STARTERKIT_REPO_NAME=\$(basename -s .git ${STARTKIT_REPO})
+                        STARTERKIT_DIR=&quot;\${WORKSPACE_DIR}/\${STARTERKIT_REPO_NAME}&quot;
+
+                        if [ ! -d &quot;\${STARTERKIT_DIR}&quot; ]; then
+                            echo &quot;Starter Kit does not exist. Cloning repository ...&quot;
+                            cd \${WORKSPACE_DIR}
+                            git clone ${STARTKIT_REPO}
+                        else
+                            echo &quot;Starter Kit exists. Pulling latest changes...&quot;
+                            cd \${STARTERKIT_DIR}
+                            git pull
+                        fi
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        slackSend (channel: 'C078T1XJE57', color: 'danger', message: &quot;Build FAILED in stage '${env.STAGE_NAME}': Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${CUSTOM_BUILD_URL})&quot;)
+                    }
+                }
+            }
+        }
+        stage('Install Nuitka') {
+            steps {
+                script {
+                    sshagent(['jenkins_to_service_key']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                        set -e
+                        HOME_DIR=\$(echo ~${SERVER_USER})
+                        WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+                        REPO_NAME=\$(basename -s .git ${REPO_URL})
+                        VENV_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}_venv&quot;
+
+                        source \${VENV_DIR}/bin/activate
+                        pip3 install nuitka==2.3.2
+                        deactivate
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        slackSend (channel: 'C078T1XJE57', color: 'danger', message: &quot;Build FAILED in stage '${env.STAGE_NAME}': Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${CUSTOM_BUILD_URL})&quot;)
+                    }
+                }
+            }
+        }
+        stage('Run Nuitka Script') {
+            steps {
+                script {
+                    sshagent(['jenkins_to_service_key']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                        set -e
+                        HOME_DIR=\$(echo ~${SERVER_USER})
+                        WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+                        REPO_NAME=\$(basename -s .git ${REPO_URL})
+                        VENV_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}_venv&quot;
+                        PROJECT_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}&quot;
+                        STARTERKIT_REPO_NAME=\$(basename -s .git ${STARTKIT_REPO})
+
+                        source \${VENV_DIR}/bin/activate
+                        
+                        NUITKA_SCRIPT=&quot;\${WORKSPACE_DIR}/\${STARTERKIT_REPO_NAME}/packaging/nuitka/\${REPO_NAME}.sh&quot;
+                        
+                        cd \${PROJECT_DIR}
+                        bash \${NUITKA_SCRIPT}
+
+                        echo &quot;\${REPO_NAME} Packing Finished!&quot;
+                        deactivate
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        slackSend (channel: 'C078T1XJE57', color: 'danger', message: &quot;Build FAILED in stage '${env.STAGE_NAME}': Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${CUSTOM_BUILD_URL})&quot;)
+                    }
+                }
+            }
+        }
+        stage('Test Nuitka') {
+            steps {
+                script {
+                    sshagent(['jenkins_to_service_key']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                        set -e
+                        HOME_DIR=\$(echo ~${SERVER_USER})
+                        WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+                        REPO_NAME=\$(basename -s .git ${REPO_URL})
+                        PROJECT_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}&quot;
+
+                        DST_DIR=\$(find \${PROJECT_DIR} -type d -name &quot;*.dist&quot;)
+                        BIN_FILE=\$(find \${DST_DIR} -type f -name &quot;*.bin&quot;)
+
+                        if [ -z &quot;\${DST_DIR}&quot; ] || [ -z &quot;\${BIN_FILE}&quot; ]; then
+                            echo &quot;Error: .dist directory or .bin file not found&quot;
+                            exit 1
+                        fi
+
+                        \${BIN_FILE} -help
+                        RESULT=\$?
+                        if [ \${RESULT} -ne 0 ]; then
+                            echo &quot;Error: .bin file execution failed&quot;
+                            exit 1
+                        fi
+
+                        echo &quot;Nuitka script executed successfully&quot;
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        slackSend (channel: 'C078T1XJE57', color: 'danger', message: &quot;Build FAILED in stage '${env.STAGE_NAME}': Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${CUSTOM_BUILD_URL})&quot;)
+                    }
+                }
+            }
+        }
+        stage('Notify Build Result') {
+            steps {
+                script {
+                    slackSend (channel: 'C078T1XJE57', color: 'good', message: &quot;Build Finished: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${CUSTOM_BUILD_URL})&quot;)
+                }
+            }
+        }
+    }
+}
+</code></pre></div></details></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +839,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

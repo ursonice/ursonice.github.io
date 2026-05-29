@@ -76,11 +76,67 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/kubernetes/">Kubernetes</a>
+    </nav>
+    <h1>[Kubernetes] PV와 PVC</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 4월 21일</span><span class="dot"></span><span>수정 2025년 5월 23일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-1dcb12c0115c80c3802cc05f8ad6ecae">PV(Persistent Volume)</h2>
+<ul><li>물리적 스토리지 리소스를 나타내는 쿠버네티스 오브젝트</li><li>개발자가 직접 만들 수 도 있고(Static), 필요할 때마다 자동으로 만들어지도록 할 수 있음(Dynamic)</li><li>즉, 사용가능하도록 하는 물리적 용량</li></ul>
+<h2 id="block-1dcb12c0115c8052a90eed8f34a0b03f">PVC(Persistent Volume Claim)</h2>
+<ul><li>Pod가 스토리지를 사용하기 위해 PVC를 참조한다.</li><li>PVC는 적합한 PV를 찾아 1:1로 바인딩</li><li>즉, 개발자가 PVC를 만들어 이를 통해 물리적 용량(PV)을 요청함</li></ul>
+<h2 id="block-1dcb12c0115c80d8ae73ce12b7fbd8ed">PV를 PVC에 명시적 바인딩 하는 방법</h2>
+<ul><li><code>VolumeName</code> 필드로 직접 지정</li></ul>
+<h3 id="block-1dcb12c0115c8033a618d904ffc7cfa4">바인딩 성공조건</h3>
+<ul><li>PVC의 <code>accessModes</code>가 PV와 <strong>완전히 동일</strong></li><li>PVC의 요청 용량(<code>storage</code>) ≤ PV의 용량 (예: 5Gi 요청 → PV는 10Gi 가능).</li><li><strong>스토리지 클래스</strong>: PV의 <code>storageClassName</code>과 PVC의 <code>storageClassName</code>이 일치.</li></ul>
+<h2 id="block-1dcb12c0115c80188d4ff5796589a79f">PV</h2>
+<pre data-lang="yaml"><code class="language-yaml">apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: static-pv  # PV 이름
+spec:
+  capacity:
+    storage: 10Gi  # PV의 총 용량
+  accessModes:
+    - ReadWriteOnce  # PVC와 동일한 접근 모드 필수
+  persistentVolumeReclaimPolicy: Retain  # PVC 삭제 후 PV 유지
+  storageClassName: &quot;&quot;  # 명시적으로 빈 값 지정 (정적 프로비저닝)
+  hostPath:
+    path: /mnt/data  # 실제 데이터 저장 경로</code></pre>
+<h2 id="block-1dcb12c0115c80318c4be03135e23eec">PVC</h2>
+<pre data-lang="yaml"><code class="language-yaml">apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: static-pvc  # PVC 이름
+spec:
+  accessModes:
+    - ReadWriteOnce  # PV와 동일한 접근 모드
+  resources:
+    requests:
+      storage: 10Gi  # PV 용량과 동일하게 요청
+  storageClassName: &quot;&quot;  # PV와 동일한 스토리지 클래스 지정
+  volumeName: static-pv  # 명시적으로 PV 이름 지정 (강제 바인딩)</code></pre></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +157,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

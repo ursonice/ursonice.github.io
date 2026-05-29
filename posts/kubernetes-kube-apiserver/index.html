@@ -76,11 +76,40 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/kubernetes/">Kubernetes</a>
+    </nav>
+    <h1>[Kubernetes] kube-apiserver</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 5월 17일</span><span class="dot"></span><span>수정 2025년 6월 3일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-1f6b12c0115c80c68ad3db30802aa60c">서론</h2>
+<p>kube-apiserver는 Kubernetes의 주요 관리 컴포넌트이다.</p>
+<p>우리가 kubectl 명령어를 실행하면 실제로는 kube-apiserver에게 요청을 보내는 것이다.</p>
+<p>kube-api에 대해서 자세히 알아보자</p>
+<h2 id="block-203b12c0115c80fea267cb7105d2cada">Kube-api server</h2>
+<figure><img src="/assets/notion/kubernetes-kube-apiserver/203b12c0-115c-8059-a9e0-ccaa427b8fa8.png" alt="" loading="lazy" width="2372" height="1304" /></figure>
+<ol><li>사용자가 파드 생성 요청을 보내면 요청에 대한 인증과 스키마를 검증한다.</li><li>저 파드 객체를 생성한다.</li><li>etcd에 파드 정보를 업데이트 하고 사용자에게 파드가 생성되었음을 알린다.</li><li>스케줄러는 kube-apiserver를 지속적으로 감시하다 노드가 할당되지 않는 새 파드를 발견한다.</li><li>스케줄러는 새 파드를 배치할 적합한 노드를 찾아 kube-apiserver에 전달한다.</li><li>kube-apiserver는 해당 정보를 etcd클러스터에 업데이트 한다.</li><li>kube-apiserver는 이 정보를 해당 워커 노드의 Kubelet으로 전달한다.</li><li>kubelet은 노드에 파드를 생성하고 컨테이너 런타임에게 애플리케이션 이미지를 배포하도록 지시한다.</li><li>작업이 끝나면 Kubelet은 상태를 API서버에 보고하고, API 서버는 다시 etcd클러스터에 데이터를 업데이트 한다.</li></ol>
+<ul><li>kube-apiserver는 etcd 데이터 저장소와 직접 상호작용하는 유일한 컴포넌트이다.</li><li>스케줄러, kube-controller-manager, kubelet과 같은 다른 컴포넌트들은 각자의 영역에서 클러스터를 업데이트하기 위해 API 서버를 사용한다.</li><li>설치<ul><li>kubeadm 구축시  kube-system의 kube-api 파드를 마스터 노드에 배포한다</li><li>/etc/kubernetes/manifests/kube-apiserver.yaml을 통해 위 파드의 옵션들을 볼 수 있다.</li></ul></li></ul></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +130,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

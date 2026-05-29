@@ -76,11 +76,51 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/kubernetes/">Kubernetes</a>
+    </nav>
+    <h1>[Kubernetes] Drain, Cordon, Uncordon</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 7월 3일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-225b12c0115c80df9defc6908dbaaae3">서론</h2>
+<p>클러스터를 운영하다보면 노드에 OS업그레이드나 보안 패치를 적용하기 위해 잠시 노드를 중단해야 하는 상황이 생긴다.</p>
+<p>이때 파드가 끊기는 시간을 최소화하면서 안전하게 노드를 관리해야 한다.</p>
+<p>이와 관련하여 </p>
+<ul><li>Drain명령어를 통해 노드에 실행중인 파드들을 모드 종료하고 다른 노드에 생성하도록 한다.</li><li>파드를 더이상 스케줄링 하지 않도록하는 Cordon 명령어</li><li>Uncordon이라는 명령어로 Cordon 명령어를 해제</li></ul>
+<p>에 대해서 알아보도록 한다.</p>
+<h2 id="block-225b12c0115c800cbd5be336feabbffa">본론</h2>
+<p>노드가 갑자기 다운되면 그 노드에 있던 파드는 즉시 접근 불가가 된다.</p>
+<p>플레인은 노드가 떨어진 후 최대 5 분(pod-eviction-timeout)을 기다린다.</p>
+<p>그 안에 노드가 복구되면 원래 파드들이 살아난 노드에 그대로 복구된다.</p>
+<p>만약 노드가 5분 이후에 복구되면, 그 노드에는 스케줄된 파드가 하나도 없는 빈 상태로 올라온다.</p>
+<p>5분안에 노드가 복구된다면 문제가 없지만 5분안에 복구될지는 알 수 없다.</p>
+<p>따라서 노드를 중단시켜야 하는 경우 drain명령을 사용해 모든 워크로드(파드, 서비스, 디플로이먼트 등)를 해당 노드에서 종료시키고 다른 노드에 새로 생성한다.</p>
+<ul><li>주의할 점은 Replicaset에 의해 파드가 관리되는 경우는 파드를 종료하면 다시 실행시키지만 일반 파드의 경우에 종료시키면 다시 실행시키는 것이 불가능하다. 따라서 일반 파드가 실행중인 노드에 drain명령어 실행시 오류가 난다.</li><li>따라서 이런 경우 일반 파드를 Replicaset으로 관리하도록 변경해야한다.</li></ul>
+<p>또한 해당 노드는 cordon 처리되어 ‘스케줄 불가’ 상태가 되며, 제한을 해제하기 전까지 새 파드가 배치되지 않는다.</p>
+<p>제한을 해제하기 위해서는 uncordon 명령어를 통해 해제가 가능하다.</p>
+<p>drain외에 cordon이라는 명령어도 있으며 이는 노드를 스케줄 불가 상태로 만들어 해당 노드에 파드가 배치되지 않도록한다.</p>
+<h2 id="block-225b12c0115c80b6af0becbff6992c51">정리</h2>
+<ul><li>drain → 유지보수 → uncordon 순서를 지키면 서비스 중단 없이 노드를 관리할 수 있습니다.</li><li>cordon은 일시적으로 새 파드 스케줄을 막고 싶을 때, drain은 실제로 파드를 다른 노드로 옮겨야 할 때 사용하면 된다.</li></ul></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +141,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

@@ -76,11 +76,231 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/coding-test/">Coding Test</a>
+    </nav>
+    <h1>2월 1주차 코딩 테스트</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 2월 8일</span><span class="dot"></span><span>수정 2025년 3월 8일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-194b12c0115c80a78ab0d826c5ee9b76">목차</h2>
+<ol><li>이중 점수 돌 게임</li><li>통 속의 공</li><li>강력한 패스워드</li><li>k자리 제거하기</li><li>선을 넘나드는 사각형</li></ol>
+<h2 id="block-194b12c0115c801d9f22f0cebdbd358c">1. 이중 점수 돌 게임</h2>
+<figure><img src="/assets/notion/2월-1주차-코딩-테스트/194b12c0-115c-808b-8173-f19e2cec29ea.png" alt="" loading="lazy" width="1538" height="1044" /></figure>
+<figure><img src="/assets/notion/2월-1주차-코딩-테스트/194b12c0-115c-8001-9ac4-e314d3fddfef.png" alt="" loading="lazy" width="1544" height="854" /></figure>
+<figure><img src="/assets/notion/2월-1주차-코딩-테스트/194b12c0-115c-801c-bc8d-f78b048a9023.png" alt="" loading="lazy" width="1538" height="768" /></figure>
+<h2 id="block-194b12c0115c8092961ae31673354363">풀이</h2>
+<p>이 문제는 두 돌의 가치의 합이 가장 큰 순으로 정렬하고 차례대로 뽑으면 된다.</p>
+<p>그 이유는 자신의 돌의 가치가 낮더라도 상대의 돌의 가치가 높다는 뜻이되어 상대가 높은돌의 가치를 뽑지 못하게 한다.</p>
+<p>따라서 최적의 답안이라 볼 수 있다.</p>
+<p>전체 코드는 아래와 같다.</p>
+<pre data-lang="python"><code class="language-python">def solution(value):
+    player1_score = 0
+    player2_score = 0
+    
+    value.sort(key=lambda x: -(x[0] + x[1]))
+
+    for i in range(len(value)):
+        if i % 2 == 0:
+            player1_score += value[i][0]
+        else:
+            player2_score += value[i][1]
+
+    if player1_score &gt; player2_score:
+        return 1
+    elif player1_score &lt; player2_score:
+        return -1
+    else:
+        return 0 
+</code></pre>
+<h2 id="block-194b12c0115c805d9019f52cdcc050e5">테스트 케이스</h2>
+<pre data-lang="python"><code class="language-python">입력값 〉 [[5, 3], [6, 9], [4, 5], [6, 3], [2, 8], [5, 4]]
+기댓값 〉 1</code></pre>
+<h2 id="block-194b12c0115c80dab232f4534842c10c">2. 통 속의 공</h2>
+<figure><img src="/assets/notion/2월-1주차-코딩-테스트/194b12c0-115c-80ed-aae2-fb343033f2ce.png" alt="" loading="lazy" width="1822" height="1224" /></figure>
+<figure><img src="/assets/notion/2월-1주차-코딩-테스트/194b12c0-115c-80b4-a606-f318440dfe35.png" alt="" loading="lazy" width="1872" height="1072" /></figure>
+<h2 id="block-194b12c0115c80ffb1e7e7a50b404330">풀이</h2>
+<pre data-lang="python"><code class="language-python">&quot;&quot;&quot; 
+ * 이분탐색 문제입니다.
+ * buckets가 정렬되지 않은 상태일 수 있는 점에 유의하세요!
+&quot;&quot;&quot;
+
+def solution(buckets, m):
+    left = 0
+    right = max(buckets)
+    
+    buckets.sort()
+    
+    answer = 0 
+    while left &lt;= right:
+        mid = (left + right) // 2
+        
+        n = 1
+        last = 0
+        for i in range(1, len(buckets)):
+            if buckets[i] - buckets[last] &gt;= mid:
+                last = i
+                n += 1
+            
+            if n &gt;= m:
+                break
+        
+        if n &gt;= m:
+            answer = max(answer, mid)
+            left = mid + 1
+        else:
+            right = mid - 1
+    
+    return answer
+
+</code></pre>
+<h2 id="block-194b12c0115c803d879efd92e351d7c5">테스트 케이스</h2>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 [1, 2, 3, 4, 7], 3
+기댓값 〉 3
+
+# 테스트 2
+입력값 〉 [1, 2, 4, 9, 99999], 2
+기댓값 〉 99998</code></pre>
+<h2 id="block-194b12c0115c80209376e3b8f1a3b582">3.  강력한 패스워드</h2>
+<figure><img src="/assets/notion/2월-1주차-코딩-테스트/194b12c0-115c-8090-8e15-e92291763119.png" alt="" loading="lazy" width="2184" height="1048" /></figure>
+<figure><img src="/assets/notion/2월-1주차-코딩-테스트/194b12c0-115c-8006-8f54-cbff0e05ce39.png" alt="" loading="lazy" width="2096" height="740" /></figure>
+<h2 id="block-194b12c0115c8030978acd07db35de5b">풀이</h2>
+<pre data-lang="python"><code class="language-python">from string import ascii_lowercase, ascii_uppercase
+
+
+SPECIAL = '!@#$%^&amp;*()'
+
+def solution(s):
+    if len(s) &lt; 6 or len(s) &gt; 20:
+        return False
+    
+    lower = 0
+    upper = 0
+    digit = 0
+    special = 0
+    for c in s:
+        if c in ascii_lowercase:
+            lower += 1
+        elif c in ascii_uppercase:
+            upper += 1
+        elif '0' &lt;= c &lt;= '9':
+            digit += 1
+        elif c in SPECIAL:
+            special += 1
+        
+        if lower and upper and digit and special:
+            break
+    else:
+        return False
+    
+    repeat = 0
+    ascend = 0
+    descend = 0
+    
+    for c1, c2 in zip(s.lower(), s[1:].lower()):
+        if c1 == c2:
+            repeat += 1
+            ascend = 0
+            descend = 0
+        elif ord(c2) - ord(c1) == 1:
+            ascend += 1
+            descend = 0
+            repeat = 0
+        elif ord(c2) - ord(c1) == -1:
+            descend += 1
+            ascend = 0
+            repeat = 0
+        else:
+            ascend = 0
+            descend = 0
+            repeat = 0
+
+        if ascend == 2 or repeat == 2 or descend == 2:
+            return False
+    
+    return True
+
+# s = &quot;zErOBase)12#Few545&quot;
+# print(solution(s))</code></pre>
+<h2 id="block-194b12c0115c80ba9379dec4d9d0fb65">테스트 케이스</h2>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 &quot;zeRobAsE!2#4&quot;
+기댓값 〉 true
+
+# 테스트 2
+입력값 〉 &quot;Pas$W0rd!234&quot;
+기댓값 〉 false</code></pre>
+<h2 id="block-194b12c0115c80078b61c6a3d12dd8af">4. k자리 제거하기</h2>
+<figure><img src="/assets/notion/2월-1주차-코딩-테스트/194b12c0-115c-80a2-b913-e761383dd8e4.png" alt="" loading="lazy" width="1774" height="1304" /></figure>
+<figure><img src="/assets/notion/2월-1주차-코딩-테스트/194b12c0-115c-8029-a83f-c4e16a1d320c.png" alt="" loading="lazy" width="1836" height="818" /></figure>
+<h2 id="block-194b12c0115c80a99c9ae6d09ce7c862">풀이</h2>
+<pre data-lang="python"><code class="language-python">def solution(s, k):
+    if k &gt;= len(s):
+        return &quot;0&quot;
+
+    if k == 0:
+        return s.lstrip('0')
+    
+    if s[1] == '0':
+        return solution(s[1:].lstrip('0'), k-1)
+    else:
+        ind = 0
+        for i in range(1, len(s)):
+            if s[i-1] &lt; s[i]:
+                ind = i
+            elif s[i-1] != s[i]:
+                break
+        return solution(s[:ind] + s[ind+1:], k-1)
+</code></pre>
+<h2 id="block-194b12c0115c80f784f1f6e2d066b030">테스트 케이스</h2>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 &quot;105990&quot;, 1
+기댓값 〉 &quot;5990&quot;
+
+# 테스트 2
+입력값 〉 &quot;1122911&quot;, 1
+기댓값 〉 &quot;112211&quot;</code></pre>
+<h2 id="block-194b12c0115c80d7b39cdf582cf2c8b4">5. 선을 넘나드는 사각형</h2>
+<figure><img src="/assets/notion/2월-1주차-코딩-테스트/194b12c0-115c-8081-b49d-e606ca1bbbab.png" alt="" loading="lazy" width="2056" height="666" /></figure>
+<figure><img src="/assets/notion/2월-1주차-코딩-테스트/194b12c0-115c-80b7-8603-e1dcbedb4f2d.png" alt="" loading="lazy" width="2304" height="1322" /></figure>
+<figure><img src="/assets/notion/2월-1주차-코딩-테스트/194b12c0-115c-801e-ae10-edfa8a609a1c.png" alt="" loading="lazy" width="2332" height="1094" /></figure>
+<figure><img src="/assets/notion/2월-1주차-코딩-테스트/194b12c0-115c-80a3-b0e7-d4a1d5423653.png" alt="" loading="lazy" width="2306" height="1394" /></figure>
+<h2 id="block-194b12c0115c80659945f4b80399f19d">풀이</h2>
+<pre data-lang="python"><code class="language-python">from math import gcd
+
+def solution(N, M):
+    return N + M - gcd(N, M)</code></pre>
+<h2 id="block-194b12c0115c80f092b2d05b0e0a6074">테스트 케이스</h2>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 4, 9
+기댓값 〉 12
+
+# 테스트 2
+입력값 〉 5, 15
+기댓값 〉 15</code></pre>
+<h2 id="block-1b0b12c0115c8069ab3eeb80a2f9cca9">출처</h2>
+<p>해당 문제와 코드는 제로베이스(ZeroBase)에서 제공받았습니다.</p>
+<p>모든 자료는 저작권법에 의하여 보호받는 저작물로서 이에 대한 무단 복제 및 배포를 원칙적으로 금합니다.</p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +321,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

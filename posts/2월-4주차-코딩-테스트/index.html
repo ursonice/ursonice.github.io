@@ -76,11 +76,233 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/coding-test/">Coding Test</a>
+    </nav>
+    <h1>2월 4주차 코딩 테스트</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 3월 1일</span><span class="dot"></span><span>수정 2025년 3월 8일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-1a9b12c0115c80d0afb4dcc689418eef">목차</h2>
+<ol><li>단 한번의 기회</li><li>n번 숫자 세고 말하기</li><li>사전식 배열</li><li>aaaaaa</li><li>유능한 암살자</li></ol>
+<h2 id="block-1a9b12c0115c8004a9a6dbd85c59030b">1. 단 한번의 기회</h2>
+<figure><img src="/assets/notion/2월-4주차-코딩-테스트/1a9b12c0-115c-8072-841a-ce9155052054.png" alt="" loading="lazy" width="1666" height="1146" /></figure>
+<figure><img src="/assets/notion/2월-4주차-코딩-테스트/1a9b12c0-115c-80b1-a38b-d7895ed88086.png" alt="" loading="lazy" width="1666" height="742" /></figure>
+<h2 id="block-1a9b12c0115c8051bc5cf8a0612537f5">풀이</h2>
+<pre data-lang="python"><code class="language-python">def solution(num):
+    num_str = list(str(num))  # 숫자를 문자열 리스트로 변환
+    n = len(num_str)
+
+    # 가장 큰 숫자의 인덱스를 저장
+    max_index = -1
+    max_digit = -1
+
+    # 오른쪽에서 가장 큰 숫자를 찾음
+    right_max = [-1] * n  # 각 위치에서 오른쪽에서 가장 큰 숫자의 인덱스 저장
+    for i in range(n - 1, -1, -1):
+        if int(num_str[i]) &gt; max_digit:
+            max_digit = int(num_str[i])
+            max_index = i
+        right_max[i] = max_index  # 현재 위치에서 가장 큰 숫자의 인덱스 저장
+
+    # 왼쪽에서 현재 숫자보다 더 큰 숫자가 있는지 확인
+    for i in range(n):
+        if num_str[i] &lt; num_str[right_max[i]]:
+            # 교환 수행
+            num_str[i], num_str[right_max[i]] = num_str[right_max[i]], num_str[i]
+            return int(&quot;&quot;.join(num_str))  # 가장 큰 숫자로 변환하여 반환
+
+    return num  # 이미 최댓값인 경우 원래 숫자 반환</code></pre>
+<h2 id="block-1a9b12c0115c80bca300e733581ab8d2">Testcase</h2>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 14235
+기댓값 〉 54231
+
+# 테스트 2
+입력값 〉 98244949
+기댓값 〉 99244948</code></pre>
+<h2 id="block-1a9b12c0115c8056bceeeccde327dfa2">2. n번 숫자 세고 말하기</h2>
+<figure><img src="/assets/notion/2월-4주차-코딩-테스트/1a9b12c0-115c-8028-a8f2-e1b933e48e5d.png" alt="" loading="lazy" width="1648" height="1142" /></figure>
+<figure><img src="/assets/notion/2월-4주차-코딩-테스트/1a9b12c0-115c-80f9-bc88-d10a8cf28887.png" alt="" loading="lazy" width="1668" height="1094" /></figure>
+<figure><img src="/assets/notion/2월-4주차-코딩-테스트/1a9b12c0-115c-8050-a964-f71e8d956db5.png" alt="" loading="lazy" width="1648" height="914" /></figure>
+<h2 id="block-1a9b12c0115c802385f2e97e9eb0f987">풀이</h2>
+<pre data-lang="python"><code class="language-python">def solution(n, num):
+    num = list(str(num))
+    for _ in range(n):
+        s = ''
+        num_set = set(num)
+        sorted_num = sorted(list(num_set))
+        for i in sorted_num:
+            c = num.count(i)
+            s += i + str(c)
+        num = s
+
+    return int(s) % 10004</code></pre>
+<h2 id="block-1a9b12c0115c80c3ba65f02591c82b87">Testcase</h2>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 3, 54223
+기댓값 〉 5451
+
+# 테스트 2
+입력값 〉 5, 1234
+기댓값 〉 5456</code></pre>
+<h2 id="block-1a9b12c0115c80b6be06ca76ab17be1c">3. 사전식 배열</h2>
+<figure><img src="/assets/notion/2월-4주차-코딩-테스트/1a9b12c0-115c-80f6-96d0-f53a22ce1084.png" alt="" loading="lazy" width="1676" height="1076" /></figure>
+<figure><img src="/assets/notion/2월-4주차-코딩-테스트/1a9b12c0-115c-8016-9024-dabdd027f1f6.png" alt="" loading="lazy" width="1666" height="1078" /></figure>
+<pre data-lang="python"><code class="language-python">1, 10, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 11, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 12, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 13, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 14, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 15, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 16, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 17, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 18, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 19, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 2, 20, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 21, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 22, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 23, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 24, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 25, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 26, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 27, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 28, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 29, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 3, 30, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 31, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 32, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 33, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 34, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 35, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 36, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 37, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 38, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 39, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 4, 40, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 41, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 42, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 43, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 44, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 45, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 46, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 47, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 48, 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 49, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 5, 50, 500, 51, 52, 53, 54, 55, 56, 57, 58, 59, 6, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 7, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 8, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 9, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99</code></pre>
+<h2 id="block-1a9b12c0115c80aea5bedf2cb2cd392a">풀이</h2>
+<pre data-lang="python"><code class="language-python">def solution(n):
+    res = []
+
+    def dfs(num):
+        if num &gt; n:
+            return
+        
+        if num &gt; 0:
+            res.append(num)
+
+        for i in range(10):
+            new_num = num * 10 + i
+            if new_num == 0:
+                continue
+            dfs(new_num)
+    
+    dfs(0)
+
+    return res</code></pre>
+<h2 id="block-1a9b12c0115c8001bcf2f730595c6189">Testcase</h2>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 15
+기댓값 〉 [1, 10, 11, 12, 13, 14, 15, 2, 3, 4, 5, 6, 7, 8, 9]
+
+# 테스트 2
+입력값 〉 41
+기댓값 〉 [1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 3, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 4, 40, 41, 5, 6, 7, 8, 9]</code></pre>
+<h2 id="block-1a9b12c0115c80d48331e958de8898bc">4. aaaaaa</h2>
+<figure><img src="/assets/notion/2월-4주차-코딩-테스트/1a9b12c0-115c-80e7-9046-dfc28a53beaa.png" alt="" loading="lazy" width="1802" height="1112" /></figure>
+<figure><img src="/assets/notion/2월-4주차-코딩-테스트/1a9b12c0-115c-80f9-9579-fa1f57a20684.png" alt="" loading="lazy" width="1748" height="812" /></figure>
+<h2 id="block-1a9b12c0115c80c0a776da73fa366661">풀이</h2>
+<pre data-lang="python"><code class="language-python">/*
+ * 이 문제는, 기능의 구현을 정확하고 빠르게 할 수 있는지를 묻는 문제입니다.
+ * a가 연속으로 나타날 때와 a가 하나씩 나타날 때를 인식하고, 경우에 따라 정확한 기능을 구현합니다.
+ * a가 연속으로 나타난 것을 처리하면 계속해서 길이가 달라지므로, a가 하나씩 나온 것을 먼저 처리하는 것이 좋습니다.
+ * 단, a가 하나씩 나온 것을 처리한 후에 연속된 a를 찾으려 하면 답이 틀린다는 점을 꼭 이해해 주세요.
+ */
+
+def solution(s):
+    count = 0
+    s = list(s)
+    while s != ['a']:
+        count += 1
+
+        multi_a = []
+        a_pos = []
+
+        start = -1
+        end = -1
+        found_a = False
+        for i in range(len(s)):
+            if not found_a:
+                if s[i] == 'a':
+                    found_a = True
+                    start = i
+                    if i == len(s) - 1:
+                        a_pos.append(start)
+                        found_a = False
+            else:
+                if s[i] != 'a':
+                    end = i - 1
+                    if start == end:
+                        a_pos.append(start)
+                    else:
+                        multi_a.append((start, end))
+                    found_a = False
+                elif i == len(s) - 1:
+                    end = i
+                    multi_a.append((start, end))
+                    found_a = False
+        
+        for i in a_pos:
+            if i+1 &lt; len(s):                
+                s[i+1] = 'a'
+            if i-1 &gt;= 0:
+                s[i-1] = 'a'
+        
+        t = []
+        last_end = -1
+        for start, end in multi_a:
+            t += s[last_end+1:start] + ['a']
+            last_end = end
+        t += s[last_end+1:]
+        s = t
+        # print(s)
+    return count</code></pre>
+<h2 id="block-1a9b12c0115c8063bd28c3d366688ab7">Testcase</h2>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 &quot;azbacefbaaaa&quot;
+기댓값 〉 5
+
+# 테스트 2
+입력값 〉 &quot;iiaiiioaaiiaaaiipp&quot;
+기댓값 〉 9</code></pre>
+<h2 id="block-1a9b12c0115c80eda634c56dd8a376da">5. 유능한 암살자</h2>
+<figure><img src="/assets/notion/2월-4주차-코딩-테스트/1a9b12c0-115c-8047-92d1-dbc8bc08a9f8.png" alt="" loading="lazy" width="1474" height="1058" /></figure>
+<figure><img src="/assets/notion/2월-4주차-코딩-테스트/1a9b12c0-115c-808d-9f52-c3b657a5df34.png" alt="" loading="lazy" width="1484" height="1126" /></figure>
+<figure><img src="/assets/notion/2월-4주차-코딩-테스트/1a9b12c0-115c-80ad-a0c9-c1b3a9e3209d.png" alt="" loading="lazy" width="1398" height="312" /></figure>
+<h2 id="block-1a9b12c0115c806ca330fc9b1137f66e">풀이</h2>
+<pre data-lang="python"><code class="language-python">def solution(N, rewards):
+    if N == 1:
+        return rewards[0]
+    if N == 2:
+        return max(rewards)
+
+    def max_rewards(nums):
+        &quot;&quot;&quot;일반적인 House Robber 문제 해결 (배열이 원형이 아닐 때)&quot;&quot;&quot;
+        dp = [0] * len(nums)
+        dp[0], dp[1] = nums[0], max(nums[0], nums[1])
+
+        for i in range(2, len(nums)):
+            dp[i] = max(dp[i - 1], dp[i - 2] + nums[i])
+
+        return dp[-1]
+
+    # 첫 번째 성을 포함, 마지막 성을 제외하는 경우
+    case1 = max_rewards(rewards[:-1])
+
+    # 첫 번째 성을 제외, 마지막 성을 포함하는 경우
+    case2 = max_rewards(rewards[1:])
+
+    return max(case1, case2)</code></pre>
+<h2 id="block-1a9b12c0115c80ac92fffb2f6f4b9302">Testcase</h2>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 6, [5, 10, 5, 7, 5, 9]
+기댓값 〉 26
+
+# 테스트 2
+입력값 〉 10, [1, 1, 10, 1, 1, 1, 10, 1, 1, 10]
+기댓값 〉 31</code></pre>
+<h2 id="block-1b0b12c0115c8069b1facd54b94df721">출처</h2>
+<p>해당 문제와 코드는 제로베이스(ZeroBase)에서 제공받았습니다.</p>
+<p>모든 자료는 저작권법에 의하여 보호받는 저작물로서 이에 대한 무단 복제 및 배포를 원칙적으로 금합니다.</p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +323,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

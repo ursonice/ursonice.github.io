@@ -76,11 +76,998 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/coding-test/">Coding Test</a>
+    </nav>
+    <h1>11월 3주차 코딩 테스트 Study</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2024년 11월 20일</span><span class="dot"></span><span>수정 2024년 12월 25일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-14ab12c0115c8039a5ccfa55dde2556c">목차</h2>
+<ul><li>제로 카드 게임</li><li>세금 납부</li><li>그래플러 찾기</li><li>미용실 예약</li><li>벽 피하기 게임</li><li>소수판별</li><li>회전방어</li><li>등산 최소비용</li></ul>
+<h2 id="block-144b12c0115c80539b68ffef4f78241d">1. 제로 카드 게임</h2>
+<h2 id="block-144b12c0115c8071a7d9f7bc32908fef">문제</h2>
+<p>제돌이와 제순이는 &quot;제로 카드 게임&quot;을 하기로 했다.</p>
+<p>제로 카드 게임은 아래와 같은 룰로 진행된다.</p>
+<p>N개의 카드를 카드 더미에서 뽑는다.</p>
+<p>정해진 시간 내에 카드를 두 그룹으로 나눈다.</p>
+<p>각 그룹에 속한 카드에 적힌 수의 합을 각각 구한다. 그룹에 속한 카드의 수는 0 개일 수 있다.</p>
+<p>두 수의 차이를 페널티라 하며, 이 페널티가 더 작은 사람이 승리한다.</p>
+<p>카드 더미에서 이번에 뽑은 N 개의 카드에 적힌 수를 모은 정수 배열 cards 가 주어진다.</p>
+<p>이 때, 뽑은 카드를 이용해서 만들 수 있는 가장 작은 페널티를 구하시오.</p>
+<h2 id="block-144b12c0115c807a8475f5192b7364ab">입력설명</h2>
+<ul><li>0 &lt; N &lt;= 25</li><li>0 &lt;= cards[i] &lt;= 100</li></ul>
+<h2 id="block-144b12c0115c80e69ed5fe230a24e5c6">출력설명</h2>
+<p>가능한 최소의 페널티 값을 정수로 반환</p>
+<p>매개변수 형식</p>
+<ul><li>N = 5</li><li>cards = [1, 3, 5, 6, 7, 10]</li></ul>
+<h2 id="block-144b12c0115c8014ba50f3a979ee4a60">반환값 형식</h2>
+<p>0</p>
+<h2 id="block-144b12c0115c80f89683c950b243bfef">예제 입출력 설명</h2>
+<h3 id="block-144b12c0115c8067a68dfa680aa7cb84">예제1</h3>
+<ul><li>입력<ul><li>N = 5</li><li>cards = [1, 3, 5, 6, 7, 10]</li></ul></li><li>반환값<ul><li>0</li></ul></li></ul>
+<p>설명</p>
+<p>아래와 같이 두 그룹으로 나누면 페널티가 으로 가장 작다.</p>
+<ul><li>첫 번째 그룹: [1, 3, 5, 7] -&gt; 1 + 3 + 5 + 7 = 16</li><li>두 번째 그룹: [6, 10] -&gt; 6 + 10 = 16</li></ul>
+<h3 id="block-144b12c0115c807eb8e6f4f38494de06">예제2</h3>
+<ul><li>입력<ul><li>N = 10</li><li>cards = [19, 7, 18, 12, 15, 2, 17, 7, 20, 8]</li></ul></li><li>반환값<ul><li>1</li></ul></li></ul>
+<h2 id="block-144b12c0115c80d998eef50ff58aa4d3">설명</h2>
+<p>아래와 같이 두 그룹으로 나누면 페널티가 1 로 가장 작다.</p>
+<p>첫 번째 그룹: [12, 15, 2, 7, 20, 7] -&gt; 12 + 15 + 2 + 7+ 20 + 7= 63</p>
+<p>두 번째 그룹: [19, 18, 17, 8] -&gt; 19 + 18 + 17 + 8 = 62</p>
+<h2 id="block-148b12c0115c80028c90d42d895080b6">풀이 </h2>
+<p>일단 나는 모든 조합을 다 구하고 해당 조합에 대한 패널티를 계산하도록 하였다.</p>
+<pre data-lang="python"><code class="language-python">def solution(N, cards):
+    comb = []
+    def dfs(start, path):
+        if path not in comb:
+            comb.append(path[:])
+            return
+        
+        for i in range(start, len(cards)):
+            dfs(i+1, path+[i])
+    
+    dfs(0, [])
+    total = sum(cards)
+    result = float('inf')
+    
+    for i, c in enumerate(comb):
+        sum_a = 0
+        for j in range(len(c)):
+            sum_a += cards[comb[i][j]]
+        sum_b = total - sum_a
+        
+        penalty = abs(sum_a - sum_b)
+        result = min(penalty, result)        
+    
+    return result</code></pre>
+<p>위 코드를 최적화하여 backtracking으로 풀이하였다.</p>
+<pre data-lang="python"><code class="language-python">def solution(n, cards):
+    min_diff = float('inf')
+    total_sum = sum(cards)
+    
+    def dfs(idx, sum_group1):
+        nonlocal min_diff
+        # idx가 n이면 모든 카드를 확인한 것
+        if idx == n:
+            # 이미 그룹1에 들어간 카드들의 합이 sum_group1
+            # 그룹2의 합은 total_sum - sum_group1
+            sum_group2 = total_sum - sum_group1
+            diff = abs(sum_group1 - sum_group2)
+            min_diff = min(min_diff, diff)
+            return
+        
+        # idx번째 카드를 group1에 넣는 경우
+        dfs(idx + 1, sum_group1 + cards[idx])
+        
+        # idx번째 카드를 group2에 넣는 경우
+        dfs(idx + 1, sum_group1)
+    
+    dfs(0, 0)
+    return min_diff</code></pre>
+<h2 id="block-144b12c0115c800a915fef6cfd6fa43a">Test case</h2>
+<pre data-lang="python"><code class="language-python">
+입력값 〉 5, [1, 3, 5, 6, 7, 10]
+기댓값 〉 0
+
+입력값 〉 10, [19, 7, 18, 12, 15, 2, 17, 7, 20, 8]
+기댓값 〉 1</code></pre>
+<h2 id="block-144b12c0115c80759145c1536c683e2a">2. 세금 납부</h2>
+<h2 id="block-144b12c0115c80619aedc1c7afd8ab8e">문제 설명</h2>
+<p>지난 해 한 국가에서는 N 명이 세금을 납부했다. </p>
+<p>세금을 관리하는 직원은 지난 해 사람들이 세금을 낸 정보를 수합하는 과정에서 K 번의 정보 수집을 진행하고자 한다. </p>
+<p>각 정보 수집에서는 X 와 Y 두 가지 변수가 사용되는데, 이는 납부한 세금의 금액이 x 이상 Y 이하인 사람의 수를 계산하는 작업을 의미한다.</p>
+<p>각 K 번의 정보 수집에 대하여, 납부한 세금의 금액이 X 이상 Y 이하인 사람의 수를 차례대로 계산하는 프로그램을 작성하여라.</p>
+<p>예를 들어 N=5 명이 납부한 세금의 금액이 다음의 표와 같다고 해보자.</p>
+<div class="table-wrap"><table><tr><td>번호</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr><tr><td>금액</td><td>7</td><td>2</td><td>3</td><td>5</td><td>2</td></tr></table></div>
+<p>이후에 K=3번의 정보 수집에 대한 정보가 다음과 같다고 가정하자.</p>
+<p>정보 수집을 위해 사용되는 변수는 [X, Y] 배열 형태로 주어진다.
+</p>
+<div class="table-wrap"><table><tr><td>번호</td><td>1</td><td>2</td><td>3</td></tr><tr><td>수집 내용</td><td>[1, 100]</td><td>[3, 5]</td><td>[2, 2]</td></tr></table></div>
+<p>현재 예시에서 각 정보 수집에 대한 정답 결과는 다음과 같다. 현재 예시에서 정보 수집 결과는 차례대로 5명, 2명, 2명이다.</p>
+<div class="table-wrap"><table><tr><td>번호</td><td>1</td><td>2</td><td>3</td></tr><tr><td>수집 내용</td><td>5</td><td>2</td><td>2</td></tr></table></div>
+<h2 id="block-144b12c0115c80eba95ec26e3a2c5084">입력 조건</h2>
+<p>가장 먼저 세금을 낸 사람의 수 N과 정보 수집 횟수 K가 주어진다. 이때 N과 K는 모두 4이상 100,000 이하의 자연수다.
+이어서 N 명의 사람들이 낸 세금에 대한 정보가 담긴 배열 arr가 주어진다.</p>
+<p>이때, 각 사람이 납부한 세금의 금액은 1이 상 1,000,000,000 이하의 자연수다.</p>
+<p>이어서 K 회의 정보 수집 작업에 대한 정보가 담긴 배열 queries 가 주어진다.</p>
+<p>구체적으로 행의 크기가 N 이고, 열의 크기가 2인 형태의 2차원 배열이다. 각 정보 수집 작업에서의 X 와 Y는 모두 1 이상 1,000,000,000 이하의 자연수로, 이때 X는 Y 보다 작거나 같다.</p>
+<h2 id="block-144b12c0115c802f9520f283b8176c42">출력 조건</h2>
+<p>K 번의 정보 수집에 대하여, 납부한 세금의 금액이 X 이상 Y 이하인 사람의 수를 차례대로 계산하여 1차원 배열 형태로 반환한다.</p>
+<h2 id="block-144b12c0115c80738fc9ca081e3e8dd7">풀이</h2>
+<p>처음에는 중첩 반복으로 각 값에 대하여 만족하는 경우에 대해서 풀이하도록 하였다.</p>
+<pre data-lang="python"><code class="language-python">def solution(N, K, arr, queries):
+    result = [0]* K
+    for num in arr:
+        for idx, (a, b) in enumerate(queries):
+            if a &lt;= num &lt;= b:
+                result[idx] += 1
+    return result</code></pre>
+<p>좀 더 최적화를 하면 이진 탐색으로 시작지점과 끝 지점의 인덱스를 구하도록 하면 쉽게 풀이가 가능하다.</p>
+<pre data-lang="python"><code class="language-python">import bisect
+
+def solution(N, K, arr, queries):
+    arr.sort()
+    result = []
+
+    for querie in queries:
+        start, end = querie
+        idx1 = bisect.bisect_left(arr, start)
+        idx2 = bisect.bisect_right(arr, end)
+        result.append(len(arr[idx1:idx2]))
+    return result
+</code></pre>
+<h2 id="block-144b12c0115c8098b1b1d47c670e04c9">TestCase</h2>
+<pre data-lang="python"><code class="language-python">입력값 〉 5, 3, [7, 2, 3, 5, 2], [[1, 100], [3, 5], [2, 2]]
+기댓값 〉 [5, 2, 2]
+
+입력값 〉 6, 4, [9, 8, 1, 5, 5, 5], [[5, 8], [3, 10], [1, 2], [5, 9]]
+기댓값 〉 [4, 5, 1, 5]</code></pre>
+<h2 id="block-144b12c0115c803182d1fde40f0cda37">3. 그래플러 찾기</h2>
+<h2 id="block-144b12c0115c80c48075c7bd52472f5b">문제 설명</h2>
+<p>한 명의 봉술가는 N x N 크기의 보드 판에서 다수의 그래플러와 싸워야 한다. </p>
+<p>보드 판에서 빈 공간은 &quot;B&quot;, 그래플러의 위치는 &quot;G&quot;로 표시되며, 한 위치에 여러 명이 존재할 수 없다. </p>
+<p>그래플러는 최소 2명 이상 주어지며, 초기 그래플러들은 서로 다른 칸에 위치해 있다. </p>
+<p>그래플러가 존재하지 않는 빈 칸(빈 공간)은 1개 이상 주어진다.</p>
+<p>봉술가가 빈 칸 중에서 자신의 시작 위치를 선택하고 나면, 이어서 그래플러들의 이동이 시작된다. </p>
+<p>각 그래플러는 매 초마다 현재 위치에서 상, 하, 좌, 우로 이동할 수 있으며, 그래플러들의 이동 과정에서 한 위치에 여러 명이 존재할 수 없다. </p>
+<p>봉술가는 싸움이 시작되기 전에 최대한 그래플러들부터 멀리 떨어지고 싶다.</p>
+<p>결과적으로 봉술가가 시작 위치를 결정하기 위해, 빈 칸 중에서 가장 가까운 그래플러와의 거리가 최대가 되는 빈 칸을 계산하는 프로그램을 작성하여라. </p>
+<p>가장 가까운 그래플러와의 거리가 최대가 되는 빈 칸이 여러 곳이라면, 가장 낮은(작은) 번호의 행을 갖는 위치를 반
+환한다. </p>
+<p>만약 가장 낮은 번호의 행을 갖는 위치가 여러 개라면, 가장 낮은 번호의 열을 갖는 위치를 반환한다.</p>
+<p>예를 들어 N = 5 인 예시를 확인해 보자. 각 위치를 [행, 열]의 형태로 나타내고, 행과 열의 인덱스가 0부터 시작한다고 하면, 아래 예시에서 3명의 그래플러가 존재하는 위치는 차례대로 [1, 1], [2, 3], [4, 2]이다.</p>
+<figure><img src="/assets/notion/11월-3주차-코딩-테스트-study/144b12c0-115c-8094-a6d6-dd94c65a97bd.png" alt="" loading="lazy" width="1178" height="1002" /></figure>
+<p>본 예시에서 가장 가까운 그래플러와의 거리의 최대값은 3인 것을 알 수 있다.</p>
+<p>따라서, 현재 예시에서는 본 문제에서 요구하는 [가장 낮은 행, 가장 낮은 열]의 위치는 [0, 4]이다.</p>
+<h2 id="block-144b12c0115c8075ac7ad67f34dea89e">입력 조건</h2>
+<p>가장 먼저 보드 판의 크기 N 이 주어진다. </p>
+<p>N은 5이상 500 이하의 자연수다. </p>
+<p>이어서 행과 열의 길이가 각각 N 인 2차원 배열 형태의 보드 판 정보 배열 board 가 주어진다.</p>
+<p>빈 공간은 &quot;B&quot;, 그래플러의 위치는 &quot;G&quot;로 표시된다. 한 위치에 여러 명이 존재하지 않는다. </p>
+<p>그래플러는 최소 2명 이상 주어지며, 빈 칸은 1개 이상 주어진다.</p>
+<h2 id="block-144b12c0115c80988f44e3a093f56d53">출력 조건</h2>
+<p>빈 칸 중에서 가장 가까운 그래플러와의 거리가 최대가 되는 빈 칸의 위치를 1차원 배열 [가장 낮은 행, 가장 낮은 열] 형태로 반환하여라.</p>
+<p>가장 가까운 그래플러와의 거리가 최대가 되는 빈 칸이 여러 곳이라면, 가장 낮은 번호의 행을 갖는 위치를 반환한다. </p>
+<p>만약 가장 낮은 번호의 행을 갖는 위치가 여러 개라면, 가장 낮은 번호의 열을 갖는 위치를 반환한다.</p>
+<h2 id="block-144b12c0115c808e80edc74c897f0d54">풀이</h2>
+<p>이 문제는 빈 공간 B에서 부터 Grappler를 찾아서 계산하는 방법보다는 Grappler로 부터 빈 공간 까지의 거리가 어떻게 되는지 BFS방식으로 계산하여 풀이해야 속도가 빠르다.</p>
+<p>그리고 Grappler의 위치가 초기 출발지점임으로 최단거리를 0으로 만들어준다.</p>
+<pre data-lang="python"><code class="language-python">rows = len(board)
+cols = len(board[0])
+
+q = collections.deque()
+distances = [[float('inf')] * cols for _ in range(rows)]
+for i in range(rows):
+    for j in range(cols):
+        if board[i][j] == 'G':
+            q.append((i, j))
+            distances[i][j] = 0</code></pre>
+<p>초기 출발 지점에서 빈 공간으로 부터 거리를 추가해준다.</p>
+<p>이때 움직일 위치의 값이 현재 위치 + 1 값보다 크다면 이는 최단거리가 아니라는 뜻임으로 현재위치 + 1 값으로 업데이트 해준다.</p>
+<p>만약 움직일 위치의 값이 더 작다면 현재 위치보다 최단거리라는 뜻임으로 값을 변경하지 않는다.</p>
+<pre data-lang="python"><code class="language-python">directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+while q:
+    x, y = q.popleft()
+    current_dist = distances[x][y]
+    for dx, dy in directions:
+        nx, ny = x + dx, y + dy
+        if 0 &lt;= nx &lt; rows and 0 &lt;= ny &lt; cols:
+            if distances[nx][ny] &gt; current_dist + 1:
+                distances[nx][ny] = current_dist + 1
+                q.append((nx, ny))</code></pre>
+<figure><img src="/assets/notion/11월-3주차-코딩-테스트-study/146b12c0-115c-803c-b8d4-cfe15b978940.jpeg" alt="" loading="lazy" width="1000" height="1511" /></figure>
+<p>이렇게 쭉 하다보면 Grappler가 위치한 지점을 제외한 나머지 값들이 전부 최단거리로 채워지게 된다.</p>
+<figure><img src="/assets/notion/11월-3주차-코딩-테스트-study/146b12c0-115c-8080-bbac-cb8d992e475a.jpeg" alt="" loading="lazy" width="1815" height="1000" /></figure>
+<p>마지막으로 최소힙을 사용해 가장 큰 거리에 마이너스(-)를 붙여주어 가장 먼 거리에 있는 위치를 찾고, 그 거리가 같다면 행과 열이 작은 것을 선택하도록 한다.</p>
+<p>이 예시의 경우 저렇게 두 부분이 그래플러로 부터 가장 먼 거리가 된다.</p>
+<pre data-lang="python"><code class="language-python">max_heap = []
+for i in range(rows):
+    for j in range(cols):
+        if board[i][j] == 'B':
+            dist = distances[i][j]
+            heapq.heappush(max_heap, (-dist, i, j))
+
+_, i, j = heapq.heappop(max_heap)</code></pre>
+<figure><img src="/assets/notion/11월-3주차-코딩-테스트-study/146b12c0-115c-808a-b576-df11d8900e86.jpeg" alt="" loading="lazy" width="1416" height="1000" /></figure>
+<p>전체 코드는 다음과 같다</p>
+<pre data-lang="python"><code class="language-python">def solution(N, board):
+    rows = len(board)
+    cols = len(board[0])
+    
+    q = collections.deque()
+    distances = [[float('inf')] * cols for _ in range(rows)]
+    
+    for i in range(rows):
+        for j in range(cols):
+            if board[i][j] == 'G':
+                q.append((i, j))
+                distances[i][j] = 0
+    
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    while q:
+        x, y = q.popleft()
+        current_dist = distances[x][y]
+        for dx, dy in directions:
+            nx, ny = x + dx, y + dy
+            if 0 &lt;= nx &lt; rows and 0 &lt;= ny &lt; cols:
+                if distances[nx][ny] &gt; current_dist + 1:
+                    distances[nx][ny] = current_dist + 1
+                    q.append((nx, ny))
+    
+    max_heap = []
+    for i in range(rows):
+        for j in range(cols):
+            if board[i][j] == 'B':
+                dist = distances[i][j]
+                heapq.heappush(max_heap, (-dist, i, j))
+    
+    _, i, j = heapq.heappop(max_heap)
+    return [i, j]</code></pre>
+<p>기존에는 빈 의 위치에서 그래플러 위치를 찾으려 하니 시간이 많이 걸린 것 같다.</p>
+<p>첫 번째 시도 풀이</p>
+<pre data-lang="python"><code class="language-python">import collections
+import sys
+def solution(N, board):
+    def bfs(start, end):
+        q = collections.deque()
+        
+        visited = [[False]*cols for _ in range(rows)]
+
+        q.append([start[0], start[1], 0])
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        
+        visited[start[0]][start[1]] = True
+
+        while q:
+            x, y, dist = q.popleft()
+            
+            if (x, y) == end:
+                return dist
+            
+            for dx, dy in directions:
+                nx, ny = x + dx, y + dy
+                if 0 &lt;= nx &lt; rows and 0 &lt;= ny &lt; cols:
+                    if not visited[nx][ny]:
+                        visited[nx][ny] = True
+                        q.append((nx, ny, dist+1))
+        return -1
+
+
+    rows = len(board)
+    cols = len(board[0])
+    
+    gs = []
+    for i in range(rows):
+        for j in range(cols):
+            if board[i][j] == 'G':
+                gs.append((i, j))
+    
+    
+    results = []
+    for i in range(rows):
+        for j in range(cols):
+            if board[i][j] == 'B':
+                start = (i, j)
+                min_dist = sys.maxsize
+                for g in gs:
+                    retv = bfs(start, g)
+                    if retv == -1:
+                        continue
+                    min_dist = min(min_dist, retv)        
+            results.append((min_dist, start))
+
+    results = sorted(results, key=lambda x: (x[0], -x[1][0], -x[1][1]))
+    return results[-1][-1]</code></pre>
+<p>테스트 결과:</p>
+<p>문제에서 제공하는 기본 Test case들은 가볍게 통과한다.</p>
+<figure><img src="/assets/notion/11월-3주차-코딩-테스트-study/144b12c0-115c-800e-8283-c40676891aa5.png" alt="" loading="lazy" width="1838" height="908" /></figure>
+<p>그러나 채점을 통해 숨겨진 Test case들에 대해서는 전부 타임아웃이 발생한다.</p>
+<figure><img src="/assets/notion/11월-3주차-코딩-테스트-study/144b12c0-115c-8078-acaa-e905b31c1271.png" alt="" loading="lazy" width="1798" height="894" /></figure>
+<p>따라서 최적화를 진행해보았다.</p>
+<p>두 번째 풀이</p>
+<pre data-lang="python"><code class="language-python">import collections
+import heapq
+import sys
+def solution(N, board):
+    def bfs(start):
+        q = collections.deque()
+        
+        visited = [[False]*cols for _ in range(rows)]
+
+        q.append([start[0], start[1], 0])
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        
+        visited[start[0]][start[1]] = True
+
+        while q:
+            x, y, dist = q.popleft()
+            
+            if board[x][y] == 'G':
+                return dist
+            
+            for dx, dy in directions:
+                nx, ny = x + dx, y + dy
+                if 0 &lt;= nx &lt; rows and 0 &lt;= ny &lt; cols:
+                    if not visited[nx][ny]:
+                        visited[nx][ny] = True
+                        q.append((nx, ny, dist+1))
+        return -1
+
+
+    rows = len(board)
+    cols = len(board[0])
+    result = []
+    
+    for i in range(rows):
+        for j in range(cols):
+            if board[i][j] != 'B':
+                continue
+            start = (i, j)
+            retv = bfs(start)
+            heapq.heappush(result, (-retv, i, j))
+
+    _, i, j = heapq.heappop(result)
+    return [i, j]</code></pre>
+<p>테스트 결과:</p>
+<p>문제에서 제공하는 기본 Test case들은 가볍게 통과한다.</p>
+<figure><img src="/assets/notion/11월-3주차-코딩-테스트-study/144b12c0-115c-80e7-b6be-e7da3f5c43ba.png" alt="" loading="lazy" width="1858" height="922" /></figure>
+<p>그러나 여전히 채점을 통해 숨겨진 Test case들에 대해서는70% 정도 타임아웃이 발생한다.</p>
+<p>그래도 기존에는 전부 실패였는데 30%는 통과한다..</p>
+<figure><img src="/assets/notion/11월-3주차-코딩-테스트-study/144b12c0-115c-80f0-a4b3-e3edac5f1163.png" alt="" loading="lazy" width="1834" height="894" /></figure>
+<h2 id="block-144b12c0115c80518cf8c1fa58a30b1e">Test case</h2>
+<pre data-lang="python"><code class="language-python">입력값 〉 5, [[&quot;B&quot;, &quot;B&quot;, &quot;B&quot;, &quot;B&quot;, &quot;B&quot;], [&quot;B&quot;, &quot;G&quot;, &quot;B&quot;, &quot;B&quot;, &quot;B&quot;], [&quot;B&quot;, &quot;B&quot;, &quot;B&quot;, &quot;G&quot;, &quot;B&quot;], [&quot;B&quot;, &quot;B&quot;, &quot;B&quot;, &quot;B&quot;, &quot;B&quot;], [&quot;B&quot;, &quot;B&quot;, &quot;G&quot;, &quot;B&quot;, &quot;B&quot;]]
+기댓값 〉 [0, 4]
+
+
+입력값 〉 5, [[&quot;B&quot;, &quot;B&quot;, &quot;B&quot;, &quot;B&quot;, &quot;B&quot;], [&quot;B&quot;, &quot;B&quot;, &quot;B&quot;, &quot;B&quot;, &quot;B&quot;], [&quot;B&quot;, &quot;B&quot;, &quot;B&quot;, &quot;B&quot;, &quot;G&quot;], [&quot;B&quot;, &quot;B&quot;, &quot;B&quot;, &quot;G&quot;, &quot;B&quot;], [&quot;B&quot;, &quot;B&quot;, &quot;G&quot;, &quot;B&quot;, &quot;B&quot;]]
+기댓값 〉 [0, 0]</code></pre>
+<h2 id="block-145b12c0115c808dbbc2fe351409103c">4. 미용실</h2>
+<h2 id="block-145b12c0115c807f94edd4aee5f6ff87">문제</h2>
+<p>현재 미용실에서 커트를 받고 싶은 사람의 수가 N명이다.</p>
+<p>N 명의 사람들은 각각 초 단위로 예약을 진행했다고 가정하자. </p>
+<p>각 사람이 예약한 커트 시간은 시작 시각 <code>start</code>과 종료 시각 <code>end</code>으로 표시된다.</p>
+<p>이를 배열로 나타낸다면 <code>[start , end]</code> 형태(원소가 2개인 1차원 배열)로 이해할 수 있을 것이다.</p>
+<p>이때, 하루는 86,400초이므로, 시각 <code>start</code>은 <code>0</code>이상 <code>86,399</code>이하의 정수로 주어진다.</p>
+<p>또한 미용사는 동시에 여러 명의 손님에 대하여 커트를 진행할 수 없다. </p>
+<p>예를 들어 예약 시간이 <code>[3000, 6000]</code>인 손님과 <code>[4000, 7000]</code>인 손님 두 명이 있을 때, 두 손님을 모두 받는 것은 불가능하다.</p>
+<p>또한, 손님들의 미용실 입장 시간 및 대기 시간은 <code>0</code>초라고 가정하자.</p>
+<p>이때, 1명의 미용사가 받을 수 있는 손님의 수의 최댓값을 계산하는 프로그램을 작성하여
+라.</p>
+<p>예를 들어, <code>N=5</code> 명의 손님이 커트를 받고 싶은 상태라고 가정하자. </p>
+<p>현재 예시에서 각 손님이 예약한 커트 시간은 <code>[3, 7], [4, 8], [1, 2], [7, 10], [4, 7]</code>이다.</p>
+<p> 이 경우 1명의 미용사가 받을 수 있는 예약자 수의 최댓값은 <code>3</code>이다.</p>
+<h2 id="block-145b12c0115c8094b6f5dd78ecb85f42">입력 조건</h2>
+<p>가장 먼저 예약자 수 N 이 자연수로 주어진다. (N 은 100,000보다 작거나 같은 자연수
+다.)
+이어서 각 예약자가 원하는 커트 시간 정보가 담긴 배열 reserved 가 주어진다.</p>
+<p>배열은 행의 크기가 N 이고, 열의 크기가 2인 형태의 2차원 배열이다. </p>
+<p>각 손님에 대한 예약 시간 [start, end] 형태로 주어진다. </p>
+<p>각 손님에 대해 start 는 0 이상 86,399 이하의 정수이며, end 는 start+1 이상 86,400 이하의 정수이다.</p>
+<h2 id="block-145b12c0115c80f090a1dbdae7c90cc2">출력 조건 </h2>
+<p>한 명의 미용사가 받을 수 있는 최대한 많은 손님의 수를 반환하여라.</p>
+<h2 id="block-145b12c0115c80d8a377f21261b64f9d">입출력 예시</h2>
+<div class="table-wrap"><table><tr><td>N</td><td>reserved</td><td>정답</td></tr><tr><td>5</td><td>[[3, 7], [4, 8], [1, 2], [7, 10], [4, 7]]</td><td>3</td></tr><tr><td>8</td><td>[[2, 7], [7, 10], [10, 13], [10, 12], [12, 15], [15, 16], [15, 18], [16, 17]]</td><td>6</td></tr></table></div>
+<h2 id="block-145b12c0115c80ff9674f7aea100ddf6">풀이</h2>
+<p>이 문제는 종료시간을 기준으로 정렬하는 방식으로 접근해야 풀리는 문제이다.</p>
+<p>시작시간을 기준으로 할 경우 위 두 가지 예시에 대해서는 문제가 없다.</p>
+<p>첫 번째 예시를 시작시간 기준으로 정렬하면 아래와 같고 그림으로 나타내어보자</p>
+<pre data-lang="python"><code class="language-python">[[1, 2], [3, 7], [4, 7], [4, 8], [7, 8]]</code></pre>
+<p>정렬 한 그림을 보면 3가지의 예약을 받을 수 있다.</p>
+<figure><img src="/assets/notion/11월-3주차-코딩-테스트-study/145b12c0-115c-8055-abe7-f001999800fb.jpeg" alt="" loading="lazy" width="1789" height="1000" /></figure>
+<p>그러나 아래의 경우에 대해서는 시작시간을 기준으로 정렬할 경우 문제가 생긴다</p>
+<pre data-lang="python"><code class="language-python">[[1, 10], [2, 3], [3, 4], [4, 5], [5, 6]]</code></pre>
+<p>아래 처럼되며 1사람만 예약이 가능하다. 왜냐하면 문제에서는 가능한 많은 손님 수를 리턴해야 하기 때문이다.</p>
+<p>이 예시에서는 4명이 되야한다.</p>
+<figure><img src="/assets/notion/11월-3주차-코딩-테스트-study/145b12c0-115c-8007-a7f1-d1a8e035bfaf.jpeg" alt="" loading="lazy" width="1576" height="1000" /></figure>
+<p>그렇다면 이번엔 종료시간을 기준으로 정렬해보자</p>
+<p>이 경우에는 4명의 손님을 받을 수 있다.</p>
+<figure><img src="/assets/notion/11월-3주차-코딩-테스트-study/145b12c0-115c-806e-b732-dd5dd29a7c8c.jpeg" alt="" loading="lazy" width="1903" height="1000" /></figure>
+<p>왜 그럴까?</p>
+<p>그 이유는 시작시간이 빠르다고 하여 일찍 끝나는 것이 아니기 때문에 시작시간을 기준으로 정렬하면 오래걸리는 작업을 먼저 선택하여 이후 작업에 대해 놓칠 수 있다.</p>
+<p><strong>또한 </strong><strong>종료시간이 같다면 시작시간이 큰 순으로 정렬되기 때문에 동일한 종료시간에 대하여 시작시간이 큼으로 더 짧은  예약을 자동으로 선택</strong><strong>하게된다.</strong></p>
+<p>반대로 종료시간이 빠른 예약을 선택하면 이후에 더 많은 예약을 받을 수 있는 여지가 생긴다.</p>
+<p>따라서 종료 시점을 기준으로 정렬하여 풀이한다.</p>
+<p>전체 코드</p>
+<pre data-lang="python"><code class="language-python">def solution(N, reserved):
+    # 예약을 종료 시간, 시작 시간 순으로 정렬
+    reserved.sort(key=lambda x: (x[1], x[0]))
+    count = 0
+    current_end_time = 0
+
+    for start, end in reserved:
+        if start &gt;= current_end_time:
+            current_end_time = end
+            count += 1
+
+    return count</code></pre>
+<h2 id="block-145b12c0115c80c09fb8c81a9c50c405">Test case</h2>
+<pre data-lang="python"><code class="language-python">입력값 〉 5, [[3, 7], [4, 8], [1, 2], [7, 10], [4, 7]]
+기댓값 〉 3
+
+입력값 〉 8, [[2, 7], [7, 10], [10, 13], [10, 12], [12, 15], [15, 16], [15, 18], [16, 17]]
+기댓값 〉 6</code></pre>
+<h2 id="block-145b12c0115c80f7bbcecf7358e2cbd4">5. 벽 피하기 게임</h2>
+<h2 id="block-145b12c0115c80a1b0d4c46af0a7d454">문제 설명</h2>
+<p>벽 피하기 게임에서는 N × M 크기의 격자가 주어진다. </p>
+<p>격자의 각 칸에 대하여 0은 빈 칸, 1은 벽, 2는 플레이어의 위치를 의미한다. 플레이어는 1명이다.</p>
+<p>플레이어는 초기에 항상 가장 아래 행(줄)의 한 위치에 존재한다. 플레이어는 매번 (1) 가만히 있거나, (2) 왼쪽으로 한 칸 이동하거나, 혹은 (3) 오른쪽으로 한칸 이동할 수 있다.</p>
+<p>플레이어가 이동한 뒤에는 위에서부터 존재하는 모든 벽이 한 칸씩 아래로 내려온다.</p>
+<p>구체적으로 1초 동안 ① 초기 플레이어가 먼저 행동하고, ② 이후에 모든 벽에 해당하는 칸이 한 칸씩 아래로 내려온다. </p>
+<p>플레이어가 벽에 부딪힌다면 즉시 게임이 종료되며, 부딪히지 않은 경우 플레이어가 생존한 시간이 1초만큼 증가하
+는 것으로 간주한다.</p>
+<p>벽이 내려온 직후에 플레이어가 살아남았을 경우 1초만큼 생존한 시간이 증가한 것으로 간주하기 때문에, 만약 처음부터 플레이어가 존재하는 위치의 윗줄의 칸들이 모두 벽으로 완전히 가로막혀 있다면 정답으로는 0초를 출력해야 할 것이다. </p>
+<p>플레이어는 벽 피하기 게임으로부터 최대한 오랜 시간을 버티는 것이 목표다. </p>
+<p>전체 행(줄)의 수가 최대 N 이라는 점에서 최대로 버틸 수 있는 시간은 N-1 초이다.</p>
+<p>결과적으로 플레이어가 최적의 움직임을 보인다고 했을 때, 플레이어가 생존 가능한 최대 시간을 계산하는 프로그램을 작성하여라.</p>
+<p>예를 들어 N = 9 , M = 10 인 상황을 가정하자. N X M 크기의 각 공간에 대한 정보는 아래의 2차원 배열과 같다.</p>
+<figure><img src="/assets/notion/11월-3주차-코딩-테스트-study/145b12c0-115c-8062-8a88-c07a449f9704.png" alt="" loading="lazy" width="1170" height="916" /></figure>
+<p>초기 3초 동안 플레이어가 왼쪽 - 가만히 가만히&quot; 순서대로 행동한다면, 게임 시작 이후 3초 뒤에 전체 공간의 형태는 다음과 같을 것이다.</p>
+<figure><img src="/assets/notion/11월-3주차-코딩-테스트-study/145b12c0-115c-8084-b982-faf9d3de3047.png" alt="" loading="lazy" width="1156" height="618" /></figure>
+<p>이후에 &quot;오른쪽 → 오른쪽 → 가만히 순서대로 행동한다면, 게임 시작 이후 6초 뒤에 전체 공간의 형태는 다음과 같을 것이다.</p>
+<figure><img src="/assets/notion/11월-3주차-코딩-테스트-study/145b12c0-115c-80a3-9e2c-da1c6d29481c.png" alt="" loading="lazy" width="1142" height="322" /></figure>
+<p>현재 상황에서는 플레이어가 어떤 행동을 취해도 벽에 부딪혀 게임이 종료된다.</p>
+<p>결과적으로 현재 예시에서는 플레이어가 최적의 행동을 취했을 때 최대 6초까지 생존이 가능한 것으로 이해할 수 있다.</p>
+<p>초기 게임 보드 판의 정보가 2차원 배열 형태로 주어졌을 때, 플레이어가 생존가능한 최대 시간을 반환하는 프로그램을 작성하여라.</p>
+<h2 id="block-145b12c0115c807387acec9cec444578">입력 조건</h2>
+<p>가장 먼저 벽 피하기 게임을 진행할 보드 판에 대한 크기 정보 N 과 M이 주어진다.</p>
+<p>N과 M은 3보다 크거나 같고 100보다 작거나 같은 자연수다.</p>
+<p>이어서 벽 피하기 게임을 진행할 보드 판에 대한 정보가 담긴 N x M 크기의 2차원 배열 board가 주어진다. </p>
+<p>격자의 각 칸에 대하여 0은 빈 칸, 1은 벽, 2는 플레이어의 초기 위치를 의미한다.</p>
+<p>플레이어는 항상 1명이며, 플레이어는 초기에 가장 아래 행(줄)의 한 위치에 존재한다.</p>
+<h2 id="block-145b12c0115c8024a9e5ebb0fdd0d077">출력 조건</h2>
+<p>플레이어가 최선을 선택을 함으로써 생존 가능한 최대 시간을 반환한다.</p>
+<h2 id="block-14ab12c0115c80d5837fc5b65f70507d">풀이</h2>
+<p>이 문제는 플레이어의 위치를 찾고 3가지를 매번 탐색해 한 칸씩 올라간다.</p>
+<p>벽이 1칸씩 내려온다 생각하면 복잡함으로 반대로 플레이어가 1칸씩 올라가야만 한다 라고 생각하면 쉽게 풀 수 있다.</p>
+<p>매번 3가지 동작</p>
+<ul><li>1칸 위로 올라간다.</li><li>왼쪽으로 한칸, 위로 한칸</li><li>오른쪽으로 한칸, 위로 한칸</li></ul>
+<p>위 3가지 동작을 매번 체크하여 벽이 없는 경우 플레이어를 한 칸씩 전진 배치한다.</p>
+<p>플레이어가 이동 가능한 위치를 추적하기 위해 dp 테이블을 만든다.</p>
+<pre data-lang="python"><code class="language-python">def solution(N, M, board):
+    # N X M 크기의 배열 위치에 대하여 처음에는 모두 도달 불가능(F)하다고 가정
+    dp = [[False] * M for i in range(N)]</code></pre>
+<p>이후 플레이어의 위치를 찾는다.</p>
+<pre data-lang="python"><code class="language-python">    for j in range(M):
+        if board[N - 1][j] == 2:  # 초기 플레이어가 존재하는 위치라면
+            dp[N - 1][j] = True  # 해당 위치에 도달 가능(T)한 것으로 수정
+            break</code></pre>
+<p>dp가 True인 지점A(플레이어가 위치할 수 있는 곳)을 맨 마지막 행부터 순차적으로 탐색한다.</p>
+<p>A를 찾으면 그 지점에서 부터 위에 서 언급한 3가지 경로에 대해서 이동가능한지 board를 통해서 확인한다.</p>
+<p>board가 0이면 이동가능함으로 dp를 True로, 이동이 불가능하면 움직이지 않는다.</p>
+<p>그렇게 board의 1행까지만 탐색해야 한다. 왜냐하면 앞으로(위로) 한칸 이동한 경로 즉 i-1까지를 고려해여 True를 하기 때문에 1행까지만 탐색하면 자동으로 0행까지의 이동가능한 경로의 탐색이 완료되기 때문이다.</p>
+<p>따라서 <code>range(N-1, 0, -1)</code>까지로 하여 N-1부터 1행까지만 탐색하도록한다.</p>
+<pre data-lang="python"><code class="language-python"> # 가장 아랫줄부터 위에서 두 번째 줄까지 확인하며
+    for i in range(N - 1, 0, -1):
+        for j in range(M):
+            if dp[i][j] == True:  # 현재 위치가 도달 가능한 위치인 경우
+                # 바로 위쪽 위치가 빈 칸이라면
+                if board[i - 1][j] == 0:
+                    dp[i - 1][j] = True  # 바로 위쪽 위치에 도달 가능(T)
+                # 왼쪽과 왼쪽 위 위치가 모두 빈 칸이라면
+                if j &gt; 0:
+                    if board[i][j - 1] == 0 and board[i - 1][j - 1] == 0:
+                        # 왼쪽 위 위치에 도달 가능(T)
+                        dp[i - 1][j - 1] = True
+                # 오른쪽과 오른쪽 위 위치가 모두 빈 칸이라면
+                if j &lt; M - 1:
+                    if board[i][j + 1] == 0 and board[i - 1][j + 1] == 0:
+                        # 오른쪽 위 위치에 도달 가능(T)
+                        dp[i - 1][j + 1] = True</code></pre>
+<p>이렇게 1행까지 탐색이 끝나면, 마지막 행(N-1)을 제외한 N-2행 부터 True가 1개라도 존재한다면 1초씩 증가시켜 플레이어의 생존시간을 추가해나간다.</p>
+<pre data-lang="python"><code class="language-python">    answer = 0  # 주인공이 최대 몇 초까지 살아남을 수 있는지
+    # 가장 아랫줄부터 가장 윗줄까지 확인하며
+    for i in range(N - 1, -1, -1):
+        # 현재 행에 도달 가능한 위치가 하나라도 있는 경우
+        if dp[i].count(True) &gt;= 1:
+            answer = (N - i) - 1
+    return answer</code></pre>
+<p>최종 코드</p>
+<pre data-lang="python"><code class="language-python"># 보드 판의 크기(N, M)와 벽 피하기 게임을 진행할 보드 판 정보 배열(board) 입력받기
+def solution(N, M, board):
+    # N X M 크기의 배열 위치에 대하여 처음에는 모두 도달 불가능(F)하다고 가정
+    dp = [[False] * M for i in range(N)]
+    # 가장 아랫줄의 위치를 하나씩 확인하며
+    for j in range(M):
+        if board[N - 1][j] == 2:  # 초기 플레이어가 존재하는 위치라면
+            dp[N - 1][j] = True  # 해당 위치에 도달 가능(T)한 것으로 수정
+            break
+        
+    # 가장 아랫줄부터 위에서 두 번째 줄까지 확인하며
+    for i in range(N - 1, 0, -1):
+        for j in range(M):
+            if dp[i][j] == True:  # 현재 위치가 도달 가능한 위치인 경우
+                # 바로 위쪽 위치가 빈 칸이라면
+                if board[i - 1][j] == 0:
+                    dp[i - 1][j] = True  # 바로 위쪽 위치에 도달 가능(T)
+                # 왼쪽과 왼쪽 위 위치가 모두 빈 칸이라면
+                if j &gt; 0:
+                    if board[i][j - 1] == 0 and board[i - 1][j - 1] == 0:
+                        # 왼쪽 위 위치에 도달 가능(T)
+                        dp[i - 1][j - 1] = True
+                # 오른쪽과 오른쪽 위 위치가 모두 빈 칸이라면
+                if j &lt; M - 1:
+                    if board[i][j + 1] == 0 and board[i - 1][j + 1] == 0:
+                        # 오른쪽 위 위치에 도달 가능(T)
+                        dp[i - 1][j + 1] = True
+    answer = 0  # 주인공이 최대 몇 초까지 살아남을 수 있는지
+    # 가장 아랫줄부터 가장 윗줄까지 확인하며
+    for i in range(N - 1, -1, -1):
+        # 현재 행에 도달 가능한 위치가 하나라도 있는 경우
+        if dp[i].count(True) &gt;= 1:
+            answer = (N - i) - 1
+    return answer</code></pre>
+<p>또는 bfs를 사용하여 풀이도 가능하다.</p>
+<pre data-lang="python"><code class="language-python">import collections
+
+def solution(N, M, board):
+    rows = len(board)
+    cols = len(board[0])
+    
+    for i in range(cols):
+        if board[-1][i] == 2:
+            start = rows-1, i
+    
+    def bfs(start):
+        q = collections.deque([])
+        q.append((start[0], start[1], 0))
+        
+        directions = [(0, 0), (0, -1), (0, 1)]
+        while q:
+            x, y, dist = q.popleft()
+            
+            for dx, dy in directions:
+                nx, ny = dx + x, dy + y
+            
+                if 0 &lt;= nx &lt; rows and 0 &lt;= ny &lt; cols:
+                    if board[nx][ny] == 1:
+                        continue  
+                    nx, ny = nx - 1, ny - 0
+                    if 0 &lt;= nx &lt; rows and 0 &lt;= ny &lt; cols:
+                        if board[nx][ny] == 0:
+                            q.append((nx, ny, dist+1))
+        
+        return dist
+    
+    return bfs(start)</code></pre>
+<h2 id="block-145b12c0115c80ef91b7f51c54c8ec27">TestCase</h2>
+<pre data-lang="python"><code class="language-python">
+입력값 〉 9, 10, [[0, 0, 1, 1, 1, 1, 1, 1, 1, 1], [0, 0, 0, 1, 1, 1, 1, 1, 1, 1], [0, 0, 0, 0, 0, 1, 1, 1, 1, 1], [1, 1, 1, 1, 0, 0, 1, 1, 1, 1], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [1, 0, 0, 1, 0, 0, 0, 0, 1, 1], [0, 0, 0, 1, 1, 1, 1, 1, 1, 1], [0, 0, 0, 2, 0, 0, 0, 0, 0, 0]]
+기댓값 〉 6</code></pre>
+<h2 id="block-147b12c0115c80a08701cbba4fd18a15">6. 소수 판별</h2>
+<h2 id="block-147b12c0115c8092a836fc8cf2ba8829">문제</h2>
+<p><code>A</code> 이상 <code>B</code> 이하의 모든 자연수에 대해 소수인지 아닌지 그 여부를 판별하고자 한다. </p>
+<p>이때, <code>A</code>는 100,000,000 이상 100,010,000 이하의 자연수이며, <code>B</code>는 <code>A</code> 이상 100,010,000 이하의 자연수이다.</p>
+<p>결과적으로 <code>A</code>와 <code>B</code>가 주어졌을 때, <code>A</code> 이상 <code>B</code> 이하의 모든 자연수 중에서 소수의 개수를 계산하는 프로그램을 작성하여라.</p>
+<p>예를 들어 <code>A</code>의 값이 100,000,005이고, <code>B</code>의 값이 100,000,010인 상황을 가정해 보자.</p>
+<p>이때, <code>A</code> 이상 <code>B</code> 이하의 각 자연수에 대하여 소수인지 아닌지 여부를 표로 나타내면 다음과 같다. </p>
+<p>소수인 경우 참(T)이며, 소수가 아닌 경우 거짓(F)으로 그 값이 기록되어 있다.</p>
+<div class="table-wrap"><table><tr><td>값</td><td>소수 여부</td></tr><tr><td>100000005</td><td>F</td></tr><tr><td>100000006</td><td>F</td></tr><tr><td>100000007</td><td>T</td></tr><tr><td>100000008</td><td>F</td></tr><tr><td>100000009</td><td>F</td></tr><tr><td>100000010</td><td>F</td></tr></table></div>
+<p>따라서 현재 예시에서는 <code>A</code> 이상 <code>B</code> 이하의 모든 자연수 중에서 소수의 개수(정답)가 1이다.</p>
+<h2 id="block-147b12c0115c805b9493f7a6942664e9">입력 조건</h2>
+<p><code>A</code>와 <code>B</code>가 자연수 형태로 차례대로 주어진다.</p>
+<p>이때, <code>A</code>는 100,000,000 이상 100,010,000 이하의 자연수이며, <code>B</code>는 <code>A</code> 이상 100,010,000 이하의 자연수이다.</p>
+<h2 id="block-147b12c0115c807b8481d66a37f194f1">출력 조건</h2>
+<p><code>A</code> 이상 <code>B</code> 이하의 모든 자연수 중에서 소수의 개수를 반환하여라.</p>
+<h2 id="block-147b12c0115c80569c18f9fbdbe1567f">풀이</h2>
+<p>어떤 값 A에 대한 소수판 별은 A 이하의 수(0 ~ A-1)들로 A를 나누었을 때 나머지가 0이 되는 경우가 있다면 이는 소수이다.</p>
+<p>코드로 보면 다음과 같다.</p>
+<pre data-lang="python"><code class="language-python">n = 10 # 10이 소수인지 판별
+
+for i in range(2, n): # 2부터 (n-1)까지의 모든 수를 확인
+		if n % i == 0
+				return False
+				
+return True</code></pre>
+<p>그러나 위 코드는 최적화가 가능하다.</p>
+<p>약수의 특성상 값의 교환이 가능하기 때문인데</p>
+<p>예를들어 16이라는 약수는 다음과 같다</p>
+<ul><li>16 = 1 x 16</li><li>16 = 2 x 8</li><li><strong>16 = 4 x 4</strong></li><li>16 = 8 x 2</li><li>16 = 16 x 1</li></ul>
+<p>이 처럼 16을 값(A)으로 나누었을 때 나머지가 0을 만족하는 몫(B)이 있다면 교환 법칙이 성립하여 16을 B로 나누었을 때 나머지가 0을 만족하는 A가 존재하게 된다.</p>
+<ul><li>16을 2로 나누었을 때 나머지가 0을 만족하는 몫 8</li><li>16을 8로 나누었을 때 나머지가 0을 만족하는 몫 2</li></ul>
+<p>이렇게 16의 가운데 약수를 기준으로  각 등식이 대칭적인 형태를 보이게 된다.</p>
+<p>따라서 가운데 약수값 까지(위 예시에서는 4까지만) 나머지가 0이되는 값이 있는지를 확인해보면 된다는 것이다.</p>
+<p>가운데 약수 값은 제곱근을 통해 구할 수 있다. (16이라면 루트 16 = 4)</p>
+<p>이번엔 64를 예로들어보자 (64의 제곱근인 8)</p>
+<ul><li>1 x 64 = 64</li><li>2 x 32 = 64</li><li>4 x 16 = 64</li><li><strong>8 x 8 = 64</strong></li><li>16 x 4 = 64</li><li>32 x 2 = 64</li><li>64 x 1 = 64</li></ul>
+<p>최적화된 코드로 구현해보면 다음과 같다</p>
+<pre data-lang="python"><code class="language-python">import math
+
+n = 10
+
+for i in range(2, int(math.sqrt(n)) + 1):
+		if n % i == 0:
+				return False
+				
+return True</code></pre>
+<p>따라서 이를 적용하여 문제를 풀어보면 전체코드는 아래와 같다.</p>
+<pre data-lang="python"><code class="language-python">def solution(A, B)
+	count = 0
+	for i in range(A, B+1):
+		flag = True
+		for j in range(2, int(math.sqrt(i)+1):
+			if i % j == 0:
+				flag = False
+				break
+		
+		if flag:
+			count += 1
+	
+	return count</code></pre>
+<p>&lt; 추가 꿀팁 &gt;</p>
+<p>만약 위 문제가 1부터 N까지의 범위내에서의 소수여부를 판별하고자 할 때 에라토스테네스의 체 알고리즘을 사용할 수 있다.</p>
+<p>이 알고리즘은 N보다 작거나 같은 모든 소수를 찾을 때 사용할 수 있다.</p>
+<p>1.	<strong>초기화</strong>:</p>
+<ul><li>2부터 N까지의 모든 자연수를 나열</li></ul>
+<p>2.	<strong>소수의 배수 제거</strong>:</p>
+<ul><li>범위내의 가장 작은 소수 i를 선택하고, i의 배수 중 자신(i)을 제외한 모든 수를 제거</li></ul>
+<p>3.	<strong>다음 소수 선택</strong>:</p>
+<ul><li>아직 제거되지 않은 수 중에서 i보다 큰 가장 작은 수를 선택하여, 해당 수의 배수를 제거</li></ul>
+<p>4.	<strong>반복 종료</strong>:</p>
+<ul><li>i * j &gt; N이 될 때까지 2번과 3번 과정을 반복</li></ul>
+<p>5.	<strong>결과</strong>:</p>
+<ul><li>제거되지 않고 남은 수가 모두 소수</li></ul>
+<p><strong>알고리즘의 핵심 아이디어</strong></p>
+<ul><li>소수의 배수를 제거함으로써, 합성수를 효율적으로 걸러낼 수 있다.</li></ul>
+<p>예를들어 n=10이라 해보자</p>
+<div class="table-wrap"><table><tr><td><strong>단계</strong></td><td><strong>나열된 숫자</strong></td><td><strong>설명</strong></td></tr><tr><td>1</td><td>2, 3, 4, 5, 6, 7, 8, 9, 10</td><td>초기화</td></tr><tr><td>2</td><td>2, 3, (4 제거), 5, (6 제거), 7, (8 제거), 9, (10 제거)</td><td>i = 2, 2의 배수 제거</td></tr><tr><td>3</td><td>2, 3, 5, 7, (9 제거)</td><td>i = 3, 3의 배수 제거</td></tr><tr><td>4</td><td>2, 3, 5, 7</td><td>i = 5, 반복 종료</td></tr></table></div>
+<p>아래 코드는 n까지의 범위중 어떤 값이 소수인지 판별하는 코드이다.</p>
+<pre data-lang="python"><code class="language-python">import math
+def solution(n):
+    # n = 10
+    is_prime = [True]*(n+1)
+    for i in range(2, int(math.sqrt(n) + 1)):
+        if is_prime[i]:
+            j = 2
+            while i * j &lt;= n:
+                is_prime[i*j] = False
+                j += 1
+
+    results = []			
+    for i in range(2, n+1):
+        if is_prime[i]:
+            results.append(i)
+        
+    return results</code></pre>
+<p>에라토스테네스의 체는 아래 블로그에서 시각적으로 잘 표현하여 아래 블로그를 참고하자</p>
+<p><a href="https://velog.io/@changhee09/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-%EC%86%8C%EC%88%98%EC%9D%98-%ED%8C%90%EB%B3%84-%EC%97%90%EB%9D%BC%ED%86%A0%EC%8A%A4%ED%85%8C%EB%84%A4%EC%8A%A4%EC%9D%98-%EC%B2%B4" target="_blank" rel="noreferrer">https://velog.io/@changhee09/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-%EC%86%8C%EC%88%98%EC%9D%98-%ED%8C%90%EB%B3%84-%EC%97%90%EB%9D%BC%ED%86%A0%EC%8A%A4%ED%85%8C%EB%84%A4%EC%8A%A4%EC%9D%98-%EC%B2%B4</a></p>
+<h2 id="block-147b12c0115c80b8a9d1fc11f0e605b2">7. 회전 방어</h2>
+<h2 id="block-147b12c0115c80a58caaf8628c8a4a8e">문제</h2>
+<p>한 명의 주인공 캐릭터가 존재한다. </p>
+<p>주인공 캐릭터는 처음에 위쪽(상)을 바라보고 있다. </p>
+<p>이후에 1초부터 <code>N</code>초에 걸쳐서 매 초마다 상, 하, 좌, 우 위치에 적이 나타난다. </p>
+<p>주인공 캐릭터는 매 초마다 방향을 바꾸지 않거나(가만히 있기), 좌로 90도 회전(좌회전), 우로 90도 회전(우회전)할 수 있다. </p>
+<p>주인공 캐릭터의 위치는 고정되어 위치를 옮기는 것은 불가능하다.</p>
+<p>매 초마다 ① 먼저 캐릭터가 회전 방향을 결정한 뒤에 ② 상, 하, 좌, 우 위치에서 적군이 한 칸씩 다가와 공격을 수행한다.</p>
+<p>적군으로부터 공격을 받은 주인공 캐릭터의 점수는 적군의 공격력에 따라 차감된다.</p>
+<p>구체적으로 캐릭터의 앞(정면)에 존재하는 적은 공격력의 1배수만큼, 옆에 존재하는 적은 공격력의 2배수만큼, 뒤(후면)에 존재하는 적은 공격력의 3배수만큼 점수가 차감된다.</p>
+<p>앞서 언급했듯이 총 <code>N</code>초에 걸쳐서 매 초마다 상, 하, 좌, 우 위치에 각각 적군이 1명씩 등장한다.</p>
+<p>따라서 입력은 <code>4 X N</code> 크기의 2차원 배열로 주어지며, 이 배열은 총 <code>N</code>초에 걸쳐서 등장하는 각 적군들의 공격력 정보를 포함한다. </p>
+<p>이때 각 행의 의미를 주인공의 위치를 중심으로 살펴 보면, 첫 번째 행은 위쪽(상), 두 번째 행은 오른쪽(우), 세 번째 행은 아래쪽(하), 네 번째 행은 왼쪽(좌) 위치를 의미한다.</p>
+<p>캐릭터가 <code>N</code>초간 적절하게 행동하도록 하여 최소한의 데미지를 받도록 하는(최소한의 점수가 차감되도록 하는) 프로그램을 작성하여라. </p>
+<p>예를 들어 <code>N = 4</code>이고, 다음과 같이 적군의 공격력이 주어진다고 가정하자.</p>
+<div class="table-wrap"><table><tr><td><strong>시간</strong></td><td><strong>1초</strong></td><td><strong>2초</strong></td><td><strong>3초</strong></td><td><strong>4초</strong></td></tr><tr><td><strong>상</strong></td><td>2</td><td>2</td><td>3</td><td>7</td></tr><tr><td><strong>우</strong></td><td>1</td><td>3</td><td>8</td><td>6</td></tr><tr><td><strong>하</strong></td><td>3</td><td>5</td><td>6</td><td>5</td></tr><tr><td><strong>좌</strong></td><td>4</td><td>4</td><td>9</td><td>3</td></tr></table></div>
+<p>만약 주인공 캐릭터가 다음과 같이 (1) 가만히, (2) 좌회전, (3) 우회전, (4) 우회전 순서대로 행동한다면, 총 (21 + 27 + 55 + 39) = 142점이 감점된다. </p>
+<div class="table-wrap"><table><tr><td><strong>시간</strong></td><td><strong>1초</strong></td><td><strong>2초</strong></td><td><strong>3초</strong></td><td><strong>4초</strong></td></tr><tr><td><strong>행동</strong></td><td>가만히</td><td>좌회전</td><td>우회전</td><td>우회전</td></tr><tr><td><strong>현재 보는 곳</strong></td><td>상</td><td>좌</td><td>상</td><td>우</td></tr><tr><td><strong>차감되는 점수</strong></td><td>21</td><td>27</td><td>55</td><td>39</td></tr></table></div>
+<p>하지만 주인공 캐릭터가 다음과 같이 (1) 좌회전, (2) 좌회전, (3) 가만히, (4) 좌회전 순서대로 행동한다면, 총 (17 + 25 + 49 + 39) = 130점이 감점된다. 이 점수는 주인공이 최선의 행동을 했을 때 차감되는 점수 합으로, 최솟값이다.</p>
+<div class="table-wrap"><table><tr><td><strong>시간</strong></td><td><strong>1초</strong></td><td><strong>2초</strong></td><td><strong>3초</strong></td><td><strong>4초</strong></td></tr><tr><td><strong>행동</strong></td><td>좌회전</td><td>좌회전</td><td>가만히</td><td>좌회전</td></tr><tr><td><strong>현재 보는 곳</strong></td><td>좌</td><td>하</td><td>하</td><td>우</td></tr><tr><td><strong>차감되는 점수</strong></td><td>17</td><td>25</td><td>49</td><td>39</td></tr></table></div>
+<p>주인공이 <code>N</code>초 동안 최선의 행동을 함으로써 만들 수 있는, 차감되는 점수의 합의 최솟값을 반환하는 프로그램을 작성하여라.</p>
+<h2 id="block-147b12c0115c80a79e02e5576927b64a">입력 조건</h2>
+<p>가장 먼저 적군이 등장하는 횟수(시간) <code>N</code>이 자연수로 주어진다. <code>N</code>은 2 이상 9 이하의 자연수다.
+이어서 <code>4 X N</code> 크기의 2차원 배열 <code>enemies</code>가 주어지며, 이 배열은 총 <code>N</code>초에 걸쳐서 등장하는 각 적군들의 공격력 정보를 포함한다. 모든 적군의 공격력의 값은 1 이상 100 이하의 자연수다.</p>
+<p><strong>출력 조건</strong></p>
+<p>주인공이 <code>N</code>초 동안 최선의 행동을 함으로써 만들 수 있는 차감되는 점수의 합의 최솟값을 자연수 형태로 반환한다.</p>
+<h2 id="block-14ab12c0115c80798422f86b49a39ad9">풀이</h2>
+<p>이 문제는 다이나믹 프로그래밍 기법중  메모제이션으로 구현하면 된다.</p>
+<p>각 방향에 대한 값을 정해준다.</p>
+<pre data-lang="python"><code class="language-python">       0 (상)
+        ⬆️
+3 (좌)⬅️   ➡️ 1 (우)
+        ⬇️
+       2 (하)</code></pre>
+<p>주어진 적 출몰 방향은 상 우 하 좌  순임으로 이 순서로 값을 참조하도록 순서를 정해준다.</p>
+<pre data-lang="python"><code class="language-python">UP, RIGHT, DOWN, LEFT = 0, 1, 2, 3
+directions = [UP, RIGHT, DOWN, LEFT]</code></pre>
+<p>중복된 연산을 방지하기 초기 계산해둔 것들을 저장해준다.</p>
+<p>이때 데미지 값은 초와 어느 방향에서 시작하느냐가 중요함으로 (N, facing)을 키로 해준다.</p>
+<pre data-lang="python"><code class="language-python">memo = {}
+key = (N, facing)
+if key in memo:
+		return memo[key]</code></pre>
+<p>이후 플레이어는 시작 방향에서 가만히 있기(0), 좌회전(1), 우회전(2) 순으로 방향 값을 업데이트 해준다.</p>
+<p>뒤로는 방향을 2번 바꿔야함으로 불가능하다.</p>
+<ul><li>가만히 있기: 현재 방향을 유지하는 것임으로 현재값을 업데이트 한다.</li><li>좌회전: 현재 방향에서 시계방향으로 +3 만큼 진행되면 좌회전 방향이다. [0~4]사이의 값으로 유지하기 위해 %4 모듈러 연산을 해준다. </li><li>우회전: 현재 방향에서 시계방향으로 +1 만큼 진행되면 우회전 방향이다. [0~4]사이의 값으로 유지하기 위해 %4로 모듈러 연산을 해준다.</li></ul>
+<pre data-lang="python"><code class="language-python">total_damage = float('inf')
+for action in [0, 1, 2]:
+		if action == 0: # 가만히 있기
+				new_facing = facing
+		elif action == 1: # 좌회전
+				new_facing = (facing + 3) % 4
+		elif action == 2: # 우회전
+				new_facing = (facing + 1) % 4</code></pre>
+<p>이렇게 선택한 방향에 대하여 적들의 공격을 받았을 때 현재 시간에서의 총 데미지를 계산해준다.</p>
+<p>총 대미지 계산을 위해 정면 공격인지, 측면 공격인지를 판별한다.</p>
+<p>적 공격 방향과 플레이어 방향이 일치한다는 것은 정면을 의미함으로 multiplier = 1로 설정</p>
+<p>적 공격 방향과 플레이어 방향에서 우측 또는 좌측으로 방향을 변경했을 때 일치 한다면 측면을 의미함으로 multiplier = 2로 설정</p>
+<p>적 공격 방향이 정면, 측면에서도 성립하지 않으면 후면을 의미함으로 multiplier = 3로 설정</p>
+<pre data-lang="python"><code class="language-python">		damage = 0
+		# 선택한 방향에서의 적군 공격 합 계산
+		for enemy_dir in directions # UP(0), RIGHT(1), DOWN(2), LEFT(3)
+				attack_power = enemies[enemy_dir][time]
+				
+				# enemy_dir방향의 플레이어가 마주보고 있으면
+				if enemy_dir == new_facing: 
+						multiplier = 1 # 1배
+				
+				# 플레이어가 현재 방향에서 우회전 또는 좌회전 했을 때의 방향과 적의 방향이 일치하다면 측면 공격
+				elif enemy_dir == (new_facing + 1) % 4 or enemy_dir == (new_facing + 3) % 4:
+						multiplier = 2 # 2배
+					
+				# 위 경우가 둘 다 아니라면 후방 공격
+				else:
+						multiplier = 3
+				
+				# 선택 방향에서의 각 방향에 대한 적군 공격 누적
+				damage += attack_power
+				
+		# 선택 방향에서의 적군 공격 합 데미지 + 다음 위치에서 new_facing으로 시작했을 때의 최소 데미지 값				
+    total_damage = damage + dfs(time + 1, new_facing)
+	  # 가능한 모든 방향을 고려했을 때의 최소 데미지
+    min_damage = min(min_damage, total_damage)
+
+# N초에서 facing 방향으로 가능한 모든 경우의 수중 최소 데미지를 저장
+memo[key] = min_damage
+return min_damage</code></pre>
+<p>전체 코드는 아래와 같다.</p>
+<pre data-lang="python"><code class="language-python">def solution(N, enemies):
+    # 방향을 숫자로 매핑
+    UP, RIGHT, DOWN, LEFT = 0, 1, 2, 3
+    directions = [UP, RIGHT, DOWN, LEFT]
+    
+    # 메모이제이션을 위한 딕셔너리
+    memo = {}
+    
+    def dfs(time, facing):
+        if time == N:
+            return 0  # 모든 시간이 지났으므로 데미지 없음
+        
+        key = (time, facing)
+        if key in memo:
+            return memo[key]
+        
+        min_damage = float('inf')
+        
+        # 가능한 행동: 가만히 있기(0), 좌회전(1), 우회전(2)
+        for action in [0, 1, 2]:
+            if action == 0:  # 가만히 있기
+                new_facing = facing
+            elif action == 1:  # 좌회전
+                new_facing = (facing + 3) % 4
+            elif action == 2:  # 우회전
+                new_facing = (facing + 1) % 4
+            
+            # 현재 시간의 데미지 계산
+            damage = 0
+            for enemy_dir in directions:
+                attack_power = enemies[enemy_dir][time]
+                if enemy_dir == new_facing:
+                    multiplier = 1
+                elif enemy_dir == (new_facing + 1) % 4 or enemy_dir == (new_facing + 3) % 4:
+                    multiplier = 2
+                else:
+                    multiplier = 3
+                damage += attack_power * multiplier
+            
+            # 다음 시간의 최소 데미지와 합산
+            total_damage = damage + dfs(time + 1, new_facing)
+            min_damage = min(min_damage, total_damage)
+        
+        memo[key] = min_damage
+        return min_damage
+    
+    # 초기 방향은 UP(0)
+    result = dfs(0, 0)
+    return result</code></pre>
+<pre data-lang="python"><code class="language-python">def solution2(N, board): # 쉬운 버전
+    memo = {}
+    
+    def dfs(time, facing):
+        if time == N:
+            return 0
+        
+        key = (time, facing)
+        if key in memo:
+            return memo[key]
+        
+        min_damage = float('inf')
+        
+        for action in [0, 1, 3]:
+            damaged = 0 
+            new_facing = (facing + action) % 4
+            
+            if new_facing == 0: # 정면
+                damages = [1, 2, 3, 2]
+            elif new_facing == 1: # 오른쪽
+                damages = [2, 1, 2, 3]
+            elif new_facing == 3: # 왼쪽
+                damages = [2, 3, 2, 1] # 상 우 하 좌 
+            else: # 아래쪽
+                damages = [3, 2, 1, 2]
+                
+            for i, damage in enumerate(damages):
+                damaged += (board[i][time] * damage)
+            
+            total_damage = damaged + dfs(time + 1, new_facing)
+            min_damage = min(min_damage, total_damage)
+        
+        memo[key] = min_damage
+        return min_damage
+    
+    return dfs(0, 0)</code></pre>
+<h2 id="block-148b12c0115c80428714c062ed149dd9">Test case</h2>
+<pre data-lang="python"><code class="language-python">테스트 1
+
+입력값 〉 4, [[2, 2, 3, 7], [1, 3, 8, 6], [3, 5, 6, 5], [4, 4, 9, 3]]
+기댓값 〉 130
+
+테스트 2
+입력값 〉4, [[1, 2, 3, 4], [6, 2, 5, 3], [4, 7, 1, 2], [8, 6, 3, 2]]
+기댓값 〉 107</code></pre>
+<h2 id="block-148b12c0115c8031ab9df51028531093">8. 등산 최소 비용</h2>
+<h2 id="block-148b12c0115c80439077e58d3da5debf">문제</h2>
+<p><code>N X N</code> 보드 판 형태로 산이 존재하며, 여행가는 등산을 하고자 한다. 여행가의 위치는 초기에 (1, 1)로 가장 왼쪽 위의 칸에 서 있으며, 결과적으로 가장 오른쪽 아래의 위치인 (<code>N</code>, <code>N</code>)의 위치로 이동하는 것이 목표다.</p>
+<p>보드 판의 각 위치는 0 이상 100 이하의 정수로 표현되는데, 이것은 해당 위치의 고도(높이)를 의미한다. 시작 위치에 해당하는 (1, 1) 위치의 고도(높이) 값은 항상 0이며, 도착 위치인 (<code>N</code>, <code>N</code>)까지 최소한의 체력을 소모하여 이동하는 것이 목표다.</p>
+<p>여행가는 자신의 위치에서 인접한 상, 하, 좌, 우 위치로 이동이 가능하다. 예를 들어 <code>N = 4</code>인 상황을 가정하자. 이때, 여행가가 (1, 2)의 위치에 있다면 보드 판의 형태를 다음의 그림처럼 표현할 수 있을 것이다. 그림에서 여행가의 위치는 빨간색 음영으로 색칠하였고, 여행가가 이동 가능한 위치는 파란색 음영으로 색칠하였다.</p>
+<figure><img src="https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/012c3dc5-b4de-4d2a-a9c6-eb297200dfad/0.png" alt="" loading="lazy" /></figure>
+<p>여행가는 산을 벗어나지만 않는다면 현재 위치에서 인접한 위치(상, 하, 좌, 우)로 이동이 가능하다. 이때 현재 위치에서 인접한 위치 중 하나를 골라 다음 위치로 이동할 때, 고도가 다르더라도 이동이 가능하다. 단, 현재 위치와 이동할 인접 위치의 높이(고도)가 다르다면, 이동하기 위해 고도의 차이만큼 체력이 소모된다. 반면에 고도가 동일하다면 체력은 소모되지 않는다.</p>
+<p>여행가가 (1, 1)의 위치에서 (<code>N</code>, <code>N</code>)의 위치로 이동하기 위한 체력 소모량의 최소 값을 계산하는 프로그램을 작성하여라.</p>
+<p><code>N = 5</code>일 때의 한 예시를 확인해 보자. 보드 판에서 각 위치에 쓰인 값은 해당 위치의 고도(높이)를 의미한다. 시작 위치에 해당하는 (1, 1) 위치의 고도(높이) 값은 항상 0이다.</p>
+<figure><img src="https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/b7cd2818-c191-41c4-850d-6a5c16532844/1.png" alt="" loading="lazy" /></figure>
+<p>각 위치는 (행, 열)을 의미한다고 가정하자. 현재 예시에서는 (1, 1) → (2, 1) → (3, 1) → (4, 1) → (4, 2) → (5, 2) → (5, 3) → (5, 4) → (5, 5) 순서대로 이동하면, 총 체력 소모량은 5이다. 그림으로 표현하면, (1, 1)에서 (5, 5)의 위치까지 이동하는 최단 경로에 대하여 음영으로 칠하였고, 이동을 수행했을 때 체력 소모가 발생하는 칸에 대하여 파란색으로 칠하였다.</p>
+<figure><img src="https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/31b5356d-5a4e-45ef-9085-2f45f3f0e2dc/2.png" alt="" loading="lazy" /></figure>
+<p>이와 같이 움직일 때 체력 소모량은 5이며, 이것보다 적게 체력을 소모할 수 있는 경우는 존재하지 않는다. (최소 체력 소모량) 따라서 본 예시에서의 정답은 5이다.</p>
+<h2 id="block-148b12c0115c8083849cdac5d464f84f">입력 조건</h2>
+<p>가장 먼저 전체 공간의 크기 <code>N</code>이 주어진다. <code>N</code>은 300보다 작거나 같은 자연수이다.
+이어서 보드 판 형태의 산의 각 위치에 대한 고도(높이) 정보가 담긴 <code>N X N</code> 크기의 배열 <code>arr</code>가 주어진다. 각 위치의 고도 값은 0 이상 100이하의 정수이다. 시작 위치에 해당하는 (1, 1) 위치의 고도(높이) 값은 항상 0이다.</p>
+<h2 id="block-148b12c0115c80d7867bcf76ef986adb">출력 조건</h2>
+<p>여행가가 (1, 1)의 위치에서 (<code>N</code>, <code>N</code>)의 위치로 이동하기 위한 최소 체력 소모량을 반환한다.</p>
+<h2 id="block-148b12c0115c80aea2a9ea900c1f58f8">풀이</h2>
+<p>이전 문제들은 bfs를 통해 최소 거리를 구하는 방식으로 진행했었다.</p>
+<p>최소 거리를 구하는 코드를 가져와보자</p>
+<pre data-lang="python"><code class="language-python">from collections import deque
+
+def bfs_shortest_path(grid, start, end):
+    rows = len(grid)
+    cols = len(grid[0]) if rows else 0
+
+    # 네 방향으로 이동 가능: 상, 하, 좌, 우
+    directions = [(-1,0), (1,0), (0,-1), (0,1)]
+
+    # 방문 여부를 기록하는 행렬
+    visited = [[False]*cols for _ in range(rows)]
+
+    queue = deque()
+    queue.append((start[0], start[1], 0))  # x, y, 거리
+    visited[start[0]][start[1]] = True
+
+    while queue:
+        x, y, dist = queue.popleft()
+
+        if (x, y) == end:
+            return dist
+
+        for dx, dy in directions:
+            nx, ny = x+dx, y+dy
+
+            if 0 &lt;= nx &lt; rows and 0 &lt;= ny &lt; cols:
+                if not visited[nx][ny] and grid[nx][ny] == 0:
+                    visited[nx][ny] = True
+                    queue.append((nx, ny, dist+1))
+
+    return -1  # 경로가 없을 경우
+</code></pre>
+<p>여기서 visited를 통해 방문한 곳을 또 방문하게 하는 것을 방지하여 무한 루프를 돌거나 비효율적인 탐색을 하지 않도록 하였다. </p>
+<p>그러나 이는 최단경로가 아닌 최소 비용으로 목적지 까지 도착해야하는 문제로 다익스트라 알고리즘으로 접근해야 한다.</p>
+<p>그 이유는 visited배열은 한 번 방문한 노드를 다시 방문하지 못하게 하지만 다익스트라 알고리즘에서는 <code>이미 방문한 노드라도 더 낮은 비용으로 도달할 수 있으면 다시 방문해야 하기 때문이다.</code></p>
+<ul><li>예를 들어, (1, 1)위치를 비용 10으로 먼저 도달했더라도, 나중에 다른 경로를 통해 비용 5로 도달할 수 있다. 하지만 visited가 True로 설정되어 있다면 이 경로를 고려하지 않는다.</li></ul>
+<p>다익스트라 알고리즘은 최소 힙을 통해 구현된다.</p>
+<p>전체 코드는 아래와 같다.</p>
+<pre data-lang="python"><code class="language-python">import heapq
+
+def solution(N, grid):
+    # 그리드의 크기 (행, 열)
+    rows = len(grid)
+    cols = len(grid[0])
+    
+    # 목표 지점 (우측 하단)
+    end = (rows-1, cols-1)
+    
+    # 비용을 기록할 2차원 배열 (초기값은 무한대)
+    cost = [[float('inf')] * cols for _ in range(rows)]
+    
+    # 우선순위 큐 초기화 (비용, x좌표, y좌표)
+    Q = [(0, 0, 0)]  # 시작점의 초기 비용은 0
+    
+    # 상하좌우 방향 정의
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    
+    # 시작점의 비용 초기화
+    cost[0][0] = 0
+    
+    # 다익스트라 알고리즘을 사용하여 최소 비용 경로 탐색
+    while Q:
+        # 현재 가장 낮은 비용의 경로를 큐에서 꺼냄
+        price, x, y = heapq.heappop(Q)
+        
+        # 목표 지점에 도달했으면 최소 비용 반환
+        if (x, y) == end:
+            return price
+        
+        # 상하좌우로 이동 가능한 모든 방향 탐색
+        for dx, dy in directions:
+            nx, ny = x + dx, y + dy  # 새로운 좌표 계산
+            
+            # 새로운 좌표가 그리드 범위 내에 있는지 확인
+            if 0 &lt;= nx &lt; rows and 0 &lt;= ny &lt; cols:
+                # 현재 좌표에서 새로운 좌표로 이동하는 비용 계산
+                new_price = price + abs(grid[nx][ny] - grid[x][y])
+                
+                # 새로운 좌표에 기록된 최소 비용보다 더 낮은 비용으로 도달 가능한 경우
+                if cost[nx][ny] &gt; new_price:
+                    # 최소 비용 갱신
+                    cost[nx][ny] = new_price
+                    # 우선순위 큐에 새로운 좌표와 비용 추가
+                    heapq.heappush(Q, (new_price, nx, ny))</code></pre>
+<h2 id="block-148b12c0115c80d68f88e810c7e57939">Testcase</h2>
+<pre data-lang="python"><code class="language-python">N = 5
+grid = [[0, 0, 0, 0, 1], [1, 1, 1, 0, 1], [1, 4, 4, 4, 4], [1, 1, 4, 3, 3], [0, 1, 3, 1, 1]]
+# result: 5
+
+N = 6
+grid = [[0, 5, 6, 2, 3, 8], [1, 1, 1, 1, 1, 1], [5, 6, 5, 3, 2, 3], [2, 6, 5, 2, 2, 4], [7, 7, 7, 3, 5, 6], [6, 7, 8, 4, 4, 3]]
+# result: 5</code></pre>
+<h2 id="block-148b12c0115c80a38b9feb408d60f71b">출처:</h2>
+<p>해당 문제와 코드는 제로베이스(ZeroBase)에서 제공받았습니다.</p>
+<p>모든 자료는 저작권법에 의하여 보호받는 저작물로서 이에 대한 무단 복제 및 배포를 원칙적으로 금합니다.</p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +1088,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

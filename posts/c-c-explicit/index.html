@@ -76,11 +76,138 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/c-c/">C/ C++</a>
+    </nav>
+    <h1>C/C++ Explicit</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2023년 2월 14일</span><span class="dot"></span><span>수정 2023년 6월 14일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-7e0f0a86df214fb3aa9f2c9053c1b4c7">서론</h2>
+<p>이 장은 Explicit에 대해서 설명한다.</p>
+<h2 id="block-d0fc01f5a58740a684a4b53c4066ac22">목차</h2>
+<ol><li><a href="#block-d2ff7bf8b94849b399c4e0945849df20">Explicit Type Casting(명시적 형변환)</a> </li><li><a href="#block-f4dcd3d52a964c049cf4c2f5e7fc6054">Implicit Type Casting(묵시적 형변환)</a> </li><li><a href="#block-1e58cbc871f047378eaa76081d2bf065">Explicit을 적용하지 않음</a> </li><li><a href="#block-69c9ea36b5e94333aa369af78ac4ed72">Explicit을 적용</a> </li></ol>
+<h2 id="block-d2ff7bf8b94849b399c4e0945849df20">Explicit Type Casting(명시적 형변환)</h2>
+<p>변수명 앞에 자료형을 명시적(보이게)으로 붙여줘 값을 변환</p>
+<pre data-lang="c++"><code class="language-cpp">int val = 2;
+float floatval = (float) val; //명시적 형변환</code></pre>
+<h2 id="block-f4dcd3d52a964c049cf4c2f5e7fc6054">Implicit Type Casting(묵시적 형변환)</h2>
+<p>변수명 앞에 자료형을 붙여주지 않고 값을 변환</p>
+<pre data-lang="c++"><code class="language-cpp">int first = 5;
+int second = 2;
+
+float floatVal = first / second; //묵시적 형변환</code></pre>
+<p>묵시적 형변환의 경우 값의 소실이 있을 수 있다</p>
+<ul><li>int→float는 값의 소실 X</li><li>float→int는 값의 소실 O</li></ul>
+<p>따라서값의 소실이 발생할 가능성에 대해 묵시적 형변환을 하지 못하게 막도록 하는 키워드가 Explicit이다.</p>
+<h2 id="block-1e58cbc871f047378eaa76081d2bf065">Explicit을 적용하지 않음</h2>
+<ol><li><em>impTypeCasting</em> 함수를<em> Call</em>하여 Foo라는 객체를 생성한다.</li><li>Foo 타입의 인자가 아니라 int형태의 인자를 넘겨준다.</li><li>컴파일러는 자동으로  Foo클래스의 int형 생성자(Foo (int val1))을 자동으로 호출한다.(묵시적 형변환)</li></ol>
+<pre data-lang="c++"><code class="language-cpp">#include &lt;iostream&gt;
+
+class Foo {
+public :
+    int value1;
+
+    Foo() : value1(0) {
+        std::cout &lt;&lt; &quot;1-init: &quot; &lt;&lt; std::endl;
+    }
+
+    Foo(int val1) : value1(val1) {
+        std::cout &lt;&lt; &quot;2-init: &quot; &lt;&lt; std::endl;
+    }
+
+    void printValue(){
+        std::cout &lt;&lt; value1 &lt;&lt; std::endl;
+    }
+};
+
+void impTypeCasting(Foo a){
+    a.printValue();
+}
+
+int main(void) {
+    impTypeCasting(100);
+}</code></pre>
+<p> 출력결과 </p>
+<figure><img src="/assets/notion/c-c-explicit/53b5c612-5afd-4107-89a0-46bd445308c2.png" alt="" loading="lazy" width="2343" height="239" /></figure>
+<h2 id="block-69c9ea36b5e94333aa369af78ac4ed72">Explicit을 적용</h2>
+<p>위의 묵시적 형변환을 막는 경우다.</p>
+<pre data-lang="c++"><code class="language-cpp">#include &lt;iostream&gt;
+
+class Foo {
+public :
+    int value1;
+
+    Foo() : value1(0) {
+        std::cout &lt;&lt; &quot;1-init: &quot; &lt;&lt; std::endl;
+    }
+
+    explicit Foo(int val1) : value1(val1) {
+        std::cout &lt;&lt; &quot;2-init: &quot; &lt;&lt; std::endl;
+    }
+
+    void printValue(){
+        std::cout &lt;&lt; value1 &lt;&lt; std::endl;
+    }
+};
+
+void impTypeCasting(Foo a){
+    a.printValue();
+}
+
+int main(void) {
+    impTypeCasting(100);
+}</code></pre>
+<p>출력결과 :</p>
+<figure><img src="/assets/notion/c-c-explicit/4779622a-800f-4a1d-8e29-3d1f5771c227.png" alt="" loading="lazy" width="1800" height="357" /></figure>
+<p>위 에러를 해결하려면 다음과 같은 문법을 사용해야 한다.</p>
+<pre data-lang="c++"><code class="language-cpp">#include &lt;iostream&gt;
+
+class Foo {
+public :
+    int value1;
+
+    Foo() : value1(0) {
+        std::cout &lt;&lt; &quot;1-init: &quot; &lt;&lt; std::endl;
+    }
+
+    explicit Foo(int val1) : value1(val1) {
+        std::cout &lt;&lt; &quot;2-init: &quot; &lt;&lt; std::endl;
+    }
+
+    void printValue(){
+        std::cout &lt;&lt; value1 &lt;&lt; std::endl;
+    }
+};
+
+void impTypeCasting(Foo a){
+    a.printValue();
+}
+
+int main(void) {
+    impTypeCasting(Foo(100)); //요기가 다름
+}</code></pre>
+<p>출력결과 :</p>
+<figure><img src="/assets/notion/c-c-explicit/34467615-da4f-4294-aecd-8fff8210d1b6.png" alt="" loading="lazy" width="1576" height="270" /></figure></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +228,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

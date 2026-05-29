@@ -76,11 +76,52 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/tools/">Tools</a>
+    </nav>
+    <h1>Ubuntu Nvidia Driver Install</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2023년 5월 17일</span><span class="dot"></span><span>수정 2025년 8월 16일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-7501b1513ce7439da1037f1acc9c3be1">서론</h2>
+<p>우분투 20.04 환경에서 Nvidia driver 설치 방법에 대해서 설명한다.</p>
+<h2 id="block-9d72232579284c8a9d243ca7e8aaea4b">목차</h2>
+<ol><li><a href="#block-e166ca670841440785e5a0658e950d16">Nvidia-driver 설치</a> </li><li><a href="#block-7f0b9893b5584061874f384ed43846e1">Driver 설치 확인</a> </li></ol>
+<h2 id="block-e166ca670841440785e5a0658e950d16">Nvidia-driver 설치</h2>
+<p>아래 명령어를 입력하면 다음과 같은 화면이 뜨는데 recommended 부분을 설치하면되는데 open버전이 아닌 걸로 설치하면 된다.</p>
+<p>driver: <code>nvidia-driver-530-open - distro non-free recommended</code> 이렇게 되어있는데 이걸 설치하지말고 open이 빠진 driver: <code>nvidia-driver-530 - distro non-free</code> 를 설치하자.</p>
+<p><strong>참고: 470을 설치했을 때 CUDA ToolKit이 Ubuntu 20.04까지만 지원한다 (CUDA Version 11.X), 500번대 버전이 Ubuntu22.04를 지원하니 참고하자(CUDA Version 12.X)</strong></p>
+<pre data-lang="shell"><code class="language-bash">$ ubuntu-drivers devices</code></pre>
+<figure><img src="/assets/notion/ubuntu-nvidia-driver-install/f2630ef7-de44-464e-94de-94eb571f67e7.png" alt="" loading="lazy" width="1064" height="581" /></figure>
+<p>수동 설치 명령어</p>
+<pre data-lang="python"><code class="language-python">$ sudo apt install nvidia-driver-530</code></pre>
+<p>설치가 완료되면 리부팅 해준다.</p>
+<pre data-lang="shell"><code class="language-bash">$ sudo reboot</code></pre>
+<h2 id="block-7f0b9893b5584061874f384ed43846e1">Driver 설치 확인</h2>
+<p>아래 명령어를 입력했을 때 GPU가 잡히는지 확인한다.</p>
+<pre data-lang="shell"><code class="language-bash">$ nvidia-smi</code></pre>
+<figure><img src="/assets/notion/ubuntu-nvidia-driver-install/44cf68fb-28e7-4dc6-8967-0fa77b122abf.png" alt="" loading="lazy" width="1490" height="931" /></figure>
+<h2 id="block-0843c3a01b8544a4bde24087d428124b">Nvidia Driver 삭제</h2>
+<figure><img src="/assets/notion/ubuntu-nvidia-driver-install/6c1e5ace-f0e5-4f58-945e-c4e92347cb12.png" alt="" loading="lazy" width="2054" height="1328" /></figure></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +142,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

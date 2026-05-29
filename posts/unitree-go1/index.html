@@ -76,11 +76,163 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/robotics/">Robotics</a>
+    </nav>
+    <h1>Unitree Go1</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 11월 10일</span><span class="dot"></span><span>수정 2025년 12월 8일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-2aab12c0115c80a6b115e981da726667">History</h2>
+<p>(과거)</p>
+<p>기존 Jetson XGA에 ROS2 Humble이 설치되어있고 Raspi에는 ROS1 Melodic이 설치되어있었음</p>
+<p>→ ROS버전이 맞지 않음</p>
+<p>따라서 Jetson에 ROS1 Neotic을 설치하여 Jetson ↔ Raspi간 ROS 버전을 일치시킴</p>
+<p>(현재)</p>
+<p>문제는 XGA에서 ROS로 Raspi에게 이동명령을 내려도 로봇이 움직이지 않음</p>
+<p>확인해보니 Go1을 움직이기 위해서는 unitree에서 제공하는 SDK를 XGA에 설치해서 unitree에서 제공하는 명령어로만 동작함</p>
+<h2 id="block-2aeb12c0115c80f5b9d7f83288cdfe44">프로젝트 목표</h2>
+<p>OpenVLA 모델을 선정하여 Go1 로봇개에 VLA모델을 적용한다.</p>
+<p>그리고 “이리와”(사람을 인식해서 따라오기) 명령어를 사용자가 음성으로 입력하면 동작하도록하는 서비스를 적용시켜야 한다.</p>
+<h2 id="block-2a7b12c0115c802883c1ed13997b5877">Go1 스펙</h2>
+<h3 id="block-2aeb12c0115c80ffb7dbd64ab80b298f">아키텍처</h3>
+<ul><li>Raspberry Pi: 메인 컨트롤러(IP: 192.168.12.1, 192.168.123.161) Ros1 Melodic</li><li>Nano1: 헤드 카메라 처리 (IP: 192.168.123.13)</li><li>Nano2: 사이드 카메라 처리 (IP: 192.168.123.14)</li><li>Nano3(Main): AI 및 바닥 카메라 처리 (IP: 192.168.123.15)</li><li>MCU(Microcontroller Unit): 모터(정밀) 제어PC IP: 192.168.123.10</li></ul>
+<h3 id="block-2aeb12c0115c8007bf34c62468f31529">센서 시스템</h3>
+<ul><li>5개의 스테레오 카메라 <ul><li>총 10개의 카메라(헤드 2개, 측면 오,왼 각 2개씩 총 4개, 바닥 아래, 위에 각 2개씩 총 4개) </li></ul></li></ul>
+<h3 id="block-2aeb12c0115c80798ec9ef9a8c9f8ee0">통신 계층</h3>
+<ul><li>실시간 UDP 통신</li></ul>
+<h2 id="block-2aeb12c0115c80a2aec8e920237e2e67">Jetson XGA 스펙</h2>
+<p>Jetson AGX Orin Developer Kit</p>
+<p>Arcitecture: aarch64</p>
+<p>CPU: 12 core / 12 thread Cortex-A78AE @ 2.2 GHz</p>
+<p>GPU: Ampere 2048 CUDA cores + 64 Tensor Cores</p>
+<p>RAM: 64 GB LPDDR5</p>
+<p>OS: Jetpack 6.2.1 (Ubuntu 22.04 LTS, Kernel 5.15)</p>
+<p>Storage: 64 GB eMMC</p>
+<p>Swap: 31GB</p>
+<p>ROS1 neotic installed</p>
+<p>AI Model: OpenVLA</p>
+<p><a href="https://www.jetson-ai-lab.com/openvla.html?utm_source=chatgpt.com" target="_blank" rel="noreferrer">https://www.jetson-ai-lab.com/openvla.html?utm_source=chatgpt.com</a></p>
+<h2 id="block-2aeb12c0115c806d8951df85abe0866b">PC ↔ Go1 제어방식</h2>
+<h3 id="block-2aeb12c0115c80b99fe0e1eb355ceefc">두 가지 제어 레벨을 제공</h3>
+<ul><li>High-level control<ul><li>Go1 Mode: Sport Mode</li><li>보행, 속도, 턴 등 “행동 단위”의 명령</li><li>UDP(192.168.123.161:8082)로 직접 전송</li><li>예: <code>example_walk</code></li></ul>
+<pre data-lang="javascript"><code class="language-javascript">Example_walk.py (PC) -&gt; Raspi(Controller) -&gt; MCU -&gt; 모터</code></pre></li><li>Low-level control<ul><li>모터 각 관절을 직접 토크/속도/위치로 제어</li><li>MCU(192.168.123.10:8007)로 직접 전송</li><li>예: <code>example_position</code>, <code>example_torque</code>, <code>example_velocity</code></li></ul>
+<pre data-lang="javascript"><code class="language-javascript">Example_position.py (PC) -&gt; MCU -&gt; 모터</code></pre></li></ul>
+<h3 id="block-2aeb12c0115c808da7ccd0262eb934d2">두 가지 통신 방식 제공</h3>
+<ul><li>UDP 통신</li><li>ROS기반 LCM 통신</li></ul>
+<h2 id="block-2aeb12c0115c80479d2bdab7501eabf5">1. SDK 방식(UDP)</h2>
+<pre data-lang="javascript"><code class="language-javascript">Python/C++ SDK (PC) → UDP 통신 → Raspi → MCU → 모터</code></pre>
+<ul><li>LCM 서버 필요 없음</li><li>ROS 필요 없음</li></ul>
+<h2 id="block-2aeb12c0115c80969095e36f5dc0e10b">2. ROS 방식(LCM서버 사용)</h2>
+<pre data-lang="javascript"><code class="language-javascript">ROS Node (PC) → LCM 메시지 → sdk_lcm_server → UDP 통신 → Raspi → MCU → Motor
+</code></pre>
+<ul><li><strong>LCM(Lightweight Communications and Marshalling)</strong> 사용 이유<ul><li>ROS1은 Linux 시스템에서 실행되므로 <strong>정확한 타이밍에 메시지가 전달된다는 보장이 없음</strong></li><li>제어 명령이 지연되면 로봇이 넘어질 위험</li><li>LCM은 지연편차(jitter)가 매우 낮고 UDP 기반으로 실시간 통신 가능</li></ul></li><li>LCM 서버 실행 명령어(High-level)<pre data-lang="javascript"><code class="language-javascript">$ roslaunch unitree_legged_real real.launch ctrl_level:=highlevel</code></pre>
+<ul><li>HighCmd 기반 LCM 메시지를 UDP로 변환해 Go1에 전송</li><li>ROS 노드는 <code>/go1/HighCmd</code> 토픽을 LCM으로 publish</li></ul></li><li>LCM 서버 실행 명령어(Low-level)<pre data-lang="javascript"><code class="language-javascript">roslaunch unitree_legged_real real.launch ctrl_level:=lowlevel</code></pre>
+<ul><li>LowCmd 기반 LCM 메시지를 UDP로 변환</li><li>ROS에서 관절 토크/속도/위치를 직접 제어 가능</li></ul></li></ul>
+<h2 id="block-2aab12c0115c800286d8ec782b1a3096">Toy Project</h2>
+<h3 id="block-2aeb12c0115c800e8627ce6402341861">1. PC에서 SDK를 사용하여 Go1 제어</h3>
+<ul><li><a href="https://github.com/unitreerobotics/unitree_legged_sdk" target="_blank" rel="noreferrer">https://github.com/unitreerobotics/unitree_legged_sdk</a></li><li>Repo에서 다운로드<ul><li>SDK는 Jetson에서 직접 UDP패킷을 만들어 Go1에게 보낼수 있는 로우레벨 C++ 라이브러리</li></ul></li></ul>
+<pre data-lang="javascript"><code class="language-javascript">git clone https://github.com/unitreerobotics/unitree_legged_sdk.git</code></pre>
+<ul><li>Build</li></ul>
+<pre data-lang="javascript"><code class="language-javascript">$ cd unitree_legged_sdk/
+$ mkdir build
+$ cd build/
+$ cmake ..
+$ make -j$(nproc)</code></pre>
+<ul><li>빌드가 완료되면 example_walk가 생긴다. </li><li>아래 명령어를 실행하면 로봇이 앞으로 간다.</li></ul>
+<pre data-lang="javascript"><code class="language-javascript">cd /home/{user_name}/unitree_legged_sdk/build
+sudo ./example_walk</code></pre>
+<h3 id="block-2aeb12c0115c800e9ab7d4aa89aed1f3">2. PC에서 Ros를 사용하여 Go1 제어</h3>
+<ul><li><a href="https://github.com/unitreerobotics/unitree_ros_to_real" target="_blank" rel="noreferrer">https://github.com/unitreerobotics/unitree_ros_to_real</a></li><li>Repo에서 다운로드<ul><li>ROS 메시지(예: <code>/go1/HighCmd</code>, <code>/go1/LowCmd</code>)를 LCM 메시지로 변환해주는 ROS 패키지</li><li>LCM Server는 이를 다시 UDP 패킷으로 변환하여 Go1 제어 보드(Raspi)에 전송</li></ul></li></ul>
+<pre data-lang="javascript"><code class="language-javascript">mkdir -p ~/catkin_ws/src
+cd ~/catkin_ws/src</code></pre>
+<pre data-lang="javascript"><code class="language-javascript">git clone https://github.com/unitreerobotics/unitree_legged_sdk.git</code></pre>
+<pre data-lang="javascript"><code class="language-javascript">git clone https://github.com/unitreerobotics/unitree_ros_to_real.git</code></pre>
+<pre data-lang="javascript"><code class="language-javascript">cd ..
+catkin_make</code></pre>
+<ul><li>Catkin<ul><li>ROS패키지를 실행 가능한 상태로 만들어주는 자돵화 시스템으로 Linux/C++ 프로젝트를 자동으로 빌드하기 위해 ROS 전용 CMake도구를 묶어놓은 것.</li></ul></li><li>LCM 서버 실행</li></ul>
+<pre data-lang="javascript"><code class="language-javascript">roslaunch unitree_legged_real real.launch ctrl_level:=highlevel</code></pre>
+<ul><li>ROS로 걷는 명령어 실행</li></ul>
+<pre data-lang="javascript"><code class="language-javascript">$ rosrun unitree_legged_real ros_example_walk</code></pre>
+<ul><li>ROS Run<ul><li><strong>패키지 안의 하나의 노드를 바로 실행</strong>할 때 사용</li></ul></li><li>ROS launch<ul><li><strong>launch 파일(.launch)</strong> 을 읽어서 여러 노드를 한 번에 실행</li></ul></li></ul>
+<h2 id="block-2aeb12c0115c802a9aa6f2e4b1222bff">VLA</h2>
+<ul><li>Model: NaVILA(Legged Robot Vision-Language-Action Model for Navigation)<ul><li><strong>Na</strong>vigation + <strong>Vi</strong>sion <strong>L</strong>anguage <strong>A</strong>ction</li><li>2024. 12. 5 출간</li><li>ㅇ</li><li></li></ul></li></ul>
+<h2 id="block-2c3b12c0115c80d6bc46f592d42a96be">제어</h2>
+<p>터미널 하나를 열어서 Xavier에서 Roscore를 실행한다.</p>
+<p>Xavier가 Ros Master.</p>
+<p>그리고 터미널 하나를 더열어서 아래 명령어를 입력해준다.</p>
+<pre data-lang="javascript"><code class="language-javascript">$ rosrun unitree_legged_real twist_sub</code></pre>
+<p>그리고 난 후에 다시 터미널 하나를 더 열어서 토픽값을 날리면 unitree go 가 움직인다.</p>
+<pre data-lang="javascript"><code class="language-javascript">jet@ubuntu:~$ rostopic pub /cmd_vel geometry_msgs/Twist &quot;linear:
+&gt;   x: 0.0
+&gt;   y: 0.0
+&gt;   z: 0.0
+&gt; angular:
+&gt;   x: 0.0
+&gt;   y: 0.0
+&gt;   z: 0.3&quot; -r 10
+</code></pre>
+<p>프론트 카메라는 Nano와 연결되어있다.</p>
+<p>카메라를 보기 위해서 아래 명령어를 치면 에러가난다.</p>
+<pre data-lang="javascript"><code class="language-javascript">unitree@unitree-desktop:~/Unitree/sdk/UnitreeCameraSdk/bins$ ./example_getRawFrame 
+
+(example_getRawFrame:8788): GStreamer-CRITICAL **: 00:08:21.192: 
+Trying to dispose element pipeline0, but it is in PAUSED instead of the NULL state.
+You need to explicitly set elements to the NULL state before
+dropping the final reference, to allow them to clean up.
+This problem may also be caused by a refcounting bug in the
+application or some element.
+
+[ WARN:0] global /home/nvidia/host/build_opencv/nv_opencv/modules/videoio/src/cap_gstreamer.cpp (886) open OpenCV | GStreamer warning: unable to start pipeline
+
+(example_getRawFrame:8788): GStreamer-CRITICAL **: 00:08:21.192: 
+Trying to dispose element videoconvert0, but it is in PLAYING instead of the NULL state.
+You need to explicitly set elements to the NULL state before
+dropping the final reference, to allow them to clean up.
+This problem may also be caused by a refcounting bug in the
+application or some element.
+
+[ WARN:0] global /home/nvidia/host/build_opencv/nv_opencv/modules/videoio/src/cap_gstreamer.cpp (480) isPipelinePlaying OpenCV | GStreamer warning: GStreamer: pipeline have not been created
+
+(example_getRawFrame:8788): GStreamer-CRITICAL **: 00:08:21.192: 
+Trying to dispose element appsink0, but it is in READY instead of the NULL state.
+You need to explicitly set elements to the NULL state before
+dropping the final reference, to allow them to clean up.
+This problem may also be caused by a refcounting bug in the
+application or some element.
+
+
+(example_getRawFrame:8788): GStreamer-CRITICAL **: 00:08:21.192: gst_element_post_message: assertion 'GST_IS_ELEMENT (element)' failed
+</code></pre>
+<p>에러가 나는 이유는 go1이 켜질때 autostart의 항목이 이미 카메라 스트림을 점유하여 라즈베리파이에 쏘고  있기 때문이다.</p>
+<p>이를 사용하기 위해서는 autostart되는 부분의 카메라 이미지를 스트리밍하는 아이피주소를 변경해주면된다.</p>
+<pre data-lang="javascript"><code class="language-javascript">unitree@unitree-desktop:~/Unitree/autostart/camerarosnode/cameraRosNode$ ls
+build  calib.HrC6RP  devel  kill.sh  patch  src  startNode.sh
+unitree@unitree-desktop:~/Unitree/autostart/camerarosnode/cameraRosNode$ sudo vim startNode.sh</code></pre>
+<figure><img src="/assets/notion/unitree-go1/2c3b12c0-115c-80e3-97ab-ced417d3a312.png" alt="" loading="lazy" width="2106" height="1458" /></figure>
+<p>그 다음 </p>
+<pre data-lang="javascript"><code class="language-javascript">cd ~/Unitree/autostart/camerarosnode/cameraRosNode/src/unitree_camera/config/
+sudo vim stereo_camera_config.yaml
+</code></pre></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +253,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

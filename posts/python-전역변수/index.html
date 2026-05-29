@@ -76,11 +76,111 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/python/">Python</a>
+    </nav>
+    <h1>[Python] 전역변수</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2023년 8월 20일</span><span class="dot"></span><span>수정 2025년 4월 20일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-d83c5fac786642c5a113f36183c23d84">서론</h2>
+<p>파이썬에서 전역변수를 사용할 때 유의할 점을 봐본다.</p>
+<h2 id="block-2a93baf298204bd2b35c7e6595a03b16">전역 변수</h2>
+<p>아래와 같은 코드가 있다고 봐보자.</p>
+<p><code>test_list</code>와 <code>test_number</code>은 전역변수이다.</p>
+<p>그러나 <code>test_func</code>안에 <code>test_number</code>이라는 같은 변수명으로 선언되어 있다.</p>
+<p>이 경우, 함수 내에서는 지역변수를 우선순위로 보고 함수내의 <code>print</code>문에서 10이라는 값을 출력한다.</p>
+<p>하지만 함수 밖의 <code>if</code>문 아래에서의 <code>print</code>를 보면 전역변수의 값인 100이 출력된다.</p>
+<pre data-lang="python"><code class="language-python">import random
+
+test_list = []
+test_number = 100
+
+
+def test_func() :
+    rand_value = random.randint(0, 10)
+    test_list.append(rand_value)
+    test_number = 10
+
+    print(f&quot;test_list:{test_list} &amp; test_flag: {test_number}&quot;)
+
+
+
+if __name__=='__main__' :
+    test_func()
+    print(f&quot;test_flag from out func: {test_number}&quot;)</code></pre>
+<pre data-lang="python"><code class="language-python">결과: 
+test_list:[2] &amp; test_flag: 10
+main: 100</code></pre>
+<p>따라서 전역변수를 사용하고자 할때는 <code>global</code>이라는 키워드를 명시해서 변수를 변경해야한다.</p>
+<p><code>global test_number</code> 이라는 키워드를 줌으로써 우리는 함수내에서 전역변수를 사용하겠다라는 의미가 형성된다. 따라서 함수의 출력결과가 전역변수와 같은 값인 100이 나오는 것을 알 수 있다.</p>
+<pre data-lang="python"><code class="language-python">import random
+
+test_list = []
+test_number = 100
+
+
+def test_func() :
+    rand_value = random.randint(0, 10)
+    test_list.append(rand_value)
+    global test_number 
+    print(f&quot;test_list:{test_list} &amp; test_flag: {test_number}&quot;)
+
+
+
+if __name__=='__main__' :
+    test_func()
+    print(f&quot;main: {test_number}&quot;)</code></pre>
+<pre data-lang="python"><code class="language-python">결과:
+test_list:[8] &amp; test_flag: 100
+main: 100</code></pre>
+<p>그럼 리스트 객체로 구성된 변수는 따로 <code>global</code>을 명시할 필요가 없을까?</p>
+<p>결론은 리스트의 경우 <code>global</code>키워드를 사용할 필요가 없다.</p>
+<p><code>global</code>이라는 키워드 의미는 전역변수로 되어있는 변수를 함수 내에서 사용할게 라는 의미를 갖는다.</p>
+<p>그리고 변수의 값을 변경할 수 있다.</p>
+<p>하지만 리스트 객체를 담고 있는 변수는 우리가 리스트라는 객체를 변경하는 것이 아니다.</p>
+<p>단순히 리스트에 추가하고 삭제하는 것 뿐이지 리스트라는 객체를 다른 객체로 변경하는 것이 아님으로 <code>global</code>키워드 없이 사용이 가능하다.</p>
+<p>아래 코드는 함수내에서 <code>test_list</code>안에 값을 추가하였지만 함수 밖의 <code>if</code>문에서도 똑같은 결과값이 나오는 것을 볼 수 있다.</p>
+<pre data-lang="python"><code class="language-python">import random
+
+test_list = []
+test_number = 100
+
+
+def test_func() :
+    rand_value = random.randint(0, 10)
+    test_list.append(rand_value)
+    global test_number 
+
+    print(f&quot;test_list:{test_list} &amp; test_flag: {test_number}&quot;)
+
+
+
+if __name__=='__main__' :
+    test_func()
+    print(f&quot;main: {test_number}, {test_list}&quot;)</code></pre>
+<pre data-lang="python"><code class="language-python">결과: 
+test_list:[4] &amp; test_flag: 100
+main: 100, [4]</code></pre></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +201,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

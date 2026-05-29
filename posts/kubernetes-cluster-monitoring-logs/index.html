@@ -76,11 +76,64 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/kubernetes/">Kubernetes</a>
+    </nav>
+    <h1>[Kubernetes] Cluster Monitoring / Logs</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 6월 17일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-215b12c0115c80d4b9a6dc9e2638db1e">서론</h2>
+<p>쿠버네티스 클러스터에서의 자원 사용량을 모니터링하는 방법에 대해 알아본다.</p>
+<p>모니터링의 주요 대상은 크게 노드 수준과 파드 수준으로 나뉘며, 각각 다음과 같은 지표들을 포함한다.</p>
+<ul><li><strong>노드 수준</strong>: 클러스터 내 노드의 수, 각 노드의 상태(정상 여부), CPU, 메모리, 디스크, 네트워크 사용량 등</li><li><strong>파드 수준</strong>: 전체 파드 수, 각 파드의 CPU 및 메모리 사용량</li></ul>
+<p>쿠버네티스는 기본적으로 모니터링 솔루션을 내장하고 있지 않아 이러한 장보를 실시간으로 수집하고 분석할 수 있는 모니터링 솔루션을 별도로 설치해야 한다.</p>
+<h2 id="block-215b12c0115c80629251c5172723d0c0">로그 수집 동작 방식</h2>
+<p>쿠버네티스의 각 노드는 kubelet을 가지고 있다.</p>
+<p>kubelet은 API server로부터 명령을 받아 파드를 실행시키며, 내부에 cAdvisor(Container Advisor)라는 하위 컴포넌트를 포함하고 있다.</p>
+<p>cAdvisor는 각 컨테이너의 성능 메트릭(CPU, 메모리 등)을 수집하고, 이를 kubelet API를 통해 외부에 노출한다. </p>
+<p>Metrics Server는 이 API로부터 메트릭을 받아 집계한다.</p>
+<figure><img src="/assets/notion/kubernetes-cluster-monitoring-logs/215b12c0-115c-809a-b1cc-c05ada0ddf1d.png" alt="" loading="lazy" width="1062" height="894" /></figure>
+<h2 id="block-215b12c0115c80808993ee022eae91c4"><strong>
+Metrics Server</strong></h2>
+<p>오늘날 모니터링 솔루션에는 Metrics Server, Prometheus, Elastic Stack 등이 있다. </p>
+<p>이 중 가볍게 사용할 수 있는 것이 Metrics Server이며 클러스터당 하나씩 운영 가능하다.</p>
+<p>Metrics Server는 메모리 기반의 모니터링 솔루션으로 각 노드와 파드에서 메트릭 데이터를 수집하고 이를 집계하여 메모리에 저장하기 떄문에 디스크에 메트릭 데이터를 저장하지는 않아 과거의 성능 데이터는 볼 수 없다.</p>
+<p>과거 데이터를 보려면 다른 모니터링 솔루션을 사용해야 한다.</p>
+<h3 id="block-215b12c0115c8008971ef5a86d841e1f"><strong>설치 방법</strong></h3>
+<p>아래 주소로 클론한다.</p>
+<pre data-lang="python"><code class="language-python">git clone https://github.com/kubernetes-incubator/metrics-server.git</code></pre>
+<p>kubectl 명령어로 리소스(Pod, service, role 등)를 배포한다</p>
+<pre data-lang="python"><code class="language-python">kubectl create -f deploy/1.8+/</code></pre>
+<p>Metrics Server가 데이터를 수집할 시간을 약간 기다린 후, kubectl top 명령으로 확인한다.</p>
+<figure><img src="/assets/notion/kubernetes-cluster-monitoring-logs/215b12c0-115c-80ec-8806-ea4385575b59.png" alt="" loading="lazy" width="1548" height="892" /></figure>
+<h3 id="block-215b12c0115c80efba74ede6d245b25b">사용 방법</h3>
+<figure><img src="/assets/notion/kubernetes-cluster-monitoring-logs/215b12c0-115c-80b5-877c-e806c55acdfe.png" alt="" loading="lazy" width="1244" height="740" /></figure>
+<h2 id="block-215b12c0115c80b39c94dce889fd9421">Logs</h2>
+<p>쿠버네티스에서 파드의 로그를 보기 위해서는 아래와 같은 명령어를 사용하면된다.</p>
+<pre data-lang="python"><code class="language-python">kubectl logs -f {pod-name}</code></pre>
+<figure><img src="/assets/notion/kubernetes-cluster-monitoring-logs/215b12c0-115c-801d-9927-eb083e356c36.png" alt="" loading="lazy" width="1586" height="900" /></figure>
+<p>만약 파드내에 두개의 컨테이너가 들어가 있다면 파드이름과 함께 컨테이너 이름도 같이 적어 명령어를 실행하면된다.</p>
+<figure><img src="/assets/notion/kubernetes-cluster-monitoring-logs/215b12c0-115c-80f4-ba19-e0e9ccc0639d.png" alt="" loading="lazy" width="1580" height="876" /></figure></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +154,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>

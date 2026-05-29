@@ -76,11 +76,86 @@
     </header>
 
     <main class="article-shell">
-      <article class="article" data-article>
-        <a class="back-link" href="/#posts">← 글 목록</a>
-        <p class="eyebrow">Loading</p>
-        <h1>글을 불러오는 중입니다</h1>
-      </article>
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/tools/">Tools</a>
+    </nav>
+    <h1>Install Tensorflow on M1 Mac</h1>
+    <div class="article-meta">
+      <a class="meta-tag" href="/index.html?tag=Tensorflow">#Tensorflow</a>
+      <span class="dot"></span>
+      <span>작성 2022년 11월 19일</span><span class="dot"></span><span>수정 2023년 6월 14일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-4bb378a8a1ed4f7a871d6f87bd42fc6f">서론</h2>
+<p>이 장은 M1 Mac silicon기반의 아키텍처에서 Tensorflow-gpu를 설치하는 방법을 소개한다.</p>
+<p>Python Version : 3.10</p>
+<p>Tensorflow Version : 2.10.0</p>
+<h2 id="block-e9de7a575206452b88308bff2ad54c10">목차</h2>
+<ol><li><a href="#block-147ca09ebbd6416189466a1d523a794b">1. Install Homebrew</a> </li><li><a href="#block-6d5d1037288646368202e2403cb5a2f5">2. Install XCode</a> </li><li><a href="#block-5982c0acc66c4c12af0b13f8ee8cfdb6">3. Download Miniforge</a> </li><li><a href="#block-89db02ad9c6a4b458509fc068cdcc964">4. Install Miniforge3</a> </li><li><a href="#block-98f8956d9dc640299b629ee79b4724d5">5. Make Virtual Environment by using Conda</a> </li><li><a href="#block-e458bf231dbd4023a486c3d6b3f850e1">6. Install Tensorflow deps</a> </li><li><a href="#block-6ee7d9b3dd054ff59543cb3e76f035b4">7. Use Tensorflow on Jupyter </a> <ol><li><a href="#block-dded88770dc9416781635427ee2b6d5a">7-1 Install Jupyter notebook</a> </li><li><a href="#block-0a4c728d2b0f456b9fc53ad56a1d297d">7-2 Change Jupyter start-up folder</a> </li><li><a href="#block-9ccf8849ac664828a547c9ce864487c5">7-3 Change Jupyter Theme</a> </li><li><a href="#block-fa65741e7d1c456787cabe4e5b2d813b">7-4 설치확인</a> </li></ol></li></ol>
+<h2 id="block-8d5b272293a14b69abd4883276a8c753">Requirments for Linux/Mac</h2>
+<p><a href="https://www.tensorflow.org/install/source#gpu" target="_blank" rel="noreferrer">https://www.tensorflow.org/install/source#gpu</a></p>
+<h2 id="block-147ca09ebbd6416189466a1d523a794b">1. Install Homebrew</h2>
+<pre data-lang="shell"><code class="language-bash">$ bin/bash -c &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)&quot;</code></pre>
+<hr />
+<h2 id="block-6d5d1037288646368202e2403cb5a2f5">2. Install XCode</h2>
+<pre data-lang="shell"><code class="language-bash">$ Xcode-select --install</code></pre>
+<hr />
+<h2 id="block-5982c0acc66c4c12af0b13f8ee8cfdb6">3. Download Miniforge</h2>
+<details class="toggle"><summary>Download</summary><div class="toggle-body"><p><a href="https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/ecefbbb5-b42f-409b-b7c6-ec48f7131588/Miniforge3-MacOSX-arm64.sh?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB466RKICGIM4%2F20260522%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260522T054147Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEE0aCXVzLXdlc3QtMiJHMEUCIQChcL%2FhRwvDhn%2Be2MHchyFI5oi3IcVgprg%2FmFnhGUDrogIgYkG5r15kQ%2Fi67xXjIjGOkpA4%2F2%2FB6vc8Nx8LRZwPsysq%2FwMIFhAAGgw2Mzc0MjMxODM4MDUiDPvy2fuN3SbgPwXlhSrcA0y4uRDij45uIHMeLs7xsKvmKPVoU43LpI9X0AvAWMIns4sobR%2Ff4zYq139TvR4M8I0CqWwMajd5Y5rJX07kkdqgbjCzSukzltFZMkUEoSelWUClRsL%2Fg2d5wCyK%2FqFjKQ5rQkF%2FOYNonmMnHw3UNNLjqAEimfl2yv7gV2DdGWFy%2BZlvwLlHQcpKAqWNJKhoYe232ScTAn60UAAAzM5TyO6ogf3WQ17CNKDbdsseKHW%2B%2FAf%2BdEdVyN4opfVcnEH9QHFDnZttiK5%2BFl2nKpSoFbuT%2FanzVz3r3zuZuKk60JZqAbnwnEhuJqXHS8SwepqyrMivZvA%2FS32O8hhJVKVWdMBRqip2qKgqW1QYbTxsW32ktctMJdt7HkZXTbYUnTSCirIGBMqcP5h0vQXxKjTZNkkXj%2FfCWm5GFztET2mNqLIXYo9QrJHXR50pveG5vX5CMfcDWS46KOZgmc0dJxxePMi3Z4MHf5eyHC4kffjxm13g7gVedsfEiCCADD6q6jzOqsJ1jziCpoE3d%2B%2FfLeTJ%2FdcrT%2BMXg%2BAJQLRfdq21CfIW56iJkI6NncPfx5s0uBWouRuNDf2e6zRktr9WYNoU2OaattpZr7kDwUK7xL2K0L7twjDSbAWy6Nw2yjQDMNy8v9AGOqUBoryYKXHdZmXRqGZnmOCzhAoK6P%2B0y9gPgLzQXgikiv0raQ4jctvFZ%2B7%2FnMG0RjkGNNdwfqHujQZsBwu0EQX1ZPlbaKJdy3SzuLnE6fpsXemiVwKYBzDY8uasMOnQugDcTcgy5ff6PFYqEI8fbseflkxhVXic4LVU9jnWjXRtjDQ9wSgnFyQng4TOi3Vxlej9XHFZnN0caMB%2BSSi4UgaU%2FWOEwixS&amp;X-Amz-Signature=0413b4b800ce2fa49bf125d34d1207deb57e0958c1d089edfe7f736202eba88e&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject" target="_blank" rel="noreferrer">https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/ecefbbb5-b42f-409b-b7c6-ec48f7131588/Miniforge3-MacOSX-arm64.sh?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB466RKICGIM4%2F20260522%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260522T054147Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEE0aCXVzLXdlc3QtMiJHMEUCIQChcL%2FhRwvDhn%2Be2MHchyFI5oi3IcVgprg%2FmFnhGUDrogIgYkG5r15kQ%2Fi67xXjIjGOkpA4%2F2%2FB6vc8Nx8LRZwPsysq%2FwMIFhAAGgw2Mzc0MjMxODM4MDUiDPvy2fuN3SbgPwXlhSrcA0y4uRDij45uIHMeLs7xsKvmKPVoU43LpI9X0AvAWMIns4sobR%2Ff4zYq139TvR4M8I0CqWwMajd5Y5rJX07kkdqgbjCzSukzltFZMkUEoSelWUClRsL%2Fg2d5wCyK%2FqFjKQ5rQkF%2FOYNonmMnHw3UNNLjqAEimfl2yv7gV2DdGWFy%2BZlvwLlHQcpKAqWNJKhoYe232ScTAn60UAAAzM5TyO6ogf3WQ17CNKDbdsseKHW%2B%2FAf%2BdEdVyN4opfVcnEH9QHFDnZttiK5%2BFl2nKpSoFbuT%2FanzVz3r3zuZuKk60JZqAbnwnEhuJqXHS8SwepqyrMivZvA%2FS32O8hhJVKVWdMBRqip2qKgqW1QYbTxsW32ktctMJdt7HkZXTbYUnTSCirIGBMqcP5h0vQXxKjTZNkkXj%2FfCWm5GFztET2mNqLIXYo9QrJHXR50pveG5vX5CMfcDWS46KOZgmc0dJxxePMi3Z4MHf5eyHC4kffjxm13g7gVedsfEiCCADD6q6jzOqsJ1jziCpoE3d%2B%2FfLeTJ%2FdcrT%2BMXg%2BAJQLRfdq21CfIW56iJkI6NncPfx5s0uBWouRuNDf2e6zRktr9WYNoU2OaattpZr7kDwUK7xL2K0L7twjDSbAWy6Nw2yjQDMNy8v9AGOqUBoryYKXHdZmXRqGZnmOCzhAoK6P%2B0y9gPgLzQXgikiv0raQ4jctvFZ%2B7%2FnMG0RjkGNNdwfqHujQZsBwu0EQX1ZPlbaKJdy3SzuLnE6fpsXemiVwKYBzDY8uasMOnQugDcTcgy5ff6PFYqEI8fbseflkxhVXic4LVU9jnWjXRtjDQ9wSgnFyQng4TOi3Vxlej9XHFZnN0caMB%2BSSi4UgaU%2FWOEwixS&amp;X-Amz-Signature=0413b4b800ce2fa49bf125d34d1207deb57e0958c1d089edfe7f736202eba88e&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject</a></p></div></details>
+<figure><img src="/assets/notion/install-tensorflow-on-m1-mac/ebb0459d-5ae3-49a3-81e1-7d79fa624d29.png" alt="" loading="lazy" width="1362" height="906" /></figure>
+<p><a href="https://github.com/conda-forge/miniforge" target="_blank" rel="noreferrer">https://github.com/conda-forge/miniforge</a></p>
+<hr />
+<h2 id="block-89db02ad9c6a4b458509fc068cdcc964">4. Install Miniforge3</h2>
+<pre data-lang="shell"><code class="language-bash">$ cd Downloads
+$ chmod +x Miniforge3-MacOSX-arm64.sh
+$ ./Miniforge3-MacOSX-arm64.sh</code></pre>
+<hr />
+<h2 id="block-98f8956d9dc640299b629ee79b4724d5">5. Make Virtual Environment by using Conda</h2>
+<pre data-lang="shell"><code class="language-bash">$ conda create –n tf python==3.10
+$ conda activate tf</code></pre>
+<hr />
+<h2 id="block-e458bf231dbd4023a486c3d6b3f850e1">6. Install Tensorflow deps</h2>
+<pre data-lang="shell"><code class="language-bash">(tf)$ conda install -c apple tensorflow-deps</code></pre>
+<h2 id="block-54286494897c4dcb960fddb6194a9452">6-1. Install Tensorflow</h2>
+<pre data-lang="shell"><code class="language-bash">(tf)$ python3 -m pip install tensorflow-macos
+(tf)$ pip3 install tensorflow-metal</code></pre>
+<hr />
+<h2 id="block-6ee7d9b3dd054ff59543cb3e76f035b4">7. Use Tensorflow on Jupyter </h2>
+<p>jupyter notebook과 lab중 원하는 것을 설치하자</p>
+<h3 id="block-dded88770dc9416781635427ee2b6d5a">7-1 Install Jupyter notebook</h3>
+<pre data-lang="shell"><code class="language-bash">(tf)$ conda install jupyter notebook
+(tf)$ jupyter notebook --generate-config
+(tf)$ jupyter notebook</code></pre>
+<h3 id="block-0a4c728d2b0f456b9fc53ad56a1d297d">7-2 Change Jupyter start-up folder</h3>
+<p>jupyter_notebook_config.py을 열고 주석을 해제해 원하는 경로를 입력한다.</p>
+<pre data-lang="shell"><code class="language-bash">c.NotebookApp.notebook_dir = '/Users/$yourName$/Documents/Code'</code></pre>
+<h3 id="block-9ccf8849ac664828a547c9ce864487c5">7-3 Change Jupyter Theme</h3>
+<pre data-lang="shell"><code class="language-bash">(tf)$ conda install -c conda-forge jupyterthemes
+(tf)$ jt -l
+(tf)$ jt -t chesterish</code></pre>
+<h3 id="block-fa65741e7d1c456787cabe4e5b2d813b">7-4 설치확인</h3>
+<pre data-lang="shell"><code class="language-bash">(tf)$ conda list | grep tensorflow</code></pre>
+<figure><img src="/assets/notion/install-tensorflow-on-m1-mac/cdf4cd6b-4925-46ad-b032-782f656cfa10.png" alt="" loading="lazy" width="1076" height="146" /></figure>
+<p>이렇게 뜨면 잘 설치가 된 것이고 안 뜬다면 6-1과정(<a href="#block-54286494897c4dcb960fddb6194a9452">바로가기</a>)을 다시 설치한다.</p>
+<p>설치가 잘 되었다면 주피터를 열고 다음과 같이 입력해 확인하자</p>
+<p><code>sys.executable</code>은 현재 주피터에서 인식하고 있는 파이썬 경로다.</p>
+<figure><img src="/assets/notion/install-tensorflow-on-m1-mac/21485494-f016-44b2-956d-cdcba28e9596.png" alt="" loading="lazy" width="852" height="404" /></figure></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
       <aside class="article-side" data-article-side hidden></aside>
       <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
         <h2 class="comments-title" id="comments-title">Comment</h2>
@@ -101,7 +176,7 @@
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=12" type="module"></script>
+    <script src="/assets/js/post.js?v=13" type="module"></script>
     <script src="/assets/js/palette.js?v=8" defer></script>
   </body>
 </html>
