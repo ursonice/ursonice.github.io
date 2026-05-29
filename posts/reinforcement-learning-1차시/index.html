@@ -80,13 +80,13 @@
     <nav class="breadcrumb" aria-label="breadcrumb">
       <a href="/">홈</a>
       <span class="bc-sep" aria-hidden="true">›</span>
-      <a href="/topics/ai-theory/">AI/ Theory</a>
+      <a href="/topics/reinforcement-learning/">Reinforcement Learning</a>
     </nav>
     <h1>Reinforcement Learning 1차시</h1>
     <div class="article-meta">
       
       
-      <span>작성 2026년 1월 19일</span><span class="dot"></span><span>수정 2026년 1월 23일</span>
+      <span>작성 2026년 1월 19일</span><span class="dot"></span><span>수정 2026년 5월 28일</span>
       <span class="reading-size" role="group" aria-label="글자 크기">
         <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
         <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
@@ -128,12 +128,12 @@ X_n= X_0 + \sum_{i=1}^{n} W_i= X_{n-1} + W_n
 <h2 id="block-2eeb12c0115c80c088e2c872c739dbfb">Stochastic Process</h2>
 <p>확률과정 X(t)는 시간 t에 따라 변하는 확률변수들의 집합, 이때의 다 다른 확률변수에 대응하는 분포는 다 다를 수도, 같을 수도 있다.</p>
 <div class="math-block">\[X(t) = \{ X(t) \mid{t}\in T \}\]</div>
-<h2 id="block-2eeb12c0115c80bf806bff652b90d714">Discrete Time &amp; State</h2>
+<h3 id="block-2eeb12c0115c80bf806bff652b90d714">Discrete Time &amp; State</h3>
 <div class="math-block">\[T = \{t_0,\ t_1,\ t_2,\ \ ... \}\\X(t) \rarr S = \{S_1,\ S_2 , ... \ S_n \} \]</div>
 <h2 id="block-2eeb12c0115c8055b5cfd5f8e759f391">Markov Chain(Markov Process)</h2>
 <ul><li>Markov Property: 지금 상태(\(S_t\))는 이전상태(\(S_{t-1}\))만 영향을 미친다.</li></ul>
 <div class="math-block">\[P(x_{n + 1} | x_{n}, x_{n-1}, \ldots , x _ { 0 } ) = P( x _ { n + 1 } | x _ { n } )\]</div>
-<h2 id="block-2eeb12c0115c805cbca1c33f645198ce">Markov Process</h2>
+<h3 id="block-2eeb12c0115c805cbca1c33f645198ce">Markov Process</h3>
 <ul><li>시간에 따라 상태가 변화는 확률과정 중에서, Markov Property를 만족하는 확률변수의 열을 말한다.</li></ul>
 <div class="math-block">\[S = \{S_1,\ S_2,\ S_3 \ ...\ ,\ S_n\}\]</div>
 <h2 id="block-2eeb12c0115c80ef9f0fd12594a19123">Transition Matrix</h2>
@@ -148,7 +148,7 @@ X_n= X_0 + \sum_{i=1}^{n} W_i= X_{n-1} + W_n
 <h2 id="block-2eeb12c0115c80f997e9c53dee6eb33f">Limiting Distribution</h2>
 <ul><li>처음 어떤 상태( \(P^{(0)}\))로 시작했는지와 상관없이 시간이(\(\text{step n} \rarr \infin\)) 무한히 흐르면 도달하게 되는 확률분포</li><li> \(n \rarr \infin\)갔을 때 값이 존재해야 한다.</li></ul>
 <div class="math-block">\[P^{\infin}=P^{(0)}\lim_{n \rarr \infin}P^{(n)}\]</div>
-<h2 id="block-2eeb12c0115c8013a5e4c0f68c585f49">Example: Weather</h2>
+<h3 id="block-2eeb12c0115c8013a5e4c0f68c585f49">Example: Weather</h3>
 <div class="math-block">\[S = \{ 1 = \text{Sunny},\; 2 = \text{Cloudy} \}, \ \
 P =\begin{pmatrix}\frac{2}{3} &amp; \frac{1}{3} \\\frac{1}{2} &amp; \frac{1}{2}\end{pmatrix}\]</div>
 <div class="math-block">\[p_{11} = P(\text{Sunny} \to \text{Sunny}) = \frac{2}{3}, \quad p_{12} = P(\text{Sunny} \to \text{Cloudy}) = \frac{1}{3}\]</div>

@@ -86,7 +86,7 @@
     <div class="article-meta">
       
       
-      <span>작성 2026년 5월 24일</span><span class="dot"></span><span>수정 2026년 5월 25일</span>
+      <span>작성 2026년 5월 24일</span><span class="dot"></span><span>수정 2026년 5월 28일</span>
       <span class="reading-size" role="group" aria-label="글자 크기">
         <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
         <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
@@ -102,8 +102,7 @@
 <ol><li><strong>Spatial knowledge</strong>: RGB만으로도 3D 공간 구조를 이해하도록 함</li><li><strong>Temporal knowledge</strong>: 시간에 따른 상태 변화를 안정적으로 이해하도록 함</li><li><strong>Action knowledge</strong>: teacher의 3D-aware action 선택을 따라가도록 함</li></ol>
 <p>즉, MonoLift는 학습 중에는 depth 정보를 활용하지만, 실제 배포 시에는 depth estimator 없이 RGB-only로 동작하는 효율적인 3D manipulation policy 학습 방법이다.</p>
 <h2 id="block-36ab12c0115c800b85dfcd297124cfbc">목차</h2>
-<ul><li></li></ul>
-<figure><img src="/assets/notion/monolift-learning-3d-manipulation-policies-from-monocular-rgb-via-distillation/36bb12c0-115c-80f4-b127-f9db8a3efe97.png" alt="" loading="lazy" width="736" height="1598" /></figure>
+<ul><li><a href="#서론" target="_blank" rel="noreferrer">서론</a></li><li><a href="#problem-formulation" target="_blank" rel="noreferrer">Problem Formulation</a></li><li><a href="#spatial-representation-distillation" target="_blank" rel="noreferrer">Spatial Representation Distillation</a><ul><li><a href="#input" target="_blank" rel="noreferrer">Input</a><ul><li><a href="#teacher-branch" target="_blank" rel="noreferrer">Teacher branch</a><ul><li><a href="#dual-path-cross-modal-fusion" target="_blank" rel="noreferrer">Dual-path Cross-modal Fusion</a></li></ul></li><li><a href="#student-branch" target="_blank" rel="noreferrer">Student branch</a></li></ul></li><li><a href="#output" target="_blank" rel="noreferrer">Output</a></li></ul></li><li><a href="#temporal-dynamics-distillation" target="_blank" rel="noreferrer">Temporal Dynamics Distillation</a><ul><li><a href="#input-1" target="_blank" rel="noreferrer">Input</a><ul><li><a href="#spatial-token" target="_blank" rel="noreferrer">Spatial Token</a></li><li><a href="#learnable-acton-token" target="_blank" rel="noreferrer">Learnable Acton Token</a></li><li><a href="#language-token" target="_blank" rel="noreferrer">Language Token</a></li></ul></li><li><a href="#casual-transformer" target="_blank" rel="noreferrer">Casual Transformer</a></li><li><a href="#output-1" target="_blank" rel="noreferrer">output</a></li></ul></li><li><a href="#action-distribution-distillation" target="_blank" rel="noreferrer">Action Distribution Distillation</a><ul><li><a href="#input-2" target="_blank" rel="noreferrer">Input</a></li><li><a href="#output-2" target="_blank" rel="noreferrer">Output</a></li></ul></li></ul>
 <h2 id="block-36ab12c0115c801389fed53a6748216d">Problem Formulation</h2>
 <p>이 논문에서 목표는 단일 RGB 이미지와 언어 명령을 입력으로 받아 로봇 조작 action을 출력하는 policy를 학습하는 것이다.</p>
 <p>하나의 학습 데이터 \(\tau_i\)는 무엇을 해야 하는지 알려주는 언어 명령 \(g_i\)와 그 명령을 수행하는 동안 시간별로 저장된 이미지 \(o_t^i\)와 expert action \(a_t^i\)의 쌍 으로 구성되며 다음과 같이 표현된다.</p>
@@ -118,10 +117,10 @@
 <p>Student는 Inference에서 RGB입력만을 사용해야 함으로 따로 깊이 맵을 사용하지 않는다.</p>
 <p>전체 플로우는 아래 그림과 같다.</p>
 <figure><img src="/assets/notion/monolift-learning-3d-manipulation-policies-from-monocular-rgb-via-distillation/36bb12c0-115c-8075-bf9a-ef16f389edca.png" alt="" loading="lazy" width="1292" height="1348" /></figure>
-<h2 id="block-36bb12c0115c80958395dca6e3e1432b">Input</h2>
+<h3 id="block-36bb12c0115c80958395dca6e3e1432b">Input</h3>
 <p>\(o_{t-H+1:t}\): 최근 H개의 RGB Frame을 사용한다.</p>
 <p>이 입력은 teacher branch와 student branch로 동시에 들어간다.</p>
-<h3 id="block-36bb12c0115c80da9bd7c5722099ad8e">Teacher branch</h3>
+<h4 id="block-36bb12c0115c80da9bd7c5722099ad8e">Teacher branch</h4>
 <p>Teacher는 RGB만 보지 않고 RGB에서 추정한 pseudo-depth(\(d_t\))도 함께 사용한다.</p>
 <p>먼저 RGB Frame이 Depth Anything V2로 들어간다. </p>
 <div class="math-block">\[d_t = \text{DepthAnythingV2}(o_t)\]</div>
@@ -161,15 +160,14 @@ Concat = [R1, R2, R3, R4, D1, D2, D3, D4]</code></pre>
 <p>이 결과가 attention branch에서 얻은 fusion feature이다.</p>
 <p>동시에, 원래 RGB feature와 depth feature를 같은 위치끼리 직접 평균낸다.</p>
 <p>이 부분은 Multi-head Self-Attention으로 들어가는 중간 결과가 아니라, attention branch와 병렬로 계산되는 feature이다. 이 부분은 같은 위치의 RGB-depth 정보를 직접 보존하는 것이다.</p>
-<div class="math-block">\[
-F^T_{\text{avg},\;t} = \frac{1}{2}\left(F^T_{\text{rgb},\;t} + F^T_{\text{dep},\;t}\right)\]</div>
+<div class="math-block">\[F^T_{\text{avg},\;t} = \frac{1}{2}\left(F^T_{\text{rgb},\;t} + F^T_{\text{dep},\;t}\right)\]</div>
 <p>마지막으로 두 fusion 결과를 다시 평균낸다.
 최종 feature는 전체 관계 정보 + 같은 위치의 local 구조 정보 두 가지 정보를 모두 포함한다.</p>
-<h3 id="block-36bb12c0115c80bfb244d59f3712bc26">Student branch</h3>
+<h4 id="block-36bb12c0115c80bfb244d59f3712bc26">Student branch</h4>
 <p>Depth를 사용하지않고 RGB Frame을 ResNet-18 Encoder에 넣는다.</p>
 <div class="math-block">\[F^{S}_{\text{spa},\; t} = E(o_t)\]</div>
 <p>RGB만 보기 때문에 깊이 정보가 부족하다. 따라서 teacher의 \(F^{T}_{\text{spa},\; t}\)를 따라가도록 학습시킨다.</p>
-<h2 id="block-36bb12c0115c8061916cef32842cb197">Output</h2>
+<h3 id="block-36bb12c0115c8061916cef32842cb197">Output</h3>
 <p>Spatial Distillation Loss로 teature feature, student feature가 비슷해지도록 만든다.</p>
 <div class="math-block">\[L_{SD} = \frac{1}{H}\sum_{t=t_0-H+1}^{t_0}||F^{S}_{\text{spa},\; t} - F^T_{\text{spa},\;t}||^2_2\]</div>
 <p>Student는 depth가 있는 것처럼 3D 구조를 반영하는 feature를 만들도록 훈련된다.</p>
@@ -178,8 +176,11 @@ F^T_{\text{avg},\;t} = \frac{1}{2}\left(F^T_{\text{rgb},\;t} + F^T_{\text{dep},\
 <p>이 부분에서는 Student가 RGB만 보고도 Teacher처럼 시간에 따른 상태 변화를 이해하도록 만드는 것이다.</p>
 <p>RGB 한 장만 보면 예를들어 “컵이 있다” 정도는 알 수 있지만, 시간 흐름을 보면 “gripper가 컵에 가까워지고 있다”, “손잡이와 정렬되고 있다”, “이제 잡아야 한다” 같은 상태 전이를 알 수 있다.</p>
 <p>monocular RGB만으로는 이런 temporal variation이 충분하지 않기 때문에, teacher의 3D-aware temporal feature 변화량을 student가 따라가도록 학습한다.</p>
-<h2 id="block-36bb12c0115c80308287c6ed4f5fa382">Input</h2>
-<h3 id="block-36bb12c0115c80d592dce005a34286fd">Spatial Token</h3>
+<figure><img src="/assets/notion/monolift-learning-3d-manipulation-policies-from-monocular-rgb-via-distillation/36eb12c0-115c-80c4-9420-c074c3f3b6d6.png" alt="" loading="lazy" width="1598" height="1814" /></figure>
+<h3 id="block-36bb12c0115c80308287c6ed4f5fa382">Input</h3>
+<p>입력은 순서대로 연결된 Spatial Token, Learnable action token,  Language token 세 가지 종류가 입력으로 들어간다.</p>
+<h4 id="block-36bb12c0115c80d592dce005a34286fd">Spatial Token</h4>
+<p>spatial token은 장면이 어떻게 생겼는지 물체가 어디 있는지 등을 나타내는 visual feature이다.</p>
 <p>H=5라면 입력 spatial token은 다음과 같다.</p>
 <div class="math-block">\[[F_{\text{spa},\;t-4}, F_{\text{spa},\;t-3}, F_{\text{spa},\;t-2}, F_{\text{spa},\;t-1}, F_{\text{spa},\;t}]\]</div>
 <p>Teacher인 경우 RGB와 pseudo-depth를 fusion해서 만든 feature를 사용하고</p>
@@ -190,15 +191,64 @@ F^T_{\text{avg},\;t} = \frac{1}{2}\left(F^T_{\text{rgb},\;t} + F^T_{\text{dep},\
 <div class="math-block">\[[F^T_{\text{spa},\;t-4}, F^T_{\text{spa},\;t-3}, F^T_{\text{spa},\;t-2}, F^T_{\text{spa},\;t-1}, F^T_{\text{spa},\;t}]\]</div>
 <p>student쪽 입력은 다음과 같다.</p>
 <div class="math-block">\[[F^S_{\text{spa},\;t-4}, F^S_{\text{spa},\;t-3}, F^S_{\text{spa},\;t-2}, F^S_{\text{spa},\;t-1}, F^S_{\text{spa},\;t}]\]</div>
-<h3 id="block-36bb12c0115c8085a793c369fc9c8306">Acton Token</h3>
+<h4 id="block-36bb12c0115c8085a793c369fc9c8306">Learnable Acton Token</h4>
 <p>H=5개인 경우 timestep에 대응되는 learnable action token이다.</p>
-<p>이 action token들은 randomly initialized learnable embeddings이고, 학습 과정에서 같이 업데이트된다.</p>
+<p>이 action token들은 randomly initialized learnable embeddings이고, 로봇이 action 예측에 필요한 정보를 모으기 위한 학습 가능한 파라미터이다.</p>
 <div class="math-block">\[[\text{act1},\text{act2},\text{act3},\text{act4}, \text{act5} ]= [F_{\text{action},\;t-4}, F_{\text{action},\;t-3}, F_{\text{action},\;t-2}, F_{\text{action},\;t-1}, F_{\text{action},\;t}]\]</div>
-<h3 id="block-36bb12c0115c8081b24af4f8cc2789d4">Language Token</h3>
+<h4 id="block-36bb12c0115c8081b24af4f8cc2789d4">Language Token</h4>
 <p>Language Instraction에서 MiniLM 모듈을 통해 text를 feature화 한 것이다.(그림에서는 Language Token Vector)</p>
 <div class="math-block">\[F_{\text{text}}\]</div>
-<h2 id="block-36bb12c0115c80dd8efdc8616cd2bea1">Casual Transformer</h2>
-<p>논문에서는 teacher와 student 모두 temporal backbone으로 Transformer decoder를 사용한다고 설명합니다. 이 decoder는 masked self-attention, cross-attention, feedforward layer로 구성됩니다. 또한 teacher와 student가 decoder를 공유하여 temporal encoding을 일관되게 맞춘다고 설명합니다.</p></div>
+<h3 id="block-36bb12c0115c80dd8efdc8616cd2bea1">Casual Transformer</h3>
+<p>이 부분이 로봇이 temoral dynamics를 이해할 수 있도록 구성해주는 모듈이다. </p>
+<p>위 3가지 입력이 들어오면 이 모듈을 통해과거부터 현재까지의 spatial token과 action token의 시퀀스를 보고 이전 상태가 현재 상태와 어떻게 연결되는지를 학습한다. 이 부분은 Casual Transformer 모듈 안에 구성되어 있는 masked self-attention, cross attention, feedforward을 통해 진행된다.</p>
+<figure><img src="/assets/notion/monolift-learning-3d-manipulation-policies-from-monocular-rgb-via-distillation/36db12c0-115c-80c3-9605-cdb07f300d8d.png" alt="" loading="lazy" width="904" height="842" /></figure>
+<ul><li>여기서 t=5라 생각하고 보면된다. (spa3= \(F_{spa,t-2}\) ) \(F_{spa}\)끼리는 서로 self-attention을 통해 시간에 따른 과거부터 현재 장면이 어떻게 변했는지를 학습한다. (양방향으로 봄)</li><li>\(F_{act}\)는 masked self-attention을 통해 \(F_{spa}\)로 얻은 장면 변화와 이전 action을 참고하여 현재 시점에서 어떤 행동을 해야하는지 학습한다. (autoregressive로 봄)</li></ul>
+<h3 id="block-36eb12c0115c80cbb636c547586efa29">output</h3>
+<p>\(F_{tem}\)은 Transformer를 통과하면서 시간 문맥이 반영된 feature이다</p>
+<p>Casual Transformer를 통과한 Teacher feature들은</p>
+<div class="math-block">\[F_{\text{tem}, t-4}^{T}, \ F_{\text{tem}, t-3}^{T}, \ F_{\text{tem}, t-2}^{T}, \ F_{\text{tem}, t-1}^{T}, \ F_{\text{tem}, t}^{T}\]</div>
+<p>가 나오고 Student feature들은 </p>
+<div class="math-block">\[F_{\text{tem}, t-4}^{S}, \ F_{\text{tem}, t-3}^{S}, \ F_{\text{tem}, t-2}^{S}, \ F_{\text{tem}, t-1}^{S}, \ F_{\text{tem}, t}^{S}\]</div>
+<p>가 된다.</p>
+<p>\(G_t\)는 \(F_{tem}\)를 통해 시간에 따라 어떻게 변하는지 계산한다.</p>
+<p>그런데 데이터가 연속 시간이 아니라 프레임 단위로 끊겨 있으므로, 미분 대신 앞뒤 프레임 차이를 이용해 변화량을 근사한다.</p>
+<div class="math-block">\[\begin{align*}
+G_t^T &amp;= \nabla_t F_{\text{tem}}^T \\
+G_t^S &amp;= \nabla_t F_{\text{tem}}^S
+\end{align*}\]</div>
+<p>central difference G는 앞뒤 feature가 모두 있어야 하므로 양 끝에서는 계산하지 않는다. 예를들어 t=5라면</p>
+<pre data-lang="javascript"><code class="language-javascript">t-4   t-3   t-2   t-1   t
+ X     O     O     O    X</code></pre>
+<p>G는 아래 3시점에서만 계산된다.</p>
+<div class="math-block">\[G_{t-3}, \ G_{t-2}, \ G_{t-1}\]</div>
+<p>Teacher:</p>
+<div class="math-block">\[\begin{align*}G_{t-3}^T &amp;= \frac{F_{\text{tem}, t-2}^T - F_{\text{tem}, t-4}^T}{2} \\G_{t-2}^T &amp;= \frac{F_{\text{tem}, t-1}^T - F_{\text{tem}, t-3}^T}{2} \\G_{t-1}^T &amp;= \frac{F_{\text{tem}, t}^T - F_{\text{tem}, t-2}^T}{2}\end{align*}\]</div>
+<p>Student:</p>
+<div class="math-block">\[\begin{align*}G_{t-3}^S &amp;= \frac{F_{\text{tem}, t-2}^S - F_{\text{tem}, t-4}^S}{2} \\G_{t-2}^S &amp;= \frac{F_{\text{tem}, t-1}^S - F_{\text{tem}, t-3}^S}{2} \\G_{t-1}^S &amp;= \frac{F_{\text{tem}, t}^S - F_{\text{tem}, t-2}^S}{2}\end{align*}\]</div>
+<p>Temporal Dynamics Distillation의 목적은</p>
+<div class="math-block">\[G^T\approx G^S\]</div>
+<p>Temporal Dynamics Distillation loss는 다음과 같다.</p>
+<div class="math-block">\[L_{TD} = \frac{1}{H - 2} \sum_{t = t_0 - H + 2}^{t_0 - 1} \left\| G_t^S - G_t^T \right\|_2^2\]</div>
+<p>수식의 의미는 H−2개의 timestep에서 Student와 Teacher의 temporal gradient 차이를 평균낸다.</p>
+<p>예를들어 H=5인경우 아래와 같다.</p>
+<div class="math-block">\[L_{TD} = \frac{1}{3} \left( \left\| G_{t-3}^S - G_{t-3}^T \right\|_2^2 + \left\| G_{t-2}^S - G_{t-2}^T \right\|_2^2 + \left\| G_{t-1}^S - G_{t-1}^T \right\|_2^2 \right)\]</div>
+<h2 id="block-36eb12c0115c80678aedc11d828288eb">Action Distribution Distillation</h2>
+<h3 id="block-36eb12c0115c80caa9c5ef7d73a712b8">Input</h3>
+<p>Causal Transformer를 통과한 후 나온 Teacher의 action feature는 아래와 같고</p>
+<div class="math-block">\[\tilde{F}_{\text{act}, t-4}^{T}, \ \tilde{F}_{\text{act}, t-3}^{T}, \ \tilde{F}_{\text{act}, t-2}^{T}, \ \tilde{F}_{\text{act}, t-1}^{T}, \ \tilde{F}_{\text{act}, t}^{T}\]</div>
+<p>Student는 아래와 같다.</p>
+<div class="math-block">\[\tilde{F}_{\text{act}, t-4}^{S}, \ \tilde{F}_{\text{act}, t-3}^{S}, \ \tilde{F}_{\text{act}, t-2}^{S}, \ \tilde{F}_{\text{act}, t-1}^{S}, \ \tilde{F}_{\text{act}, t}^{S}\]</div>
+<p>Action distillation에서 사용되는 입력은 현재 시점의 액션만 사용된다.</p>
+<div class="math-block">\[\tilde{F}_{\text{act}, t}^{T},\;\tilde{F}_{\text{act}, t}^{S}\]</div>
+<h3 id="block-36eb12c0115c80c9a9a9cee5a1e1b0af">Output</h3>
+<p>Policy Head는 action feature를 받아서 action distribution을 출력한다.</p>
+<p>Policy Head MLP로 구성되어 있으며 Teacher와 Student는 MLP의 가중치를 공유해서 사용하고 출력은 Gaussian action distribution의 parameter인 mean과 standard deviation을 출력한다.</p>
+<div class="math-block">\[\begin{align*}\tilde{F}_{\text{act}, t}^{T} &amp;\rightarrow \text{Policy Head} \rightarrow \mu_t^T, \sigma_t^T \\\tilde{F}_{\text{act}, t}^{S} &amp;\rightarrow \text{Policy Head} \rightarrow \mu_t^S, \sigma_t^S\end{align*}\]</div>
+<p>따라서 다음과 같은 분포를 출력한다고 볼 수 있음으로</p>
+<div class="math-block">\[\begin{align*}A_t^T &amp;= \mathcal{N}(\mu_t^T, \sigma_t^T) \\A_t^S &amp;= \mathcal{N}(\mu_t^S, \sigma_t^S)\end{align*}\]</div>
+<p>Action Distribution Distillation loss는 KL을 사용하여 계산하고 이 차이를 줄이도록 학습한다.</p>
+<div class="math-block">\[L_{AD} = KL(A_t^T \parallel A_t^S)\]</div>
+<p>최종적으로는 이를 통해 Student가 이 distribution을 따라가면 RGB입력만 사용하더라도 Teacher의 3D-aware decision-making을 배울 수 있게된다.</p></div>
     <div class="share-bar" data-share>
       <span class="share-label">Share</span>
       <button type="button" class="share-btn" data-share-copy>Copy</button>
