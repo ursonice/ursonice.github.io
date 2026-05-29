@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-29T05:54:59.916Z",
+  "generatedAt": "2026-05-29T06:29:20.510Z",
   "site": {
     "title": "Woojae Joo — Developer Note",
     "description": "AI, Robotics, Systems 공부 기록"
@@ -66,6 +66,19 @@
     "github": "https://github.com/ursonice"
   },
   "posts": [
+    {
+      "id": "36fb12c0-115c-80a6-881e-cab805ae5a45",
+      "title": "DELTAR: Depth Estimation from a Light-weight ToF Sensor and RGB Image 논문리뷰",
+      "slug": "deltar-depth-estimation-from-a-light-weight-tof-sensor-and-rgb-image-논문리뷰",
+      "category": "AI/ Deep Learning",
+      "tags": [],
+      "created": "2026-05-29T06:27:00.000Z",
+      "updated": "2026-05-29T06:28:00.000Z",
+      "readingTime": 1,
+      "summary": "",
+      "sourceUrl": "https://www.notion.so/DELTAR-Depth-Estimation-from-a-Light-weight-ToF-Sensor-and-RGB-Image-36fb12c0115c80a6881ecab805ae5a45",
+      "html": ""
+    },
     {
       "id": "36ab12c0-115c-8031-b1d2-e1a5a8077788",
       "title": "MonoLift: Learning 3D Manipulation Policies from Monocular RGB via Distillation",

@@ -6,7 +6,15 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Fri, 29 May 2026 05:54:59 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 29 May 2026 06:29:20 GMT</lastBuildDate>
+    <item>
+      <title>DELTAR: Depth Estimation from a Light-weight ToF Sensor and RGB Image 논문리뷰</title>
+      <link>https://ursonice.github.io/posts/deltar-depth-estimation-from-a-light-weight-tof-sensor-and-rgb-image-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</link>
+      <guid isPermaLink="false">36fb12c0-115c-80a6-881e-cab805ae5a45</guid>
+      <pubDate>Fri, 29 May 2026 06:27:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description></description>
+    </item>
     <item>
       <title>MonoLift: Learning 3D Manipulation Policies from Monocular RGB via Distillation</title>
       <link>https://ursonice.github.io/posts/monolift-learning-3d-manipulation-policies-from-monocular-rgb-via-distillation/</link>
@@ -238,14 +246,6 @@
       <pubDate>Sat, 12 Nov 2022 06:23:00 GMT</pubDate>
       <category>Application</category>
       <description>서론 이 장에서는 Raspberry PI에서 MobileNetV2를 Coral Edge TPU를 사용해 inference하는 방법과 필요한 환경셋팅 대해서 설명한다. 목차 1. Requirements 2. Install Ubuntu 방법1. 라즈베리파이에서 제공하는 GUI툴을 이용해 설치 방법2. Ser</description>
-    </item>
-    <item>
-      <title>ONNX-MLIR 다뤄보기(MobileNetV2-12)</title>
-      <link>https://ursonice.github.io/posts/onnx-mlir-%EB%8B%A4%EB%A4%84%EB%B3%B4%EA%B8%B0-mobilenetv2-12/</link>
-      <guid isPermaLink="false">392835f5-a06f-4c04-b1e8-d07d56e9d112</guid>
-      <pubDate>Mon, 05 Dec 2022 05:18:00 GMT</pubDate>
-      <category>ONNX-MLIR</category>
-      <description>서론 이 장은 ONNX-MLIR로 모델을 컴파일 하는 방법에 대해 소개한다. Docker를 사용하거나 직접 설치해서 사용할 수 있다.(직접설치하는 방법 바로가기) 그리고 기존 onnx모델을 shared library형태에로 컴파일 한 후, Inference를 진행해본다. (환경) AMD64 Archite</description>
     </item>
   </channel>
 </rss>
