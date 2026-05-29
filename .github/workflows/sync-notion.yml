@@ -40,12 +40,13 @@ jobs:
           node scripts/add-image-dims.mjs
           node scripts/gen-post-pages.mjs
           node scripts/gen-tag-pages.mjs
+          node scripts/gen-home-page.mjs
       - name: Commit generated data
         run: |
-          if [[ -n "$(git status --porcelain data/notion-posts.json assets/notion feed.xml sitemap.xml posts topics 2>/dev/null)" ]]; then
+          if [[ -n "$(git status --porcelain data/notion-posts.json assets/notion feed.xml sitemap.xml posts topics index.html 2>/dev/null)" ]]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add data/notion-posts.json feed.xml sitemap.xml posts topics
+            git add data/notion-posts.json feed.xml sitemap.xml posts topics index.html
             if [[ -d assets/notion ]]; then
               git add assets/notion
             fi
@@ -54,3 +55,6 @@ jobs:
           else
             echo "No changes to commit"
           fi
+      - name: Notify IndexNow (Bing/Naver/Yandex)
+        run: node scripts/notify-indexnow.mjs
+        continue-on-error: true
