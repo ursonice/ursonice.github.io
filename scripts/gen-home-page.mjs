@@ -81,14 +81,42 @@ const lastUpdated = latest ? fmtDate(latest.updated || latest.created) : "–";
 const file = "index.html";
 let html = readFileSync(file, "utf8");
 
-html = html.replace(
-  /<div class="post-grid" data-posts[^>]*>[\s\S]*?<\/div>/,
+// Balanced <div>…</div> replacement. Post cards contain nested <div class="post-meta">/
+// <div class="post-footer">, so a non-greedy regex would stop at the first inner </div> and
+// leave orphan content behind on re-runs (cards multiplied to 23 on the second pass). We
+// instead find the opening div, then walk forward counting <div openings vs </div> closings
+// until depth returns to zero.
+const replaceBalancedDiv = (input, openRegex, replacement) => {
+  const match = input.match(openRegex);
+  if (!match) return input;
+  const start = match.index;
+  let i = start + match[0].length;
+  let depth = 1;
+  while (depth > 0 && i < input.length) {
+    const nextOpen = input.indexOf("<div", i);
+    const nextClose = input.indexOf("</div>", i);
+    if (nextClose === -1) break;
+    if (nextOpen !== -1 && nextOpen < nextClose) {
+      depth += 1;
+      i = nextOpen + 4;
+    } else {
+      depth -= 1;
+      i = nextClose + 6;
+    }
+  }
+  return input.slice(0, start) + replacement + input.slice(i);
+};
+
+html = replaceBalancedDiv(
+  html,
+  /<div class="post-grid" data-posts[^>]*>/,
   `<div class="post-grid" data-posts aria-live="polite">${postCardsHtml}
         </div>`,
 );
 
-html = html.replace(
-  /<div class="topic-grid" data-topics[^>]*>[\s\S]*?<\/div>/,
+html = replaceBalancedDiv(
+  html,
+  /<div class="topic-grid" data-topics[^>]*>/,
   `<div class="topic-grid" data-topics>${topicCardsHtml}</div>`,
 );
 
