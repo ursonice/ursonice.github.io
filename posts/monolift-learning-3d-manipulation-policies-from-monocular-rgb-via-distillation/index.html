@@ -29,13 +29,13 @@
     <meta property="og:url" content="https://ursonice.github.io/posts/monolift-learning-3d-manipulation-policies-from-monocular-rgb-via-distillation/" />
     <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=MonoLift%3A%20Learning%203D%20Manipulation%20Policies%20from%20Monocular%20RGB%20via%20Distillation&amp;cat=AI%2F%20Deep%20Learning" />
     <meta property="article:published_time" content="2026-05-24T14:31:00.000Z" />
-    <meta property="article:modified_time" content="2026-05-28T05:25:00.000Z" />
+    <meta property="article:modified_time" content="2026-05-30T12:56:00.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="MonoLift: Learning 3D Manipulation Policies from Monocular RGB via Distillation" />
     <meta name="twitter:description" content="서론 이 논문은 단일 RGB 이미지(Monocular RGB)만으로 3D 로봇 조작 정책을 학습하는 MonoLift framework를 제안한다. 기존 RGB-D, multi-view, point cloud 기반 방법은 3D 정보를 잘 활용할 수 있지만, 추가 센서와 전처리 비용이 크다. 반대로 RGB-" />
     <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=MonoLift%3A%20Learning%203D%20Manipulation%20Policies%20from%20Monocular%20RGB%20via%20Distillation&amp;cat=AI%2F%20Deep%20Learning" />
 
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"MonoLift: Learning 3D Manipulation Policies from Monocular RGB via Distillation","description":"서론 이 논문은 단일 RGB 이미지(Monocular RGB)만으로 3D 로봇 조작 정책을 학습하는 MonoLift framework를 제안한다. 기존 RGB-D, multi-view, point cloud 기반 방법은 3D 정보를 잘 활용할 수 있지만, 추가 센서와 전처리 비용이 크다. 반대로 RGB-","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=MonoLift%3A%20Learning%203D%20Manipulation%20Policies%20from%20Monocular%20RGB%20via%20Distillation&cat=AI%2F%20Deep%20Learning","datePublished":"2026-05-24T14:31:00.000Z","dateModified":"2026-05-28T05:25:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/monolift-learning-3d-manipulation-policies-from-monocular-rgb-via-distillation/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"MonoLift: Learning 3D Manipulation Policies from Monocular RGB via Distillation","description":"서론 이 논문은 단일 RGB 이미지(Monocular RGB)만으로 3D 로봇 조작 정책을 학습하는 MonoLift framework를 제안한다. 기존 RGB-D, multi-view, point cloud 기반 방법은 3D 정보를 잘 활용할 수 있지만, 추가 센서와 전처리 비용이 크다. 반대로 RGB-","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=MonoLift%3A%20Learning%203D%20Manipulation%20Policies%20from%20Monocular%20RGB%20via%20Distillation&cat=AI%2F%20Deep%20Learning","datePublished":"2026-05-24T14:31:00.000Z","dateModified":"2026-05-30T12:56:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/monolift-learning-3d-manipulation-policies-from-monocular-rgb-via-distillation/"}}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Deep Learning","item":"https://ursonice.github.io/topics/ai-deep-learning/"},{"@type":"ListItem","position":3,"name":"MonoLift: Learning 3D Manipulation Policies from Monocular RGB via Distillation","item":"https://ursonice.github.io/posts/monolift-learning-3d-manipulation-policies-from-monocular-rgb-via-distillation/"}]}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -86,7 +86,7 @@
     <div class="article-meta">
       
       
-      <span>작성 2026년 5월 24일</span><span class="dot"></span><span>수정 2026년 5월 28일</span>
+      <span>작성 2026년 5월 24일</span><span class="dot"></span><span>수정 2026년 5월 30일</span>
       <span class="reading-size" role="group" aria-label="글자 크기">
         <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
         <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
@@ -248,7 +248,10 @@ G_t^S &amp;= \nabla_t F_{\text{tem}}^S
 <div class="math-block">\[\begin{align*}A_t^T &amp;= \mathcal{N}(\mu_t^T, \sigma_t^T) \\A_t^S &amp;= \mathcal{N}(\mu_t^S, \sigma_t^S)\end{align*}\]</div>
 <p>Action Distribution Distillation loss는 KL을 사용하여 계산하고 이 차이를 줄이도록 학습한다.</p>
 <div class="math-block">\[L_{AD} = KL(A_t^T \parallel A_t^S)\]</div>
-<p>최종적으로는 이를 통해 Student가 이 distribution을 따라가면 RGB입력만 사용하더라도 Teacher의 3D-aware decision-making을 배울 수 있게된다.</p></div>
+<p>최종적으로는 이를 통해 Student가 이 distribution을 따라가면 RGB입력만 사용하더라도 Teacher의 3D-aware decision-making을 배울 수 있게된다.</p>
+<h4 id="block-370b12c0115c80c5b188d0a45d811d9c">Target actiont</h4>
+<p>teacher의 Target action *a는 아래와 같다.</p>
+<div class="math-block">\[L_{actor}= -\log\pi_{\theta}(a_t^*|o_t,g)\]</div></div>
     <div class="share-bar" data-share>
       <span class="share-label">Share</span>
       <button type="button" class="share-btn" data-share-copy>Copy</button>
