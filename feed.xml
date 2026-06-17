@@ -6,7 +6,15 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Wed, 17 Jun 2026 04:47:16 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 17 Jun 2026 06:19:20 GMT</lastBuildDate>
+    <item>
+      <title></title>
+      <link>https://ursonice.github.io/posts/382b12c0-115c-8066-9b73-d5fea9f9339c/</link>
+      <guid isPermaLink="false">382b12c0-115c-8066-9b73-d5fea9f9339c</guid>
+      <pubDate>Wed, 17 Jun 2026 06:17:00 GMT</pubDate>
+      <category>Robotics</category>
+      <description>Compounding Error 로봇이 학습시에 전문가의 행동을 보고 배웠는데 실제 추론시에 본인이 전문가가 했던 행동과 약간만 벗어나도 이에 대한 학습데이터가 없기 때문에 그 다음 행동에서도 오차가 발생해서 점점 더 전문가의 행동과 벌어지는 행동을 하게되는 에러를 말한다. ACT(Action Chunk</description>
+    </item>
     <item>
       <title>Knowledge Distillation</title>
       <link>https://ursonice.github.io/posts/knowledge-distillation/</link>
@@ -238,14 +246,6 @@
       <pubDate>Mon, 17 Jul 2023 08:30:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
       <description>서론 Vitjan Zavrtanik, Matej Kristan, Danijel Skočaj; Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2021, pp. 1-10. DRÆM – A Discrim</description>
-    </item>
-    <item>
-      <title>ONNX-Runtime에서 Custom Operator 구현 Study</title>
-      <link>https://ursonice.github.io/posts/onnx-runtime%EC%97%90%EC%84%9C-custom-operator-%EA%B5%AC%ED%98%84-study/</link>
-      <guid isPermaLink="false">6f19fddf-1ede-476c-b3e2-16bf8a8ec15b</guid>
-      <pubDate>Tue, 30 May 2023 23:42:00 GMT</pubDate>
-      <category>ONNX-MLIR</category>
-      <description>서론 이 장은 ORT(ONNX-Runtime)에서 Custom Operator를 구현하는 방법에 대해 study한것을 설명한다. ONNX Operation은 하나 이상의 커널을 갖는다. 각 커널은 연산이 어떻게 실행되는지를 정의하며 커널은 특정 하드웨어에 대해 최적화되어 있다. 따라서 ORT가 다양한 하</description>
     </item>
   </channel>
 </rss>
