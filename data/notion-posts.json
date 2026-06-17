@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-17T06:19:20.698Z",
+  "generatedAt": "2026-06-17T06:20:36.600Z",
   "site": {
     "title": "Woojae Joo — Developer Note",
     "description": "AI, Robotics, Systems 공부 기록"
@@ -73,7 +73,7 @@
       "category": "Robotics",
       "tags": [],
       "created": "2026-06-17T06:17:00.000Z",
-      "updated": "2026-06-17T06:19:00.000Z",
+      "updated": "2026-06-17T06:20:00.000Z",
       "readingTime": 2,
       "summary": "Compounding Error 로봇이 학습시에 전문가의 행동을 보고 배웠는데 실제 추론시에 본인이 전문가가 했던 행동과 약간만 벗어나도 이에 대한 학습데이터가 없기 때문에 그 다음 행동에서도 오차가 발생해서 점점 더 전문가의 행동과 벌어지는 행동을 하게되는 에러를 말한다. ACT(Action Chunk",
       "sourceUrl": "https://app.notion.com/p/382b12c0115c80669b73d5fea9f9339c",
