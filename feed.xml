@@ -6,7 +6,15 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Thu, 25 Jun 2026 23:47:23 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 26 Jun 2026 04:12:48 GMT</lastBuildDate>
+    <item>
+      <title>DRÆM – A discriminatively trained reconstruction embedding for surface anomaly detection 코드 리뷰</title>
+      <link>https://ursonice.github.io/posts/dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/</link>
+      <guid isPermaLink="false">f42eca2c-68d3-4bfc-80fe-be0abcac3a96</guid>
+      <pubDate>Tue, 18 Jul 2023 05:55:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 DRÆM – A discriminatively trained reconstruction embedding for surface anomaly detection 모델 코드에 대해 리뷰한다. 목차 코드 리뷰 Dependency 아래는 코드는 필요한 모듈을 import한다. learn_rate값을 가져오</description>
+    </item>
     <item>
       <title>Action Chunking Transformer 역할</title>
       <link>https://ursonice.github.io/posts/action-chunking-transformer-%EC%97%AD%ED%95%A0/</link>
@@ -238,14 +246,6 @@
       <pubDate>Tue, 13 Aug 2024 04:26:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
       <description>Cite Karsten Roth, Latha Pemula, Joaquin Zepeda, Bernhard Schölkopf, Thomas Brox, Peter Gehler; arXiv preprint arXiv:2106.08265, 2022. https://arxiv.org/abs/2106.08265 출간</description>
-    </item>
-    <item>
-      <title>DRÆM – A discriminatively trained reconstruction embedding for surface anomaly detection 논문 리뷰</title>
-      <link>https://ursonice.github.io/posts/dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/</link>
-      <guid isPermaLink="false">30cd1c6a-5aed-483c-96a5-6a15183740e2</guid>
-      <pubDate>Mon, 17 Jul 2023 08:30:00 GMT</pubDate>
-      <category>AI/ Deep Learning</category>
-      <description>서론 Vitjan Zavrtanik, Matej Kristan, Danijel Skočaj; Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2021, pp. 1-10. DRÆM – A Discrim</description>
     </item>
   </channel>
 </rss>
