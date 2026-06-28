@@ -7,7 +7,6 @@
   <url><loc>https://ursonice.github.io/topics/robotics/</loc></url>
   <url><loc>https://ursonice.github.io/topics/ai-theory/</loc></url>
   <url><loc>https://ursonice.github.io/topics/reinforcement-learning/</loc></url>
-  <url><loc>https://ursonice.github.io/topics/application/</loc></url>
   <url><loc>https://ursonice.github.io/topics/c-c/</loc></url>
   <url><loc>https://ursonice.github.io/topics/tools/</loc></url>
   <url><loc>https://ursonice.github.io/topics/onnx-mlir/</loc></url>
@@ -27,10 +26,8 @@
   <url><loc>https://ursonice.github.io/posts/vla-navila-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2026-05-22</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/resnet-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2026-05-20</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/nas-neural-network-search/</loc><lastmod>2026-05-11</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/how-to-do-internal-camera-calibration/</loc><lastmod>2026-04-27</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/likelihood-mle/</loc><lastmod>2026-03-24</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/01-c-%EA%B8%B0%EC%B4%88/</loc><lastmod>2026-03-20</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/raspi-segmentation/</loc><lastmod>2026-02-04</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/docker%EC%97%90-vnc-%EC%84%A4%EC%B9%98/</loc><lastmod>2026-01-20</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/manifold-%EA%B0%9C%EB%85%90/</loc><lastmod>2026-01-15</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/isaacsim-5-1-manual/</loc><lastmod>2026-01-08</lastmod></url>
@@ -46,7 +43,6 @@
   <url><loc>https://ursonice.github.io/posts/towards-total-recall-in-industrial-anomaly-detection-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2025-07-20</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/</loc><lastmod>2025-07-20</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/onnx-runtime%EC%97%90%EC%84%9C-custom-operator-%EA%B5%AC%ED%98%84-study/</loc><lastmod>2025-07-20</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/raspberry-pi%EC%97%90%EC%84%9C-ubuntu-setting%EB%B6%80%ED%84%B0-coral-tpu%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%B4-mobilenetv2-inference-%E1%84%92/</loc><lastmod>2025-07-20</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/onnx-mlir-%EB%8B%A4%EB%A4%84%EB%B3%B4%EA%B8%B0-mobilenetv2-12/</loc><lastmod>2025-07-19</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/glass-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2025-07-19</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/kubernetes-taint-toleration/</loc><lastmod>2025-07-14</lastmod></url>
@@ -110,34 +106,21 @@
   <url><loc>https://ursonice.github.io/posts/12%EC%9B%94-2%EC%A3%BC%EC%B0%A8-%EC%BD%94%EB%94%A9-%ED%85%8C%EC%8A%A4%ED%8A%B8/</loc><lastmod>2025-01-10</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/12%EC%9B%94-3%EC%A3%BC%EC%B0%A8-%EC%BD%94%EB%94%A9-%ED%85%8C%EC%8A%A4%ED%8A%B8/</loc><lastmod>2025-01-08</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/11%EC%9B%94-2%EC%A3%BC%EC%B0%A8-%EC%BD%94%EB%94%A9-%ED%85%8C%EC%8A%A4%ED%8A%B8-study/</loc><lastmod>2024-12-30</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/jetson-nano-xt1%EC%97%90%EC%84%9C-tensorrt%EB%A1%9C-mobilenetv2-inference-%ED%95%B4%EB%B3%B4%EA%B8%B0/</loc><lastmod>2024-12-30</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/11%EC%9B%94-3%EC%A3%BC%EC%B0%A8-%EC%BD%94%EB%94%A9-%ED%85%8C%EC%8A%A4%ED%8A%B8-study/</loc><lastmod>2024-12-25</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/convnextv2-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2024-12-20</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/161b12c0-115c-8085-9b9b-c5349c1522c2/</loc><lastmod>2024-12-19</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/cnn-translation-equivariance-invariance/</loc><lastmod>2024-12-19</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/convolution%EC%97%90-%EB%8C%80%ED%95%9C-%EC%9D%B4%ED%95%B4-vgg/</loc><lastmod>2024-12-19</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/11%EC%9B%94-1%EC%A3%BC%EC%B0%A8-%EC%A3%BC%EB%A7%90-%EC%BD%94%EB%94%A9-%ED%85%8C%EC%8A%A4%ED%8A%B8-study/</loc><lastmod>2024-12-06</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/jenkins-%EC%84%A4%EC%B9%98-%ED%99%98%EA%B2%BD-%EB%A7%8C%EB%93%A4%EA%B8%B0/</loc><lastmod>2024-11-28</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/augmentation-folder-controller-%EC%82%AC%EC%9A%A9%EB%B0%A9%EB%B2%95/</loc><lastmod>2024-11-28</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/simclr-%EB%85%BC%EB%AC%B8-%EB%A6%AC%EB%B7%B0/</loc><lastmod>2024-11-28</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/convnextv1-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2024-11-28</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/confusion-matrix/</loc><lastmod>2024-11-25</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/multi-gpu%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%B4-%ED%95%99%EC%8A%B5%ED%95%98%EA%B8%B0/</loc><lastmod>2024-11-25</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/ccmd-algorithm/</loc><lastmod>2024-11-25</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/swin-transformer-%EC%BD%94%EB%93%9C%EB%A6%AC%EB%B7%B0/</loc><lastmod>2024-11-21</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/swin-transformer-hierarchical-vision-transformer-using-shifted-windows-%EB%85%BC%EB%AC%B8-%EB%A6%AC/</loc><lastmod>2024-11-21</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/inceptionnet-%EB%85%BC%EB%AC%B8-%EB%A6%AC%EB%B7%B0-%EB%B0%8F-%EC%BD%94%EB%93%9C-%EB%B6%84%EC%84%9D/</loc><lastmod>2024-11-21</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/densenet-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2024-11-21</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/</loc><lastmod>2024-11-21</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/what-is-kafka/</loc><lastmod>2024-11-11</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/jenkins-slack-notification/</loc><lastmod>2024-11-04</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/jenkins-git-hub-%EC%97%B0%EB%8F%99/</loc><lastmod>2024-10-27</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/onnx-model-quantization/</loc><lastmod>2024-09-10</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/sandbox/</loc><lastmod>2024-08-24</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/zero-config/</loc><lastmod>2024-08-24</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/jenkins-build-scheduling-%EB%B0%A9%EB%B2%95/</loc><lastmod>2024-08-21</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/ssh-rsa%EB%A5%BC-%ED%86%B5%ED%95%B4-%EC%A0%91%EC%86%8D%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95/</loc><lastmod>2024-05-16</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/onnx-model-tunning/</loc><lastmod>2024-04-05</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/linux-user-%EC%B6%94%EA%B0%80%ED%95%98%EA%B8%B0/</loc><lastmod>2024-01-07</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/%EA%B3%A0%EA%B8%89-%ED%8C%8C%EC%9D%B4%EC%8D%AC/</loc><lastmod>2023-12-26</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/git-%EB%AA%85%EB%A0%B9%EC%96%B4/</loc><lastmod>2023-10-23</lastmod></url>

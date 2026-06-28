@@ -6,7 +6,7 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Sat, 27 Jun 2026 23:45:40 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 28 Jun 2026 04:21:11 GMT</lastBuildDate>
     <item>
       <title>DRÆM – A discriminatively trained reconstruction embedding for surface anomaly detection 코드 리뷰</title>
       <link>https://ursonice.github.io/posts/dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/</link>
@@ -112,14 +112,6 @@
       <description>서론 이 장은 NAS의 개념에 대해 설명한다. 목차 NAS Search Space Search Strategy Search Algorithm Performance Estimation Search Strategy &amp; Search Algorithm 차이점 Example NAS Neural Architectu</description>
     </item>
     <item>
-      <title>How to do Internal Camera Calibration</title>
-      <link>https://ursonice.github.io/posts/how-to-do-internal-camera-calibration/</link>
-      <guid isPermaLink="false">2fdb12c0-115c-80b6-a95f-fd82d92af82a</guid>
-      <pubDate>Wed, 04 Feb 2026 05:23:00 GMT</pubDate>
-      <category>Application</category>
-      <description>서론 ROS2를 사용해서 카메라 내부 캘리브레이션 하는 방법에 대해 설명한다. Dependencies 카메라 렌즈와 센서의 특성 때문에 발생하는 영상 왜곡을 수학적으로 계산하여 보정값을 찾아내는 프로그램으로 실시간으로 ROS 토픽(image_raw)을 구독(Subscribe)하여 화면을 보면서, 그 위에</description>
-    </item>
-    <item>
       <title>Likelihood(MLE)</title>
       <link>https://ursonice.github.io/posts/likelihood-mle/</link>
       <guid isPermaLink="false">38883001-3d8c-451a-a56f-f475f9d69d26</guid>
@@ -134,14 +126,6 @@
       <pubDate>Wed, 18 Mar 2026 10:16:00 GMT</pubDate>
       <category>C/ C++</category>
       <description>목차 1. Namespace 2. 기초문법 3. Reference 4. New, Delete 5. Class 1. Namespace C++에서 이름 공간(namespace)은 변수, 함수, 클래스와 같은 이름들이 어느 소속에 속해 있는지 구분하기 위한 개념으로 같은 이름이라도 서로 다른 namespace</description>
-    </item>
-    <item>
-      <title>Raspi Segmentation</title>
-      <link>https://ursonice.github.io/posts/raspi-segmentation/</link>
-      <guid isPermaLink="false">2fcb12c0-115c-802f-9543-cb4345effb6b</guid>
-      <pubDate>Tue, 03 Feb 2026 09:40:00 GMT</pubDate>
-      <category>Application</category>
-      <description>Dependencies Device: Raspi 5 OS: Bookworm SD card: 128GB</description>
     </item>
     <item>
       <title>Docker에 VNC 설치</title>
@@ -246,6 +230,22 @@
       <pubDate>Tue, 13 Aug 2024 04:26:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
       <description>Cite Karsten Roth, Latha Pemula, Joaquin Zepeda, Bernhard Schölkopf, Thomas Brox, Peter Gehler; arXiv preprint arXiv:2106.08265, 2022. https://arxiv.org/abs/2106.08265 출간</description>
+    </item>
+    <item>
+      <title>DRÆM – A discriminatively trained reconstruction embedding for surface anomaly detection 논문 리뷰</title>
+      <link>https://ursonice.github.io/posts/dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/</link>
+      <guid isPermaLink="false">30cd1c6a-5aed-483c-96a5-6a15183740e2</guid>
+      <pubDate>Mon, 17 Jul 2023 08:30:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 Vitjan Zavrtanik, Matej Kristan, Danijel Skočaj; Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2021, pp. 1-10. DRÆM – A Discrim</description>
+    </item>
+    <item>
+      <title>ONNX-Runtime에서 Custom Operator 구현 Study</title>
+      <link>https://ursonice.github.io/posts/onnx-runtime%EC%97%90%EC%84%9C-custom-operator-%EA%B5%AC%ED%98%84-study/</link>
+      <guid isPermaLink="false">6f19fddf-1ede-476c-b3e2-16bf8a8ec15b</guid>
+      <pubDate>Tue, 30 May 2023 23:42:00 GMT</pubDate>
+      <category>ONNX-MLIR</category>
+      <description>서론 이 장은 ORT(ONNX-Runtime)에서 Custom Operator를 구현하는 방법에 대해 study한것을 설명한다. ONNX Operation은 하나 이상의 커널을 갖는다. 각 커널은 연산이 어떻게 실행되는지를 정의하며 커널은 특정 하드웨어에 대해 최적화되어 있다. 따라서 ORT가 다양한 하</description>
     </item>
   </channel>
 </rss>
