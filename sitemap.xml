@@ -3,10 +3,10 @@
   <url><loc>https://ursonice.github.io/</loc></url>
   <url><loc>https://ursonice.github.io/cv.html</loc></url>
   <url><loc>https://ursonice.github.io/archive.html</loc></url>
+  <url><loc>https://ursonice.github.io/topics/reinforcement-learning/</loc></url>
   <url><loc>https://ursonice.github.io/topics/ai-deep-learning/</loc></url>
   <url><loc>https://ursonice.github.io/topics/robotics/</loc></url>
   <url><loc>https://ursonice.github.io/topics/ai-theory/</loc></url>
-  <url><loc>https://ursonice.github.io/topics/reinforcement-learning/</loc></url>
   <url><loc>https://ursonice.github.io/topics/application/</loc></url>
   <url><loc>https://ursonice.github.io/topics/c-c/</loc></url>
   <url><loc>https://ursonice.github.io/topics/tools/</loc></url>
@@ -14,6 +14,7 @@
   <url><loc>https://ursonice.github.io/topics/kubernetes/</loc></url>
   <url><loc>https://ursonice.github.io/topics/python/</loc></url>
   <url><loc>https://ursonice.github.io/topics/coding-test/</loc></url>
+  <url><loc>https://ursonice.github.io/posts/variation-inference-vi-elbo/</loc><lastmod>2026-07-02</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/</loc><lastmod>2026-06-26</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/action-chunking-transformer-%EC%97%AD%ED%95%A0/</loc><lastmod>2026-06-17</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/knowledge-distillation/</loc><lastmod>2026-06-16</lastmod></url>
