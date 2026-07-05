@@ -3,9 +3,9 @@
   <url><loc>https://ursonice.github.io/</loc></url>
   <url><loc>https://ursonice.github.io/cv.html</loc></url>
   <url><loc>https://ursonice.github.io/archive.html</loc></url>
+  <url><loc>https://ursonice.github.io/topics/robotics/</loc></url>
   <url><loc>https://ursonice.github.io/topics/ai-deep-learning/</loc></url>
   <url><loc>https://ursonice.github.io/topics/reinforcement-learning/</loc></url>
-  <url><loc>https://ursonice.github.io/topics/robotics/</loc></url>
   <url><loc>https://ursonice.github.io/topics/application/</loc></url>
   <url><loc>https://ursonice.github.io/topics/c-c/</loc></url>
   <url><loc>https://ursonice.github.io/topics/tools/</loc></url>
@@ -13,6 +13,9 @@
   <url><loc>https://ursonice.github.io/topics/kubernetes/</loc></url>
   <url><loc>https://ursonice.github.io/topics/python/</loc></url>
   <url><loc>https://ursonice.github.io/topics/coding-test/</loc></url>
+  <url><loc>https://ursonice.github.io/posts/z-transform/</loc><lastmod>2026-07-05</lastmod></url>
+  <url><loc>https://ursonice.github.io/posts/pole%EC%9D%B4-%EC%8B%9C%EA%B0%84%EC%98%81%EC%97%AD%EC%97%90%EC%84%9C-%EB%AF%B8%EC%B9%98%EB%8A%94-%EC%98%81%ED%96%A5/</loc><lastmod>2026-07-05</lastmod></url>
+  <url><loc>https://ursonice.github.io/posts/action-chunking-transformer-%EC%97%AD%ED%95%A0/</loc><lastmod>2026-07-05</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/confusion-matrix/</loc><lastmod>2026-07-05</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/focal-loss/</loc><lastmod>2026-07-05</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/ssim-structural-similarity-index-measure/</loc><lastmod>2026-07-05</lastmod></url>
@@ -28,7 +31,6 @@
   <url><loc>https://ursonice.github.io/posts/knowledge-distillation/</loc><lastmod>2026-07-05</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/variation-inference-vi-elbo/</loc><lastmod>2026-07-05</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/</loc><lastmod>2026-06-26</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/action-chunking-transformer-%EC%97%AD%ED%95%A0/</loc><lastmod>2026-06-17</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/deltar-depth-estimation-from-a-light-weight-tof-sensor-and-rgb-image-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2026-06-04</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/monolift-learning-3d-manipulation-policies-from-monocular-rgb-via-distillation/</loc><lastmod>2026-05-30</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/reinforcement-learning-1%EC%B0%A8%EC%8B%9C/</loc><lastmod>2026-05-28</lastmod></url>
@@ -42,12 +44,10 @@
   <url><loc>https://ursonice.github.io/posts/01-c-%EA%B8%B0%EC%B4%88/</loc><lastmod>2026-03-20</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/raspi-segmentation/</loc><lastmod>2026-02-04</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/docker%EC%97%90-vnc-%EC%84%A4%EC%B9%98/</loc><lastmod>2026-01-20</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/unitree-go1/</loc><lastmod>2025-12-08</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/rt-2-robotics-transformer-2-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2025-11-18</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/diffusionad-norm-guided-one-step-denoising-diffusion-for-anomaly-detection-%EB%85%BC%EB%AC%B4/</loc><lastmod>2025-11-05</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/rt-1-robotics-transformer-1-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2025-10-15</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/vit-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2025-10-13</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/272b12c0-115c-8015-b798-c73a7df07ba6/</loc><lastmod>2025-09-18</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/ubuntu-nvidia-driver-install/</loc><lastmod>2025-08-16</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/towards-total-recall-in-industrial-anomaly-detection-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2025-07-20</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/</loc><lastmod>2025-07-20</lastmod></url>

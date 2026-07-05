@@ -6,7 +6,31 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 05 Jul 2026 08:32:27 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 05 Jul 2026 10:53:01 GMT</lastBuildDate>
+    <item>
+      <title>Z-transform</title>
+      <link>https://ursonice.github.io/posts/z-transform/</link>
+      <guid isPermaLink="false">394b12c0-115c-8078-9f04-fb59ba6123e6</guid>
+      <pubDate>Sun, 05 Jul 2026 08:37:00 GMT</pubDate>
+      <category>Robotics</category>
+      <description> 연속 시스템은 미분방정식으로 표현되었다. 그런데 이산신호 연속이 아님으로 (y[n], n=0,1,2 ... ) 미분방정식으로 표현되지 않는다. 대신 이산 시스템에서는 변화를 표현하는 건 한 스텝의 전 값임으로 차분방정식의 꼴로 표현된다. 연속에서와 마찬가지로 차분방정식 y[n], y[n-1], y[n-</description>
+    </item>
+    <item>
+      <title>Pole이 시간영역에서 미치는 영향</title>
+      <link>https://ursonice.github.io/posts/pole%EC%9D%B4-%EC%8B%9C%EA%B0%84%EC%98%81%EC%97%AD%EC%97%90%EC%84%9C-%EB%AF%B8%EC%B9%98%EB%8A%94-%EC%98%81%ED%96%A5/</link>
+      <guid isPermaLink="false">394b12c0-115c-803a-b016-eed9fc5d6713</guid>
+      <pubDate>Sun, 05 Jul 2026 06:10:00 GMT</pubDate>
+      <category>Robotics</category>
+      <description>목차 왜 이 장에서는 시스템의 해가 지수함수의 꼴이며 이때 Pole값이 시간응답에 미치는 영향에 대해 알아본다. 시스템의 해 e^{st} 이유 시스템은 일반적으로 미분방정식으로 기술된다. a_2 \ddot{y} + a_1 \dot{y} + a_0 y = 0 이 미분방정식은 \ddot{y},\ \dot{y</description>
+    </item>
+    <item>
+      <title>Action Chunking Transformer 역할</title>
+      <link>https://ursonice.github.io/posts/action-chunking-transformer-%EC%97%AD%ED%95%A0/</link>
+      <guid isPermaLink="false">382b12c0-115c-8066-9b73-d5fea9f9339c</guid>
+      <pubDate>Wed, 17 Jun 2026 06:17:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>Compounding Error 로봇이 학습시에 전문가의 행동을 보고 배웠는데 실제 추론시에 본인이 전문가가 했던 행동과 약간만 벗어나도 이에 대한 학습데이터가 없기 때문에 그 다음 행동에서도 오차가 발생해서 점점 더 전문가의 행동과 벌어지는 행동을 하게되는 에러를 말한다. ACT(Action Chunk</description>
+    </item>
     <item>
       <title>Confusion Matrix</title>
       <link>https://ursonice.github.io/posts/confusion-matrix/</link>
@@ -128,14 +152,6 @@
       <description>서론 DRÆM – A discriminatively trained reconstruction embedding for surface anomaly detection 모델 코드에 대해 리뷰한다. 목차 코드 리뷰 Dependency 아래는 코드는 필요한 모듈을 import한다. learn_rate값을 가져오</description>
     </item>
     <item>
-      <title>Action Chunking Transformer 역할</title>
-      <link>https://ursonice.github.io/posts/action-chunking-transformer-%EC%97%AD%ED%95%A0/</link>
-      <guid isPermaLink="false">382b12c0-115c-8066-9b73-d5fea9f9339c</guid>
-      <pubDate>Wed, 17 Jun 2026 06:17:00 GMT</pubDate>
-      <category>Robotics</category>
-      <description>Compounding Error 로봇이 학습시에 전문가의 행동을 보고 배웠는데 실제 추론시에 본인이 전문가가 했던 행동과 약간만 벗어나도 이에 대한 학습데이터가 없기 때문에 그 다음 행동에서도 오차가 발생해서 점점 더 전문가의 행동과 벌어지는 행동을 하게되는 에러를 말한다. ACT(Action Chunk</description>
-    </item>
-    <item>
       <title>DELTAR: Depth Estimation from a Light-weight ToF Sensor and RGB Image 논문리뷰</title>
       <link>https://ursonice.github.io/posts/deltar-depth-estimation-from-a-light-weight-tof-sensor-and-rgb-image-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</link>
       <guid isPermaLink="false">36fb12c0-115c-80a6-881e-cab805ae5a45</guid>
@@ -230,22 +246,6 @@
       <pubDate>Tue, 03 Feb 2026 09:40:00 GMT</pubDate>
       <category>Application</category>
       <description>Dependencies Device: Raspi 5 OS: Bookworm SD card: 128GB</description>
-    </item>
-    <item>
-      <title>Docker에 VNC 설치</title>
-      <link>https://ursonice.github.io/posts/docker%EC%97%90-vnc-%EC%84%A4%EC%B9%98/</link>
-      <guid isPermaLink="false">2edb12c0-115c-805d-aa36-ccceca42b396</guid>
-      <pubDate>Mon, 19 Jan 2026 05:19:00 GMT</pubDate>
-      <category>Tools</category>
-      <description>Ubuntu Image 다운로드 및 실행 --net=host 를 옵션에 꼭 넣어줘야 외부포트 접속이 가능하다. docker run -it --net=host --name ubuntu-desktop ubuntu:22.04 /bin/bash 컨테이너 접속 명령어 만약 컨테이너에서 나왔다면 아래 명령어로 다시</description>
-    </item>
-    <item>
-      <title>Unitree Go1</title>
-      <link>https://ursonice.github.io/posts/unitree-go1/</link>
-      <guid isPermaLink="false">2a7b12c0-115c-806b-9f33-dc35eef5de3e</guid>
-      <pubDate>Mon, 10 Nov 2025 05:43:00 GMT</pubDate>
-      <category>Robotics</category>
-      <description>History (과거) 기존 Jetson XGA에 ROS2 Humble이 설치되어있고 Raspi에는 ROS1 Melodic이 설치되어있었음 → ROS버전이 맞지 않음 따라서 Jetson에 ROS1 Neotic을 설치하여 Jetson ↔ Raspi간 ROS 버전을 일치시킴 (현재) 문제는 XGA에서 ROS</description>
     </item>
   </channel>
 </rss>
