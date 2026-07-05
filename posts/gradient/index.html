@@ -27,16 +27,16 @@
     <meta property="og:title" content="Gradient" />
     <meta property="og:description" content="서론 이 장은 Foward 신경망에 대한 Weight(가중치)를 update하는 방법(backpropagation)에 대해 다룬다. 목차 1. Analytical Differentiation(해석적 미분) 2. Numerical Differentiation(수치 미분) 3. Symbolic differe" />
     <meta property="og:url" content="https://ursonice.github.io/posts/gradient/" />
-    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Gradient&amp;cat=AI%2F%20Theory" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Gradient&amp;cat=AI%2F%20Deep%20Learning" />
     <meta property="article:published_time" content="2022-11-20T04:44:00.000Z" />
-    <meta property="article:modified_time" content="2025-08-11T07:35:00.000Z" />
+    <meta property="article:modified_time" content="2026-07-05T08:31:00.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Gradient" />
     <meta name="twitter:description" content="서론 이 장은 Foward 신경망에 대한 Weight(가중치)를 update하는 방법(backpropagation)에 대해 다룬다. 목차 1. Analytical Differentiation(해석적 미분) 2. Numerical Differentiation(수치 미분) 3. Symbolic differe" />
-    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Gradient&amp;cat=AI%2F%20Theory" />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Gradient&amp;cat=AI%2F%20Deep%20Learning" />
 
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Gradient","description":"서론 이 장은 Foward 신경망에 대한 Weight(가중치)를 update하는 방법(backpropagation)에 대해 다룬다. 목차 1. Analytical Differentiation(해석적 미분) 2. Numerical Differentiation(수치 미분) 3. Symbolic differe","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Gradient&cat=AI%2F%20Theory","datePublished":"2022-11-20T04:44:00.000Z","dateModified":"2025-08-11T07:35:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/gradient/"}}</script>
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Theory","item":"https://ursonice.github.io/topics/ai-theory/"},{"@type":"ListItem","position":3,"name":"Gradient","item":"https://ursonice.github.io/posts/gradient/"}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Gradient","description":"서론 이 장은 Foward 신경망에 대한 Weight(가중치)를 update하는 방법(backpropagation)에 대해 다룬다. 목차 1. Analytical Differentiation(해석적 미분) 2. Numerical Differentiation(수치 미분) 3. Symbolic differe","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Gradient&cat=AI%2F%20Deep%20Learning","datePublished":"2022-11-20T04:44:00.000Z","dateModified":"2026-07-05T08:31:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/gradient/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Deep Learning","item":"https://ursonice.github.io/topics/ai-deep-learning/"},{"@type":"ListItem","position":3,"name":"Gradient","item":"https://ursonice.github.io/posts/gradient/"}]}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -80,13 +80,13 @@
     <nav class="breadcrumb" aria-label="breadcrumb">
       <a href="/">홈</a>
       <span class="bc-sep" aria-hidden="true">›</span>
-      <a href="/topics/ai-theory/">AI/ Theory</a>
+      <a href="/topics/ai-deep-learning/">AI/ Deep Learning</a>
     </nav>
     <h1>Gradient</h1>
     <div class="article-meta">
-      <a class="meta-tag" href="/index.html?tag=Graident">#Graident</a>
-      <span class="dot"></span>
-      <span>작성 2022년 11월 20일</span><span class="dot"></span><span>수정 2025년 8월 11일</span>
+      
+      
+      <span>작성 2022년 11월 20일</span><span class="dot"></span><span>수정 2026년 7월 5일</span>
       <span class="reading-size" role="group" aria-label="글자 크기">
         <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
         <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
@@ -94,15 +94,15 @@
       </span>
     </div>
     <hr class="article-divider" />
-    <div class="article-content"><h2 id="block-5fa2070311fc4d76b5f8d4d34e825e0c">서론</h2>
+    <div class="article-content"><h3 id="block-5fa2070311fc4d76b5f8d4d34e825e0c">서론</h3>
 <p>이 장은 Foward 신경망에 대한 Weight(가중치)를 update하는 방법(backpropagation)에 대해 다룬다.</p>
 <h2 id="block-aed8f847f77e4062a2b487f674e1072d">목차</h2>
 <ol><li><a href="#block-b1be21804798466e852ce946fc72610e">1. Analytical Differentiation(해석적 미분)</a> </li><li><a href="#block-d0261b28f1124d9baf32d94ff70ae9a2">2. Numerical Differentiation(수치 미분)</a> </li><li><a href="#block-eb688f0a7a1949e0a956778fcbb5589c">3. Symbolic differentiation(기호 미분)</a> </li><li><a href="#block-72efa5f54ba44e66987d7d1f5318afbd">4. Automatic Differentiation(AD- 자동 미분)</a> </li><li><a href="#block-eced0891ae8e45b590735a9cd561af50">5. Chain Rule (= 연쇄법칙 = 합성함수 미분법)</a> </li><li><a href="#block-c6390732035c41cf9954f6076766dd6a">6. 일변수 미분</a> </li><li><a href="#block-de32c66ee3de49e8bc8b86d61f0da95d">7. 다변수 방향 미분</a> </li><li><a href="#block-d7992ed0cc25446cbf5272f631566000">8. 편도함수와 편미분</a> </li><li><a href="#block-158c7f1a64f140aaa430dfd873437be9">9. Gradient</a> </li><li><a href="#block-bad18a340d9d48d18ba1d104df361e5b">10. 방향 미분 계수의 최대 최소</a> </li><li><a href="#block-149d30cb990c4490ae1705ec03c8a3a4">11. Gradient Desent</a> </li><li><a href="#block-1f15f5e5e2524032865f74bfdabfbaad">12. Weight Updating</a> </li></ol>
 <hr />
-<h2 id="block-b1be21804798466e852ce946fc72610e">1. Analytical Differentiation(해석적 미분)</h2>
+<h3 id="block-b1be21804798466e852ce946fc72610e">1. Analytical Differentiation(해석적 미분)</h3>
 <div class="math-block">\[f'(x) = \frac{df(x)}{dx} = \lim_{\Delta x \to 0}\frac{f(x+\Delta x)-f(x)}{\Delta x}\]</div>
 <hr />
-<h2 id="block-d0261b28f1124d9baf32d94ff70ae9a2">2. Numerical Differentiation(수치 미분)</h2>
+<h3 id="block-d0261b28f1124d9baf32d94ff70ae9a2">2. Numerical Differentiation(수치 미분)</h3>
 <p>해석적 미분 방식으로 풀 수 없는 문제가 있을 때 수치적 접근을 통해 근사 값을 찾는 방식</p>
 <p>컴퓨터에서는 \(\lim_{\Delta x \to 0}\)과 같이 무한소 형태로 계산하는 것이 불가능하다. </p>
 <p>따라서 수치미분을 통해 근사치로 계산한다.</p>
@@ -114,13 +114,13 @@
 <p>그래서 다음과 같은 미분 방식이 나오게 된다.</p>
 <blockquote>https://blog.naver.com/PostView.naver?blogId=mykepzzang&amp;logNo=220069937244&amp;parentCategoryNo=&amp;categoryNo=16&amp;viewDate=&amp;isShowPopularPosts=false&amp;from=postView</blockquote>
 <hr />
-<h2 id="block-eb688f0a7a1949e0a956778fcbb5589c">3. Symbolic differentiation(기호 미분)</h2>
+<h3 id="block-eb688f0a7a1949e0a956778fcbb5589c">3. Symbolic differentiation(기호 미분)</h3>
 <p>기호 미분은 인간에게 가장 익숙한 미분법이다. 간단한 함수라면 쉽게 미분할 수 있다. (sympy)</p>
 <div class="math-block">\[\frac{d}{dx}(\frac{x^2cos(x-7)}{sin(x)}) = \\x^2sin(7-x)csc(x) + x^2(-cos(7-x))cot(x)csc(x) + 2xcos(7-x)csc(x)\]</div>
 <p>그러나 매우 복잡한 수식의 경우 미분이 매우 어려우며 미분을 하였더라도 수식에 대한 간략화가 필요하며 이를 컴퓨터로 구현하기엔 너무 복잡하며 어렵다.</p>
 <p> 따라서 이 미분법을 머신러닝에선 주된 방법으로 사용하지 않는다.</p>
 <hr />
-<h2 id="block-72efa5f54ba44e66987d7d1f5318afbd">4. Automatic Differentiation(AD- 자동 미분)</h2>
+<h3 id="block-72efa5f54ba44e66987d7d1f5318afbd">4. Automatic Differentiation(AD- 자동 미분)</h3>
 <div class="math-block">\[sin(a+b*c) = sin(add(mul(b, c),\;a))\]</div>
 <p>자동 미분은 어떤 복잡한 함수의 개형이라도 연속적인 합성함수의 꼴로 나타낼 수 있다는 것을 아이디어로 도함수를 구하는 방법이다. </p>
 <p>아래는 자동미분 하나의 예로 그래프로와 수식으로보면 아래와 같다.</p>
@@ -148,32 +148,32 @@
 <figure><img src="/assets/notion/gradient/adc48dee-f186-4710-b5b5-520c7491372d.png" alt="" loading="lazy" width="1388" height="772" /></figure>
 <blockquote>https://www.youtube.com/watch?v=XG73maPwDl8<p><a href="https://towardsdatascience.com/forward-mode-automatic-differentiation-dual-numbers-8f47351064bf" target="_blank" rel="noreferrer">https://towardsdatascience.com/forward-mode-automatic-differentiation-dual-numbers-8f47351064bf</a></p></blockquote>
 <hr />
-<h2 id="block-eced0891ae8e45b590735a9cd561af50">5. Chain Rule (= 연쇄법칙 = 합성함수 미분법)</h2>
+<h3 id="block-eced0891ae8e45b590735a9cd561af50">5. Chain Rule (= 연쇄법칙 = 합성함수 미분법)</h3>
 <p>어떤 변수에 대한 다른 변수의 변화율을 알아내기 위해 쓰인다.</p>
 <p>예를들어, 변수 y가 u에 의존하고, 변수 u가 x에 의존한다고 하면 x에 대한 y의 변화율은 u에 대한 y의 변화율과 x에 대한 u의 변화율을 곱함으로써 계산할 수 있다. 아래식을 참고하자.</p>
 <div class="math-block">\[y = f(g(x)),\;\; y = f(u),\;\; u = g(x) \\\frac{dy}{dx} = \frac{dy}{du}\cdot\frac{du}{dx}\]</div>
 <blockquote>https://m.blog.naver.com/alwaysneoi/100171733834</blockquote>
 <hr />
-<h2 id="block-c6390732035c41cf9954f6076766dd6a">6. 일변수 미분</h2>
+<h3 id="block-c6390732035c41cf9954f6076766dd6a">6. 일변수 미분</h3>
 <p>변수의 방향은 왼쪽과 오른쪽 두가지만 존재한다.</p>
 <div class="math-block">\[\lim_{\Delta x\to 0} \frac{f(x+\Delta x) - f(x)}{\Delta x}\]</div>
 <hr />
-<h2 id="block-de32c66ee3de49e8bc8b86d61f0da95d">7. 다변수 방향 미분</h2>
+<h3 id="block-de32c66ee3de49e8bc8b86d61f0da95d">7. 다변수 방향 미분</h3>
 <p>여러 방향이 존재하므로 방향 벡터를 사용해야 한다.</p>
 <div class="math-block">\[D_{\vec{u}} f(\underline{x}) = \lim_{\Delta x \to 0}\frac{f(\underline x+\Delta x \vec{u})-f(\underline x)}{\Delta x}\]</div>
 <hr />
-<h2 id="block-d7992ed0cc25446cbf5272f631566000">8. 편도함수와 편미분</h2>
+<h3 id="block-d7992ed0cc25446cbf5272f631566000">8. 편도함수와 편미분</h3>
 <p><code>각 축</code>에 대한 미분을 편미분이라고 하며 방향 미분 축에 해당하는 변수 외에는 상수취급한다.
 </p>
 <div class="math-block">\[D_{(1,0,\cdots,0,0)}f(\underline{x}) = \frac{f(\underline{x}+\Delta x(1,0,\cdots,0,0))-f(\underline{x})}{\Delta x} \\D_{(0,1,\cdots,0,0)}f(\underline{x}) = \frac{f(\underline{x}+\Delta x(0,1,\cdots,0,0))-f(\underline{x})}{\Delta x}\\\vdots \\\\D_{(0,0,\cdots,1,0)}f(\underline{x}) = \frac{f(\underline{x}+\Delta x(0,0,\cdots,1,0))-f(\underline{x})}{\Delta x}\\D_{(0,0\cdots,0,1)}f(\underline{x}) = \frac{f(\underline{x}+\Delta x(0,0,\cdots,0,1))-f(\underline{x})}{\Delta x}\\\]</div>
 <hr />
-<h2 id="block-158c7f1a64f140aaa430dfd873437be9">9. Gradient</h2>
+<h3 id="block-158c7f1a64f140aaa430dfd873437be9">9. Gradient</h3>
 <p>미분계수가 커지는 <code>가장 가파른 방향</code>의 순간변화율 혹은 기울기라고도 하며  모든 변수에 대한 편미분을 벡터로 정리한 것도 <code>Gradient</code>라고 한다.</p>
 <div class="math-block">\[\nabla f = (\frac{\partial f}{\partial w_0}, \frac{\partial f}{\partial w_1}, \frac{\partial f}{\partial w_2}, \cdots,\frac{\partial f}{\partial w_n})\]</div>
 <p>모든 방향벡터의 크기(Scalar)를 Gradient와 방향(단위벡터)를 내적하여 구할 수 있다.</p>
 <div class="math-block">\[D_{\vec{u}}f(\underline{x}) = \nabla f(\underline{x}) \cdot \vec{u}= \parallel\nabla f(x)\parallel \; \parallel\vec{u}\parallel\cos\theta \;\; \cdot\cdot\cdot\cdot\;(a)\]</div>
 <hr />
-<h2 id="block-bad18a340d9d48d18ba1d104df361e5b">10. 방향 미분 계수의 최대 최소</h2>
+<h3 id="block-bad18a340d9d48d18ba1d104df361e5b">10. 방향 미분 계수의 최대 최소</h3>
 <p>Gradient는 가장 가파른 방향의 기울기라고 하였다. 그럼 언제가 Gradient가 가장 가파른 기울기 일까?</p>
 <p>(a)식의 크기가 최대가 되려면 \(cos\theta\) 가 1일 때이다.</p>
 <p>방향벡터가 Gradient와 같은 방향을 보고 있을 때가 최대가 된다.</p>
@@ -184,7 +184,7 @@
 <figure><img src="/assets/notion/gradient/f3512276-6261-4239-b7ee-95ca30555038.jpeg" alt="" loading="lazy" width="2561" height="1000" /></figure>
 <p>Gradient의 반대방향이 그 지점에서 손실함수의 값을 가장 빠르게 줄이는 방향(Local Minima)이지만 손실함수의 최솟값을 가르키는건 아닐 수 있다.(Global Minina)</p>
 <hr />
-<h2 id="block-149d30cb990c4490ae1705ec03c8a3a4">11. Gradient Desent</h2>
+<h3 id="block-149d30cb990c4490ae1705ec03c8a3a4">11. Gradient Desent</h3>
 <p>경사 하강법은 Gradient의 반대 방향으로 한 발자국씩 내딛으면서 Loss 함수의 값을 낮추는 방법이다.</p>
 <p>부호가 <code>-</code>인 이유는 Gradient의 반대 방향이기 때문이다.
 </p>
@@ -194,7 +194,7 @@
 <p>아래 그림에서는 Global Minima에 도착했을 때가 가장 Loss값이 작아지는 지점으로 모델의 학습이 가장 잘 된 경우라 볼 수 있다.</p>
 <figure><img src="/assets/notion/gradient/e1c385b9-5e6b-4dd5-8eb2-b5408cefdd03.jpeg" alt="" loading="lazy" width="2561" height="1000" /></figure>
 <hr />
-<h2 id="block-1f15f5e5e2524032865f74bfdabfbaad">12. Weight Updating</h2>
+<h3 id="block-1f15f5e5e2524032865f74bfdabfbaad">12. Weight Updating</h3>
 <p>실제 어떻게 가중치 업데이트가 이루어지는지 알아보겠다.</p>
 <p>시작점은 \(w_1=1, w_2=1\) 이고 \(\eta=1\)이라 하자.</p>
 <p>각 변수에 대한 Gradient를 \(2w_1, w_2\)라고 하면 아래와 같이 쓸 수 있다.</p>
@@ -212,7 +212,7 @@
 <div class="math-block">\[y = w_1^2 + \frac{1}{2}w_2^2\]</div>
 <figure><img src="/assets/notion/gradient/65ee20ef-8f52-4b93-b233-7006ca64bd83.jpeg" alt="" loading="lazy" width="1000" height="1053" /></figure>
 <hr />
-<h3 id="block-0d2bdc6b9715468a9c4a1d7f032745c8">13. Back Propagation</h3>
+<h4 id="block-0d2bdc6b9715468a9c4a1d7f032745c8">13. Back Propagation</h4>
 <figure><img src="/assets/notion/gradient/43dda2ba-08b5-4136-8a6b-57cafe24bf2c.jpeg" alt="" loading="lazy" width="3191" height="1000" /></figure>
 <ol><li>\(w_{21}^{(2)}\) 에 대한 Loss function \(f\)의 미분</li></ol>
 <div class="math-block">\[\frac{\partial f}{\partial w_{21}^{(2)}} = \frac{\partial f}{\partial x_1^{(3)}}\frac{\partial x_1^{(3)}}{\partial s_1^{(2)}}\frac{\partial s_1^{(2)}}{\partial w_{21}^{(3)}}\]</div>

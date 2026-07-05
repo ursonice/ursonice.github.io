@@ -6,7 +6,111 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 05 Jul 2026 05:42:27 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 05 Jul 2026 08:32:27 GMT</lastBuildDate>
+    <item>
+      <title>Confusion Matrix</title>
+      <link>https://ursonice.github.io/posts/confusion-matrix/</link>
+      <guid isPermaLink="false">f847f619-02eb-47c0-ba46-115d595b9e7b</guid>
+      <pubDate>Mon, 31 Jul 2023 01:00:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>Confusion Matrix 양성이 정상 음성이 비정상이라 가정하겠다. 여기서 중요한 것은 데이터가 들어왔을 때 그 데이터가 어떤 데이터인지 파악하는 것이 중요하다. TN ( True Negative) 모델이 비정상(Negatvie)이라고 예측했는데 잘 맞춘(True) 경우이다. 어떤 데이터가 들어왔는</description>
+    </item>
+    <item>
+      <title>Focal Loss</title>
+      <link>https://ursonice.github.io/posts/focal-loss/</link>
+      <guid isPermaLink="false">f520883c-78be-4c0f-b543-1b5dfd463f88</guid>
+      <pubDate>Tue, 18 Jul 2023 05:56:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 Focal Loss는 2017년 말에 Facebook AI Research(Meta AI Research)에서 발표한 논문 Focal Loss for Dense Object Detection에서 처음 소개되었다. Focal loss는 Object Detection에서 주로 사용되며 주로 두 가지 유</description>
+    </item>
+    <item>
+      <title>SSIM (Structural Similarity Index Measure)</title>
+      <link>https://ursonice.github.io/posts/ssim-structural-similarity-index-measure/</link>
+      <guid isPermaLink="false">6d7e69dc-cfdf-4820-9789-57fab468a698</guid>
+      <pubDate>Tue, 18 Jul 2023 05:55:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 사람의 시각체계는(HVS) 이미지의 밝기(Luminance), 대비(Contrast), 구조(Structure) 등에 자각하여 이미지의 품질(Quality)을 관찰하는데 L2 loss는 모든 픽셀이 독립적이라는 가정 가정이 내포되어 있다. 이는 한 이미지의 특정 픽셀이 다른 이미지의 동일한 위치의 </description>
+    </item>
+    <item>
+      <title>Quantization 원리</title>
+      <link>https://ursonice.github.io/posts/quantization-%EC%9B%90%EB%A6%AC/</link>
+      <guid isPermaLink="false">541062b5-bffc-4698-b440-d6e45bac6f1e</guid>
+      <pubDate>Fri, 30 Jun 2023 01:02:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 Quantization 이란 Neural Network 일반적으로 Parameter는 모델의 정확도를 높이기 위해 32bit floating point(FP32)로 펴현된다. 하지만 임베디드 장치와 같이 리소스가 제한된 환경에서 FP32로 표현하게 되면 Inference과정에서굉장히 많은 시간이 소</description>
+    </item>
+    <item>
+      <title>Taylor&apos;s series and Maclaurin&apos;s series on ML</title>
+      <link>https://ursonice.github.io/posts/taylor-s-series-and-maclaurin-s-series-on-ml/</link>
+      <guid isPermaLink="false">340491c3-168a-4c32-8d5a-0216c98cc428</guid>
+      <pubDate>Tue, 27 Jun 2023 02:05:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 이 장은 Taylor&apos;s series와 Maclaurin&apos;s series가 무엇인지 간단하게 알아보고 두 급수의 차이점을 알아본다. 그리고 ML에서 어떻게 적용되는지 알아보자. 목차 Taylor&apos;s series Maclaurin&apos;s series Taylor&apos;s series &amp; Maclaurin&apos;s </description>
+    </item>
+    <item>
+      <title>Likelihood(MLE)</title>
+      <link>https://ursonice.github.io/posts/likelihood-mle/</link>
+      <guid isPermaLink="false">38883001-3d8c-451a-a56f-f475f9d69d26</guid>
+      <pubDate>Wed, 14 Jun 2023 02:07:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 이 장은 MLE에 대해서 설명한다. 확률의 의미와 기본 개념들에 대해서 같이 알아봐보자. 목차 Probability PDF(Probability Density Function) CDF(Cumulative Distribution Function) 모수 추정 Likelihood Maximum likel</description>
+    </item>
+    <item>
+      <title>Normalization / Regularization</title>
+      <link>https://ursonice.github.io/posts/normalization-regularization/</link>
+      <guid isPermaLink="false">3b660236-1572-482e-8c35-0f8e23bcf77b</guid>
+      <pubDate>Mon, 12 Jun 2023 06:39:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 이 장은 Normalization과 Regularization의 차이점에 대해서 설명한다. 그리고 Batch Normalization과 Layer Normalization에 대해서 설명한다. 목차 Normalization Regularization Batch Normalization과 Layer N</description>
+    </item>
+    <item>
+      <title>NAS(Neural Network Search)</title>
+      <link>https://ursonice.github.io/posts/nas-neural-network-search/</link>
+      <guid isPermaLink="false">d8c14d53-56d5-4447-a6a8-d43d9aa4cbbf</guid>
+      <pubDate>Sun, 11 Jun 2023 06:33:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 이 장은 NAS의 개념에 대해 설명한다. 목차 NAS Search Space Search Strategy Search Algorithm Performance Estimation Search Strategy &amp; Search Algorithm 차이점 Example NAS Neural Architectu</description>
+    </item>
+    <item>
+      <title>Manifold 개념</title>
+      <link>https://ursonice.github.io/posts/manifold-%EA%B0%9C%EB%85%90/</link>
+      <guid isPermaLink="false">7c984a89-c8d3-4b5d-aff7-f782c8101731</guid>
+      <pubDate>Sun, 11 Jun 2023 05:05:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 이 장은 Manifold의 개념에 대해서 설명한다. 목차 Manifold Manifold Hypothesis 1. Data compression 2. Data visualization 3. Curse of dimensionality 개선 4. Discovering most important feat</description>
+    </item>
+    <item>
+      <title>Machine Learning Design Pattern</title>
+      <link>https://ursonice.github.io/posts/machine-learning-design-pattern/</link>
+      <guid isPermaLink="false">8066838b-23c6-4bbb-9c9f-63b21698aaeb</guid>
+      <pubDate>Thu, 26 Jan 2023 23:17:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 이 장은 Machine Learning 디자인 패턴에 대해 공부한 것을 설명한다. 더 많은 데이터를 수집할 수 없을 때 데이터 균형(분포)을 이해하면 이를 고려하여 모델을 설계하는데 도움이 된다. 서빙(serving) : 모델을 배포하여 예측값을 전송하는 시스템 서빙의 하위 항목들로는 온프레미스(o</description>
+    </item>
+    <item>
+      <title>Gradient</title>
+      <link>https://ursonice.github.io/posts/gradient/</link>
+      <guid isPermaLink="false">34a741d8-2bcf-4dcb-b056-d30e59af6b93</guid>
+      <pubDate>Sun, 20 Nov 2022 04:44:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 이 장은 Foward 신경망에 대한 Weight(가중치)를 update하는 방법(backpropagation)에 대해 다룬다. 목차 1. Analytical Differentiation(해석적 미분) 2. Numerical Differentiation(수치 미분) 3. Symbolic differe</description>
+    </item>
+    <item>
+      <title>Activation Function</title>
+      <link>https://ursonice.github.io/posts/activation-function/</link>
+      <guid isPermaLink="false">085ecacc-284d-4b68-8bef-872284e94440</guid>
+      <pubDate>Sun, 20 Nov 2022 02:33:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 이 장은 AI에서 가장 기본적인 활성화 함수에 대해 소개한다 목차 Sigmoid 하이퍼볼릭 탄젠트(Hyperbolic Tangent Function - Tanh) 소프트맥스(SoftMax Function) 렐루(Relu -Rectified Linear Unit Function) Sigmoid 시그모</description>
+    </item>
+    <item>
+      <title>Knowledge Distillation</title>
+      <link>https://ursonice.github.io/posts/knowledge-distillation/</link>
+      <guid isPermaLink="false">381b12c0-115c-801b-abe2-c16494ef2dc2</guid>
+      <pubDate>Tue, 16 Jun 2026 01:53:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 지식 증류관련 논문을 읽다보면 Teacher-Student를 같이 학습하는 경우가 있고, Teacher를 먼저 학습하고 Student를 학습하는 경우가 있다. 어떤 경우에는 같이 학습하는지 그리고 어떤 경우에는 선행 학습 후 전이가 이뤄지는지 고민하여 찾아본 결과에 대해 작성한다. 목차 방법 A: </description>
+    </item>
     <item>
       <title>Variation Inference(VI, ELBO)</title>
       <link>https://ursonice.github.io/posts/variation-inference-vi-elbo/</link>
@@ -30,14 +134,6 @@
       <pubDate>Wed, 17 Jun 2026 06:17:00 GMT</pubDate>
       <category>Robotics</category>
       <description>Compounding Error 로봇이 학습시에 전문가의 행동을 보고 배웠는데 실제 추론시에 본인이 전문가가 했던 행동과 약간만 벗어나도 이에 대한 학습데이터가 없기 때문에 그 다음 행동에서도 오차가 발생해서 점점 더 전문가의 행동과 벌어지는 행동을 하게되는 에러를 말한다. ACT(Action Chunk</description>
-    </item>
-    <item>
-      <title>Knowledge Distillation</title>
-      <link>https://ursonice.github.io/posts/knowledge-distillation/</link>
-      <guid isPermaLink="false">381b12c0-115c-801b-abe2-c16494ef2dc2</guid>
-      <pubDate>Tue, 16 Jun 2026 01:53:00 GMT</pubDate>
-      <category>AI/ Theory</category>
-      <description>서론 지식 증류관련 논문을 읽다보면 Teacher-Student를 같이 학습하는 경우가 있고, Teacher를 먼저 학습하고 Student를 학습하는 경우가 있다. 어떤 경우에는 같이 학습하는지 그리고 어떤 경우에는 선행 학습 후 전이가 이뤄지는지 고민하여 찾아본 결과에 대해 작성한다. 목차 방법 A: </description>
     </item>
     <item>
       <title>DELTAR: Depth Estimation from a Light-weight ToF Sensor and RGB Image 논문리뷰</title>
@@ -112,28 +208,12 @@
       <description>서론 Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun; &quot;Deep Residual Learning for Image Recognition&quot;, Proceedings of the IEEE Conference on Computer Vision and Pattern Re</description>
     </item>
     <item>
-      <title>NAS(Neural Network Search)</title>
-      <link>https://ursonice.github.io/posts/nas-neural-network-search/</link>
-      <guid isPermaLink="false">d8c14d53-56d5-4447-a6a8-d43d9aa4cbbf</guid>
-      <pubDate>Sun, 11 Jun 2023 06:33:00 GMT</pubDate>
-      <category>AI/ Theory</category>
-      <description>서론 이 장은 NAS의 개념에 대해 설명한다. 목차 NAS Search Space Search Strategy Search Algorithm Performance Estimation Search Strategy &amp; Search Algorithm 차이점 Example NAS Neural Architectu</description>
-    </item>
-    <item>
       <title>How to do Internal Camera Calibration</title>
       <link>https://ursonice.github.io/posts/how-to-do-internal-camera-calibration/</link>
       <guid isPermaLink="false">2fdb12c0-115c-80b6-a95f-fd82d92af82a</guid>
       <pubDate>Wed, 04 Feb 2026 05:23:00 GMT</pubDate>
       <category>Application</category>
       <description>서론 ROS2를 사용해서 카메라 내부 캘리브레이션 하는 방법에 대해 설명한다. Dependencies 카메라 렌즈와 센서의 특성 때문에 발생하는 영상 왜곡을 수학적으로 계산하여 보정값을 찾아내는 프로그램으로 실시간으로 ROS 토픽(image_raw)을 구독(Subscribe)하여 화면을 보면서, 그 위에</description>
-    </item>
-    <item>
-      <title>Likelihood(MLE)</title>
-      <link>https://ursonice.github.io/posts/likelihood-mle/</link>
-      <guid isPermaLink="false">38883001-3d8c-451a-a56f-f475f9d69d26</guid>
-      <pubDate>Wed, 14 Jun 2023 02:07:00 GMT</pubDate>
-      <category>AI/ Theory</category>
-      <description>서론 이 장은 MLE에 대해서 설명한다. 확률의 의미와 기본 개념들에 대해서 같이 알아봐보자. 목차 Probability PDF(Probability Density Function) CDF(Cumulative Distribution Function) 모수 추정 Likelihood Maximum likel</description>
     </item>
     <item>
       <title>[01] C++ 기초</title>
@@ -160,92 +240,12 @@
       <description>Ubuntu Image 다운로드 및 실행 --net=host 를 옵션에 꼭 넣어줘야 외부포트 접속이 가능하다. docker run -it --net=host --name ubuntu-desktop ubuntu:22.04 /bin/bash 컨테이너 접속 명령어 만약 컨테이너에서 나왔다면 아래 명령어로 다시</description>
     </item>
     <item>
-      <title>Manifold 개념</title>
-      <link>https://ursonice.github.io/posts/manifold-%EA%B0%9C%EB%85%90/</link>
-      <guid isPermaLink="false">7c984a89-c8d3-4b5d-aff7-f782c8101731</guid>
-      <pubDate>Sun, 11 Jun 2023 05:05:00 GMT</pubDate>
-      <category>AI/ Theory</category>
-      <description>서론 이 장은 Manifold의 개념에 대해서 설명한다. 목차 Manifold Manifold Hypothesis 1. Data compression 2. Data visualization 3. Curse of dimensionality 개선 4. Discovering most important feat</description>
-    </item>
-    <item>
-      <title>Isaacsim 5.1 Manual</title>
-      <link>https://ursonice.github.io/posts/isaacsim-5-1-manual/</link>
-      <guid isPermaLink="false">2e0b12c0-115c-80de-9d96-d8ecca8af5d5</guid>
-      <pubDate>Tue, 06 Jan 2026 10:30:00 GMT</pubDate>
-      <category>Robotics</category>
-      <description>Basic usage Preparation 파일 생성 Menu Bar → File → New를 눌러 프로젝트를 생성 Ground plane생성 Create &gt; Physics &gt; Ground Plane 조명추가 Create &gt; Lights &gt; Distant Light Visual Cube Gizmo(큐브)</description>
-    </item>
-    <item>
       <title>Unitree Go1</title>
       <link>https://ursonice.github.io/posts/unitree-go1/</link>
       <guid isPermaLink="false">2a7b12c0-115c-806b-9f33-dc35eef5de3e</guid>
       <pubDate>Mon, 10 Nov 2025 05:43:00 GMT</pubDate>
       <category>Robotics</category>
       <description>History (과거) 기존 Jetson XGA에 ROS2 Humble이 설치되어있고 Raspi에는 ROS1 Melodic이 설치되어있었음 → ROS버전이 맞지 않음 따라서 Jetson에 ROS1 Neotic을 설치하여 Jetson ↔ Raspi간 ROS 버전을 일치시킴 (현재) 문제는 XGA에서 ROS</description>
-    </item>
-    <item>
-      <title>RT-2(Robotics Transformer-2) 논문리뷰</title>
-      <link>https://ursonice.github.io/posts/rt-2-robotics-transformer-2-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</link>
-      <guid isPermaLink="false">28bb12c0-115c-80b1-aa9a-fb839ddfc10d</guid>
-      <pubDate>Mon, 13 Oct 2025 10:56:00 GMT</pubDate>
-      <category>AI/ Deep Learning</category>
-      <description>Cite An-Chieh Cheng, Yandong Ji, Zhaojing Yang, Zaitian Gongye, Xueyan Zou, Jan Kautz, Erdem Bıyık, Hongxu Yin, Sifei Liu, Xiaolong Wang; arXiv preprint arXiv:2412.04453 </description>
-    </item>
-    <item>
-      <title>DiffusionAD: Norm-guided One-step Denoising Diffusion for Anomaly Detection 논문리뷰</title>
-      <link>https://ursonice.github.io/posts/diffusionad-norm-guided-one-step-denoising-diffusion-for-anomaly-detection-%EB%85%BC%EB%AC%B4/</link>
-      <guid isPermaLink="false">2faa86ea-5304-4f76-8da3-2b8e7b91ede5</guid>
-      <pubDate>Sat, 10 Aug 2024 08:48:00 GMT</pubDate>
-      <category>AI/ Deep Learning</category>
-      <description>Cite Hui Zhang1,2 Zheng Wang3 Zuxuan Wu1,2 Yu-Gang Jiang1,2; arXiv preprint arXiv:2303.08730 https://arxiv.org/pdf/2407.09359 출간일: 2024. 07. 12 Abstract Unsupervised Abno</description>
-    </item>
-    <item>
-      <title>RT-1(Robotics Transformer-1) 논문리뷰 </title>
-      <link>https://ursonice.github.io/posts/rt-1-robotics-transformer-1-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</link>
-      <guid isPermaLink="false">285b12c0-115c-8076-871f-f701199189cb</guid>
-      <pubDate>Tue, 07 Oct 2025 09:18:00 GMT</pubDate>
-      <category>AI/ Deep Learning</category>
-      <description>Cite Anthony Brohan, Noah Brown, Justice Carbajal, Yevgen Chebotar, et al.; arXiv preprint arXiv:2212.06817 [cs.RO] https://arxiv.org/pdf/2212.06817 출간일: 2022. 12. 13 저널:</description>
-    </item>
-    <item>
-      <title>ViT 논문리뷰</title>
-      <link>https://ursonice.github.io/posts/vit-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</link>
-      <guid isPermaLink="false">95458e7d-0614-40ef-b9e1-cab3c363dbc4</guid>
-      <pubDate>Sun, 11 Dec 2022 09:34:00 GMT</pubDate>
-      <category>AI/ Deep Learning</category>
-      <description>서론 이 장은 NLP에서 사용되던 Transformer에서 self-attention기반의 아키텍처가 Vision Task에 적용한 Vision Transformer에 대해 설명한다. 본 논문에서 ViT는 CNN보다 데이터셋의 갯수가 적을경우 Inductive Bias학습이 어려워 일반화가 어렵다는 단점</description>
-    </item>
-    <item>
-      <title>ROS2</title>
-      <link>https://ursonice.github.io/posts/ros2/</link>
-      <guid isPermaLink="false">279b12c0-115c-80f6-8d59-ffa114c11425</guid>
-      <pubDate>Thu, 25 Sep 2025 05:56:00 GMT</pubDate>
-      <category>Robotics</category>
-      <description>bag ros2 bag record {topic}: 토픽을 녹화 ros2 bag play {bag file}: 녹화된 파일을 실행 아래 명령어로 turtilesim_node를 실행 $ ros2 run turtlesim turtlesim_node turtilesim_node를 키보드로 움직일 수 있게 모듈</description>
-    </item>
-    <item>
-      <title></title>
-      <link>https://ursonice.github.io/posts/272b12c0-115c-8015-b798-c73a7df07ba6/</link>
-      <guid isPermaLink="false">272b12c0-115c-8015-b798-c73a7df07ba6</guid>
-      <pubDate>Thu, 18 Sep 2025 02:35:00 GMT</pubDate>
-      <category>Robotics</category>
-      <description>URDF: Unified Robot discription format Link: 로봇의 몸체 부분 Link의 구성요소 Visual: 시각적 요소 부분 inertial: 관성 Mass(질량): 물체의 무게 Origin(무게중심): 물체의 균형점 Inertia(관성모멘트): 회전하기 어려운 정도 collis</description>
-    </item>
-    <item>
-      <title>Ubuntu Nvidia Driver Install</title>
-      <link>https://ursonice.github.io/posts/ubuntu-nvidia-driver-install/</link>
-      <guid isPermaLink="false">8812b0fb-a40e-476e-82e1-5dee7b662ff2</guid>
-      <pubDate>Wed, 17 May 2023 06:43:00 GMT</pubDate>
-      <category>Tools</category>
-      <description>서론 우분투 20.04 환경에서 Nvidia driver 설치 방법에 대해서 설명한다. 목차 Nvidia-driver 설치 Driver 설치 확인 Nvidia-driver 설치 아래 명령어를 입력하면 다음과 같은 화면이 뜨는데 recommended 부분을 설치하면되는데 open버전이 아닌 걸로 설치하면 </description>
-    </item>
-    <item>
-      <title>Gradient</title>
-      <link>https://ursonice.github.io/posts/gradient/</link>
-      <guid isPermaLink="false">34a741d8-2bcf-4dcb-b056-d30e59af6b93</guid>
-      <pubDate>Sun, 20 Nov 2022 04:44:00 GMT</pubDate>
-      <category>AI/ Theory</category>
-      <description>서론 이 장은 Foward 신경망에 대한 Weight(가중치)를 update하는 방법(backpropagation)에 대해 다룬다. 목차 1. Analytical Differentiation(해석적 미분) 2. Numerical Differentiation(수치 미분) 3. Symbolic differe</description>
     </item>
   </channel>
 </rss>
