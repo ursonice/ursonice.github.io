@@ -29,13 +29,13 @@
     <meta property="og:url" content="https://ursonice.github.io/posts/z-transform/" />
     <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Z-transform&amp;cat=Robotics" />
     <meta property="article:published_time" content="2026-07-05T08:37:00.000Z" />
-    <meta property="article:modified_time" content="2026-07-12T09:06:00.000Z" />
+    <meta property="article:modified_time" content="2026-07-12T09:46:00.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Z-transform" />
     <meta name="twitter:description" content=" 연속 시스템은 변화율에 대한 관계식을 나타내는 미분방정식으로 표현되었다. 이산에서 &quot;변화율&quot;에 해당되는 가장 작은 간격이 1스텝이므로, 변화를 표현하는 최소 단위는 현재 값과 한 스텝 전 값의 차이, 즉 차분 y[n] - y[n-1] 이다. 미분이 차분으로 대체되므로, 시스템은 현재와 과거 값들 사이의" />
     <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Z-transform&amp;cat=Robotics" />
 
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Z-transform","description":" 연속 시스템은 변화율에 대한 관계식을 나타내는 미분방정식으로 표현되었다. 이산에서 \"변화율\"에 해당되는 가장 작은 간격이 1스텝이므로, 변화를 표현하는 최소 단위는 현재 값과 한 스텝 전 값의 차이, 즉 차분 y[n] - y[n-1] 이다. 미분이 차분으로 대체되므로, 시스템은 현재와 과거 값들 사이의","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Z-transform&cat=Robotics","datePublished":"2026-07-05T08:37:00.000Z","dateModified":"2026-07-12T09:06:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/z-transform/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Z-transform","description":" 연속 시스템은 변화율에 대한 관계식을 나타내는 미분방정식으로 표현되었다. 이산에서 \"변화율\"에 해당되는 가장 작은 간격이 1스텝이므로, 변화를 표현하는 최소 단위는 현재 값과 한 스텝 전 값의 차이, 즉 차분 y[n] - y[n-1] 이다. 미분이 차분으로 대체되므로, 시스템은 현재와 과거 값들 사이의","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Z-transform&cat=Robotics","datePublished":"2026-07-05T08:37:00.000Z","dateModified":"2026-07-12T09:46:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/z-transform/"}}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Robotics","item":"https://ursonice.github.io/topics/robotics/"},{"@type":"ListItem","position":3,"name":"Z-transform","item":"https://ursonice.github.io/posts/z-transform/"}]}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -101,25 +101,13 @@
 <p>미분이 차분으로 대체되므로, 시스템은 현재와 과거 값들 사이의 관계식인 차분방정식으로 표현된다.</p>
 <div class="math-block">\[y[n] + a_1 y[n - 1] + a_0 y[n - 2] = 0\]</div>
 <p>연속에서와 마찬가지로 차분방정식 \(y[n], y[n-1], y[n-2]\) 의 상수배 합이 모든 n에서 0이려면 세 항은 전부 같은 함수의 상수배여야 한다.</p>
-<p>그러면 n → n-1로 tiem shift시켜도 함수의 형태가 변하지 않아야 한다.</p>
-<p>이에 적합한 함수는 \(y[n] = z^n\) 이다. </p>
+<p>그러면 n → n-1로 tiem shift시켜도 함수의 형태(커널)가 변하지 않아야 한다.</p>
+<p>이에 적합한 함수는 \(y[n] = z^n\) 이 된다.</p>
 <ul><li>n은 정수, z는 복소수 전체범위를 가진다.</li></ul>
-<p>그럼 이산신호에서의 해였던 \(e^{st}\)가 아닌 이유는?</p>
-<p>연속신호에서 해 family라고 가정했던 \(e^{st}\)는 s가 미지수로 정해지지 않은 값이다.</p>
-<p>즉 y(t)의 해는 <strong>어떤</strong> 지수함수일 것이다. </p>
-<div class="math-block">\[s^2 e^{st} + 3se^{st} + 2e^{st} = 0 \implies s^2 + 3s + 2 = 0 \implies s = -1, -2\]</div>
-<p>이산에서 zⁿ이라고 쓰는 것도 동일한 방식인데 해가 어떤 등비수열(매 스텝 같은 수가 곱해지는 수열)일 것이다. 그 곱해지는 수가 뭔지는 모르니 z라는 빈칸으로 두자.&quot;</p>
-<p>s2est+3sest+2est=0  ⇒  s2+3s+2=0  ⇒  s=−1,−2s^2 e^{st} + 3s e^{st} + 2e^{st} = 0 \;\Rightarrow\; s^2 + 3s + 2 = 0 \;\Rightarrow\; s = -1, -2</p>
-<p>s2est+3sest+2est=0⇒s2+3s+2=0⇒s=−1,−2</p>
-<p><strong>방정식이 빈칸을 채워준 겁니다.</strong> 가정 단계의 e^st는 함수 하나가 아니라 &quot;s값마다 하나씩 있는 함수 가족 전체&quot;였고, 방정식이 그중 e^(−t)와 e^(−2t) 두 개를 골라준 거예요.</p>
-<p>이산에서 zⁿ이라고 쓰는 것도 <strong>완전히 같은 한 수</strong>입니다. &quot;해는 <strong>어떤</strong> 등비수열(매 스텝 같은 수가 곱해지는 수열)일 것이다. 그 곱해지는 수가 뭔지는 모르니 z라는 빈칸으로 두자.&quot; 그리고 방정식이 채워줍니다. 같은 계수로 비교해보면:</p>
-<ul><li>시간의 범위가 정수뿐이니 t = n을 넣어보면</li></ul>
-<div class="math-block">\[e^{st} \xrightarrow{t\rightarrow n}
-
-e^{sn}=(e^s)^n=z^n, \quad z≡e^s
+<p>\(y[n] = z^n\) 를 가정하면 처럼 n-2 → n-1스탭(한 스탭) 이 동하면 z가 곱해지는 특징이 나타난다.</p>
+<div class="math-block">\[y[n-2] = z^{n-2} \rightarrow y[n-1] = z^{n-1}
 \]</div>
-<p>따라서 \(z^n\) 은 \(e^{st}\) 의 이산 버전이라 보면 된다.</p>
-<p>증명해보면 상수 \(\lambda\) 에 대해 \(y[n-1] = \lambda\, y[n]\) 이 모든 n에서 성립해야 한다.</p>
+<p>이를 일반화해서 봐보면 \(y[n] = z^n\) 를 가정한다면 상수 \(\lambda\) 에 대해 \(y[n-1] = \lambda\, y[n]\) 이 모든 n에서 성립해야 한다.</p>
 <div class="math-block">\[\begin{align}
 &amp;y[1] = \frac{1}{\lambda}·y[0]\\[10pt]
 &amp;y[2] = \frac{1}{\lambda}·y[1] = \frac{1}{\lambda}·\frac{1}{\lambda}·y[0] = \left(\frac{1}{\lambda}\right)^2·y[0] \\[10pt]
@@ -128,20 +116,23 @@ e^{sn}=(e^s)^n=z^n, \quad z≡e^s
 \end{align}\]</div>
 <p>임으로 다음과 같이 쓸 수 있다.</p>
 <div class="math-block">\[y[n] = \frac{1}{\lambda}y[n-1] = \left(\frac{1}{\lambda}\right)^2 y[n-2] = \cdots = \left(\frac{1}{\lambda}\right)^n y[0]\]</div>
-<p>매 스텝 곱해지는 공비 \(\frac{1}{\lambda}\)를 z라 하고, 초항 y[0]을 c라고 하면 \(y[n]=\text{c}\cdot z^n\)</p>
-<p>(z를 \(\frac{1}{\lambda}\)로 정의한 이유는 방향 때문인데 λ는 n → n-1 같이 한 스텝 뒤로 갈 때 곱해지는 수였으니, n-1 → n 처럼 앞으로 갈 때 곱해지는 수는 그 역수인 λ가 된다.)</p>
+<p>매 스텝 곱해지는 공비 \(\frac{1}{\lambda}\)를 z라 하고, 초항 y[0]을 c라고 하면 \(y[n]=\text{c}\cdot z^n\) 처럼 쓸 수 있다.</p>
+<h2 id="block-39bb12c0115c802a8442cd8c36f81b3f">연속신호와의 비교 이해</h2>
+<p>연속신호에서 해 family라고 가정했던 \(e^{st}\)는 s가 미지수로 정해지지 않은 값이였다.</p>
+<p>실제로 s를 구하기 위해 풀어보면</p>
+<div class="math-block">\[s^2 e^{st} + 3se^{st} + 2e^{st} = 0 \implies s^2 + 3s + 2 = 0 \implies s = -1, -2\]</div>
+<p>위와 같은 방정식으로 부터 s를 구할 수 있다. </p>
+<p>가정 단계의 \(e^{st}\) 는 함수 하나가 아니라 s값마다 하나씩 있는 함수 family였고, 방정식이 그중 \(e^{-t}\)와 \(e^{-2t}\) 두 개가 나온 것이다.</p>
+<p>이산에서 zⁿ이라고 쓰는 것도 동일한 방식인데 해가 어떤 등비수열(매 스텝 같은 수가 곱해지는 수열)일 것이다. 라고 가정한다. 그 곱해지는 수 z가 뭔지는 모르겠으니 방정식을 통해서 구해준다.</p>
+<div class="math-block">\[y[n] + 3y[n-1] + 2y[n-2] = 0 \implies z^2 + 3z + 2 = 0 \implies z = -1, -2\]</div>
+<p>즉 연속은 s가 미지수, 이산은 z가 미지수이고, 특성방정식이 그 미지수를 채우는 역할을 한다.</p>
 <h2 id="block-39bb12c0115c805a98d7c3c94c35a8b3">특성방정식과 Pole</h2>
 <div class="math-block">\[y[n] + a_1 y[n - 1] + a_0 y[n - 2] = 0\]</div>
 <p>위 식에 \(y[n] = z^n\) 을 대입하면</p>
 <div class="math-block">\[z^n + a_1 z^{n-1} + a_0 z^{n-2} = 0\]</div>
 <p>되고 공통인자 \(z^{n-2}\) 로 묶으면</p>
 <div class="math-block">\[z^{n-2}\left(z^2 + a_1 z + a_0\right) = 0\]</div>
-<p>\(z = 0\) 이면 \(y[n] \equiv 0\) 인 자명해이므로 제외한다. \(z \neq 0\) 이면 \(z^{n-2} \neq 0\) 이므로, 이 식이 모든 n에서 성립할 유일한 방법은 괄호안의 이차 방정식이 0인 것이다.</p>
-<p>y[n]= \(e^{sn}\) 을 차분방정식에 대입하면</p>
-<div class="math-block">\[e^{sn} + a_1 e^{s(n-1)} + a_0 e^{s(n-2)} = 0 \]</div>
-<p>공통인자 \(e^{s(n-2)}\) 로 묶으면</p>
-<div class="math-block">\[e^{s(n-2)}(e^{2s} + a_1 e^s + a_0) = 0\]</div>
-<p>즉 여기서는 \(e^s\)가 z이고 이해가</p></div>
+<p>\(z = 0\) 이면 \(y[n] \equiv 0\) 인 자명해이므로 제외한다. \(z \neq 0\) 이면 \(z^{n-2} \neq 0\) 이므로, 이 식이 모든 n에서 성립할 유일한 방법은 괄호안의 이차 방정식이 0인 것이다.</p></div>
     <div class="share-bar" data-share>
       <span class="share-label">Share</span>
       <button type="button" class="share-btn" data-share-copy>Copy</button>
