@@ -6,14 +6,14 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 12 Jul 2026 06:46:55 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 12 Jul 2026 09:06:27 GMT</lastBuildDate>
     <item>
       <title>Z-transform</title>
       <link>https://ursonice.github.io/posts/z-transform/</link>
       <guid isPermaLink="false">394b12c0-115c-8078-9f04-fb59ba6123e6</guid>
       <pubDate>Sun, 05 Jul 2026 08:37:00 GMT</pubDate>
       <category>Robotics</category>
-      <description> 연속 시스템은 미분방정식으로 표현되었다. 그런데 이산신호는 연속이 아님으로 (y[n], n=0,1,2 ... ) 미분방정식으로 표현되지 않는다. 대신 이산 시스템에서는 변화를 표현하는 건 한 스텝의 전 값임으로 차분방정식의 꼴로 표현된다. 연속에서와 마찬가지로 차분방정식 y[n], y[n-1], y[n</description>
+      <description> 연속 시스템은 변화율에 대한 관계식을 나타내는 미분방정식으로 표현되었다. 이산에서 &quot;변화율&quot;에 해당되는 가장 작은 간격이 1스텝이므로, 변화를 표현하는 최소 단위는 현재 값과 한 스텝 전 값의 차이, 즉 차분 y[n] - y[n-1] 이다. 미분이 차분으로 대체되므로, 시스템은 현재와 과거 값들 사이의</description>
     </item>
     <item>
       <title>Pole이 시간영역에서 미치는 영향</title>
