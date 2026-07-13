@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-13T00:11:48.075Z",
+  "generatedAt": "2026-07-13T04:03:22.809Z",
   "site": {
     "title": "Woojae Joo — Developer Note",
     "description": "AI, Robotics, Systems 공부 기록"
@@ -66,6 +66,19 @@
     "github": "https://github.com/ursonice"
   },
   "posts": [
+    {
+      "id": "39cb12c0-115c-8084-9eb2-f4abfd8d67c7",
+      "title": "Markov process",
+      "slug": "markov-process",
+      "category": "Reinforcement Learning",
+      "tags": [],
+      "created": "2026-07-13T03:26:00.000Z",
+      "updated": "2026-07-13T03:59:00.000Z",
+      "readingTime": 1,
+      "summary": "서론 목차 Markov process Markove property를 만족하는 확률 과정을 Markov process라고 하는데 시간과 상태가 연속인지 이산인지에 따라 네 가지 조합이 가능하다. 이 중 시간이 이산적이고 상태 공간이 이산인 Markove process를 특별히 Markov Chain이라 ",
+      "sourceUrl": "https://app.notion.com/p/Markov-process-39cb12c0115c80849eb2f4abfd8d67c7",
+      "html": "<h2 id=\"block-39cb12c0115c8086badadf9a6eaa2684\">서론</h2>\n<h2 id=\"block-39cb12c0115c80828626fb88e87317ad\">목차</h2>\n<h2 id=\"block-39cb12c0115c80469512f61773e4d186\">Markov process</h2>\n<p>Markove property를 만족하는 확률 과정을 Markov process라고 하는데 시간과 상태가 연속인지 이산인지에 따라 네 가지 조합이 가능하다.</p>\n<ul><li>이 중 시간이 이산적이고 상태 공간이 이산인 Markove process를 특별히 Markov Chain이라 부른다. </li><li>강화학습에서는 대부분 이산 시간 스텝 t=0, 1, 2, ..을 다루므로 Markov chain을 가정으로한다.</li></ul>\n<h3 id=\"block-39cb12c0115c80548a99d380bf4bee13\">Markov property</h3>\n<p>현재상태가 이전 상태에만 영향을 받는다는 성질을 의미한다.</p>\n<div class=\"math-block\">\\[P(x_{n+1}|x_n, x_{n-1}, x_{n-2}, ...,x_0) = P(x_{n+1}|x_n)\n\\]</div>\n<h3 id=\"block-39cb12c0115c803bb54fc387b76f10e4\">Stochastic process</h3>\n<p>시간 인덱스 t마다 확률변수 \\(X_t\\)가 하나씩 대응되는 확률변수들의 모임(collection of random variables)를 말한다. 시간이 이산인 경우 식은 아래와 같다.</p>\n<div class=\"math-block\">\\[\\{X_t\\}_{t \\in T}, \\quad T = \\{0, 1, 2, \\dots\\}\\]</div>\n<h2 id=\"block-39cb12c0115c80409145ec3c86eb179c\">Markov Chain</h2>\n<h3 id=\"block-39cb12c0115c80f78a70eaf447dea1a2\">State transition matrix</h3>\n<p>상태가 유한개(\\(|S|=n\\))라면 모든 state transition matrix를 아래처럼 쓸 수 있다.</p>\n<p>각 행은 확률 분포이므로 행의 합은 항상 1이다:</p>"
+    },
     {
       "id": "394b12c0-115c-8078-9f04-fb59ba6123e6",
       "title": "Z-transform",

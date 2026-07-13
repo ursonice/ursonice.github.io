@@ -6,7 +6,15 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 13 Jul 2026 00:11:48 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 13 Jul 2026 04:03:22 GMT</lastBuildDate>
+    <item>
+      <title>Markov process</title>
+      <link>https://ursonice.github.io/posts/markov-process/</link>
+      <guid isPermaLink="false">39cb12c0-115c-8084-9eb2-f4abfd8d67c7</guid>
+      <pubDate>Mon, 13 Jul 2026 03:26:00 GMT</pubDate>
+      <category>Reinforcement Learning</category>
+      <description>서론 목차 Markov process Markove property를 만족하는 확률 과정을 Markov process라고 하는데 시간과 상태가 연속인지 이산인지에 따라 네 가지 조합이 가능하다. 이 중 시간이 이산적이고 상태 공간이 이산인 Markove process를 특별히 Markov Chain이라 </description>
+    </item>
     <item>
       <title>Z-transform</title>
       <link>https://ursonice.github.io/posts/z-transform/</link>
@@ -238,14 +246,6 @@
       <pubDate>Wed, 18 Mar 2026 10:16:00 GMT</pubDate>
       <category>C/ C++</category>
       <description>목차 1. Namespace 2. 기초문법 3. Reference 4. New, Delete 5. Class 1. Namespace C++에서 이름 공간(namespace)은 변수, 함수, 클래스와 같은 이름들이 어느 소속에 속해 있는지 구분하기 위한 개념으로 같은 이름이라도 서로 다른 namespace</description>
-    </item>
-    <item>
-      <title>Raspi Segmentation</title>
-      <link>https://ursonice.github.io/posts/raspi-segmentation/</link>
-      <guid isPermaLink="false">2fcb12c0-115c-802f-9543-cb4345effb6b</guid>
-      <pubDate>Tue, 03 Feb 2026 09:40:00 GMT</pubDate>
-      <category>Application</category>
-      <description>Dependencies Device: Raspi 5 OS: Bookworm SD card: 128GB</description>
     </item>
   </channel>
 </rss>
