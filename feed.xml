@@ -6,14 +6,14 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 13 Jul 2026 04:03:22 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 13 Jul 2026 07:40:51 GMT</lastBuildDate>
     <item>
       <title>Markov process</title>
       <link>https://ursonice.github.io/posts/markov-process/</link>
       <guid isPermaLink="false">39cb12c0-115c-8084-9eb2-f4abfd8d67c7</guid>
       <pubDate>Mon, 13 Jul 2026 03:26:00 GMT</pubDate>
       <category>Reinforcement Learning</category>
-      <description>서론 목차 Markov process Markove property를 만족하는 확률 과정을 Markov process라고 하는데 시간과 상태가 연속인지 이산인지에 따라 네 가지 조합이 가능하다. 이 중 시간이 이산적이고 상태 공간이 이산인 Markove process를 특별히 Markov Chain이라 </description>
+      <description>서론 강화학습의 목표는 “현재 상황에서 어떤 행동을 해야 미래에 더 좋은 결과를 얻을 수 있는가?” 이라고 볼 수 있다. 이 질문을 다루려면 먼저 시간에 따라 상태가 어떻게 변할지를 표현해야 한다. 하지만 미래의 상태는 정확히 정해져 있지 않고 확률적으로 변한다.(예를 들어 로봇이 앞으로 가려고 해도 바</description>
     </item>
     <item>
       <title>Z-transform</title>
