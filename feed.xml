@@ -6,7 +6,15 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Tue, 14 Jul 2026 08:24:12 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 14 Jul 2026 10:19:08 GMT</lastBuildDate>
+    <item>
+      <title>Average Reward</title>
+      <link>https://ursonice.github.io/posts/average-reward/</link>
+      <guid isPermaLink="false">39db12c0-115c-800c-94f0-f3884a3a2f4d</guid>
+      <pubDate>Tue, 14 Jul 2026 08:56:00 GMT</pubDate>
+      <category>Reinforcement Learning</category>
+      <description>서론 목차</description>
+    </item>
     <item>
       <title>Markov Decision Process</title>
       <link>https://ursonice.github.io/posts/markov-decision-process/</link>
@@ -238,14 +246,6 @@
       <pubDate>Wed, 04 Feb 2026 05:23:00 GMT</pubDate>
       <category>Application</category>
       <description>서론 ROS2를 사용해서 카메라 내부 캘리브레이션 하는 방법에 대해 설명한다. Dependencies 카메라 렌즈와 센서의 특성 때문에 발생하는 영상 왜곡을 수학적으로 계산하여 보정값을 찾아내는 프로그램으로 실시간으로 ROS 토픽(image_raw)을 구독(Subscribe)하여 화면을 보면서, 그 위에</description>
-    </item>
-    <item>
-      <title>[01] C++ 기초</title>
-      <link>https://ursonice.github.io/posts/01-c-%EA%B8%B0%EC%B4%88/</link>
-      <guid isPermaLink="false">327b12c0-115c-8054-943c-eb189c200cf8</guid>
-      <pubDate>Wed, 18 Mar 2026 10:16:00 GMT</pubDate>
-      <category>C/ C++</category>
-      <description>목차 1. Namespace 2. 기초문법 3. Reference 4. New, Delete 5. Class 1. Namespace C++에서 이름 공간(namespace)은 변수, 함수, 클래스와 같은 이름들이 어느 소속에 속해 있는지 구분하기 위한 개념으로 같은 이름이라도 서로 다른 namespace</description>
     </item>
   </channel>
 </rss>
