@@ -6,10 +6,18 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Tue, 14 Jul 2026 05:58:26 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 14 Jul 2026 08:24:12 GMT</lastBuildDate>
     <item>
-      <title>Markov process</title>
-      <link>https://ursonice.github.io/posts/markov-process/</link>
+      <title>Markov Decision Process</title>
+      <link>https://ursonice.github.io/posts/markov-decision-process/</link>
+      <guid isPermaLink="false">39db12c0-115c-806f-a27f-e95df222a646</guid>
+      <pubDate>Tue, 14 Jul 2026 08:10:00 GMT</pubDate>
+      <category>Reinforcement Learning</category>
+      <description>서론 지난 시간에는 정책을 평가하기 위해 에르고딕 조건 아래에서 장기적인 시간이 흘렀을 때의 상태분포를 구하는 것 까지 알았다. 그런데 처음의 질문 — &quot;현재 상황에서 어떤 행동을 해야 미래에 더 좋은 결과를 얻을 수 있는가?&quot; 는 아직 완전히 해결되지 않았다. 첫 번째는, &quot;좋다&quot;의 개념이 없다. Su</description>
+    </item>
+    <item>
+      <title>[1차시] Markov process</title>
+      <link>https://ursonice.github.io/posts/1%EC%B0%A8%EC%8B%9C-markov-process/</link>
       <guid isPermaLink="false">39cb12c0-115c-8084-9eb2-f4abfd8d67c7</guid>
       <pubDate>Mon, 13 Jul 2026 03:26:00 GMT</pubDate>
       <category>Reinforcement Learning</category>
@@ -174,14 +182,6 @@
       <pubDate>Sun, 24 May 2026 14:31:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
       <description>서론 이 논문은 단일 RGB 이미지(Monocular RGB)만으로 3D 로봇 조작 정책을 학습하는 MonoLift framework를 제안한다. 기존 RGB-D, multi-view, point cloud 기반 방법은 3D 정보를 잘 활용할 수 있지만, 추가 센서와 전처리 비용이 크다. 반대로 RGB-</description>
-    </item>
-    <item>
-      <title>Reinforcement Learning 1차시</title>
-      <link>https://ursonice.github.io/posts/reinforcement-learning-1%EC%B0%A8%EC%8B%9C/</link>
-      <guid isPermaLink="false">2edb12c0-115c-80ef-babc-d7b8ed3e3b94</guid>
-      <pubDate>Mon, 19 Jan 2026 06:08:00 GMT</pubDate>
-      <category>Reinforcement Learning</category>
-      <description>Random Variable 표본 공간을 어떤 목적에 따른 실수에 대응 시켜주는 함수를 확률 변수라고 한다. 그리고 이 실수들을 맞는 확률값에 대응시켜준 것을 확률 분포라고 한다. Conditional Probability Partion theorem Probability Density Function </description>
     </item>
     <item>
       <title>Learning Vision-Based Omnidirectional Navigation: A Teacher-Student Approach Using Monocular Depth Estimation 논문리뷰</title>
