@@ -29,13 +29,13 @@
     <meta property="og:url" content="https://ursonice.github.io/posts/markov-process/" />
     <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Markov%20process&amp;cat=Reinforcement%20Learning" />
     <meta property="article:published_time" content="2026-07-13T03:26:00.000Z" />
-    <meta property="article:modified_time" content="2026-07-13T11:59:00.000Z" />
+    <meta property="article:modified_time" content="2026-07-14T03:37:00.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Markov process" />
     <meta name="twitter:description" content="서론 강화학습의 목표는 “현재 상황에서 어떤 행동을 해야 미래에 더 좋은 결과를 얻을 수 있는가?” 이라고 볼 수 있다. 이 질문을 다루려면 먼저 시간에 따라 상태가 어떻게 변할지를 표현해야 한다. 하지만 미래의 상태는 정확히 정해져 있지 않고 확률적으로 변한다.(예를 들어 로봇이 앞으로 가려고 해도 바" />
     <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Markov%20process&amp;cat=Reinforcement%20Learning" />
 
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Markov process","description":"서론 강화학습의 목표는 “현재 상황에서 어떤 행동을 해야 미래에 더 좋은 결과를 얻을 수 있는가?” 이라고 볼 수 있다. 이 질문을 다루려면 먼저 시간에 따라 상태가 어떻게 변할지를 표현해야 한다. 하지만 미래의 상태는 정확히 정해져 있지 않고 확률적으로 변한다.(예를 들어 로봇이 앞으로 가려고 해도 바","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Markov%20process&cat=Reinforcement%20Learning","datePublished":"2026-07-13T03:26:00.000Z","dateModified":"2026-07-13T11:59:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/markov-process/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Markov process","description":"서론 강화학습의 목표는 “현재 상황에서 어떤 행동을 해야 미래에 더 좋은 결과를 얻을 수 있는가?” 이라고 볼 수 있다. 이 질문을 다루려면 먼저 시간에 따라 상태가 어떻게 변할지를 표현해야 한다. 하지만 미래의 상태는 정확히 정해져 있지 않고 확률적으로 변한다.(예를 들어 로봇이 앞으로 가려고 해도 바","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Markov%20process&cat=Reinforcement%20Learning","datePublished":"2026-07-13T03:26:00.000Z","dateModified":"2026-07-14T03:37:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/markov-process/"}}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Reinforcement Learning","item":"https://ursonice.github.io/topics/reinforcement-learning/"},{"@type":"ListItem","position":3,"name":"Markov process","item":"https://ursonice.github.io/posts/markov-process/"}]}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -86,7 +86,7 @@
     <div class="article-meta">
       
       
-      <span>작성 2026년 7월 13일</span>
+      <span>작성 2026년 7월 13일</span><span class="dot"></span><span>수정 2026년 7월 14일</span>
       <span class="reading-size" role="group" aria-label="글자 크기">
         <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
         <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
@@ -227,12 +227,46 @@ p_2^{(0)} P_{20} &amp;= P(X_0 = 2) \cdot P(X_1 = 0 \mid X_0 = 2) = P(X_1 = 0 \ca
 <h2 id="block-39cb12c0115c80609bc1fd3c4a5e80b3">Limiting distribution</h2>
 <p><strong>Limiting distribution</strong>이란, 어떤 초기분포\((p(0))\)로 시작했는지와 상관없이 시간이 무한히 흐르면(step \(n \rightarrow \infin\)) 도달하게 되는 확률분포를 말한다.</p>
 <div class="math-block">\[p^{(\infty)} = \lim_{n \to \infty} p^{(n)} = \lim_{n \to \infty} p^{(0)} \cdot \mathcal{P}^n\]</div>
-<p>위 확률분포를 나타내기 위해서는 두 가지 조건이 성립해야 하는데 하나는 \(n \rightarrow \infin\) 때의 극한이 존재해야한다는 것이고, 다른 하나는 그 값이 초기분포(출발점)와 무관하다는 것이다. </p>
+<p>위 확률분포를 나타내기 위해서는 두 가지 조건이 성립해야 하는데 하나는 \(n \rightarrow \infin\) 때의 극한이 존재해야한다는 것이고, 다른 하나는 그 값이 초기분포(출발점)와 무관해야 한다는 것이다.</p>
 <p>그런데 행렬 \(\mathcal{P}\)를 n번 곱한 \(\mathcal{P}^n\)을 구하는 것은 쉬운일이 아니다. 이를 쉽게 하기 위해서 행렬 \(\mathcal{P}\)를 대각행렬로 만들면 행렬곱이 쉬워진다. 이는 Diagonalization(대각화)를 통해 가능하다.</p>
 <div class="math-block">\[\mathcal{P} = Q D Q^{-1}\]</div>
-<p>여기서 D는 \(\mathcal{P}\)의 고윳값 </p>
-<p>이를 쉽게 곱하기 위해</p>
-<p>그렇다면 이 두 가지가 정말 성립하는지 보기 위해, 위 날씨 예제를 바탕으로 \(n \rightarrow \infin\)로 보냈을 때 분포가 어떻게 움직이는지를 직접 관찰해본다.</p>
+<p>여기서 D는 \(\mathcal{P}\)의 고윳값 \(\lambda_1, \dots, \lambda_m\) 을 대각에 놓은 행렬이고, \(Q = [v_1 \,\, v_2 \,\, \cdots \,\, v_m]\)은 대응하는 고유벡터들을 열로 세운 행렬이다.</p>
+<p>대각화한 \(\mathcal{P}^2\)을 계산하면:</p>
+<div class="math-block">\[\mathcal{P}^2 = (QDQ^{-1})(QDQ^{-1}) = QD \underbrace{(Q^{-1}Q)}_{= I} DQ^{-1} = Q D^2 Q^{-1}\]</div>
+<p>\(\mathcal{P}^n\)도 계산해보면</p>
+<div class="math-block">\[\mathcal{P}^n = Q D^n Q^{-1} = Q \begin{pmatrix} \lambda_1^n &amp; &amp; \\ &amp; \ddots &amp; \\ &amp; &amp; \lambda_m^n \end{pmatrix} Q^{-1}\]</div>
+<p>로 쉽게 계산될 수 있다.</p>
+<p>그럼 행렬의 n곱 계산이 가능해졌으니 실제 예시를 통해서</p>
+<ul><li> \(n \rightarrow \infin\) 때의 극한이 존재하는지</li><li>그렇게 극한으로 보냈을 때 초기분포(출발점)와 무관한지</li></ul>
+<p>를 알아보자.</p>
+<h3 id="block-39db12c0115c8055bfccc446f6bdd4c4">Example</h3>
+<p>이를 알아보기 위해 날씨 예제를 사용한다.</p>
+<div class="math-block">\[\mathcal{P} = \begin{pmatrix} \frac{2}{3} &amp; \frac{1}{3} \\[6pt] \frac{1}{2} &amp; \frac{1}{2} \end{pmatrix}\]</div>
+<details class="toggle"><summary>EigenVector, EigenValue란?</summary><div class="toggle-body"><ul><li>\(v\) 고유벡터는(eigenvector) 행렬을 곱해도 방향은 변하지 않고 크기만 변하는 0이아닌 벡터</li><li>\(\lambda\) 고윳값(eigenvalue): 행렬을 어떤 0이 아닌 벡터 v에 곱했을 때 그 벡터의 방향은 유지한 채 크기를 변화시키는 스칼라 값</li></ul>
+<div class="math-block">\[Av = \lambda v\]</div>
+<p>위 식을 만족하는 \(v\)가 고유벡터, \(\lambda\)가 고윳값이다.</p></div></details>
+<div class="math-block">\[Q = [v_1 \,\, v_2 \,\, \cdots \,\, v_m], \quad D = \begin{pmatrix} \lambda_1 &amp; &amp; \\ &amp; \ddots &amp; \\ &amp; &amp; \lambda_m \end{pmatrix}\]</div>
+<ul><li>\(v_i:\) 고유벡터(열벡터)</li><li>\(\lambda_i\): 고윳값(스칼라)</li></ul>
+<p>고유벡터의 정의에 의해:</p>
+<div class="math-block">\[\mathcal{P}v = \lambda v\]</div>
+<p>우변을 좌변으로 넘기면</p>
+<div class="math-block">\[\mathcal{P}v - \lambda v = 0\]</div>
+<p>\(\lambda\)는 스칼라 임으로 행렬끼리의 뺄샘을 하기 위해</p>
+<div class="math-block">\[(\mathcal{P} - \lambda I)v = 0\]</div>
+<p>v는 0이아닌 벡터여야 함으로 행렬 \((\mathcal{P} - \lambda I)\)의 역행렬이 존재하면 안 된다.</p>
+<p>왜냐하면 \(B = (\mathcal{P} - \lambda I)\)의 역행렬이 존재하면</p>
+<div class="math-block">\[Bv = 0\\
+B^{-1}Bv = B^{-1}0\]</div>
+<p>고윳값: \(\det(\mathcal{P}-\lambda I)
+=
+\lambda^2-{}^{7}\!/\!_{6}\lambda+{}^{1}\!/\!_{6}
+=
+0\) 를 풀면</p>
+<div class="math-block">\[\lambda_1 = 1, \quad \lambda_2 = \dfrac{1}{6}\]</div>
+<p>임으로 \(\mathcal{P} = Q D Q^{-1}\)에서 D는:</p>
+<div class="math-block">\[D = \begin{pmatrix} 1 &amp; 0 \\[6pt] 0 &amp; \frac{1}{6} \end{pmatrix}\]</div>
+<p>고유벡터는 </p>
+<div class="math-block">\[v_1 = \begin{pmatrix} 1 \\[3pt] 1 \end{pmatrix}, \;v_2 = \begin{pmatrix} 2 \\[3pt] -3 \end{pmatrix}\]</div>
 <h3 id="block-39cb12c0115c80f5a7caeb067f566919"><strong>Verify the existence of the distribution</strong></h3>
 <h4 id="block-39cb12c0115c80e08134d904e835ba80">1-step</h4>
 <div class="math-block">\[p^{(1)} = p^{(0)}\mathcal{P} = \begin{pmatrix} 1 &amp; 0 \end{pmatrix} \begin{pmatrix} \frac{2}{3} &amp; \frac{1}{3} \\ \frac{1}{2} &amp; \frac{1}{2} \end{pmatrix} = \begin{pmatrix} \frac{2}{3} &amp; \frac{1}{3} \end{pmatrix} \approx \begin{pmatrix} 0.667 &amp; 0.333 \end{pmatrix}\]</div>
