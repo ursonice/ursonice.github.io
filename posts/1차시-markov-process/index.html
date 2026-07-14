@@ -29,13 +29,13 @@
     <meta property="og:url" content="https://ursonice.github.io/posts/1%EC%B0%A8%EC%8B%9C-markov-process/" />
     <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5B1%EC%B0%A8%EC%8B%9C%5D%20Markov%20process&amp;cat=Reinforcement%20Learning" />
     <meta property="article:published_time" content="2026-07-13T03:26:00.000Z" />
-    <meta property="article:modified_time" content="2026-07-14T08:41:00.000Z" />
+    <meta property="article:modified_time" content="2026-07-14T11:06:00.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="[1차시] Markov process" />
     <meta name="twitter:description" content="서론 강화학습의 목표는 “현재 상황에서 어떤 행동을 해야 미래에 더 좋은 결과를 얻을 수 있는가?” 이라고 볼 수 있다. 이 질문을 다루려면 먼저 시간에 따라 상태가 어떻게 변할지를 표현해야 한다. 하지만 미래의 상태는 정확히 정해져 있지 않고 확률적으로 변한다.(예를 들어 로봇이 앞으로 가려고 해도 바" />
     <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5B1%EC%B0%A8%EC%8B%9C%5D%20Markov%20process&amp;cat=Reinforcement%20Learning" />
 
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"[1차시] Markov process","description":"서론 강화학습의 목표는 “현재 상황에서 어떤 행동을 해야 미래에 더 좋은 결과를 얻을 수 있는가?” 이라고 볼 수 있다. 이 질문을 다루려면 먼저 시간에 따라 상태가 어떻게 변할지를 표현해야 한다. 하지만 미래의 상태는 정확히 정해져 있지 않고 확률적으로 변한다.(예를 들어 로봇이 앞으로 가려고 해도 바","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5B1%EC%B0%A8%EC%8B%9C%5D%20Markov%20process&cat=Reinforcement%20Learning","datePublished":"2026-07-13T03:26:00.000Z","dateModified":"2026-07-14T08:41:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/1%EC%B0%A8%EC%8B%9C-markov-process/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"[1차시] Markov process","description":"서론 강화학습의 목표는 “현재 상황에서 어떤 행동을 해야 미래에 더 좋은 결과를 얻을 수 있는가?” 이라고 볼 수 있다. 이 질문을 다루려면 먼저 시간에 따라 상태가 어떻게 변할지를 표현해야 한다. 하지만 미래의 상태는 정확히 정해져 있지 않고 확률적으로 변한다.(예를 들어 로봇이 앞으로 가려고 해도 바","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5B1%EC%B0%A8%EC%8B%9C%5D%20Markov%20process&cat=Reinforcement%20Learning","datePublished":"2026-07-13T03:26:00.000Z","dateModified":"2026-07-14T11:06:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/1%EC%B0%A8%EC%8B%9C-markov-process/"}}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Reinforcement Learning","item":"https://ursonice.github.io/topics/reinforcement-learning/"},{"@type":"ListItem","position":3,"name":"[1차시] Markov process","item":"https://ursonice.github.io/posts/1%EC%B0%A8%EC%8B%9C-markov-process/"}]}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -393,10 +393,9 @@ P = \begin{pmatrix} 0 &amp; 1 &amp; 0 &amp; 0 \\ \frac{1}{2} &amp; 0 &amp; \frac
 <p>\(gcd(2,4,6...) = 2\) 임으로 상태 1은 Periodic하다.</p>
 <p>여기서 2의 의미는 2스텝마다 반드시 돌아온다는 뜻이 아니라, 돌아온다면 그 시점이 반드시 2의 배수라는 뜻이다.</p>
 <h2 id="block-39db12c0115c80468fbde51ed3708582">마무리</h2>
-<p>여기까지 강화학습의 정책을 평가하기 위해 필요한 사전 조건들에 대해서 알아보았다.</p>
-<p>정리하면, 정책을 평가한다는 것은 &quot;그 정책을 장기간 따랐을 때 좋은 상태에 얼마나 머무는가&quot;를 따지는 일이었다. 이를 위해 장시간 후의 상태 분포인 극한분포가 필요했고 연산량이 많아짐으로 이를 쉽게 구하기 위해 방정식 \(\pi = \pi\mathcal{P}\) 로 구하는 정상분포를 얻었으며, 이 정상분포와 극한분포가 같아지기 위한 자격 조건인 — irreducible, recurrent, aperiodic, 즉 에르고딕 — 까지 확인했다. </p>
-<p>이로써 정책이 만들어내는 마르코프 체인을 하나의 값으로 평가할 수 있는 이론적 기반이 마련되었다. 다만 마르코프 체인만으로는 아직 &quot;평가&quot;를 시작할 수 없다.  어떤 상태가 좋은지에 대한 개념(보상)도, 그 상태에 도달하기 위한 행동을 아직 모르기 때문이다. </p>
-<p>다음 시간에는 이 두 가지를 얹어, 강화학습의 근간이 되는 MDP(Markov Decision Process)를 진행한다.</p></div>
+<p>이로써 정책이 만들어내는 마르코프 체인을 하나의 값으로 평가할 수 있는 이론적 기반이 마련되었다. 하지만 마르코프 체인만으로는 아직 정책의 성능을 평가할 수는 없다. 체인이 장기적으로 어떤 상태를 얼마나 자주 방문하는지는 알 수 있지만, 그 상태가 좋은 상태인지 나쁜 상태인지는 알 수 없기 때문이다. 다시 말해, 상태의 방문 빈도만으로는 정책의 우수성을 판단할 수 없다.</p>
+<p>따라서 각 상태에 보상(Reward) 을 부여하여 상태의 '좋음'을 수치로 표현한다. 그러면 에르고딕 성질에 의해 장기적으로 각 상태를 방문하는 비율(정상분포)과 상태의 보상을 결합하여 정책이 장기적으로 얻는 평균적인 성과를 계산할 수 있다. 이것이 평균보상(Average Reward) 의 기본 아이디어이다.</p>
+<p>다음 차시에는 평균보상에 대해 다룬다.</p></div>
     <div class="share-bar" data-share>
       <span class="share-label">Share</span>
       <button type="button" class="share-btn" data-share-copy>Copy</button>

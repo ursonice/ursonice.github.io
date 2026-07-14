@@ -16,7 +16,7 @@
 
     <title>Average Reward — Woojae Joo</title>
     <meta name="post-slug" content="average-reward" />
-    <meta name="description" content="서론 목차" />
+    <meta name="description" content="서론 지금까지는 정책이 만들어내는 마르코프 체인을 장기적인 관점에서 분석하기 위한 이론적 기반을 살펴보았다. 정상분포와 에르고딕 성질을 통해, 정책을 충분히 오래 수행하면 각 상태를 얼마나 자주 방문하는지를 하나의 확률분포로 표현할 수 있음을 확인하였다. 그러나 상태를 얼마나 자주 방문하는지만으로는 정책" />
     <link rel="canonical" href="https://ursonice.github.io/posts/average-reward/" />
     <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="/manifest.json" />
@@ -25,17 +25,17 @@
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Woojae Joo — Developer Note" />
     <meta property="og:title" content="Average Reward" />
-    <meta property="og:description" content="서론 목차" />
+    <meta property="og:description" content="서론 지금까지는 정책이 만들어내는 마르코프 체인을 장기적인 관점에서 분석하기 위한 이론적 기반을 살펴보았다. 정상분포와 에르고딕 성질을 통해, 정책을 충분히 오래 수행하면 각 상태를 얼마나 자주 방문하는지를 하나의 확률분포로 표현할 수 있음을 확인하였다. 그러나 상태를 얼마나 자주 방문하는지만으로는 정책" />
     <meta property="og:url" content="https://ursonice.github.io/posts/average-reward/" />
     <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Average%20Reward&amp;cat=Reinforcement%20Learning" />
     <meta property="article:published_time" content="2026-07-14T08:56:00.000Z" />
-    <meta property="article:modified_time" content="2026-07-14T08:57:00.000Z" />
+    <meta property="article:modified_time" content="2026-07-14T11:29:00.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Average Reward" />
-    <meta name="twitter:description" content="서론 목차" />
+    <meta name="twitter:description" content="서론 지금까지는 정책이 만들어내는 마르코프 체인을 장기적인 관점에서 분석하기 위한 이론적 기반을 살펴보았다. 정상분포와 에르고딕 성질을 통해, 정책을 충분히 오래 수행하면 각 상태를 얼마나 자주 방문하는지를 하나의 확률분포로 표현할 수 있음을 확인하였다. 그러나 상태를 얼마나 자주 방문하는지만으로는 정책" />
     <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Average%20Reward&amp;cat=Reinforcement%20Learning" />
 
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Average Reward","description":"서론 목차","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Average%20Reward&cat=Reinforcement%20Learning","datePublished":"2026-07-14T08:56:00.000Z","dateModified":"2026-07-14T08:57:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/average-reward/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Average Reward","description":"서론 지금까지는 정책이 만들어내는 마르코프 체인을 장기적인 관점에서 분석하기 위한 이론적 기반을 살펴보았다. 정상분포와 에르고딕 성질을 통해, 정책을 충분히 오래 수행하면 각 상태를 얼마나 자주 방문하는지를 하나의 확률분포로 표현할 수 있음을 확인하였다. 그러나 상태를 얼마나 자주 방문하는지만으로는 정책","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Average%20Reward&cat=Reinforcement%20Learning","datePublished":"2026-07-14T08:56:00.000Z","dateModified":"2026-07-14T11:29:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/average-reward/"}}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Reinforcement Learning","item":"https://ursonice.github.io/topics/reinforcement-learning/"},{"@type":"ListItem","position":3,"name":"Average Reward","item":"https://ursonice.github.io/posts/average-reward/"}]}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -95,8 +95,29 @@
     </div>
     <hr class="article-divider" />
     <div class="article-content"><h2 id="block-39db12c0115c80eb9b8efc21abd92140">서론</h2>
+<p>지금까지는 정책이 만들어내는 마르코프 체인을 장기적인 관점에서 분석하기 위한 이론적 기반을 살펴보았다. 정상분포와 에르고딕 성질을 통해, 정책을 충분히 오래 수행하면 각 상태를 얼마나 자주 방문하는지를 하나의 확률분포로 표현할 수 있음을 확인하였다.</p>
+<p>그러나 상태를 얼마나 자주 방문하는지만으로는 정책의 성능을 평가할 수 없다. 어떤 상태는 좋은 상태일 수도 있고, 어떤 상태는 피해야 하는 상태일 수도 있기 때문이다. 즉, 상태의 방문 빈도에 '좋음'이라는 기준이 함께 주어져야 비로소 정책의 우수성을 비교할 수 있다.</p>
+<p>이를 위해 강화학습에서는 각 상태(또는 상태-행동)에 보상(Reward) 을 부여하여 상태의 가치를 수치로 표현한다. 그리고 에르고딕 성질에 의해 얻은 장기 방문 비율과 이 보상을 결합하면, 정책이 장기간 수행되었을 때 평균적으로 얼마나 좋은 성과를 내는지를 하나의 값으로 나타낼 수 있다. 이러한 정책의 장기 성능 지표를 평균보상(Average Reward) 이라 한다.</p>
 <h2 id="block-39db12c0115c8094ba16e23f65c82f54">목차</h2>
-<h2 id="block-39db12c0115c80118d9ced4f5841b326"></h2></div>
+<h2 id="block-39db12c0115c80118d9ced4f5841b326"></h2>
+<p>정책을 평가하려면, 그 정책을 따랐을 때 에이전트가 장기적으로 얼마나 좋은 결과를 얻는지를 하나의 값으로 나타내야 한다. 이를 위해 각 시점에서 에이전트가 받는 보상을 \(R_{t+1}\) 이라 하자.</p>
+<div class="math-block">\[R_1 + R_2 + \cdots + R_T\]</div>
+<p>가 된다. 그러나 계속되는 환경에서는 시간이 길어질수록 이 합이 계속 커지므로, 총보상만으로는 정책을 적절히 비교하기 어렵다. 따라서 누적보상을 전체 시간 T로 나누어, 한 스텝 당 평균적으로 얼마나 많은 보상을 얻었는지를 계산한다.</p>
+<div class="math-block">\[\bar{R}_T = \frac{1}{T} \sum_{t=0}^{T-1} R_{t+1}\]</div>
+<p>그리고 정책을 무한히 오래 수행했을 때 이 값이 수렴하는 극한을 정책 \(\pi\)의 평균보상(Average Reward) 이라 한다.</p>
+<ul><li>\(T:\) 정책을 수행한 전체 스텝 수</li><li>t: 현재 스텝을 나타내는 인덱스</li><li>\(R_{t+1}\): t시점의 상태에서 한 번 전이한 뒤 받은 보상</li><li>\(\bar{R}_T\): \(T\)스텝 동안 실제로 관측한 보상의 평균</li></ul>
+<div class="math-block">\[g_{\pi} = \lim_{T \to \infty} \frac{1}{T} \mathbb{E}_{\pi} \left[ \sum_{t=0}^{T-1} R_{t+1} \right]\]</div>
+<p>여기서 \(g_\pi\)는 정책 \(\pi\)를 계속 따랐을 때 한 단계마다 평균적으로 얻는 보상을 의미한다.</p>
+<h3 id="block-39db12c0115c80babb9ed26a6baee07f">Example: Sunny–Cloudy 날씨의 평균보상</h3>
+<p>앞에서 사용한 날씨예제로 평균보상을 구해보자. 상태는 두 가지가 있다.</p>
+<div class="math-block">\[S = \{\text{Sunny}, \text{Cloudy}\}\]</div>
+<p>상태전이행렬은</p>
+<div class="math-block">\[\mathcal{P} = \begin{pmatrix} \displaystyle\frac{2}{3} &amp; \displaystyle\frac{1}{3} \\[1.5em] \displaystyle\frac{1}{2} &amp; \displaystyle\frac{1}{2} \end{pmatrix}\]</div>
+<p>앞에서 이 마르코프 체인의 정상분포를 구한 결과는</p>
+<div class="math-block">\[d = \begin{pmatrix} \displaystyle\frac{3}{5} &amp; \displaystyle\frac{2}{5} \end{pmatrix}\]</div>
+<p>이였다.</p>
+<p>이 결과의 의미는 장기적으로 전체 스텝(시간)의 \(\displaystyle\frac{3}{5}\)는 Sunny상태에 머물고, \(\displaystyle\frac{2}{5}\)정도는 Cloudy 상태에 머문다는 뜻이다.</p>
+<p>이제 각 상태에 보상을 부여하여 Sunny 상태에서는 보상 +1, Cloudy 상태에서는 보상 0을 받는다고 하자.</p></div>
     <div class="share-bar" data-share>
       <span class="share-label">Share</span>
       <button type="button" class="share-btn" data-share-copy>Copy</button>
