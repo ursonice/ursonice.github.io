@@ -29,13 +29,13 @@
     <meta property="og:url" content="https://ursonice.github.io/posts/markov-process/" />
     <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Markov%20process&amp;cat=Reinforcement%20Learning" />
     <meta property="article:published_time" content="2026-07-13T03:26:00.000Z" />
-    <meta property="article:modified_time" content="2026-07-14T03:37:00.000Z" />
+    <meta property="article:modified_time" content="2026-07-14T05:52:00.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Markov process" />
     <meta name="twitter:description" content="서론 강화학습의 목표는 “현재 상황에서 어떤 행동을 해야 미래에 더 좋은 결과를 얻을 수 있는가?” 이라고 볼 수 있다. 이 질문을 다루려면 먼저 시간에 따라 상태가 어떻게 변할지를 표현해야 한다. 하지만 미래의 상태는 정확히 정해져 있지 않고 확률적으로 변한다.(예를 들어 로봇이 앞으로 가려고 해도 바" />
     <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Markov%20process&amp;cat=Reinforcement%20Learning" />
 
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Markov process","description":"서론 강화학습의 목표는 “현재 상황에서 어떤 행동을 해야 미래에 더 좋은 결과를 얻을 수 있는가?” 이라고 볼 수 있다. 이 질문을 다루려면 먼저 시간에 따라 상태가 어떻게 변할지를 표현해야 한다. 하지만 미래의 상태는 정확히 정해져 있지 않고 확률적으로 변한다.(예를 들어 로봇이 앞으로 가려고 해도 바","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Markov%20process&cat=Reinforcement%20Learning","datePublished":"2026-07-13T03:26:00.000Z","dateModified":"2026-07-14T03:37:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/markov-process/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Markov process","description":"서론 강화학습의 목표는 “현재 상황에서 어떤 행동을 해야 미래에 더 좋은 결과를 얻을 수 있는가?” 이라고 볼 수 있다. 이 질문을 다루려면 먼저 시간에 따라 상태가 어떻게 변할지를 표현해야 한다. 하지만 미래의 상태는 정확히 정해져 있지 않고 확률적으로 변한다.(예를 들어 로봇이 앞으로 가려고 해도 바","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Markov%20process&cat=Reinforcement%20Learning","datePublished":"2026-07-13T03:26:00.000Z","dateModified":"2026-07-14T05:52:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/markov-process/"}}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Reinforcement Learning","item":"https://ursonice.github.io/topics/reinforcement-learning/"},{"@type":"ListItem","position":3,"name":"Markov process","item":"https://ursonice.github.io/posts/markov-process/"}]}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -253,11 +253,15 @@ p_2^{(0)} P_{20} &amp;= P(X_0 = 2) \cdot P(X_1 = 0 \mid X_0 = 2) = P(X_1 = 0 \ca
 <div class="math-block">\[\mathcal{P}v - \lambda v = 0\]</div>
 <p>\(\lambda\)는 스칼라 임으로 행렬끼리의 뺄샘을 하기 위해</p>
 <div class="math-block">\[(\mathcal{P} - \lambda I)v = 0\]</div>
-<p>v는 0이아닌 벡터여야 함으로 행렬 \((\mathcal{P} - \lambda I)\)의 역행렬이 존재하면 안 된다.</p>
-<p>왜냐하면 \(B = (\mathcal{P} - \lambda I)\)의 역행렬이 존재하면</p>
-<div class="math-block">\[Bv = 0\\
-B^{-1}Bv = B^{-1}0\]</div>
-<p>고윳값: \(\det(\mathcal{P}-\lambda I)
+<p>\(v\)는 0이아닌 벡터여야 함으로 행렬 \((\mathcal{P} - \lambda I)\)의 역행렬이 존재하면 안 된다.</p>
+<p>왜냐하면 \((\mathcal{P} - \lambda I)\)의 역행렬이 존재하면</p>
+<div class="math-block">\[\begin{align}&amp;(\mathcal{P} - \lambda I)v = 0\\
+&amp;Bv = 0\\
+&amp;B^{-1}Bv = B^{-1}0\\&amp;v=0
+\end{align}\]</div>
+<p>\(v\)가 0이되기 때문이다.</p>
+<p>역행렬이 존재하면 안 됨으로 \(\text{det}(\mathcal{P} - \lambda I) = 0\) 여야 한다.</p>
+<p>\(\det(\mathcal{P}-\lambda I)
 =
 \lambda^2-{}^{7}\!/\!_{6}\lambda+{}^{1}\!/\!_{6}
 =
@@ -265,18 +269,83 @@ B^{-1}Bv = B^{-1}0\]</div>
 <div class="math-block">\[\lambda_1 = 1, \quad \lambda_2 = \dfrac{1}{6}\]</div>
 <p>임으로 \(\mathcal{P} = Q D Q^{-1}\)에서 D는:</p>
 <div class="math-block">\[D = \begin{pmatrix} 1 &amp; 0 \\[6pt] 0 &amp; \frac{1}{6} \end{pmatrix}\]</div>
-<p>고유벡터는 </p>
-<div class="math-block">\[v_1 = \begin{pmatrix} 1 \\[3pt] 1 \end{pmatrix}, \;v_2 = \begin{pmatrix} 2 \\[3pt] -3 \end{pmatrix}\]</div>
-<h3 id="block-39cb12c0115c80f5a7caeb067f566919"><strong>Verify the existence of the distribution</strong></h3>
-<h4 id="block-39cb12c0115c80e08134d904e835ba80">1-step</h4>
-<div class="math-block">\[p^{(1)} = p^{(0)}\mathcal{P} = \begin{pmatrix} 1 &amp; 0 \end{pmatrix} \begin{pmatrix} \frac{2}{3} &amp; \frac{1}{3} \\ \frac{1}{2} &amp; \frac{1}{2} \end{pmatrix} = \begin{pmatrix} \frac{2}{3} &amp; \frac{1}{3} \end{pmatrix} \approx \begin{pmatrix} 0.667 &amp; 0.333 \end{pmatrix}\]</div>
-<h4 id="block-39cb12c0115c80c4bcc2f99ee8172017">2-step</h4>
-<div class="math-block">\[p^{(2)} = p^{(1)}\mathcal{P} = \begin{pmatrix} \frac{2}{3} &amp; \frac{1}{3} \end{pmatrix} \begin{pmatrix} \frac{2}{3} &amp; \frac{1}{3} \\ \frac{1}{2} &amp; \frac{1}{2} \end{pmatrix} = \begin{pmatrix} \frac{2}{3} \cdot \frac{2}{3} + \frac{1}{3} \cdot \frac{1}{2} , &amp; \frac{2}{3} \cdot \frac{1}{3} + \frac{1}{3} \cdot \frac{1}{2} \end{pmatrix} = \begin{pmatrix} \frac{11}{18} &amp; \frac{7}{18} \end{pmatrix} \approx \begin{pmatrix} 0.611 &amp; 0.389 \end{pmatrix}\]</div>
-<h4 id="block-39cb12c0115c80258877e371cfd93523">3-step</h4>
-<div class="math-block">\[p^{(3)} = p^{(2)}\mathcal{P} = \begin{pmatrix} \frac{11}{18} &amp; \frac{7}{18} \end{pmatrix} \begin{pmatrix} \frac{2}{3} &amp; \frac{1}{3} \\ \frac{1}{2} &amp; \frac{1}{2} \end{pmatrix} = \begin{pmatrix} \frac{65}{108} &amp; \frac{43}{108} \end{pmatrix} \approx \begin{pmatrix} 0.602 &amp; 0.398 \end{pmatrix}\]</div>
-<h4 id="block-39cb12c0115c80c589e2c53631998338">4-step</h4>
-<div class="math-block">\[p^{(4)} = p^{(3)}\mathcal{P} = \begin{pmatrix} \frac{65}{108} &amp; \frac{43}{108} \end{pmatrix} \begin{pmatrix} \frac{2}{3} &amp; \frac{1}{3} \\ \frac{1}{2} &amp; \frac{1}{2} \end{pmatrix} = \begin{pmatrix} \frac{389}{648} &amp; \frac{259}{648} \end{pmatrix} \approx \begin{pmatrix} 0.6003 &amp; 0.3997 \end{pmatrix}\]</div>
-<p>값이 0.6으로 수렴하고 있다. 왜 이렇게 수렴하는지 보면</p></div>
+<p>고유벡터는</p>
+<p>\(\text{i}) \lambda_1=1\) 인 경우</p>
+<div class="math-block">\[(\mathcal{P} - 1 \cdot I)v_1 = \begin{pmatrix} \dfrac{2}{3} - 1 &amp; \dfrac{1}{3} \\[10pt] \dfrac{1}{2} &amp; \dfrac{1}{2} - 1 \end{pmatrix} \begin{pmatrix} x_1 \\[10pt] x_2 \end{pmatrix} = \begin{pmatrix} -\dfrac{1}{3} &amp; \dfrac{1}{3} \\[10pt] \dfrac{1}{2} &amp; -\dfrac{1}{2} \end{pmatrix} \begin{pmatrix} x_1 \\[10pt] x_2 \end{pmatrix} = \begin{pmatrix} 0 \\[10pt] 0 \end{pmatrix}\]</div>
+<p>연립방정식으로 쓰면</p>
+<div class="math-block">\[\begin{cases} -\dfrac{1}{3}x_1 + \dfrac{1}{3}x_2 = 0 \\[10pt] \dfrac{1}{2}x_1 - \dfrac{1}{2}x_2 = 0 \end{cases}  \implies 
+\begin{cases} -x_1 + x_2 = 0 \\ x_1 - x_2 = 0 \end{cases}\]</div>
+<div class="math-block">\[x_1 = x_2 \implies v_1 = c \begin{pmatrix} 1 \\ 1 \end{pmatrix} \quad (c \neq 0\text{인 아무 값})\]</div>
+<p>\(c=1\)을 골라</p>
+<div class="math-block">\[v_1=\begin{pmatrix} 1 \\ 1 \end{pmatrix} \]</div>
+<p>\(\text{i}) \lambda_2=\frac{1}{6}\) 인 경우</p>
+<div class="math-block">\[(\mathcal{P} - \frac{1}{6}I) v_2 = \begin{pmatrix} \frac{2}{3} - \frac{1}{6} &amp; \frac{1}{3} \\ \frac{1}{2} &amp; \frac{1}{2} - \frac{1}{6} \end{pmatrix} \begin{pmatrix} x_1 \\ x_2 \end{pmatrix} = \begin{pmatrix} \frac{1}{2} &amp; \frac{1}{3} \\ \frac{1}{2} &amp; \frac{1}{3} \end{pmatrix} \begin{pmatrix} x_1 \\ x_2 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix}\]</div>
+<p>연립방정식으로 쓰면</p>
+<div class="math-block">\[\frac{1}{2}x_1 + \frac{1}{3}x_2 = 0 \implies x_2 = -\frac{3}{2}x_1\]</div>
+<p>\(x_1 =2\)를 고르면</p>
+<div class="math-block">\[v_2=\begin{pmatrix} 2 \\ -3 \end{pmatrix} \]</div>
+<p>정리하면</p>
+<div class="math-block">\[Q = [v_1 \quad v_2] = \begin{pmatrix} 1 &amp; 2 \\ 1 &amp; -3 \end{pmatrix}, \quad D = \begin{pmatrix} 1 &amp; 0 \\ 0 &amp; \frac{1}{6} \end{pmatrix}\]</div>
+<p>마지막으로 \(Q^{-1}\)을 구하면</p>
+<div class="math-block">\[\begin{bmatrix} a &amp; b \\ c &amp; d \end{bmatrix}^{-1} = \frac{1}{ad-bc} \begin{bmatrix} d &amp; -b \\ -c &amp; a \end{bmatrix}\]</div>
+<p>에 의해</p>
+<div class="math-block">\[Q^{-1} = \frac{1}{(1)(-3) - (2)(1)} \begin{pmatrix} -3 &amp; -2 \\ -1 &amp; 1 \end{pmatrix} = \frac{1}{-5} \begin{pmatrix} -3 &amp; -2 \\ -1 &amp; 1 \end{pmatrix} = \begin{pmatrix} \frac{3}{5} &amp; \frac{2}{5} \\ \frac{1}{5} &amp; -\frac{1}{5} \end{pmatrix}\]</div>
+<p>\(\mathcal{P}^n\)을 계산하면</p>
+<div class="math-block">\[\mathcal{P}^n = QD^n Q^{-1} = \begin{pmatrix} 1 &amp; 2 \\ 1 &amp; -3 \end{pmatrix} \begin{pmatrix} 1^n &amp; 0 \\ 0 &amp; \left(\frac{1}{6}\right)^n \end{pmatrix} \begin{pmatrix} \frac{3}{5} &amp; \frac{2}{5} \\ \frac{1}{5} &amp; -\frac{1}{5} \end{pmatrix}\]</div>
+<p>극한을 계산하면</p>
+<div class="math-block">\[\begin{align}
+\lim_{n \to \infty} \mathcal{P}^n = Q \left( \lim_{n \to \infty} D^n \right) Q^{-1} = Q \begin{pmatrix} \lim_{n \to \infty} 1^n &amp; 0 \\ 0 &amp; \lim_{n \to \infty} \left(\frac{1}{6}\right)^n \end{pmatrix} Q^{-1} \\[10pt]= Q \begin{pmatrix} 1 &amp; 0 \\ 0 &amp; 0 \end{pmatrix} Q^{-1}
+\end{align}\]</div>
+<div class="math-block">\[\lim_{n \to \infty} \mathcal{P}^n = \begin{pmatrix} 1 &amp; 2 \\ 1 &amp; -3 \end{pmatrix} \begin{pmatrix} 1 &amp; 0 \\ 0 &amp; 0 \end{pmatrix} \begin{pmatrix} \frac{3}{5} &amp; \frac{2}{5} \\ \frac{1}{5} &amp; -\frac{1}{5} \end{pmatrix}\]</div>
+<p>앞에서부터 두 행렬을 계산하면</p>
+<div class="math-block">\[\begin{pmatrix} 1 &amp; 2 \\ 1 &amp; -3 \end{pmatrix} \begin{pmatrix} 1 &amp; 0 \\ 0 &amp; 0 \end{pmatrix} = \begin{pmatrix} 1 &amp; 0 \\ 1 &amp; 0 \end{pmatrix}\]</div>
+<p>최종적으로 계산하면</p>
+<div class="math-block">\[\lim_{n \to \infty} \mathcal{P}^n = \begin{pmatrix} 1 &amp; 0 \\[6pt] 1 &amp; 0 \end{pmatrix} \begin{pmatrix} \frac{3}{5} &amp; \frac{2}{5} \\[6pt] \frac{1}{5} &amp; -\frac{1}{5} \end{pmatrix} = \begin{pmatrix} 1 \cdot \frac{3}{5} + 0 &amp; 1 \cdot \frac{2}{5} + 0 \\[6pt] 1 \cdot \frac{3}{5} + 0 &amp; 1 \cdot \frac{2}{5} + 0 \end{pmatrix} = \begin{pmatrix} \frac{3}{5} &amp; \frac{2}{5} \\[6pt] \frac{3}{5} &amp; \frac{2}{5} \end{pmatrix}\]</div>
+<p>가 되어 이 예제의 경우 첫 번째 조건인 극한이 존재한다는 것을 확인했다.</p>
+<p>첫날이 Sunny 였음으로 초기분포 \(p^{(0)} =(1\;\;0)\)을 곱하면</p>
+<div class="math-block">\[\therefore p^{(\infty)} = p^{(0)} \left( \lim_{n \to \infty} \mathcal{P}^n \right) = \begin{pmatrix} 1 &amp; 0 \end{pmatrix} \begin{pmatrix} \frac{3}{5} &amp; \frac{2}{5} \\[6pt] \frac{3}{5} &amp; \frac{2}{5} \end{pmatrix} = \begin{pmatrix} \frac{3}{5} &amp; \frac{2}{5} \end{pmatrix}\]</div>
+<p>이 결과의 의미는 긴 시간이 흐른 후에 Sunny일 확률이 \(\frac{3}{5}\), Cloudy일 확률이 \(\frac{2}{5}\)</p>
+<p>만약 초기 분포가 반대로 Cloudy였다면 초기분포 \(p^{(0)} =(0\;\;1)\)을 곱하면</p>
+<div class="math-block">\[p^{(\infty)} = \begin{pmatrix} 0 &amp; 1 \end{pmatrix} \begin{pmatrix} \frac{3}{5} &amp; \frac{2}{5} \\[6pt] \frac{3}{5} &amp; \frac{2}{5} \end{pmatrix} = \begin{pmatrix} \frac{3}{5} &amp; \frac{2}{5} \end{pmatrix}\]</div>
+<p>임으로 따라서 두 번째 조건인 초기분포에 영향을 받지 않고 값이 동일함을 확인했다.</p>
+<p>이러한 두 조건을 만족하는 \(p^{(\infty)}\)를 극한 분포라고 한다.</p>
+<p>강화학습에서 정책의 평가 기준은 &quot;그 정책을 장기간 따랐을 때 좋은 상태에 얼마나 머무는가&quot;이다. 이를 알려면 장시간이 흐른 뒤의 상태 분포가 존재해야 하고, 그 분포가 초기 상태에 따라 달라진다면 정책이 아닌 출발점을 평가하는 셈이 되므로 초기분포와도 무관해야 한다. 이 두 조건 극한의 존재, 초기분포 무관을 만족하는 분포가 극한분포이며, 정책(이 만들어내는 마르코프 체인)을 하나의 값으로 평가할 수 있게 해주는 이론적 기반이 된다.</p>
+<blockquote>강화학습에는 정책의 장기 성능을 정의하는 방식에는 평균보상 방식, 할인 보상 방식 두 종류가 있다. 평균보상 방식은 에르고딕이라는 조건을 가정하에 동작하는데 에르고딕의 조건중 극한분포가 존재가 보장되어야 한다. 이 방식을 사용하는 알고리즘은 R-learning, Differential Q-learning, Differential SARSA 등이 있으며 할인 보상방식은 Q-learning, DQN, PPO 등 이 있다.</blockquote>
+<h2 id="block-39cb12c0115c80f49380ed38940db3dd">Stationary distribution</h2>
+<p>우리는 극한분포를 구하기 위해서는 고윳값, 고유벡터, 고유벡터의 역행렬을 구해야하며 이는 상태가 많아지면 즉 행렬의 크기가 커지면 연산하는 비용이 많이 복잡하다. </p>
+<p>우리는 &quot;상태를 어떤 분포에 곱해도 변하지 않는 어떤 분포는 무엇인가&quot;라는 접근한다.</p>
+<p>극한분포를 \(\pi\)라고 하면, 이미 장기적으로 안정된 분포이므로 한 번 더 상태전이행렬 \(\mathcal{P}\)를 곱해도 분포가 더 이상 변하지 않는다. (실제로 극한분포를 구하고 거기에 초기분포(1   0)과 (0   1)을 곱했을 때 극한분포가 변하지 않았다.)</p>
+<p>또한 \(\pi\)는 확률분포임으로 확률의 합은 1이여야 한다. 이 두 성질을 수식으로 작성하면 아래와 같다.</p>
+<div class="math-block">\[\pi = \pi \mathcal{P} , \quad \sum_{i} \pi_i = 1\]</div>
+<p>그리고 위 조건을 만족하는 \(\pi\)를 Stationary distribution(정상분포)라고 한다.</p>
+<p>실제로 이 분포에서 전이행렬을 곱해 매 스텝을 이여(체인을 시작)나가면, 모든 시점의 분포가 모두</p>
+<p>π로 고정(동일)된다.</p>
+<div class="math-block">\[p^{(0)} = \pi \implies p^{(1)} = \pi \mathcal{P} = \pi, \quad p^{(2)} = \pi \mathcal{P} = \pi, \ \dots\]</div>
+<p>실제 날씨예제에서 \(\pi =(\pi_1\;\;\pi_2)\)로 놓고 풀어보자.</p>
+<div class="math-block">\[\begin{pmatrix} \pi_1 &amp; \pi_2 \end{pmatrix} \begin{pmatrix} \frac{2}{3} &amp; \frac{1}{3} \\[6pt] \frac{1}{2} &amp; \frac{1}{2} \end{pmatrix} = \begin{pmatrix} \pi_1 &amp; \pi_2 \end{pmatrix}\]</div>
+<p>첫 번째 성분을 전개하면:</p>
+<div class="math-block">\[\frac{2}{3}\pi_1 + \frac{1}{2}\pi_2 = \pi_1 \implies \frac{1}{2}\pi_2 = \frac{1}{3}\pi_1 \implies \pi_2 = \frac{2}{3}\pi_1\]</div>
+<p>\(\pi_1 + \pi_2 = 1\)과 연립하면:</p>
+<div class="math-block">\[\pi_1 + \frac{2}{3}\pi_1 = 1 \implies \pi_1 = \frac{3}{5}, \quad \pi_2 = \frac{2}{5}\\[10pt]\therefore \pi = \begin{pmatrix} \frac{3}{5} &amp; \frac{2}{5} \end{pmatrix}\]</div>
+<p>대각화를 통해 힘들게 구했던 극한분포 \(\pi = \begin{pmatrix} \frac{3}{5} &amp; \frac{2}{5} \end{pmatrix}\)가 연립방정식으로 쉽게 구해졌다.</p>
+<p>주의할 점은 </p>
+<ul><li>극한 분포가 존재하면 정상 분포도 존재한다.</li><li>정상분포가 존재한다고 극한 분포가 존재한다는 보장은 없다. </li></ul>
+<p>전자는 이미 예시를 통해서 구해봤으니 후자만 예시를 들어 보겠다.</p>
+<p>전이행렬이 아래와 같고 \(\pi = \begin{pmatrix} \frac{1}{2} &amp; \frac{1}{2} \end{pmatrix}\) 이라면 </p>
+<div class="math-block">\[\mathcal{P} = \begin{pmatrix} 0 &amp; 1 \\ 1 &amp; 0 \end{pmatrix}\]</div>
+<p>\(\pi \mathcal{P} = \begin{pmatrix} \frac{1}{2} &amp; \frac{1}{2} \end{pmatrix} = \pi\)  임으로 정상분포( \(\pi = \begin{pmatrix} \frac{1}{2} &amp; \frac{1}{2} \end{pmatrix}\))가 존재한다.</p>
+<p> 그런데 극한분포는 초기분포와 무관해야 함으로 만약 출발점이 \(p^{(0)} = \begin{pmatrix} 1 &amp; 0 \end{pmatrix}\)라면</p>
+<div class="math-block">\[p^{(1)} = \begin{pmatrix} 1 &amp; 0 \end{pmatrix} \begin{pmatrix} 0 &amp; 1 \\ 1 &amp; 0 \end{pmatrix} = \begin{pmatrix} 0 &amp; 1 \end{pmatrix},\quad p^{(2)} = \begin{pmatrix} 0 &amp; 1 \end{pmatrix} \begin{pmatrix} 0 &amp; 1 \\ 1 &amp; 0 \end{pmatrix} = \begin{pmatrix} 1 &amp; 0 \end{pmatrix},\quad \dots\]</div>
+<p>초깃값이 무엇이냐에 따라 결과가 달라지는 현상이 나타남으로 이 경우는 극한 분포가 존재하지 않는다.</p>
+<h2 id="block-39db12c0115c80409ae1cc2de0f286dc">Ergodicity</h2>
+<ul><li>지금까지의 상황을 정리해 보면 우리는 정책을 평가를 위해 극한분포가 필요했고, 그것을 쉽게구하기 위해 \(\pi = \pi\mathcal{P}\) 정상분포를 구하는 방법으로 극한분포를 구했다. 그런데 정상분포를 구했다고 해서 그것이 극한분포라는 보장이 없었다.</li><li>따라서 정상분포가 극한분포와 같아지도록 하는 에르고딕(ergodic)이라는 조건을 가정한다.</li><li>따라서 에르고딕 성질을 만족한다는 것은 &quot;정상분포가 유일하게 존재하고, 그것이 곧 극한분포임&quot;을 보장하는 조건이다. <details class="toggle"><summary>정상분포는 여러 개를 가질 수 있다.</summary><div class="toggle-body"><p>\(\mathcal{P} = \begin{pmatrix} 1 &amp; 0 \\ 0 &amp; 1 \end{pmatrix}\)인 경우 항등 행렬임으로 어떤 분포를 넣어도 성립한다.</p>
+<div class="math-block">\[\begin{pmatrix} 1 &amp; 0 \end{pmatrix} \mathcal{P} = \begin{pmatrix} 1 &amp; 0 \end{pmatrix} \checkmark \\ \begin{pmatrix} 0 &amp; 1 \end{pmatrix} \mathcal{P} = \begin{pmatrix} 0 &amp; 1 \end{pmatrix} \checkmark \\ \\\begin{pmatrix} \frac{1}{2} &amp; \frac{1}{2} \end{pmatrix} \mathcal{P} = \begin{pmatrix} \frac{1}{2} &amp; \frac{1}{2} \end{pmatrix}\checkmark \\ \begin{pmatrix} 0.3 &amp; 0.7 \end{pmatrix} \mathcal{P} = \begin{pmatrix} 0.3 &amp; 0.7 \end{pmatrix} \checkmark\]</div></div></details></li></ul>
+<h3 id="block-39db12c0115c8077b17fd454ac2c3946">Reducible / Irreducible</h3>
+<p>먼저 용어부터 알아보자</p>
+<ul><li>클래스(communicating class): 상태 i에서 j로 갈 수 있고 동시에 j에서 i로도 돌아올 수 있을 때(왕복 가능) 두 상태가 communicate 가능하다고 하고 이러한 상태들을 묶은 집합을 말한다.</li><li>예를들어 다음과같이 상태가 4개가 있고 전이행렬이 아래와 같다.</li></ul>
+<div class="math-block">\[S = \{1,\ 2,\ 3,\ 4\}\\[10pt]
+P = \begin{pmatrix} 1 &amp; 0 &amp; 0 &amp; 0 \\ \frac{1}{3} &amp; 0 &amp; \frac{2}{3} &amp; 0 \\ 0 &amp; \frac{1}{3} &amp; 0 &amp; \frac{2}{3} \\ 0 &amp; 0 &amp; 1 &amp; 0 \end{pmatrix}\]</div>
+<p>이를 그림으로 표현하면</p></div>
     <div class="share-bar" data-share>
       <span class="share-label">Share</span>
       <button type="button" class="share-btn" data-share-copy>Copy</button>
