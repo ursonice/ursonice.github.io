@@ -29,13 +29,13 @@
     <meta property="og:url" content="https://ursonice.github.io/posts/average-reward/" />
     <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Average%20Reward&amp;cat=Reinforcement%20Learning" />
     <meta property="article:published_time" content="2026-07-14T08:56:00.000Z" />
-    <meta property="article:modified_time" content="2026-07-14T12:18:00.000Z" />
+    <meta property="article:modified_time" content="2026-07-15T05:58:00.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Average Reward" />
     <meta name="twitter:description" content="서론 지금까지는 정책이 만들어내는 마르코프 체인을 장기적인 관점에서 분석하기 위한 이론적 기반을 살펴보았다. 정상분포와 에르고딕 성질을 통해, 정책을 충분히 오래 수행하면 각 상태를 얼마나 자주 방문하는지를 하나의 확률분포로 표현할 수 있음을 확인하였다. 그러나 상태를 얼마나 자주 방문하는지만으로는 정책" />
     <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Average%20Reward&amp;cat=Reinforcement%20Learning" />
 
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Average Reward","description":"서론 지금까지는 정책이 만들어내는 마르코프 체인을 장기적인 관점에서 분석하기 위한 이론적 기반을 살펴보았다. 정상분포와 에르고딕 성질을 통해, 정책을 충분히 오래 수행하면 각 상태를 얼마나 자주 방문하는지를 하나의 확률분포로 표현할 수 있음을 확인하였다. 그러나 상태를 얼마나 자주 방문하는지만으로는 정책","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Average%20Reward&cat=Reinforcement%20Learning","datePublished":"2026-07-14T08:56:00.000Z","dateModified":"2026-07-14T12:18:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/average-reward/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Average Reward","description":"서론 지금까지는 정책이 만들어내는 마르코프 체인을 장기적인 관점에서 분석하기 위한 이론적 기반을 살펴보았다. 정상분포와 에르고딕 성질을 통해, 정책을 충분히 오래 수행하면 각 상태를 얼마나 자주 방문하는지를 하나의 확률분포로 표현할 수 있음을 확인하였다. 그러나 상태를 얼마나 자주 방문하는지만으로는 정책","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Average%20Reward&cat=Reinforcement%20Learning","datePublished":"2026-07-14T08:56:00.000Z","dateModified":"2026-07-15T05:58:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/average-reward/"}}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Reinforcement Learning","item":"https://ursonice.github.io/topics/reinforcement-learning/"},{"@type":"ListItem","position":3,"name":"Average Reward","item":"https://ursonice.github.io/posts/average-reward/"}]}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -86,7 +86,7 @@
     <div class="article-meta">
       
       
-      <span>작성 2026년 7월 14일</span>
+      <span>작성 2026년 7월 14일</span><span class="dot"></span><span>수정 2026년 7월 15일</span>
       <span class="reading-size" role="group" aria-label="글자 크기">
         <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
         <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
@@ -132,7 +132,32 @@ g_{\pi} = \lim_{T \to \infty} \frac{1}{T} \mathbb{E}_{\pi} \left[ \sum_{t=0}^{T-
 <p>앞에서 이 마르코프 체인의 정상분포를 구한 결과는</p>
 <div class="math-block">\[d = \begin{pmatrix} \displaystyle\frac{3}{5} &amp; \displaystyle\frac{2}{5} \end{pmatrix}\]</div>
 <p>이였다.</p>
-<p>이 결과의 의미는 장기적으로 전체 스텝(시간)의 \(\displaystyle\frac{3}{5}\)는 Sunny상태에 머물고, \(\displaystyle\frac{2}{5}\)정도는 Cloudy 상태에 머문다는 뜻이다.</p></div>
+<p>이 결과의 의미는 장기적으로 전체 스텝(시간)의 \(\displaystyle\frac{3}{5}\)는 Sunny상태에 머물고, \(\displaystyle\frac{2}{5}\)정도는 Cloudy 상태에 머문다는 뜻이다.</p>
+<p>평균보상은</p>
+<div class="math-block">\[g_{\pi} = \lim_{T \to \infty} \mathbb{E}_{\pi} \left[ \frac{1}{T} \sum_{t=0}^{T-1} R_{t+1} \right]\]</div>
+<p>이고 기대값의 선형성을 사용하면</p>
+<div class="math-block">\[g_{\pi} = \lim_{T \to \infty} \frac{1}{T} \sum_{t=0}^{T-1} \mathbb{E}_{\pi} [R_{t+1}]\]</div>
+<p>가 된다. 각 시점의 기대보상은 상태별로 나눠 계산가능하다.</p>
+<div class="math-block">\[\mathbb{E}_{\pi}[R_{t+1}] = \sum_{s \in \mathcal{S}} P_{\pi}(S_t = s) \mathbb{E}_{\pi}[R_{t+1} \mid S_t = s]\]</div>
+<p>그리고 조건부 기댓값을 다음과 같이 정의했음으로</p>
+<div class="math-block">\[r_{\pi}(s) = \mathbb{E}_{\pi}[R_{t+1} \mid S_t = s]\]</div>
+<p>이렇게 기댓값을 풀면 상태에 있을 확률(가중치)와 각 상태의 보상 \(r_{\pi}(s)\)가 곱해진다.</p>
+<div class="math-block">\[\mathbb{E}_{\pi}[R_{t+1}] = \sum_{s} P_{\pi}(S_t = s) r_{\pi}(s)\]</div>
+<p>이를 다시 전체 식에 대입하면</p>
+<div class="math-block">\[g_{\pi} = \lim_{T \to \infty} \frac{1}{T} \sum_{t=0}^{T-1} \sum_{s} P_{\pi}(S_t = s) r_{\pi}(s)\]</div>
+<p>가 된다. 시그마의 순서를 바꾸면</p>
+<div class="math-block">\[g_{\pi} = \sum_{s} \left[ \lim_{T \to \infty} \frac{1}{T} \sum_{t=0}^{T-1} P_{\pi}(S_t = s) \right] r_{\pi}(s)\]</div>
+<p>가 된다. </p>
+<p>그런데 에르고딕한 마르코프 체인에서는 각 시점의 상태확률이 정상분포로 수렴함으로</p>
+<div class="math-block">\[P_{\pi}(S_t = s) \xrightarrow{t \to \infty} d_{\pi}(s)\]</div>
+<p>가 된다. 슈롤츠-체사 정리(Cesàro 평균 - 어떤 수열의 각 항이 점점 \(L\)에 가까워진다면, 그 항들을 처음부터 평균낸 값도 결국 \(L\)에 가까워진다.) 의해 실수열의 극한 \(\lim_{n \to \infty} x_n = L\) 이면 다음이 성립한다.</p>
+<div class="math-block">\[\lim_{n \to \infty} \frac{x_1 + x_2 + \dots + x_n}{n} = L\]</div>
+<p>따라서 상태확률들을 시간에 따라 평균낸 값도 \(d_{\pi}(s)\)로 수렴한다.
+</p>
+<div class="math-block">\[\lim_{T \to \infty} \frac{1}{T} \sum_{t=0}^{T-1} P_{\pi}(S_t = s) = d_{\pi}(s)\]</div>
+<p>따라서 최종적으로</p>
+<div class="math-block">\[g_{\pi} = \sum_{s} d_{\pi}(s) r_{\pi}(s)\]</div>
+<p>가 된다.</p></div>
     <div class="share-bar" data-share>
       <span class="share-label">Share</span>
       <button type="button" class="share-btn" data-share-copy>Copy</button>
