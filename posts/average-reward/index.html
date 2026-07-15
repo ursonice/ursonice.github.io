@@ -29,13 +29,13 @@
     <meta property="og:url" content="https://ursonice.github.io/posts/average-reward/" />
     <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Average%20Reward&amp;cat=Reinforcement%20Learning" />
     <meta property="article:published_time" content="2026-07-14T08:56:00.000Z" />
-    <meta property="article:modified_time" content="2026-07-15T05:58:00.000Z" />
+    <meta property="article:modified_time" content="2026-07-15T07:07:00.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Average Reward" />
     <meta name="twitter:description" content="서론 지금까지는 정책이 만들어내는 마르코프 체인을 장기적인 관점에서 분석하기 위한 이론적 기반을 살펴보았다. 정상분포와 에르고딕 성질을 통해, 정책을 충분히 오래 수행하면 각 상태를 얼마나 자주 방문하는지를 하나의 확률분포로 표현할 수 있음을 확인하였다. 그러나 상태를 얼마나 자주 방문하는지만으로는 정책" />
     <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Average%20Reward&amp;cat=Reinforcement%20Learning" />
 
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Average Reward","description":"서론 지금까지는 정책이 만들어내는 마르코프 체인을 장기적인 관점에서 분석하기 위한 이론적 기반을 살펴보았다. 정상분포와 에르고딕 성질을 통해, 정책을 충분히 오래 수행하면 각 상태를 얼마나 자주 방문하는지를 하나의 확률분포로 표현할 수 있음을 확인하였다. 그러나 상태를 얼마나 자주 방문하는지만으로는 정책","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Average%20Reward&cat=Reinforcement%20Learning","datePublished":"2026-07-14T08:56:00.000Z","dateModified":"2026-07-15T05:58:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/average-reward/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Average Reward","description":"서론 지금까지는 정책이 만들어내는 마르코프 체인을 장기적인 관점에서 분석하기 위한 이론적 기반을 살펴보았다. 정상분포와 에르고딕 성질을 통해, 정책을 충분히 오래 수행하면 각 상태를 얼마나 자주 방문하는지를 하나의 확률분포로 표현할 수 있음을 확인하였다. 그러나 상태를 얼마나 자주 방문하는지만으로는 정책","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Average%20Reward&cat=Reinforcement%20Learning","datePublished":"2026-07-14T08:56:00.000Z","dateModified":"2026-07-15T07:07:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/average-reward/"}}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Reinforcement Learning","item":"https://ursonice.github.io/topics/reinforcement-learning/"},{"@type":"ListItem","position":3,"name":"Average Reward","item":"https://ursonice.github.io/posts/average-reward/"}]}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -99,45 +99,44 @@
 <p>그러나 상태를 얼마나 자주 방문하는지만으로는 정책의 성능을 평가할 수 없다. 어떤 상태는 좋은 상태일 수도 있고, 어떤 상태는 피해야 하는 상태일 수도 있기 때문이다. 즉, 상태의 방문 빈도에 '좋음'이라는 기준이 함께 주어져야 비로소 정책의 우수성을 비교할 수 있다.</p>
 <p>이를 위해 강화학습에서는 각 상태(또는 상태-행동)에 보상(Reward) 을 부여하여 상태의 가치를 수치로 표현한다. 그리고 에르고딕 성질에 의해 얻은 장기 방문 비율과 이 보상을 결합하면, 정책이 장기간 수행되었을 때 평균적으로 얼마나 좋은 성과를 내는지를 하나의 값으로 나타낼 수 있다. 이러한 정책의 장기 성능 지표를 평균보상(Average Reward) 이라 한다.</p>
 <h2 id="block-39db12c0115c8094ba16e23f65c82f54">목차</h2>
-<h2 id="block-39db12c0115c80118d9ced4f5841b326"></h2>
-<p>정책을 평가하려면, 그 정책을 따랐을 때 에이전트가 장기적으로 얼마나 좋은 결과를 얻는지를 하나의 값으로 나타내야 한다. 이를 위해 각 시점에서 에이전트가 받는 보상을 \(R_{t+1}\) 이라 하자.</p>
+<h2 id="block-39db12c0115c80118d9ced4f5841b326">실제로 관측되는 보상: \(R_{t+1}\)</h2>
+<p>정책을 평가하려면, 그 정책을 따랐을 때 에이전트가 장기적으로 얼마나 좋은 결과를 얻는지를 하나의 값으로 나타내야 한다. 이를 위해 먼저 정책 \(\pi\)가 각 상태에서 한 스텝 동안 평균적으로 얼마나 좋은 결과를 만드는지를 정의하고, 그다음 에이전트가 장기적으로 각 상태를 얼마나 자주 방문하는지를 함께 고려한다.</p>
+<div class="math-block">\[S_t \rightarrow A_t \rightarrow R_{t+1}, S_{t+1}\]</div>
+<p>같은 상태에서 같은 정책을 사용하더라도 다음 상태가 다르게 결정될 수 있기 때문에, 항상 같은 보상을 받는 것은 아니다.</p>
+<h2 id="block-39eb12c0115c80f3bb88e503552710c9">상태별 기대보상: \(r_{\pi}(s)\)</h2>
+<p>현재 상태가 s라고 고정했을 때, 정책 \(\pi\)를 따라 한 스텝 행동하여 평균적으로 받는 보상을 다음과 같이 정의한다.</p>
+<div class="math-block">\[r_{\pi}(s) = \mathbb{E}_{\pi} \left[ R_{t+1} \mid S_t = s \right]\]</div>
+<p>\(r_{\pi}(s)\)는 현재 상태가 s일 때 정책 \(\pi\)를 따르면 다음 한 스텝에서 평균적으로 얻는 보상이다.</p>
+<p>따라서 이는 특정 경로에서 실제로 받은 보상 \(R_{t+1}\)이 아니라 상태 s에서 가능한 결과들을 모두 고려한 한 스텝 기대보상이다.</p>
+<p>\(r_{\pi}(s)\)를 알면 각 상태가 한 스텝 관점에서 얼마나 좋은지는 알 수 있다.</p>
+<p>그러나 아주 높은 보상을 주는 상태가 존재하더라도 정책이 그 상태를 거의 방문하지 않는다면 정책 전체의 성능은 높지 않을 수 있다. 반대로 보상이 적당히 좋은 상태를 매우 자주 방문한다면 장기적인 평균 성능은 높을 수 있다.</p>
+<p>따라서 상태별 기대보상뿐 아니라 상태별 장기 방문 비율도 필요하다.</p>
+<h2 id="block-39eb12c0115c80c7ae45d5f4e61663a9">장기 상태 방문 비율: \(d_{\pi}(s)\)</h2>
+<p>정책 \(\pi\)를 고정하면 에이전트의 상태변화는 하나의 마르코프 체인이 되고 이 체인이 에르고딕하다면 시간이 충분히 지났을 때 상태 s를 방문하는 비율은 정상분포 \(d_{\pi}(s)\)로 수렴한다.</p>
+<ul><li>\(d_{\pi}(s)\): 정책 \(\pi\)를 장시간 따랐을 때 상태 s에 머무는 비율</li></ul>
+<p>수식으로는</p>
+<div class="math-block">\[P_{\pi}(S_t = s) \longrightarrow d_{\pi}(s)\\[10pt]\frac{N_T(s)}{T} \longrightarrow d_{\pi}(s)\]</div>
+<p>\(N_T(s)\)는 \(T\)스텝 동안 상태 s를 방문한 횟수이다.</p>
+<h2 id="block-39eb12c0115c80a481a5fcef6b052f32">유한한 시간의 평균보상: \(\bar{R}_T\)</h2>
+<p>정책을 \(T\)스텝 동안 수행하여 보상</p>
 <div class="math-block">\[R_1 + R_2 + \cdots + R_T\]</div>
-<p>가 된다. 그러나 계속되는 환경에서는 시간이 길어질수록 이 합이 계속 커지므로, 총 보상만으로는 정책을 적절히 비교하기 어렵다. 따라서 누적보상을 전체 시간 T로 나누어, 한 스텝 당 평균적으로 얼마나 많은 보상을 얻었는지를 계산한다.</p>
+<p>을 받았다면 실제로 관측한 보상의 평균은</p>
 <div class="math-block">\[\bar{R}_T = \frac{1}{T} \sum_{t=0}^{T-1} R_{t+1}\]</div>
-<p>그리고 정책을 무한히 오래 수행했을 때 이 값이 수렴하는 극한을 정책 \(\pi\)의 평균보상(Average Reward) 이라 한다.</p>
+<p>위 수식은 한 번의 경로에서 계산한 표본 평균이다.</p>
 <ul><li>\(T:\) 정책을 수행한 전체 스텝 수</li><li>t: 현재 스텝을 나타내는 인덱스</li><li>\(R_{t+1}\): t시점의 상태에서 한 번 전이한 뒤 받은 보상</li><li>\(\bar{R}_T\): \(T\)스텝 동안 실제로 관측한 보상의 평균</li></ul>
-<div class="math-block">\[g_{\pi} = \lim_{T \to \infty} \mathbb{E}_{\pi} [\bar{R}_T]
-\\[10pt]
-g_{\pi} = \lim_{T \to \infty} \mathbb{E}_{\pi} \left[ \frac{1}{T} \sum_{t=0}^{T-1} R_{t+1} \right]
-\\[10pt]
-g_{\pi} = \lim_{T \to \infty} \frac{1}{T} \mathbb{E}_{\pi} \left[ \sum_{t=0}^{T-1} R_{t+1} \right]\]</div>
-<p>여기서 \(\bar{R}_T\)는 실제 한 번의 경로에서 관측한 평균이고 \(g_\pi\)는 정책 \(\pi\)를 계속 따랐을 때 여러 경로를 모두 고려한 장기 기대 평균을 의미한다.</p>
-<h3 id="block-39db12c0115c80babb9ed26a6baee07f">Example: Sunny–Cloudy 날씨의 평균보상</h3>
-<p>앞에서 사용한 날씨예제로 평균보상을 구해보자. 상태는 두 가지가 있다.</p>
-<div class="math-block">\[S = \{\text{Sunny}, \text{Cloudy}\}\]</div>
-<p>이제 각 상태에 보상을 부여하여 Sunny 상태에서는 보상 +1, Cloudy 상태에서는 보상 0을 받는다고 하자.</p>
-<div class="math-block">\[r(\text{Sunny}) = 1, \quad r(\text{Cloudy}) = 0\]</div>
-<p>만약 에피소드가 초기 날씨가 Sunny이고, 이후 날씨가 다음과 같이 변했다고 해보자.</p>
-<div class="math-block">\[\underbrace{\text{Sunny}}_{S_0} \rightarrow \underbrace{\text{Cloudy}}_{S_1} \rightarrow \underbrace{\text{Sunny}}_{S_2} \rightarrow \underbrace{\text{Sunny}}_{S_3} \rightarrow \underbrace{\text{Cloudy}}_{S_4} \rightarrow \underbrace{\text{Sunny}}_{S_5}\]</div>
-<p>상태전이가 총 5번 일어났음으로 \(T=5\)이다.</p>
-<p>각 전이에서 받은 보상은 다음과 같다.</p>
-<div class="math-block">\[\begin{array}{llll}\textbf{전이 시점} &amp; \textbf{상태 변화} &amp; \textbf{도착 상태} &amp; \textbf{받은 보상} \\[0.8em]t = 0 &amp; S_0 \rightarrow S_1 &amp; \text{Cloudy} &amp; R_1 = 0 \\[0.5em]t = 1 &amp; S_1 \rightarrow S_2 &amp; \text{Sunny} &amp; R_2 = 1 \\[0.5em]t = 2 &amp; S_2 \rightarrow S_3 &amp; \text{Sunny} &amp; R_3 = 1 \\[0.5em]t = 3 &amp; S_3 \rightarrow S_4 &amp; \text{Cloudy} &amp; R_4 = 0 \\[0.5em]t = 4 &amp; S_4 \rightarrow S_5 &amp; \text{Sunny} &amp; R_5 = 1 \end{array}\]</div>
-<p>보상은 다음과 같다.</p>
-<div class="math-block">\[R_1, R_2, R_3, R_4, R_5 = 0, 1, 1, 0, 1\]</div>
-<p>평균 보상을 구하면</p>
-<div class="math-block">\[\begin{aligned}\bar{R}_5 &amp;= \frac{1}{5} \sum_{t=0}^{4} R_{t+1} \\&amp;= \frac{1}{5} (R_1 + R_2 + R_3 + R_4 + R_5) \\&amp;= \frac{1}{5} (0 + 1 + 1 + 0 + 1) \\&amp;= \frac{3}{5} \\&amp;= 0.6\end{aligned}\]</div>
-<p>5번의 날씨 변화 동안에는 한 스텝당 평균적으로 0.6의 보상을 얻었다.</p>
-<p>정책을 따랐을 때 상태전이행렬은 다음과 같다.</p>
-<div class="math-block">\[\mathcal{P}_{\pi} = \begin{pmatrix} \displaystyle\frac{2}{3} &amp; \displaystyle\frac{1}{3} \\[1.5em] \displaystyle\frac{1}{2} &amp; \displaystyle\frac{1}{2} \end{pmatrix}\]</div>
-<p>앞에서 이 마르코프 체인의 정상분포를 구한 결과는</p>
-<div class="math-block">\[d = \begin{pmatrix} \displaystyle\frac{3}{5} &amp; \displaystyle\frac{2}{5} \end{pmatrix}\]</div>
-<p>이였다.</p>
-<p>이 결과의 의미는 장기적으로 전체 스텝(시간)의 \(\displaystyle\frac{3}{5}\)는 Sunny상태에 머물고, \(\displaystyle\frac{2}{5}\)정도는 Cloudy 상태에 머문다는 뜻이다.</p>
-<p>평균보상은</p>
+<p>예를 들어 \(T=5\) 동안 보상이</p>
+<div class="math-block">\[0, 0, 1, 0, 1\]</div>
+<p>이였다면 보상 평균은</p>
+<div class="math-block">\[\bar{R}_5 = \frac{0 + 0 + 1 + 0 + 1}{5} = 0.4\]</div>
+<p>다른 경로에서는 다른 값이 나올 수 있다. 따라서 \(\bar{R}_T\)는 정책의 고정된 성질이라기보다, 한 번의 유한한 실행에서 관측한 결과이다.</p>
+<h2 id="block-39eb12c0115c80598f9fdcb80eceda7a">정책의 Average reward: \(g_{\pi}\)</h2>
+<p>정책 \(\pi\)의 평균보상은 정책을 무한히 오랫동안 수행했을 때 한 스텝당 평균적으로 얻는 보상이다.</p>
+<div class="math-block">\[g_{\pi} = \lim_{T \to \infty} \mathbb{E}_{\pi} \left[ \bar{R}_T \right]\]</div>
+<p>\(\bar{R}_T\)를 대입하면</p>
 <div class="math-block">\[g_{\pi} = \lim_{T \to \infty} \mathbb{E}_{\pi} \left[ \frac{1}{T} \sum_{t=0}^{T-1} R_{t+1} \right]\]</div>
 <p>이고 기대값의 선형성을 사용하면</p>
 <div class="math-block">\[g_{\pi} = \lim_{T \to \infty} \frac{1}{T} \sum_{t=0}^{T-1} \mathbb{E}_{\pi} [R_{t+1}]\]</div>
-<p>가 된다. 각 시점의 기대보상은 상태별로 나눠 계산가능하다.</p>
+<p>가 된다. 각 시점의 기대보상 \(\mathbb{E}_{\pi}[R_{t+1}]\)은 상태별로 나눠 계산가능하다.</p>
 <div class="math-block">\[\mathbb{E}_{\pi}[R_{t+1}] = \sum_{s \in \mathcal{S}} P_{\pi}(S_t = s) \mathbb{E}_{\pi}[R_{t+1} \mid S_t = s]\]</div>
 <p>그리고 조건부 기댓값을 다음과 같이 정의했음으로</p>
 <div class="math-block">\[r_{\pi}(s) = \mathbb{E}_{\pi}[R_{t+1} \mid S_t = s]\]</div>
@@ -155,9 +154,42 @@ g_{\pi} = \lim_{T \to \infty} \frac{1}{T} \mathbb{E}_{\pi} \left[ \sum_{t=0}^{T-
 <p>따라서 상태확률들을 시간에 따라 평균낸 값도 \(d_{\pi}(s)\)로 수렴한다.
 </p>
 <div class="math-block">\[\lim_{T \to \infty} \frac{1}{T} \sum_{t=0}^{T-1} P_{\pi}(S_t = s) = d_{\pi}(s)\]</div>
-<p>따라서 최종적으로</p>
+<p>따라서 최종적으로 Average reward는</p>
 <div class="math-block">\[g_{\pi} = \sum_{s} d_{\pi}(s) r_{\pi}(s)\]</div>
-<p>가 된다.</p></div>
+<p>가 된다.</p>
+<p>이 식의 의미는</p>
+<ul><li>\(d_{\pi}(s)\): 상태 s를 장기적으로 방문하는 비율에</li><li>\(r_{\pi}(s)\): 상태 s에서 한 스텝 동안 평균적으로 얻은 보상을 곱하여</li></ul>
+<p>상태 s가 정책에 장기 평균보상에 기여하는 정도이다.</p>
+<p>그리고 모든 상태에 대한 기여도를 더하면 정책의 전체적인 장기 성능 \(g_{\pi}\)가 된다.</p>
+<h3 id="block-39db12c0115c80babb9ed26a6baee07f">Example: Sunny–Cloudy 날씨의 평균보상</h3>
+<p>앞에서 사용한 날씨예제로 average reward을 구해보자. 상태는 두 가지가 있다.</p>
+<div class="math-block">\[S = \{\text{Sunny}, \text{Cloudy}\}\]</div>
+<p>이제 각 상태에 보상을 부여하여 Sunny 상태에서는 보상 +1, Cloudy 상태에서는 보상 0을 받는다고 하자.</p>
+<p>정책을 따랐을 때 상태전이행렬은 다음과 같다.</p>
+<div class="math-block">\[\mathcal{P}_{\pi} = \begin{pmatrix} \displaystyle\frac{2}{3} &amp; \displaystyle\frac{1}{3} \\[1.5em] \displaystyle\frac{1}{2} &amp; \displaystyle\frac{1}{2} \end{pmatrix}\]</div>
+<p>현재 상태가 Sunny일 때의 기대보상은</p>
+<div class="math-block">\[r_{\pi}(s) = \mathbb{E}_{\pi}[R_{t+1} \mid S_t = s] = \sum_{s' \in \mathcal{S}} r(s') P_{\pi} \left( S_{t+1} = s' \mid S_t = s \right)\]</div>
+<div class="math-block">\[\begin{align*}
+r_{\pi}(\text{Sunny}) &amp;= \sum_{s' \in \mathcal{S}} r(s') P_{\pi} (S_{t+1} = s' \mid S_t = \text{Sunny}) \\[15pt]
+&amp;= r(\text{Sunny}) P_{\pi} (S_{t+1} = \text{Sunny} \mid S_t = \text{Sunny}) \\[5pt]
+&amp;\quad + r(\text{Cloudy}) P_{\pi} (S_{t+1} = \text{Cloudy} \mid S_t = \text{Sunny})
+\end{align*}\]</div>
+<p>위 수식에 값을 대입하면</p>
+<div class="math-block">\[\begin{align*}r_{\pi}(\text{Sunny}) &amp;= \frac{2}{3} \cdot 1 + \frac{1}{3} \cdot 0 \\&amp;= \frac{2}{3}\end{align*}\]</div>
+<p>현재 상태가 Cloudy일 때의 기대보상은</p>
+<div class="math-block">\[\begin{align*}r_{\pi}(\text{Cloudy}) &amp;= \frac{1}{2} \cdot 1 + \frac{1}{2} \cdot 0 \\&amp;= \frac{1}{2}\end{align*}\]</div>
+<p>기대보상을 다음과 같이 표현할 수 있다.</p>
+<div class="math-block">\[r_{\pi} = \begin{pmatrix} \frac{2}{3} \\[5pt] \frac{1}{2} \end{pmatrix}\]</div>
+<p>이전에 마르코프 체인의 정상분포를 구한 결과는</p>
+<div class="math-block">\[d_{\pi} = \begin{pmatrix} \displaystyle\frac{3}{5} &amp; \displaystyle\frac{2}{5} \end{pmatrix}\]</div>
+<p>이였다.</p>
+<p>평균보상은</p>
+<div class="math-block">\[\begin{align*}g_{\pi} &amp;= d_{\pi}(\text{Sunny}) r_{\pi}(\text{Sunny}) + d_{\pi}(\text{Cloudy}) r_{\pi}(\text{Cloudy}) \\&amp;= \frac{3}{5} \cdot \frac{2}{3} + \frac{2}{5} \cdot \frac{1}{2} \\&amp;= \frac{2}{5} + \frac{1}{5} \\&amp;= \frac{3}{5} \\&amp;= 0.6\end{align*}\]</div>
+<p>이다. 따라서 정책 \(\pi\)를 장기간 수행하면 한 번의 상태 전이마다 평균적으로 0.6의 보상을 얻는 다는 의미이다.</p>
+<h2 id="block-39eb12c0115c80c99d3ce92a32dbece4">정리</h2>
+<p>평균이 많이 등장하여 최종적으로 정리한다.</p>
+<div class="math-block">\[r_{\pi}(s) = \mathbb{E}_{\pi} \left[ R_{t+1} \mid S_t = s \right]\]</div>
+<p>는 상태 s에서 발생할 수 있는 여러 행동과 전이 확률에 대해서 평균낸 값이고</p></div>
     <div class="share-bar" data-share>
       <span class="share-label">Share</span>
       <button type="button" class="share-btn" data-share-copy>Copy</button>
