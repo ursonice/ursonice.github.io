@@ -7,6 +7,7 @@
   <url><loc>https://ursonice.github.io/topics/robotics/</loc></url>
   <url><loc>https://ursonice.github.io/topics/ai-deep-learning/</loc></url>
   <url><loc>https://ursonice.github.io/topics/application/</loc></url>
+  <url><loc>https://ursonice.github.io/topics/c-c/</loc></url>
   <url><loc>https://ursonice.github.io/topics/tools/</loc></url>
   <url><loc>https://ursonice.github.io/topics/onnx-mlir/</loc></url>
   <url><loc>https://ursonice.github.io/topics/kubernetes/</loc></url>
@@ -42,6 +43,7 @@
   <url><loc>https://ursonice.github.io/posts/vla-navila-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2026-05-22</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/resnet-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2026-05-20</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/how-to-do-internal-camera-calibration/</loc><lastmod>2026-04-27</lastmod></url>
+  <url><loc>https://ursonice.github.io/posts/01-c-%EA%B8%B0%EC%B4%88/</loc><lastmod>2026-03-20</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/raspi-segmentation/</loc><lastmod>2026-02-04</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/docker%EC%97%90-vnc-%EC%84%A4%EC%B9%98/</loc><lastmod>2026-01-20</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/rt-2-robotics-transformer-2-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2025-11-18</lastmod></url>
@@ -162,10 +164,18 @@
   <url><loc>https://ursonice.github.io/posts/emit-c/</loc><lastmod>2023-06-14</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/mlir-inference-code/</loc><lastmod>2023-06-14</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/onnx-mlir-flow/</loc><lastmod>2023-06-14</lastmod></url>
+  <url><loc>https://ursonice.github.io/posts/c-%EA%B0%80%EC%83%81%ED%95%A8%EC%88%98-virtual-function/</loc><lastmod>2023-06-14</lastmod></url>
+  <url><loc>https://ursonice.github.io/posts/cmake-%EC%82%AC%EC%9A%A9%EA%B0%80%EC%9D%B4%EB%93%9C/</loc><lastmod>2023-06-14</lastmod></url>
+  <url><loc>https://ursonice.github.io/posts/make-%EC%82%AC%EC%9A%A9-%EA%B0%80%EC%9D%B4%EB%93%9C/</loc><lastmod>2023-06-14</lastmod></url>
+  <url><loc>https://ursonice.github.io/posts/c-c-template/</loc><lastmod>2023-06-14</lastmod></url>
+  <url><loc>https://ursonice.github.io/posts/c-c-explicit/</loc><lastmod>2023-06-14</lastmod></url>
+  <url><loc>https://ursonice.github.io/posts/arm-neon-%EC%86%8D%EB%8F%84-%EC%B8%A1%EC%A0%95/</loc><lastmod>2023-06-14</lastmod></url>
+  <url><loc>https://ursonice.github.io/posts/static-%EC%A0%95%EC%A0%81-%EB%A7%B4%EB%B2%84-%EB%B3%80%EC%88%98-%EB%A9%A4%EB%B2%84-%ED%95%A8%EC%88%98/</loc><lastmod>2023-06-14</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/python-round-%ED%95%A8%EC%88%98-%EC%A3%BC%EC%9D%98%EC%82%AC%ED%95%AD/</loc><lastmod>2023-06-14</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/opencv-%ED%99%9C%EC%9A%A9%ED%95%9C-%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%97%90-text-%EC%93%B0%EA%B8%B0/</loc><lastmod>2023-06-14</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/time-%EC%B8%A1%EC%A0%95-c-python/</loc><lastmod>2023-06-14</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/pep8-code-style-%EA%B5%AC%EA%B8%80%EC%9D%98-%EC%BD%94%EB%94%A9%EC%8A%A4%ED%83%80%EC%9D%BC/</loc><lastmod>2023-06-14</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/pickle-dataset-%ED%99%9C%EC%9A%A9%ED%95%98%EA%B8%B0/</loc><lastmod>2023-06-14</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/install-tensorflow-on-m1-mac/</loc><lastmod>2023-06-14</lastmod></url>
+  <url><loc>https://ursonice.github.io/posts/c-interface/</loc><lastmod>2023-02-23</lastmod></url>
 </urlset>
