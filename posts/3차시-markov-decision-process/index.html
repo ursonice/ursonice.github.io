@@ -29,13 +29,13 @@
     <meta property="og:url" content="https://ursonice.github.io/posts/3%EC%B0%A8%EC%8B%9C-markov-decision-process/" />
     <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5B3%EC%B0%A8%EC%8B%9C%5D%20Markov%20Decision%20Process&amp;cat=Reinforcement%20Learning" />
     <meta property="article:published_time" content="2026-07-14T08:10:00.000Z" />
-    <meta property="article:modified_time" content="2026-07-15T14:05:00.000Z" />
+    <meta property="article:modified_time" content="2026-07-16T04:13:00.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="[3차시] Markov Decision Process" />
     <meta name="twitter:description" content="서론 평균보상에는 한계가 있었다. 에르고딕성이라는 강한 조건이 필요하고, 종료 상태가 존재하는 문제에서는 종료 이전의에 받은 보상이 무한한 시간 속에서 영향력이 점차 사라진다. 결국 보상을 '얼마나' 받았는지뿐 아니라 '언제' 받았는지까지 반영하는 새로운 평가 방식이 필요하다. 이번 시간에는 이 요구를 " />
     <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5B3%EC%B0%A8%EC%8B%9C%5D%20Markov%20Decision%20Process&amp;cat=Reinforcement%20Learning" />
 
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"[3차시] Markov Decision Process","description":"서론 평균보상에는 한계가 있었다. 에르고딕성이라는 강한 조건이 필요하고, 종료 상태가 존재하는 문제에서는 종료 이전의에 받은 보상이 무한한 시간 속에서 영향력이 점차 사라진다. 결국 보상을 '얼마나' 받았는지뿐 아니라 '언제' 받았는지까지 반영하는 새로운 평가 방식이 필요하다. 이번 시간에는 이 요구를 ","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5B3%EC%B0%A8%EC%8B%9C%5D%20Markov%20Decision%20Process&cat=Reinforcement%20Learning","datePublished":"2026-07-14T08:10:00.000Z","dateModified":"2026-07-15T14:05:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/3%EC%B0%A8%EC%8B%9C-markov-decision-process/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"[3차시] Markov Decision Process","description":"서론 평균보상에는 한계가 있었다. 에르고딕성이라는 강한 조건이 필요하고, 종료 상태가 존재하는 문제에서는 종료 이전의에 받은 보상이 무한한 시간 속에서 영향력이 점차 사라진다. 결국 보상을 '얼마나' 받았는지뿐 아니라 '언제' 받았는지까지 반영하는 새로운 평가 방식이 필요하다. 이번 시간에는 이 요구를 ","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5B3%EC%B0%A8%EC%8B%9C%5D%20Markov%20Decision%20Process&cat=Reinforcement%20Learning","datePublished":"2026-07-14T08:10:00.000Z","dateModified":"2026-07-16T04:13:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/3%EC%B0%A8%EC%8B%9C-markov-decision-process/"}}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Reinforcement Learning","item":"https://ursonice.github.io/topics/reinforcement-learning/"},{"@type":"ListItem","position":3,"name":"[3차시] Markov Decision Process","item":"https://ursonice.github.io/posts/3%EC%B0%A8%EC%8B%9C-markov-decision-process/"}]}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -86,7 +86,7 @@
     <div class="article-meta">
       
       
-      <span>작성 2026년 7월 14일</span><span class="dot"></span><span>수정 2026년 7월 15일</span>
+      <span>작성 2026년 7월 14일</span><span class="dot"></span><span>수정 2026년 7월 16일</span>
       <span class="reading-size" role="group" aria-label="글자 크기">
         <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
         <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
@@ -144,7 +144,7 @@
 <p>그런데 이 두 정보는 지금까지 공부한 마르코프 체인에 보상과 할인율을 추가하면 표현할 수 있다.</p>
 <p>Markov Chain \(\langle \mathcal{S}, \mathcal{P} \rangle\)에 두 가지를 추가한다:</p>
 <div class="math-block">\[\text{MRP} = \langle \mathcal{S}, \mathcal{P}, \mathcal{R}, \gamma \rangle\]</div>
-<ul><li>\(\mathcal{S}:\)  state space - \(\mathcal{S}=\{s_1, s_2, ...,s_n\}\)</li><li>\(\mathcal{P}:\)  transition Matrix<ul><li>trainsition probaility: \(P_{ss'}= P(S_{t+1}=s'|s_t=s)\)</li></ul></li><li>\(\mathcal{R}:\) reward function - 보상 함수로 상태 s에 도달하면 받는 점수 \(r(s) = \mathbb{E}[R_{t+1} \mid S_t = s]\)</li><li>\(\gamma :\) discount factor(할인율)</li></ul>
+<ul><li>\(\mathcal{S}:\)  state space - \(\mathcal{S}=\{s_1, s_2, ...,s_n\}\)</li><li>\(\mathcal{P}:\)  transition Matrix<ul><li>transition probability: \(P_{ss'}= P(S_{t+1}=s'|s_t=s)\)</li></ul></li><li>\(\mathcal{R}:\) reward function - 보상 함수로 상태 s에 도달하면 받는 점수 \(r(s) = \mathbb{E}[R_{t+1} \mid S_t = s]\)</li><li>\(\gamma :\) discount factor(할인율)</li></ul>
 <p>평균보상 방식에서는 정책 \(\pi\)가 반영된 전이확률을 다뤘다. 그래서 P밑에 첨자에 정책 \(\pi\)가 붙어있는 것이다.</p>
 <div class="math-block">\[P_\pi(s' | s) = \sum_{a} \pi(a | s) P(s' | s, a)\]</div>
 <p>그러나 MRP에서는 정책이 반영되지 않는 전이확률을 다루고 정책이 반영된 것은 MDP에서 다룬다.</p>
@@ -223,10 +223,10 @@
 <div class="math-block">\[S = \{\text{Sunny}, \text{Cloudy}\}\]</div>
 <p>이고, 상태전이행렬은</p>
 <div class="math-block">\[\mathcal{P} = \begin{pmatrix} \displaystyle\frac{2}{3} &amp; \displaystyle\frac{1}{3} \\[1.5em] \displaystyle\frac{1}{2} &amp; \displaystyle\frac{1}{2} \end{pmatrix}\]</div>
-<p>다음 상태가 Sunny이면 보상 1, Cloudy이면 보상 0을 받는다고 하였으므로</p>
-<p>현재 상태가 Sunny인 경우</p>
+<p>다음 상태가 Sunny에 도달하면 보상 1, Cloudy에 도달하면 0을 받는다고 하였으므로</p>
+<p>현재 상태가 </p>
 <div class="math-block">\[\begin{align*}r(\text{Sunny}) &amp;= \sum_{s' \in \mathcal{S}} r(s') P(S_{t+1} = s' \mid S_t = \text{Sunny}) \\[8pt]&amp;= r(\text{Sunny}) P(S_{t+1} = \text{Sunny} \mid S_t = \text{Sunny}) \\[5pt]&amp;\quad +r(\text{Cloudy}) P(S_{t+1} = \text{Cloudy} \mid S_t = \text{Sunny}) \\[8pt]&amp;= 1 \cdot \frac{2}{3} + 0 \cdot \frac{1}{3} \\[8pt]&amp;= \frac{2}{3}\end{align*}\]</div>
-<p>현재 상태가 Cloudy인 경우</p>
+<p>현재 상태가 </p>
 <div class="math-block">\[\begin{align*}r(\text{Cloudy}) &amp;= \sum_{s' \in \mathcal{S}} r(s') P(S_{t+1} = s' \mid S_t = \text{Cloudy}) \\[8pt]&amp;= r(\text{Sunny}) P(S_{t+1} = \text{Sunny} \mid S_t = \text{Cloudy}) \\[5pt]&amp;\quad + r(\text{Cloudy}) P(S_{t+1} = \text{Cloudy} \mid S_t = \text{Cloudy}) \\[8pt]&amp;= 1 \cdot \frac{1}{2} + 0 \cdot \frac{1}{2} \\[8pt]&amp;= \frac{1}{2}\end{align*}\]</div>
 <p>정리하면</p>
 <div class="math-block">\[\begin{align*}r(\text{Sunny}) &amp;= \frac{2}{3} \cdot 1 + \frac{1}{3} \cdot 0 = \frac{2}{3} \\[10pt]r(\text{Cloudy}) &amp;= \frac{1}{2} \cdot 1 + \frac{1}{2} \cdot 0 = \frac{1}{2}\end{align*}\]</div>
@@ -235,7 +235,7 @@
 <div class="math-block">\[\begin{align*}
 V(s) &amp;= r(s) + \gamma \sum_{s'} P(s' \mid s) V(s')
 \end{align*}\]</div>
-<p>이므로 Sunny의 Bellman 방정식은</p>
+<p>이다.</p>
 <div class="math-block">\[\begin{align*}V(\text{Sunny}) &amp;= r(\text{Sunny}) \\&amp;\quad + \gamma \left[ P(\text{Sunny} \mid \text{Sunny}) V(\text{Sunny}) + P(\text{Cloudy} \mid \text{Sunny}) V(\text{Cloudy}) \right]\end{align*}\]</div>
 <p>값을 대입하면</p>
 <div class="math-block">\[V(\text{Sunny}) = \frac{2}{3} + \frac{9}{10} \left[ \frac{2}{3} V(\text{Sunny}) + \frac{1}{3} V(\text{Cloudy}) \right]\]</div>
@@ -244,7 +244,75 @@ V(s) &amp;= r(s) + \gamma \sum_{s'} P(s' \mid s) V(s')
 <p>이므로</p>
 <div class="math-block">\[\frac{2}{5}V(\text{Sunny}) - \frac{3}{10}V(\text{Cloudy}) = \frac{2}{3}\]</div>
 <p>를 얻는다. 양변에 30을 곱하면</p>
-<div class="math-block">\[12V(\text{Sunny}) - 9V(\text{Cloudy}) = 20\]</div></div>
+<div class="math-block">\[12V(\text{Sunny}) - 9V(\text{Cloudy}) = 20\]</div>
+<p>가 된다.</p>
+<div class="math-block">\[\begin{align*}V(\text{Cloudy}) &amp;= r(\text{Cloudy}) \\&amp;\quad + \gamma \left[ P(\text{Sunny} \mid \text{Cloudy}) V(\text{Sunny}) + P(\text{Cloudy} \mid \text{Cloudy}) V(\text{Cloudy}) \right]\end{align*}\]</div>
+<p>값을 대입하면</p>
+<div class="math-block">\[V(\text{Cloudy}) = \frac{1}{2} + \frac{9}{10} \left[ \frac{1}{2} V(\text{Sunny}) + \frac{1}{2} V(\text{Cloudy}) \right]\]</div>
+<p>이다.</p>
+<p>이를 정리하면</p>
+<div class="math-block">\[V(\text{Cloudy}) = \frac{1}{2} + \frac{9}{20} V(\text{Sunny}) + \frac{9}{20} V(\text{Cloudy})\]</div>
+<p>이므로</p>
+<div class="math-block">\[-\frac{9}{20} V(\text{Sunny}) + \frac{11}{20} V(\text{Cloudy}) = \frac{1}{2}\]</div>
+<p>가 된다.</p>
+<p>양변에 20을 곱하면</p>
+<div class="math-block">\[-9 V(\text{Sunny}) + 11 V(\text{Cloudy}) = 10\]</div>
+<p>이다.</p>
+<p>두 상태의 Bellman 방정식을 함께 쓰면</p>
+<div class="math-block">\[\begin{cases}
+12V(\text{Sunny}) - 9V(\text{Cloudy}) = 20 \\
+-9V(\text{Sunny}) + 11V(\text{Cloudy}) = 10
+\end{cases}\]</div>
+<p>이고 이를 잘 계산하면 </p>
+<div class="math-block">\[\begin{aligned}V(\text{Sunny}) &amp;= \frac{310}{51} \approx 6.08 \\[10pt]V(\text{Cloudy}) &amp;= \frac{100}{17} \approx 5.88\end{aligned}\]</div>
+<p>를 얻는다.</p>
+<p>이 결과의 의미는 Sunny 상태에서 시작하여 앞으로 얻게 될 할인수익의 기댓값이 약 6.08이라는 뜻이고</p>
+<p>Cloudy 상태에서 시작했을 때의 기대 할인수익이 약 5.88이라는 뜻이다. 따라서 Sunny에서 출발하는 것이 조금 더 유리하다.</p>
+<h2 id="block-39fb12c0115c801192a1da27cdbe6409">Markov Decision Process: MDP</h2>
+<p>지금까지 다룬 MRP에서는 현재 상태가 주어지면 다음 상태로 이동하는 확률이 이미 정해져 있었다.</p>
+<p>즉, 에이전트가 현재 상태에서 어떤 선택을 하는지는 고려하지 않았으며, 시스템은 주어진 전이확률에 따라 상태를 이동할 뿐이었다.</p>
+<p>지금부터는 에이전트가 행동을 선택하고, 그 행동에 따라 다음 상태와 보상이 달라지는 구조로 동작한다. MRP에 행동을 추가하여 확장한 모델을 Markov Decision Process, MDP라고 한다.</p>
+<h3 id="block-39fb12c0115c805fbe6af78a323d01cf">MRP → MDP</h3>
+<p>MRP에서는 현재 상태 s가 주어지면 다음 상태의 분포가 바로 결정되었다</p>
+<div class="math-block">\[S_t \rightarrow R_{t+1}, S_{t+1}\]</div>
+<p>전이확률은</p>
+<div class="math-block">\[P(s' \mid s)\]</div>
+<p>이었고, 기대 즉시보상은</p>
+<div class="math-block">\[r(s) = \mathbb{E} \left[ R_{t+1} \mid S_t = s \right]\]</div>
+<p>이었다.</p>
+<p>반면 MDP에서는 현재 상태에서 에이전트가 행동 \(A_t\)를 선택한다.</p>
+<div class="math-block">\[S_t \xrightarrow{A_t} R_{t+1}, S_{t+1}\]</div>
+<p>따라서 다음 상태와 보상은 현재 상태뿐 아니라 선택한 행동에도 영향을 받는다.</p>
+<div class="math-block">\[\begin{gathered}P(s' \mid s, a) \\r(s, a) = \mathbb{E} \left[ R_{t+1} \mid S_t = s, A_t = a \right]\end{gathered}\]</div>
+<h3 id="block-39fb12c0115c8055a26cc6b5932f71f2">MDP의 구성요소</h3>
+<div class="math-block">\[\text{MDP} = \langle \mathcal{S}, \mathcal{A}, \mathcal{P}, \mathcal{R}, \gamma \rangle\]</div>
+<ul><li>\(\mathcal{S}:\)  state space - \(\mathcal{S}=\{s_1, s_2, ...,s_n\}\)</li><li>\(\mathcal{A}:\)  Action space - \(\mathcal{A}=\{a_1, a_2, ...,a_n\}\)</li><li>\(\mathcal{P}:\)  transition Matrix - \(P(s' \mid s, a) = P(S_{t+1} = s' \mid S_t = s, A_t = a)\)</li><li>\(\mathcal{R}:\)  reward function -  \(r(s, a) = \mathbb{E} \left[ R_{t+1} \mid S_t = s, A_t = a \right]\)</li><li>\(\gamma :\) discount factor(할인율) - \(0 \le \gamma &lt; 1\)</li></ul>
+<h3 id="block-39fb12c0115c80a9b36ee9b0eb8cbea5">정책 Policy</h3>
+<p>MDP에서는 상태마다 여러 행동을 선택할 수 있다. 그렇다면 현재 상태에서 어떤 행동을 선택할지를 정하는 규칙이 필요하다. 이 규칙을 정책(Policy) 이라고 한다.</p>
+<div class="math-block">\[\pi(a \mid s) = P(A_t = a \mid S_t = s)\]</div>
+<p>\(\pi(a \mid s)\)는 상태 s에서 행동 a를 선택할 확률이고 각 상태 행동에 대한 확률분포를 출력한다.</p>
+<p>예를 들어 상태 s에서 선택가능한 행동이</p>
+<div class="math-block">\[\mathcal{A} = \{ \text{Left}, \text{Right}, \text{Forward} \}\]</div>
+<p>이고 정책이 다음과 같다고 하자.</p>
+<p>그러면 행동 확률분포는 아래와 같이 구성될 수 있다.</p>
+<div class="math-block">\[\begin{aligned}\pi(\text{Left} \mid s) &amp;= 0.2 \\\pi(\text{Right} \mid s) &amp;= 0.3 \\\pi(\text{Forward} \mid s) &amp;= 0.5\end{aligned}\]</div>
+<p>정책은 상태에 대한 행동 확률분포 임으로 각 상태에서 행동 확률의 합은 반드시 1이여야 한다.</p>
+<div class="math-block">\[\sum_{a \in \mathcal{A}} \pi(a \mid s) = 1\]</div>
+<h3 id="block-39fb12c0115c80a9a243dfb5ffe53fad">정책하에서 전이확률</h3>
+<p>이제 정책이 무엇인지 알았음으로 정책에 대한 전이 확률을 정확히 표현할 수 있다. </p>
+<p>정책이 \(\pi(a \mid s)\)이고 MDP의 전이확률이 \(P(s'\mid s, a)\) 임으로 정책이 상태 s에서 행동 a를 선택하고 그 행동에 따라 다음 상태 s’으로 이동하므로 정책 아래에서의 전이확률은</p>
+<div class="math-block">\[P_{\pi}(s' \mid s) = \sum_{a \in \mathcal{A}} \pi(a \mid s) P(s' \mid s, a)\]</div>
+<p>가 된다. 정책하에서라는 표기를 하기위해 P밑에 첨자로 \(\pi\)가 붙는 것으로 구분 가능하다.</p>
+<p>의미는 가능한 각 행동에 대해 그 행동을 선택할 확률 x 그 행동으로 s’에 갈 확률을 모두 더한 것이다.</p>
+<p>예를들어 상태 s에서 정책이 \(\pi(a_1 \mid s) = 0.7, \quad \pi(a_2 \mid s) = 0.3\)의 확률로 행동을 선택하고, </p>
+<p>\(P(s' \mid s, a_1) = 0.8, \quad P(s' \mid s, a_2) = 0.2\) 라면 정책 아래에서 s′로 이동할 확률은</p>
+<div class="math-block">\[\begin{aligned}
+P_{\pi}(s' \mid s) &amp;= \pi(a_1 \mid s) P(s' \mid s, a_1) + \pi(a_2 \mid s) P(s' \mid s, a_2) \\[5pt]
+P_{\pi}(s' \mid s) &amp;= 0.7 \cdot 0.8 + 0.3 \cdot 0.2 = 0.62\end{aligned}\]</div>
+<p>가 되어 정책을 고정하면 상태와 행동에 의존했던 전이 확률 \(P_{\pi}(s' \mid s, a)\)이 상태에만 의존하는 \(P_{\pi}(s' \mid s)\) 전이확률 로 바뀐다.</p>
+<h3 id="block-39fb12c0115c80a2b2b5cb283feac341">정책</h3>
+<h3 id="block-39fb12c0115c80a3bdf2c30958dedbd8">정책하에서 상태가치함수</h3>
+<p>정책 π를 따를 때 상태 s에서 얻을 할인수익의 기댓값을</p></div>
     <div class="share-bar" data-share>
       <span class="share-label">Share</span>
       <button type="button" class="share-btn" data-share-copy>Copy</button>
