@@ -6,15 +6,7 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Thu, 16 Jul 2026 22:40:13 GMT</lastBuildDate>
-    <item>
-      <title>[1차시] Markov process</title>
-      <link>https://ursonice.github.io/posts/1%EC%B0%A8%EC%8B%9C-markov-process/</link>
-      <guid isPermaLink="false">39cb12c0-115c-8084-9eb2-f4abfd8d67c7</guid>
-      <pubDate>Mon, 13 Jul 2026 03:26:00 GMT</pubDate>
-      <category>Reinforcement Learning</category>
-      <description>서론 강화학습의 목표는 “현재 상황에서 어떤 행동을 해야 미래에 더 좋은 결과를 얻을 수 있는가?” 이라고 볼 수 있다. 이 질문을 다루려면 먼저 시간에 따라 상태가 어떻게 변할지를 표현해야 한다. 하지만 미래의 상태는 정확히 정해져 있지 않고 확률적으로 변한다.(예를 들어 로봇이 앞으로 가려고 해도 바</description>
-    </item>
+    <lastBuildDate>Thu, 16 Jul 2026 23:40:00 GMT</lastBuildDate>
     <item>
       <title>[3차시] Markov Decision Process</title>
       <link>https://ursonice.github.io/posts/3%EC%B0%A8%EC%8B%9C-markov-decision-process/</link>
@@ -22,6 +14,14 @@
       <pubDate>Tue, 14 Jul 2026 08:10:00 GMT</pubDate>
       <category>Reinforcement Learning</category>
       <description>서론 평균보상에는 한계가 있었다. 에르고딕성이라는 강한 조건이 필요하고, 종료 상태가 존재하는 문제에서는 종료 이전의에 받은 보상이 무한한 시간 속에서 영향력이 점차 사라진다. 결국 보상을 &apos;얼마나&apos; 받았는지뿐 아니라 &apos;언제&apos; 받았는지까지 반영하는 새로운 평가 방식이 필요하다. 이번 시간에는 이 요구를 </description>
+    </item>
+    <item>
+      <title>[1차시] Markov process</title>
+      <link>https://ursonice.github.io/posts/1%EC%B0%A8%EC%8B%9C-markov-process/</link>
+      <guid isPermaLink="false">39cb12c0-115c-8084-9eb2-f4abfd8d67c7</guid>
+      <pubDate>Mon, 13 Jul 2026 03:26:00 GMT</pubDate>
+      <category>Reinforcement Learning</category>
+      <description>서론 강화학습의 목표는 “현재 상황에서 어떤 행동을 해야 미래에 더 좋은 결과를 얻을 수 있는가?” 이라고 볼 수 있다. 이 질문을 다루려면 먼저 시간에 따라 상태가 어떻게 변할지를 표현해야 한다. 하지만 미래의 상태는 정확히 정해져 있지 않고 확률적으로 변한다.(예를 들어 로봇이 앞으로 가려고 해도 바</description>
     </item>
     <item>
       <title>[2차시] Average Reward</title>
