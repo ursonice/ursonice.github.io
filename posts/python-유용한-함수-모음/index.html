@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>[Python] 유용한 함수 모음 — Woojae Joo</title>
+    <meta name="post-slug" content="python-유용한-함수-모음" />
+    <meta name="description" content="서론 이 장은 파이썬에서 사용되는 유용한 함수에 대해서 설명한다. 목차 functools.reduce join map 함수 funct.tools.redudce functools.reduce join a = [1, 2, 3, 4, 5] 로 숫자형으로 이뤄진 리스트가 있을 때 이를 하나로 합치는 방법 &gt;&gt;&gt;" />
+    <link rel="canonical" href="https://ursonice.github.io/posts/python-%EC%9C%A0%EC%9A%A9%ED%95%9C-%ED%95%A8%EC%88%98-%EB%AA%A8%EC%9D%8C/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="[Python] 유용한 함수 모음" />
+    <meta property="og:description" content="서론 이 장은 파이썬에서 사용되는 유용한 함수에 대해서 설명한다. 목차 functools.reduce join map 함수 funct.tools.redudce functools.reduce join a = [1, 2, 3, 4, 5] 로 숫자형으로 이뤄진 리스트가 있을 때 이를 하나로 합치는 방법 &gt;&gt;&gt;" />
+    <meta property="og:url" content="https://ursonice.github.io/posts/python-%EC%9C%A0%EC%9A%A9%ED%95%9C-%ED%95%A8%EC%88%98-%EB%AA%A8%EC%9D%8C/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5BPython%5D%20%EC%9C%A0%EC%9A%A9%ED%95%9C%20%ED%95%A8%EC%88%98%20%EB%AA%A8%EC%9D%8C&amp;cat=Python" />
+    <meta property="article:published_time" content="2023-05-29T07:46:00.000Z" />
+    <meta property="article:modified_time" content="2023-08-20T06:26:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="[Python] 유용한 함수 모음" />
+    <meta name="twitter:description" content="서론 이 장은 파이썬에서 사용되는 유용한 함수에 대해서 설명한다. 목차 functools.reduce join map 함수 funct.tools.redudce functools.reduce join a = [1, 2, 3, 4, 5] 로 숫자형으로 이뤄진 리스트가 있을 때 이를 하나로 합치는 방법 &gt;&gt;&gt;" />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5BPython%5D%20%EC%9C%A0%EC%9A%A9%ED%95%9C%20%ED%95%A8%EC%88%98%20%EB%AA%A8%EC%9D%8C&amp;cat=Python" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"[Python] 유용한 함수 모음","description":"서론 이 장은 파이썬에서 사용되는 유용한 함수에 대해서 설명한다. 목차 functools.reduce join map 함수 funct.tools.redudce functools.reduce join a = [1, 2, 3, 4, 5] 로 숫자형으로 이뤄진 리스트가 있을 때 이를 하나로 합치는 방법 >>>","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5BPython%5D%20%EC%9C%A0%EC%9A%A9%ED%95%9C%20%ED%95%A8%EC%88%98%20%EB%AA%A8%EC%9D%8C&cat=Python","datePublished":"2023-05-29T07:46:00.000Z","dateModified":"2023-08-20T06:26:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/python-%EC%9C%A0%EC%9A%A9%ED%95%9C-%ED%95%A8%EC%88%98-%EB%AA%A8%EC%9D%8C/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Python","item":"https://ursonice.github.io/topics/python/"},{"@type":"ListItem","position":3,"name":"[Python] 유용한 함수 모음","item":"https://ursonice.github.io/posts/python-%EC%9C%A0%EC%9A%A9%ED%95%9C-%ED%95%A8%EC%88%98-%EB%AA%A8%EC%9D%8C/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/python/">Python</a>
+    </nav>
+    <h1>[Python] 유용한 함수 모음</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2023년 5월 29일</span><span class="dot"></span><span>수정 2023년 8월 20일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-fe7004d203a74dc2ade4dd77f234ce2b">서론</h2>
+<p>이 장은 파이썬에서 사용되는 유용한 함수에 대해서 설명한다.</p>
+<h2 id="block-d2e0fb7e91c248c5a89feeb0a1977d33">목차</h2>
+<ol><li><a href="#block-0c38b9415685439eabbe55e8d2b71842">functools.reduce</a> <ol><li><a href="#block-860416864d3a4a03928d9fe411d4c365">join</a> </li><li><a href="#block-f3c1f5491486408e94e03b2857a90dd4">map 함수</a> </li><li><a href="#block-acfa88cb4aa741078b9c891287b16e6c">funct.tools.redudce</a> </li></ol></li></ol>
+<h2 id="block-0c38b9415685439eabbe55e8d2b71842">functools.reduce</h2>
+<h4 id="block-860416864d3a4a03928d9fe411d4c365">join</h4>
+<p>a = [1, 2, 3, 4, 5] 로 숫자형으로 이뤄진 리스트가 있을 때 이를 하나로 합치는 방법</p>
+<pre data-lang="shell"><code class="language-bash">&gt;&gt;&gt; ''.join(str(e) for e in a)</code></pre>
+<p>output: ‘12345’</p>
+<h4 id="block-f3c1f5491486408e94e03b2857a90dd4">map 함수</h4>
+<pre data-lang="shell"><code class="language-bash">&gt;&gt;&gt; ''.join(map(str, a))</code></pre>
+<p>output: ‘12345’</p>
+<h4 id="block-acfa88cb4aa741078b9c891287b16e6c">funct.tools.redudce</h4>
+<p>(초깃값이 0인 경우)</p>
+<pre data-lang="shell"><code class="language-bash">result = functools.reduce(lambda x, y: 10*x + y, a, 0)</code></pre>
+<p>마지막의 0은 초기값을 타나낸다. <code>a = [1, 2, 3, 4, 5]</code> 일 때 계산 방식은 아래와 같다.</p>
+<ol><li><strong>f(1, 2)</strong> → 10*1 + 2 = <strong>12</strong></li><li>f(1, 2), 3) →<strong>f(12, 3)</strong> → 10*12 + 3 = <strong>123</strong></li><li>f(f(f(1, 2), 3) , 4) → f(f(12, 3), 4) → <strong>f(123, 4)</strong> → 10*123 + 4 = <strong>1234</strong></li><li>f(f(f(f(1, 2), 3) , 4), 5) → f(f(12, 3), 4), 5) → f(f(123, 4), 5) → <strong>f(1234, 5)</strong> → 10*1234 + 5 = <strong>12345</strong></li></ol>
+<p>(초깃값이 10인 경우)</p>
+<pre data-lang="shell"><code class="language-bash">result = functools.reduce(lambda x, y: 10*x + y, a, 10)</code></pre>
+<ol><li>f(10, 1) → 10*10 + 1 = 101</li><li>f(101, 2) → 10*101 + 2 = 1010+2 = 1012</li><li>f(1012, 3) → 10*1012 + 3 = 10120 + 3 = 10123</li><li>f(10123, 4) → 10*10123 + 4 = 101230 + 4 = 101234</li><li>f(101234, 5) → 10*101234 + 5 = 1012340 + 5 = 1012345</li></ol></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/post.js?v=13" type="module"></script>
+    <script src="/assets/js/palette.js?v=8" defer></script>
+  </body>
+</html>

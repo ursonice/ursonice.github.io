@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>Emit C — Woojae Joo</title>
+    <meta name="post-slug" content="emit-c" />
+    <meta name="description" content="서론 MLIR-EmitC provides a way to translate ML models into C++ code. The repository contains scripts and tools to translate Keras and TensorFlow models into the TOSA and MH" />
+    <link rel="canonical" href="https://ursonice.github.io/posts/emit-c/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="Emit C" />
+    <meta property="og:description" content="서론 MLIR-EmitC provides a way to translate ML models into C++ code. The repository contains scripts and tools to translate Keras and TensorFlow models into the TOSA and MH" />
+    <meta property="og:url" content="https://ursonice.github.io/posts/emit-c/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Emit%20C&amp;cat=ONNX-MLIR" />
+    <meta property="article:published_time" content="2022-12-29T04:50:00.000Z" />
+    <meta property="article:modified_time" content="2023-06-14T09:44:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Emit C" />
+    <meta name="twitter:description" content="서론 MLIR-EmitC provides a way to translate ML models into C++ code. The repository contains scripts and tools to translate Keras and TensorFlow models into the TOSA and MH" />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Emit%20C&amp;cat=ONNX-MLIR" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Emit C","description":"서론 MLIR-EmitC provides a way to translate ML models into C++ code. The repository contains scripts and tools to translate Keras and TensorFlow models into the TOSA and MH","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Emit%20C&cat=ONNX-MLIR","datePublished":"2022-12-29T04:50:00.000Z","dateModified":"2023-06-14T09:44:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/emit-c/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"ONNX-MLIR","item":"https://ursonice.github.io/topics/onnx-mlir/"},{"@type":"ListItem","position":3,"name":"Emit C","item":"https://ursonice.github.io/posts/emit-c/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/onnx-mlir/">ONNX-MLIR</a>
+    </nav>
+    <h1>Emit C</h1>
+    <div class="article-meta">
+      <a class="meta-tag" href="/index.html?tag=MLIR">#MLIR</a>
+      <span class="dot"></span>
+      <span>작성 2022년 12월 29일</span><span class="dot"></span><span>수정 2023년 6월 14일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-5ed988fa5d1a48f5925fed407c385ba5">서론</h2>
+<p>MLIR-EmitC provides a way to translate ML models into C++ code.</p>
+<p>The repository contains scripts and tools to translate Keras and TensorFlow models into the <a href="https://mlir.llvm.org/docs/Dialects/TOSA/" target="_blank" rel="noreferrer">TOSA</a>
+ and <a href="https://github.com/tensorflow/mlir-hlo" target="_blank" rel="noreferrer">MHLO</a> dialect and to convert those to <a href="https://mlir.llvm.org/docs/Dialects/EmitC/" target="_blank" rel="noreferrer">EmitC</a>.</p>
+<h2 id="block-1a22fea961334aeca9a6e3264d5399b4">목차</h2>
+<ol><li><a href="#block-89cfd9ad5e9e4775a54edc456c1045a8">사전작업</a> </li><li><a href="#block-5d56099f72524abc94bf61cba5251b11">Git에서 가져오기</a> </li><li><a href="#block-b6805c2e4de1480cb42d4be34b2ccd22">빌드하기</a> </li><li><a href="#block-844b5f3c0f004efd942cc0796557347a">MobileNet 가져오기</a> </li><li><a href="#block-e762f503f75b446f8b427e3253d811a1">Saved Model pb 가져오기</a> </li></ol>
+<h2 id="block-89cfd9ad5e9e4775a54edc456c1045a8">사전작업</h2>
+<p>LLVM Project가 사전에 빌드되어있어야 한다.</p>
+<ul><li><strong><a href="/5fac9603db3e483092ed72350152ac12#be9ae73f8d3c496395382a0fdd8a072c" target="_blank" rel="noreferrer">LLVM Project 빌드는 방법</a></strong></li></ul>
+<p>ONNX-MLIR 설치부분까지는 작업할 필요없으니 그 전까지만 빌드하자.</p>
+<h3 id="block-5d56099f72524abc94bf61cba5251b11">Git에서 가져오기</h3>
+<pre data-lang="shell"><code class="language-bash">git clone https://github.com/iml130/mlir-emitc.git
+cd mlir-emitc
+git submodule update --init</code></pre>
+<h3 id="block-b6805c2e4de1480cb42d4be34b2ccd22">빌드하기</h3>
+<pre data-lang="shell"><code class="language-bash">mkdir build &amp;&amp; cd build
+sudo apt install clang
+cmake -G Ninja -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release -DEMITC_ENABLE_HLO=OFF -DLLVM_ENABLE_PROJECTS=mlir -DLLVM_EXTERNAL_PROJECTS=&quot;mlir-emitc&quot; -DLLVM_EXTERNAL_MLIR_EMITC_SOURCE_DIR=`realpath ../` -DLLVM_TARGETS_TO_BUILD=host ${ROOT_PATH_TO_llvm-project}/llvm
+cmake --build . --target check-emitc</code></pre>
+<p>아래는 위 코드에 대한 실제로 사용된 Sample Code다 빌드할때 참조하자</p>
+<pre data-lang="shell"><code class="language-bash">mkdir build &amp;&amp; cd build
+cmake -G Ninja -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release -DEMITC_ENABLE_HLO=OFF -DLLVM_ENABLE_PROJECTS=mlir -DLLVM_EXTERNAL_PROJECTS=&quot;mlir-emitc&quot; -DLLVM_EXTERNAL_MLIR_EMITC_SOURCE_DIR=`realpath ../` -DLLVM_TARGETS_TO_BUILD=host /home/jj/llvm-project/llvm
+cmake --build . --target check-emitc</code></pre>
+<h3 id="block-844b5f3c0f004efd942cc0796557347a">MobileNet 가져오기</h3>
+<pre data-lang="shell"><code class="language-bash">cd ..
+cd scripts
+pip3 install -r requirements.txt
+mkdir model_saved
+python3 get_mobilenet_v2.py --output-file model_saved</code></pre>
+<h3 id="block-e762f503f75b446f8b427e3253d811a1">Saved Model pb 가져오기</h3>
+<pre data-lang="shell"><code class="language-bash">python3 model_to_savedmodel_with_predict_function.py mobilenet_v2.h5 ./result
+
+./e2e_test_tosa.sh ./model_saved /home/jj/llvm-project/mlir-emitc/reference-implementation/include /home/jj/llvm-project/mlir-emitc/build/bin/emitc-opt /usr/bin/g++ 1 0 ./t</code></pre>
+<p><a href="https://github.com/iml130/mlir-emitc" target="_blank" rel="noreferrer">https://github.com/iml130/mlir-emitc</a></p>
+<pre data-lang="shell"><code class="language-bash">g++ test.cpp -I./
+./a.out</code></pre></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/post.js?v=13" type="module"></script>
+    <script src="/assets/js/palette.js?v=8" defer></script>
+  </body>
+</html>

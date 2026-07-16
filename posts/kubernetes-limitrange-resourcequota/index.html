@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>[Kubernetes] LimitRange &amp; ResourceQuota — Woojae Joo</title>
+    <meta name="post-slug" content="kubernetes-limitrange-resourcequota" />
+    <meta name="description" content="서론 파드의 리소스 또는 컨테이너의 리소스를 제안하고싶다면 어떻게 해야하는지에 대해서 알아본다. Container단위의 Resources 할당/제한 # pod-definition.yaml apiVersion: v1 kind: Pod metadata: name: resource-nginx-pod label" />
+    <link rel="canonical" href="https://ursonice.github.io/posts/kubernetes-limitrange-resourcequota/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="[Kubernetes] LimitRange &amp; ResourceQuota" />
+    <meta property="og:description" content="서론 파드의 리소스 또는 컨테이너의 리소스를 제안하고싶다면 어떻게 해야하는지에 대해서 알아본다. Container단위의 Resources 할당/제한 # pod-definition.yaml apiVersion: v1 kind: Pod metadata: name: resource-nginx-pod label" />
+    <meta property="og:url" content="https://ursonice.github.io/posts/kubernetes-limitrange-resourcequota/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5BKubernetes%5D%20LimitRange%20%26%20ResourceQuota&amp;cat=Kubernetes" />
+    <meta property="article:published_time" content="2025-05-31T04:25:00.000Z" />
+    <meta property="article:modified_time" content="2025-06-01T03:45:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="[Kubernetes] LimitRange &amp; ResourceQuota" />
+    <meta name="twitter:description" content="서론 파드의 리소스 또는 컨테이너의 리소스를 제안하고싶다면 어떻게 해야하는지에 대해서 알아본다. Container단위의 Resources 할당/제한 # pod-definition.yaml apiVersion: v1 kind: Pod metadata: name: resource-nginx-pod label" />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5BKubernetes%5D%20LimitRange%20%26%20ResourceQuota&amp;cat=Kubernetes" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"[Kubernetes] LimitRange & ResourceQuota","description":"서론 파드의 리소스 또는 컨테이너의 리소스를 제안하고싶다면 어떻게 해야하는지에 대해서 알아본다. Container단위의 Resources 할당/제한 # pod-definition.yaml apiVersion: v1 kind: Pod metadata: name: resource-nginx-pod label","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5BKubernetes%5D%20LimitRange%20%26%20ResourceQuota&cat=Kubernetes","datePublished":"2025-05-31T04:25:00.000Z","dateModified":"2025-06-01T03:45:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/kubernetes-limitrange-resourcequota/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Kubernetes","item":"https://ursonice.github.io/topics/kubernetes/"},{"@type":"ListItem","position":3,"name":"[Kubernetes] LimitRange & ResourceQuota","item":"https://ursonice.github.io/posts/kubernetes-limitrange-resourcequota/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/kubernetes/">Kubernetes</a>
+    </nav>
+    <h1>[Kubernetes] LimitRange &amp; ResourceQuota</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 5월 31일</span><span class="dot"></span><span>수정 2025년 6월 1일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-204b12c0115c8086a1e5ce0accb042d7">서론</h2>
+<p>파드의 리소스 또는 컨테이너의 리소스를 제안하고싶다면 어떻게 해야하는지에 대해서 알아본다.</p>
+<h3 id="block-204b12c0115c80f0833acb0c5566319d">Container단위의 Resources 할당/제한</h3>
+<pre data-lang="yaml"><code class="language-yaml"># pod-definition.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: resource-nginx-pod
+  labels:
+    app: nginx
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      resources:
+        requests:
+          cpu: &quot;250m&quot;        # 최소 0.25 core 보장
+          memory: &quot;128Mi&quot;    # 최소 128MiB 메모리 보장
+        limits:
+          cpu: &quot;500m&quot;        # 최대 0.5 core 사용 제한
+          memory: &quot;256Mi&quot;    # 최대 256MiB 메모리 사용 제한
+</code></pre>
+<h3 id="block-204b12c0115c8058aefacf83030148d4">LimitRange</h3>
+<p>LimitRange를 생성하거나 수정한 이후에 만들어지는 새 파드에만 적용됩니다.</p>
+<ul><li>이미 존재하는 파드에는 영향을 주지 않고 파드가 생성될 때 적용된다.</li></ul>
+<h4 id="block-204b12c0115c802298a8c6792ddd1120">CPU</h4>
+<h4 id="block-204b12c0115c8001b730d83d189fc1d6">limits.default, limits.defaultRequest</h4>
+<ul><li>사용자가 리소스를 명시하지 않았을 때 자동 적용된다.</li><li><code>default</code>: Limit 미지정 시 기본 제한값 (500m)</li><li><code>defaultRequest</code>: Request 미지정 시 기본 요청량 (200m)</li></ul>
+<h4 id="block-204b12c0115c80dc82c9f8dc719e6260">limits.max, limits.min</h4>
+<ul><li>사용자가 명시적으로 리소스를 지정할 때 적용된다.</li><li>컨테이너당 CPU Request/Limit이 반드시 <code>min</code>(100m) 이상, <code>max</code>(1) 이하여야 한다.</li><li>이를 벗어나면 파드 생성 거부한다. (네임스페이스 전체에 적용됨)</li></ul>
+<h4 id="block-204b12c0115c80c59924f3354c0ec4f6">limits.type</h4>
+<ul><li>파드의 전체 CPU 사용량이 아닌, 파드안에 여러 컨테이너가 있는 경우 개별 컨테이너의 설정값을 적용한다.</li></ul>
+<pre data-lang="yaml"><code class="language-yaml"># limit-range-cpu.yaml
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: cpu-resource-constraint
+  namespace: my-namespace
+spec:
+  limits:
+  - default:
+      cpu: &quot;500m&quot;      # 파드에 resource를 따로 명시주지 않았을 때 적용되는 cpu limit
+    defaultRequest:
+      cpu: &quot;200m&quot;      # 파드에 resource를 따로 명시주지 않았을 때 적용되는 cpu request
+    max:              
+      cpu: &quot;1&quot;         # 파드에 명시 여부와 상관없이 cpu limit
+    min:
+      cpu: &quot;100m&quot;      # 파드에 명시 여부와 상관없이 cpu request
+    type: Container
+</code></pre>
+<h4 id="block-204b12c0115c80268f6ac5b77ee9b670">Memory</h4>
+<h4 id="block-204b12c0115c8013a589da0fe9b6686a">limits.default, limits.defaultRequest</h4>
+<ul><li>사용자가 리소스를 명시하지 않았을 때 자동 적용된다.</li><li><code>default</code>: Limit 미지정 시 기본 제한값 (1Gi)</li><li><code>defaultRequest</code>: Request 미지정 시 기본 요청량 (500Mi)</li></ul>
+<h4 id="block-204b12c0115c8087acdfe4a53b633434">limits.max, limits.min</h4>
+<ul><li>사용자가 명시적으로 리소스를 지정할 때 적용된다.</li><li>컨테이너당 Memory Request/Limit이 반드시 <code>min</code>(100Mi) 이상, <code>max</code>(2Gi) 이하여야 한다.</li><li>이를 벗어나면 파드 생성 거부한다. (네임스페이스 전체에 적용됨)</li></ul>
+<h4 id="block-204b12c0115c805dac82c8f98a832203">limits.type</h4>
+<ul><li>파드의 전체 Memory 사용량이 아닌, 파드안에 여러 컨테이너가 있는 경우 개별 컨테이너의 설정값을 적용한다.</li></ul>
+<pre data-lang="yaml"><code class="language-yaml"># limit-range-cpu.yaml
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: memory-resource-constraint
+  namespace: my-namespace
+spec:
+  limits:
+  - default:
+      memory: &quot;1Gi&quot;      # 파드에 resource를 따로 명시주지 않았을 때 적용되는 memory limit
+    defaultRequest:
+      memory: &quot;500Mi&quot;      # 파드에 resource를 따로 명시주지 않았을 때 적용되는 memory request
+    max:              
+      memory: &quot;2Gi&quot;         # 파드에 명시 여부와 상관없이 memory limit
+    min:
+      memory: &quot;100Mi&quot;      # 파드에 명시 여부와 상관없이 memory request
+    type: Container
+</code></pre>
+<h3 id="block-204b12c0115c801293a0e3494a79e963">ResourceQuota</h3>
+<p>네임스페이스에 속한 모든 파드의 자원 사용량(합산된)을 제한하고 싶다면 ResourceQuota를 사용하면 된다.</p>
+<h4 id="block-205b12c0115c802ca8e3c34925c99a98">hard.requests.cpu</h4>
+<p>네임스페이스 내 요청가능한(request) 총 CPU 4개</p>
+<h4 id="block-205b12c0115c80459c02cefcdad52c13">hard.requests.memory</h4>
+<p>네임스페이스 내 요청가능한(request) 총 Memory 10GiB</p>
+<h4 id="block-205b12c0115c80ea9828f3d92ff8084b">hard.limits.cpu</h4>
+<p>모든 파드가 사용할 수 있는 CPU 최대치를 10GiB</p>
+<h4 id="block-205b12c0115c80f59cd1c3d5c1c5f090">hard.limits.memory</h4>
+<p>메모리 최대치를 10GiB</p>
+<pre data-lang="yaml"><code class="language-yaml"># limit-range-cpu.yaml
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: my-resource-quota
+  namespace: my-namespace
+spec:
+  hard:
+    requests.cpu: 4
+	  requests.memory: 4Gi
+	  limits.cpu: 10
+	  limits.memory: 10Gi</code></pre></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/post.js?v=13" type="module"></script>
+    <script src="/assets/js/palette.js?v=8" defer></script>
+  </body>
+</html>

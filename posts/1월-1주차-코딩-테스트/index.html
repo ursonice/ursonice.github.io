@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>1월 1주차 코딩 테스트 — Woojae Joo</title>
+    <meta name="post-slug" content="1월-1주차-코딩-테스트" />
+    <meta name="description" content="1. 바가지 문제 풀이 def solution(x, y, target): if x + y &lt; target: return False visited = set() q = [] q.append(0) visited.add(0) while q: curr_val = q.pop(0) if curr_val == tar" />
+    <link rel="canonical" href="https://ursonice.github.io/posts/1%EC%9B%94-1%EC%A3%BC%EC%B0%A8-%EC%BD%94%EB%94%A9-%ED%85%8C%EC%8A%A4%ED%8A%B8/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="1월 1주차 코딩 테스트" />
+    <meta property="og:description" content="1. 바가지 문제 풀이 def solution(x, y, target): if x + y &lt; target: return False visited = set() q = [] q.append(0) visited.add(0) while q: curr_val = q.pop(0) if curr_val == tar" />
+    <meta property="og:url" content="https://ursonice.github.io/posts/1%EC%9B%94-1%EC%A3%BC%EC%B0%A8-%EC%BD%94%EB%94%A9-%ED%85%8C%EC%8A%A4%ED%8A%B8/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=1%EC%9B%94%201%EC%A3%BC%EC%B0%A8%20%EC%BD%94%EB%94%A9%20%ED%85%8C%EC%8A%A4%ED%8A%B8&amp;cat=Coding%20Test" />
+    <meta property="article:published_time" content="2025-01-04T02:53:00.000Z" />
+    <meta property="article:modified_time" content="2025-01-21T11:39:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="1월 1주차 코딩 테스트" />
+    <meta name="twitter:description" content="1. 바가지 문제 풀이 def solution(x, y, target): if x + y &lt; target: return False visited = set() q = [] q.append(0) visited.add(0) while q: curr_val = q.pop(0) if curr_val == tar" />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=1%EC%9B%94%201%EC%A3%BC%EC%B0%A8%20%EC%BD%94%EB%94%A9%20%ED%85%8C%EC%8A%A4%ED%8A%B8&amp;cat=Coding%20Test" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"1월 1주차 코딩 테스트","description":"1. 바가지 문제 풀이 def solution(x, y, target): if x + y \u003c target: return False visited = set() q = [] q.append(0) visited.add(0) while q: curr_val = q.pop(0) if curr_val == tar","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=1%EC%9B%94%201%EC%A3%BC%EC%B0%A8%20%EC%BD%94%EB%94%A9%20%ED%85%8C%EC%8A%A4%ED%8A%B8&cat=Coding%20Test","datePublished":"2025-01-04T02:53:00.000Z","dateModified":"2025-01-21T11:39:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/1%EC%9B%94-1%EC%A3%BC%EC%B0%A8-%EC%BD%94%EB%94%A9-%ED%85%8C%EC%8A%A4%ED%8A%B8/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Coding Test","item":"https://ursonice.github.io/topics/coding-test/"},{"@type":"ListItem","position":3,"name":"1월 1주차 코딩 테스트","item":"https://ursonice.github.io/posts/1%EC%9B%94-1%EC%A3%BC%EC%B0%A8-%EC%BD%94%EB%94%A9-%ED%85%8C%EC%8A%A4%ED%8A%B8/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/coding-test/">Coding Test</a>
+    </nav>
+    <h1>1월 1주차 코딩 테스트</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 1월 4일</span><span class="dot"></span><span>수정 2025년 1월 21일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-171b12c0115c809da822cbb510e83750">1. 바가지</h2>
+<h3 id="block-171b12c0115c804480eec2c6a8be1969">문제</h3>
+<figure><img src="/assets/notion/1월-1주차-코딩-테스트/171b12c0-115c-802d-96bb-dc923f9ef0a7.png" alt="" loading="lazy" width="2016" height="1066" /></figure>
+<figure><img src="/assets/notion/1월-1주차-코딩-테스트/171b12c0-115c-8074-b3c6-c734456ac999.png" alt="" loading="lazy" width="2010" height="1334" /></figure>
+<figure><img src="/assets/notion/1월-1주차-코딩-테스트/171b12c0-115c-80d8-9c63-d2364d164831.png" alt="" loading="lazy" width="1972" height="810" /></figure>
+<h3 id="block-171b12c0115c806585eac34e849ea0ec"> 풀이</h3>
+<pre data-lang="python"><code class="language-python">
+def solution(x, y, target):
+    if x + y &lt; target:
+        return False
+    
+    visited = set()
+    q = []
+
+    q.append(0)
+    visited.add(0)
+
+    while q:
+        curr_val = q.pop(0)
+        if curr_val == target:
+            return True
+        
+        val = curr_val + x
+        if val &lt;= x + y and val not in visited:
+            q.append(val)
+            visited.add(val)
+        
+        val = curr_val - x
+        if val &gt;= 0 and val not in visited:
+            q.append(val)
+            visited.add(val)
+
+        val = curr_val + y
+        if val &lt;= x + y and val not in visited:
+            q.append(val)
+            visited.add(val)
+        
+        val = curr_val - y
+        if val &gt;= 0 and val not in visited:
+            q.append(val)
+            visited.add(val)
+    
+    return False
+</code></pre>
+<p>결과</p>
+<figure><img src="/assets/notion/1월-1주차-코딩-테스트/171b12c0-115c-801a-92d3-ded09f063744.png" alt="" loading="lazy" width="1296" height="816" /></figure>
+<pre data-lang="python"><code class="language-python">import math
+def solution(x, y, target):
+    if target &gt; x + y:
+        return False
+    
+    gcd_xy = math.gcd(x, y)
+    if target % gcd_xy != 0:
+        return False
+
+    return True</code></pre>
+<h3 id="block-171b12c0115c80a9a95afc176dd68e79">Testcase</h3>
+<pre data-lang="python"><code class="language-python">입력값 〉 3, 5, 4
+기댓값 〉 true
+
+입력값 〉 2, 5, 1
+기댓값 〉 true</code></pre>
+<h2 id="block-171b12c0115c80ceb651ebb00988556d">2. 행렬 곱</h2>
+<h3 id="block-171b12c0115c80f99e3cf82015850a98">문제</h3>
+<figure><img src="/assets/notion/1월-1주차-코딩-테스트/171b12c0-115c-80bd-a3f9-d81737a5b8e9.png" alt="" loading="lazy" width="2066" height="1226" /></figure>
+<figure><img src="/assets/notion/1월-1주차-코딩-테스트/171b12c0-115c-8090-b88e-dbd73fa3abfb.png" alt="" loading="lazy" width="2244" height="1220" /></figure>
+<h3 id="block-171b12c0115c80dc9cd3fa8e286470c8">풀이</h3>
+<pre data-lang="python"><code class="language-python">def solution(s, t):
+    answer = [[]]
+    return answer</code></pre>
+<h3 id="block-171b12c0115c8004b38bcca3b53dfdda">Testcase</h3>
+<pre data-lang="python"><code class="language-python">입력값 〉 [[1, 0, 0], [0, 0, 3]], [[5, 0, 2], [0, 0, 0], [0, 0, -1]]
+기댓값 〉 [[5, 0, 2], [0, 0, -3]]</code></pre>
+<h2 id="block-171b12c0115c803b9fd1ea264cfdce48">3.</h2>
+<h3 id="block-171b12c0115c80bd9adbf57a2a50bf36">문제</h3>
+<figure><img src="/assets/notion/1월-1주차-코딩-테스트/171b12c0-115c-8053-80bf-d3963098e3a5.png" alt="" loading="lazy" width="1826" height="1380" /></figure>
+<figure><img src="/assets/notion/1월-1주차-코딩-테스트/171b12c0-115c-80c9-869a-e63d1ea59ed8.png" alt="" loading="lazy" width="1810" height="1344" /></figure>
+<figure><img src="/assets/notion/1월-1주차-코딩-테스트/171b12c0-115c-808e-8456-c7d422c580ab.png" alt="" loading="lazy" width="1828" height="478" /></figure>
+<h3 id="block-171b12c0115c803aabffdb1588447f44">풀이</h3>
+<pre data-lang="python"><code class="language-python">def solution(s, t):
+    answer = [[]]
+    return answer</code></pre>
+<h3 id="block-171b12c0115c8054b8cdfaaed17d54d2">Testcase</h3>
+<pre data-lang="python"><code class="language-python">입력값 〉 [[1, 4], [2, 2]], [[6, 4], [3, 2]]
+기댓값 〉 [[6, 6]]
+
+
+입력값 〉 [[1, 3], [1, 4]], [[5, 2], [3, 2], [2, 3]]
+기댓값 〉 [[5, 2], [3, 2], [2, 3]]</code></pre>
+<h2 id="block-171b12c0115c80f2b3f5e7f98089af96">4.</h2>
+<h3 id="block-171b12c0115c80d582b9c392c4e1cdf7">문제</h3>
+<figure><img src="/assets/notion/1월-1주차-코딩-테스트/171b12c0-115c-8014-aa3d-d23f600afea0.png" alt="" loading="lazy" width="1828" height="1290" /></figure>
+<figure><img src="/assets/notion/1월-1주차-코딩-테스트/171b12c0-115c-80da-97d1-e6565c8660fb.png" alt="" loading="lazy" width="1862" height="454" /></figure>
+<h3 id="block-171b12c0115c80a9847dc9253d915ccf">풀이</h3>
+<pre data-lang="python"><code class="language-python">def solution(nums):
+    answer = 0
+    return answer</code></pre>
+<h3 id="block-171b12c0115c80f991bae3f3a3428502">Testcase</h3>
+<pre data-lang="python"><code class="language-python">입력값 〉 [1, 1, 1, 1, 1, 1, 3, 4, 4, 5, 2, 3, 4, 6, 6]
+기댓값 〉 5</code></pre>
+<h2 id="block-171b12c0115c80ab9984cd0116e0b7b3">5. </h2>
+<h3 id="block-171b12c0115c80fe9502f443dce6db2e">문제</h3>
+<figure><img src="/assets/notion/1월-1주차-코딩-테스트/171b12c0-115c-80dd-bcf5-d5ba6e7db7a6.png" alt="" loading="lazy" width="2406" height="1398" /></figure>
+<figure><img src="/assets/notion/1월-1주차-코딩-테스트/171b12c0-115c-80a3-9869-c409f6c7d3a8.png" alt="" loading="lazy" width="2556" height="1076" /></figure>
+<figure><img src="/assets/notion/1월-1주차-코딩-테스트/171b12c0-115c-8002-92e9-fc29b764c06d.png" alt="" loading="lazy" width="2556" height="1254" /></figure>
+<figure><img src="/assets/notion/1월-1주차-코딩-테스트/171b12c0-115c-80e1-a365-e6f621204ecf.png" alt="" loading="lazy" width="2560" height="862" /></figure>
+<h3 id="block-171b12c0115c80d181c7ebac3e7bb97b">풀이</h3>
+<pre data-lang="python"><code class="language-python">def solution(board):
+    answer = [[]]
+    return answer</code></pre>
+<h3 id="block-171b12c0115c804b8fdae850c21b7897">Testcase</h3>
+<pre data-lang="python"><code class="language-python">입력값 〉 [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 1, 2, 3, 0], [0, 1, 2, 3, 4, 4], [1, 2, 3, 4, 4, 4]]
+기댓값 〉 [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]]</code></pre>
+<h2 id="block-178b12c0115c80519adedaac3b4aec4d">출처</h2>
+<p>해당 문제와 코드는 제로베이스(ZeroBase)에서 제공받았습니다.</p>
+<p>모든 자료는 저작권법에 의하여 보호받는 저작물로서 이에 대한 무단 복제 및 배포를 원칙적으로 금합니다.</p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/post.js?v=13" type="module"></script>
+    <script src="/assets/js/palette.js?v=8" defer></script>
+  </body>
+</html>

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>11월 1주차 (주말) 코딩 테스트 Study — Woojae Joo</title>
+    <meta name="post-slug" content="11월-1주차-주말-코딩-테스트-study" />
+    <meta name="description" content="목차 전투력 비교 연발사격 표적 맞추기 시험문제 학생 전투력 1. 전투력 비교(금) 총 N개의 좌석이 일렬로 나열되어 있다. 또한 1번부터 N번까지 N명의 전사가 존재하며, 각 전사는 하나의 좌석에 배치해야 한다. 이때, 각 전사는 모두 개별적으로 전투력 정보를 가진다. 그리고 전투력 정보는 서로 동일할" />
+    <link rel="canonical" href="https://ursonice.github.io/posts/11%EC%9B%94-1%EC%A3%BC%EC%B0%A8-%EC%A3%BC%EB%A7%90-%EC%BD%94%EB%94%A9-%ED%85%8C%EC%8A%A4%ED%8A%B8-study/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="11월 1주차 (주말) 코딩 테스트 Study" />
+    <meta property="og:description" content="목차 전투력 비교 연발사격 표적 맞추기 시험문제 학생 전투력 1. 전투력 비교(금) 총 N개의 좌석이 일렬로 나열되어 있다. 또한 1번부터 N번까지 N명의 전사가 존재하며, 각 전사는 하나의 좌석에 배치해야 한다. 이때, 각 전사는 모두 개별적으로 전투력 정보를 가진다. 그리고 전투력 정보는 서로 동일할" />
+    <meta property="og:url" content="https://ursonice.github.io/posts/11%EC%9B%94-1%EC%A3%BC%EC%B0%A8-%EC%A3%BC%EB%A7%90-%EC%BD%94%EB%94%A9-%ED%85%8C%EC%8A%A4%ED%8A%B8-study/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=11%EC%9B%94%201%EC%A3%BC%EC%B0%A8%20(%EC%A3%BC%EB%A7%90)%20%EC%BD%94%EB%94%A9%20%ED%85%8C%EC%8A%A4%ED%8A%B8%20Study&amp;cat=Coding%20Test" />
+    <meta property="article:published_time" content="2024-11-16T09:50:00.000Z" />
+    <meta property="article:modified_time" content="2024-12-06T12:03:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="11월 1주차 (주말) 코딩 테스트 Study" />
+    <meta name="twitter:description" content="목차 전투력 비교 연발사격 표적 맞추기 시험문제 학생 전투력 1. 전투력 비교(금) 총 N개의 좌석이 일렬로 나열되어 있다. 또한 1번부터 N번까지 N명의 전사가 존재하며, 각 전사는 하나의 좌석에 배치해야 한다. 이때, 각 전사는 모두 개별적으로 전투력 정보를 가진다. 그리고 전투력 정보는 서로 동일할" />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=11%EC%9B%94%201%EC%A3%BC%EC%B0%A8%20(%EC%A3%BC%EB%A7%90)%20%EC%BD%94%EB%94%A9%20%ED%85%8C%EC%8A%A4%ED%8A%B8%20Study&amp;cat=Coding%20Test" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"11월 1주차 (주말) 코딩 테스트 Study","description":"목차 전투력 비교 연발사격 표적 맞추기 시험문제 학생 전투력 1. 전투력 비교(금) 총 N개의 좌석이 일렬로 나열되어 있다. 또한 1번부터 N번까지 N명의 전사가 존재하며, 각 전사는 하나의 좌석에 배치해야 한다. 이때, 각 전사는 모두 개별적으로 전투력 정보를 가진다. 그리고 전투력 정보는 서로 동일할","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=11%EC%9B%94%201%EC%A3%BC%EC%B0%A8%20(%EC%A3%BC%EB%A7%90)%20%EC%BD%94%EB%94%A9%20%ED%85%8C%EC%8A%A4%ED%8A%B8%20Study&cat=Coding%20Test","datePublished":"2024-11-16T09:50:00.000Z","dateModified":"2024-12-06T12:03:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/11%EC%9B%94-1%EC%A3%BC%EC%B0%A8-%EC%A3%BC%EB%A7%90-%EC%BD%94%EB%94%A9-%ED%85%8C%EC%8A%A4%ED%8A%B8-study/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Coding Test","item":"https://ursonice.github.io/topics/coding-test/"},{"@type":"ListItem","position":3,"name":"11월 1주차 (주말) 코딩 테스트 Study","item":"https://ursonice.github.io/posts/11%EC%9B%94-1%EC%A3%BC%EC%B0%A8-%EC%A3%BC%EB%A7%90-%EC%BD%94%EB%94%A9-%ED%85%8C%EC%8A%A4%ED%8A%B8-study/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/coding-test/">Coding Test</a>
+    </nav>
+    <h1>11월 1주차 (주말) 코딩 테스트 Study</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2024년 11월 16일</span><span class="dot"></span><span>수정 2024년 12월 6일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-142b12c0115c8003a524f1d628deafd1">목차</h2>
+<ul><li>전투력 비교</li><li>연발사격</li><li>표적 맞추기</li><li>시험문제</li><li>학생 전투력</li></ul>
+<h2 id="block-140b12c0115c80e88596cb5e5e770ab2">1. 전투력 비교(금)</h2>
+<p>총 N개의 좌석이 일렬로 나열되어 있다.</p>
+<p>또한 1번부터 N번까지 N명의 전사가 존재하며, 각 전사는 하나의 좌석에 배치해야 한다.</p>
+<p>이때, 각 전사는 모두 개별적으로 전투력 정보를 가진다.</p>
+<p>그리고 전투력 정보는 서로 동일할 수 있으며, 그 정보는 1부터 20까지의 자연수 형태의 값을 가진다.</p>
+<p>이때, N명의 전사를 배치할 때, 인접한 좌석에 대하여 N-1개의 조건을 만족해야 한다.</p>
+<p>조건은 1번부터 N-1번까지 존재하며, 그 의미는 다음과 같다.</p>
+<ul><li>1번 조건: 1번 좌석과 2번 좌석에 대한 조건</li><li>2번 조건: 2번 좌석과 3번 좌석에 대한 조건</li><li>…</li><li>N - 1번 조건: N - 1번 좌석과 N번 좌석에 대한 조건</li></ul>
+<p>이때 각 조건은 1, 2, 3, 4중 하나의 자연수 형태의 값을 가지며, 그 의미는 다음과 같다.</p>
+<ol><li>값이 1인 경우: 왼쪽 좌석에 앉은 전사가 오른쪽 좌석에 앉은 전사보다 전투력이 높다.</li><li>값이 2인 경우: 왼쪽 좌석에 앉은 전사가 오른쪽 좌석에 앉은 전사보다 전투력이 낮다.</li><li>값이 3인 경우: 왼쪽 좌석에 앉은 전사와 오른쪽 좌석에 앉은 전사의 전투력이 같다.</li><li>값이 4인 경우: 해당 위치에서는 별도의 조건을 만족하지 않아도 된다.</li></ol>
+<p>
+결과적으로 조건에 부합하도록 전사를 배치하는 경우의 수를 출력하는 프로그램을
+작성하여라.</p>
+<p>
+예를 들어 N = 5이고, 1번부터 N번까지의 전사에 대한 전투력이 차례대로 7, 10, 7, 5, 3 이라고 해보자. </p>
+<p>또한 조건이 3, 1, 2, 4라고 해보자. </p>
+<p>이때, 다음과 같이 1번, 3번, 5번, 2번, 4번 순서대로 전사를 배치하면 다음과 같이 조건을 만족한다.</p>
+<p>그림상에서 각 조건에 대하여 값이 <code>1</code>인 경우는 <code>&gt;</code>, 값이 <code>2</code>인 경우는 <code>&lt;</code>, 값이 <code>3</code>인 경우는 <code>=</code> , 값이 <code>4</code>인 경우는 빈 상자로 표현했다.</p>
+<figure><img src="/assets/notion/11월-1주차-주말-코딩-테스트-study/140b12c0-115c-800b-b7db-e0b4753efac7.png" alt="" loading="lazy" width="1246" height="484" /></figure>
+<p>혹은 3번, 1번, 5번, 4번, 2번 순서대로 전사를 배치하여도 다음과 같이 조건을 만족하는 것을 확인할 수 있다.</p>
+<figure><img src="/assets/notion/11월-1주차-주말-코딩-테스트-study/140b12c0-115c-80ef-b49b-c58fb1fda8d7.png" alt="" loading="lazy" width="1246" height="466" /></figure>
+<p>결과적으로 현재 예시에서 전사를 배치하는 경우의 수는 총 6가지다.</p>
+<h3 id="block-140b12c0115c80cabdc8cabdec4c531c">입력조건</h3>
+<p>가장 먼저 전사의 수 N이 자연수로 주어진다. </p>
+<p>N은 10보다 작거나 같은 자연수이다.</p>
+<p>이어서 1번부터 N번까지 N명의 전사에 대한 전투력 정보가 담긴 배열 arr가 주어진다.</p>
+<p>이때 각 전투력 정보는 1부터 20까지의 자연수 형태의 값을 가진다.</p>
+<p>이어서 1번부터 N - 1번까지의 조건이 담긴 배열 conditions가 주어진다.</p>
+<p>이때 각 조건은 1, 2, 3, 4중 하나의 자연수 형태의 값을 가진다.</p>
+<h4 id="block-140b12c0115c80999a36fb0535b2b3a9">출력 조건</h4>
+<p>조건에 부합하도록 전사를 배치하는 경우의 수를 자연수 형태로 반환하여라.</p>
+<h4 id="block-140b12c0115c80278a63ee3c4051045a">입출력 예시</h4>
+<figure><img src="/assets/notion/11월-1주차-주말-코딩-테스트-study/140b12c0-115c-80c4-9ecf-d5c99fab5397.png" alt="" loading="lazy" width="1614" height="376" /></figure>
+<h4 id="block-142b12c0115c809b968dd75d7b0c5b10">풀이</h4>
+<p>이 문제는 전사의 전투력 배열(arr)의 인덱스 값으로 모든 경우에 대한 순열을 만든다.</p>
+<p>그리고 conditions의 값에 대해서 조건이 만족하는 경우의 수를 더해나가면 된다.</p>
+<p>방법은 DFS를 통해 순열을 계산하도록 하거나 <code>itertools</code>와 같은 파이썬 기본 라이브러리를 사용하면 쉽게 순열을 구할 수 있다.</p>
+<p>본인은 후자의 방법으로 문제를 풀이 했다.</p>
+<pre data-lang="python"><code class="language-python">def solution(N, arr, conditions):
+    results = list(itertools.permutations(range(0, N), N))
+    
+    count = 0
+    for result in results:
+        check = True
+        for i in range(N-1):
+            if conditions[i] == 1: # &gt;
+                if arr[result[i]] &lt;= arr[result[i+1]]:
+                    check = False
+            elif conditions[i] == 2: # &lt;
+                if arr[result[i]] &gt;= arr[result[i+1]]:
+                    check = False
+            elif conditions[i] == 3: # =
+                if arr[result[i]] != arr[result[i+1]]:
+                    check = False
+   
+        if check:
+            count+= 1
+    
+    return count</code></pre>
+<h3 id="block-142b12c0115c807bb7d5e5908788c66c">TestCase</h3>
+<pre data-lang="python"><code class="language-python">N = 5
+arr = [7, 10, 7, 5, 3]
+conditions = [3, 1, 2, 4]
+# result: 6
+
+N = 3
+arr = [4, 5, 6]
+conditions = [1, 2]
+# result = 2</code></pre>
+<h2 id="block-142b12c0115c8064b6a0f09adacb1d6d">2. 연발 사격(토)</h2>
+<p>한 사격수가 사격 연습을 하고 있다. </p>
+<p>1번부터 <code>N</code>번까지의 목표물이 일렬로 나열되어 있는데, 각 목표물에는 1이상 1,000 이하의 자연수 형태로 점수가 기입되어 있다.</p>
+<p>사격수는 명중률 100%를 자랑하여, 쏠 때마다 원하는 목표물을 정확히 맞힐 수 있다.</p>
+<p>한 사격수는 연발 사격을 1회 하려고 한다.</p>
+<p>이때, 연발 사격이란 연속된 위치에 속한 목표물들을 차례대로 맞히는 것을 의미한다.</p>
+<p>단, <code>N</code>번 위치와 1번 위치는 연속적이지 않다.</p>
+<p>또한, 사격수는 자신이 맞힐 연속된 목표물의 점수 합이 정확히 <code>M</code>이 되도록 만들예정이다.</p>
+<p>단, 가지고 있는 총알의 수는 <code>K</code>개이다. 또한 값이 짝수인 목표물만 맞히고자 한다.</p>
+<p>사격수가 목표물의 위치 <code>X</code>부터 <code>Y</code>까지의 위치를 차례대로 맞힌다고 했을 때, 사격수의 목적을 만족하는 가능한 모든 <code>(X, Y)</code>의 조합의 수를 계산하는 프로그램을 작성하여라.</p>
+<p>예를 들어 목표물의 수 <code>N = 12</code>인 상황을 가정하자.  아래의 표는 각 위치의 목표물에 부여된 점수를 나타낸다.</p>
+<p>이때, <code>M = 10</code>, <code>K = 2</code>라고 해보자.</p>
+<figure><img src="/assets/notion/11월-1주차-주말-코딩-테스트-study/142b12c0-115c-80de-a3bc-fbb0bd61df4a.png" alt="" loading="lazy" width="1632" height="246" /></figure>
+<p>이때, 가능한 모든 경우의 수는 구체적으로 <code>(3, 4)</code>, <code>(6, 7)</code>로 두 가지만 존재하는 것을 확인할 수 있다. </p>
+<p>다시 말해, 다음의 세 가지 조건을 만족하는 모든 경우의 수를 계산해야 한다.</p>
+<ol><li>연속된 목표물의 점수 합이 정확히 <code>M</code>이 되어야 한다.</li><li>가지고 있는 총알의 수는 <code>K</code>개이다.</li><li>맞히는 연속된 목표물의 점수 값은 모두 짝수여야 한다.
+</li></ol>
+<h3 id="block-142b12c0115c806cab23dce6d9fb5a90">입력 조건</h3>
+<p>가장 먼저 목표물의 수 <code>N</code>, 원하는 목표물 점수의 합 <code>M</code>과 가지고 있는 총알의 수 <code>K</code>가 주어진다. </p>
+<p><code>N</code>은 100, 000보다 작거나 같은 자연수, <code>M</code>은 10,000보다 작거나 작은 자연수, <code>K</code>는 100보다 작거나 같은 자연수이다. 이어서 각 목표물의 점수 정보가 담긴 1차원 배열 <code>scores</code> 주어진다. </p>
+<p>각 목표물의 점수는 1이상 1,000 이하의 자연수이다.</p>
+<h3 id="block-142b12c0115c806abe84cb0a02429466">출력 조건</h3>
+<p>사격수의 목적을 만족하는 가능한 모든 <code>(X, Y)</code>의 조합의 수를 반환하는 프로그램을 작성하여라.</p>
+<h3 id="block-151b12c0115c807292d6fb6074ee4299">풀이</h3>
+<p>Brute Force방법으로 풀면 O(n^2)으로 풀리지만 투 포인터를 사용하면 O(n)에 가깝게 풀 수 있다.</p>
+<p>예를들어 <code>M = 10, N = 12, K = 2, scores =[5, 5, 4, 6, 2, 2, 8, 5, 3, 2, 6, 2]</code></p>
+<p>가 있다하자. start와 end를 가지고 K크기 이하의 윈도우 크기로 움직이며 탐색한다.</p>
+<ol><li>윈도우의 합이 M을 초과했거나 또는(OR) 윈도우의 크기가 K를 초과했을 때</li></ol>
+<p>아래 처럼 10을 만족하여 count를 하나 증가 시키고 end를 한 칸 움직인다.</p>
+<figure><img src="/assets/notion/11월-1주차-주말-코딩-테스트-study/144b12c0-115c-80d1-bd95-e98097d76c29.jpeg" alt="" loading="lazy" width="2592" height="1000" /></figure>
+<p>그럼 아래 그림처럼 되는데 합 10을 초과 했고 최대 윈도우 크기 K또한  초과했음으로 start를 한 칸 증가시킨다.</p>
+<p>(둘중 하나라도 만족하지 못하면 start를 증가시킴)</p>
+<figure><img src="/assets/notion/11월-1주차-주말-코딩-테스트-study/144b12c0-115c-80e8-bbca-faf95db43736.jpeg" alt="" loading="lazy" width="2259" height="1000" /></figure>
+<p>그 결과는 아래와 같다. </p>
+<figure><img src="/assets/notion/11월-1주차-주말-코딩-테스트-study/144b12c0-115c-8089-ae70-d117b9942e65.jpeg" alt="" loading="lazy" width="2619" height="1000" /></figure>
+<p>이렇게 End를 하나 증가시키면서 합이 M이고 (AND) 윈도우의 크기가 K보다 작거나 같으면 count를 증가한다.</p>
+<ol><li>end가 홀수 번호를 만났을 때</li></ol>
+<p>이 경우에는 start를 자기보다 한 칸 앞에 배치시키고, 그 다음 end가 증가할 때 가르키는 곳의 값이 짝수인지 홀수인지 판단한다. 그리고 홀수를 만나게되면 문제의 조건 중 연속한 짝수의 합이 성립되지 않음으로 현재까지의 누적합을 초기화해준다.</p>
+<figure><img src="/assets/notion/11월-1주차-주말-코딩-테스트-study/144b12c0-115c-807f-94fc-e41e1ff761c7.jpeg" alt="" loading="lazy" width="2842" height="1000" /></figure>
+<p>이렇게 자기 앞에 start를 배치한다.</p>
+<figure><img src="/assets/notion/11월-1주차-주말-코딩-테스트-study/144b12c0-115c-804d-97bc-f2beffcde3a3.jpeg" alt="" loading="lazy" width="2593" height="1000" /></figure>
+<p>이 후 end를 증가시키고 홀/짝 인지 판단한다. </p>
+<figure><img src="/assets/notion/11월-1주차-주말-코딩-테스트-study/144b12c0-115c-8071-97b9-f7f70e7953fe.jpeg" alt="" loading="lazy" width="2017" height="1000" /></figure>
+<p>여전히 홀 수 임으로 또 start를 자기 앞에 배치한다.</p>
+<figure><img src="/assets/notion/11월-1주차-주말-코딩-테스트-study/144b12c0-115c-80ec-9753-ef4877883c3f.jpeg" alt="" loading="lazy" width="2453" height="1000" /></figure>
+<p>이후 end를 한 칸 증가시키면 아래 처럼되고 end가 홀수가 나올 때까지 윈도우 크기를 조정하며 이동한다.</p>
+<p>이때 start에 위치한 값은 end가 짝수임을 보장해줌으로 start는 항상 짝수의 위치에 놓이게 된다.</p>
+<p>윈도우 크기가 커지면 1번의 조건에 해당됨으로 start위치를 누적합에서 빼주고 윈도우 크기를 줄인다. </p>
+<figure><img src="/assets/notion/11월-1주차-주말-코딩-테스트-study/144b12c0-115c-80e1-afcc-fee021886c71.jpeg" alt="" loading="lazy" width="2012" height="1000" /></figure>
+<p>전체 코드는 아래와 같다.</p>
+<pre data-lang="python"><code class="language-python">def solution(N, M, K, scores):
+    count = 0
+    current_sum = 0
+    start = 0
+
+    for end in range(N):
+        score = scores[end]
+        
+        if score % 2 != 0:
+            # 홀수 점수를 만나면 윈도우 초기화
+            current_sum = 0
+            start = end + 1
+            continue
+        else:
+            # 짝수 점수를 윈도우에 추가
+            current_sum += score
+
+            # 합이 M을 초과하거나, 윈도우 길이가 K를 초과하면 윈도우 축소
+            while current_sum &gt; M or (end - start + 1) &gt; K:
+                current_sum -= scores[start]
+                start += 1
+
+            # 조건을 만족하면 카운트 증가
+            if current_sum == M and 1 &lt;= (end - start + 1) &lt;= K:
+                count += 1
+
+    return count</code></pre>
+<pre data-lang="python"><code class="language-python">N = 12 
+M = 10 
+K = 2 
+scores =[5, 5, 4, 6, 2, 2, 8, 5, 3, 2, 6, 2]
+# result: 2
+
+N = 15 
+M = 8 
+K = 3 
+scores =[1, 2, 3, 4, 4, 5, 8, 8, 8, 2, 4, 4, 2, 1, 3] 
+# result: 5
+
+N = 20 
+M = 10
+K = 4 
+scores = [2, 8, 3, 5, 2, 10, 1, 7, 4, 5, 4, 4, 2, 2, 4, 4, 4, 2, 10, 10]
+# result: 7</code></pre>
+<h2 id="block-142b12c0115c800abc8ceac3fdfdd51b">3. 표적 맞추기 (토) → 이거 문제 있음</h2>
+<h3 id="block-14cb12c0115c80f5997cd5eb6fd7792a">문제</h3>
+<p>N X N 보드판 위에 K개의 표적이 존재한다.</p>
+<p>보드 판에서 표적이 있는 위치는 &quot;U&quot;, &quot;R&quot;, &quot;D&quot;, &quot;L&quot;의 문자로 표시된다. </p>
+<p>이는 차례대로 상, 우, 하, 좌를 바라보고 있는 것을 의미한다.</p>
+<p>또한 아무 것도 없는 위치는 &quot;B&quot;, 벽으로 막혀있는 부분은 &quot;X&quot;로 표시된다.</p>
+<p>사격을 진행할 때는 테두리 상에 존재하는 4N개의 위치 중 원하는 곳에서 사격할 수 있다.</p>
+<p>예를 들어 N = 5일 때를 생각해 보자. 하나의 예시를 표 형태로 표현하면 다음과 같다.</p>
+<p>이때, 사격을 진행할 수 있는 위치는 총 20개가 된다.</p>
+<figure><img src="/assets/notion/11월-1주차-주말-코딩-테스트-study/14cb12c0-115c-80d3-9cbc-c0b1cd0cb070.png" alt="" loading="lazy" width="702" height="566" /></figure>
+<p>사격수는 차례대로 3번의 사격을 하고자 한다.</p>
+<p>이때 3번 모두 같은 위치에서 쏘는 것도 가능하다.</p>
+<p>사격을 진행하면 총알은 쏜 위치에서 정확히 반대편 테두리에 도달할 때까지 한 칸씩 이동하여 날아가며,</p>
+<p>벽인 &quot;X&quot; 혹은 표적을 만나면 그 자리에서 총알은 사라진다. </p>
+<p>반면에 표적을 맞힌 경우 다음과 같은 규칙에 따라 처리된다.</p>
+<ol><li>표적의 정면을 맞힌 경우: 3점을 획득하고, 표적은 사라져 빈 공간 &quot;B&quot;로 변경된다.</li><li>표적의 옆을 맞힌 경우: 2점을 획득하고, 표적은 시계 방향으로 90도 회전한다.</li><li>표적의 뒤를 맞힌 경우: 1점을 획득하고, 표적은 변하지 않고 그대로 존재한다.</li></ol>
+<p>정확히 세 발의 총알을 쏜다고 할 때, 얻을 수 있는 최대 점수를 계산하는 프로그램을 작성하여라.</p>
+<p>현재 예시에서는 쏠 수 있는 위치가 총 4N = 20개가 있다. </p>
+<p>총알이 출발할 수 있는 위치를 음영 처리하여 표현했다.</p>
+<figure><img src="/assets/notion/11월-1주차-주말-코딩-테스트-study/14cb12c0-115c-8002-a399-d3a2ce27786b.png" alt="" loading="lazy" width="922" height="758" /></figure>
+<p>현재 예시에서는 <strong>(2)</strong>- <strong>(13)</strong>- <strong>(16) </strong>순서대로 표적을 맞히면 7점(3 + 2 + 2)점을 얻을 수 있다.</p>
+<h3 id="block-14cb12c0115c807c8d27ee6b01dad5e4">입력 조건</h3>
+<p>가장 먼저 보드 판의 크기 N이 자연수로 주어진다.</p>
+<p>N은 2 이상 8 이하의 자연수다.</p>
+<p>이어서 표적의 개수 K가 자연수로 주어진다. K는 0 이상의 정수다.</p>
+<p>이후에 NxN 크기의 보드의 정보가 담긴 배열 board가 주어진다. </p>
+<p>보드 판에서 표적이있는 위치는 &quot;U, &quot;R&quot;, &quot;D&quot;, &quot;L&quot;의 문자로 표시된다. </p>
+<p>이는 차례대로 상, 우, 하, 좌를 바라보고 있는 것을 의미한다.</p>
+<p>또한 아무 것도 없는 위치는 &quot;B&quot;, 벽으로 막혀 있는 부분은 &quot;X&quot;로 표시된다.</p>
+<h3 id="block-14cb12c0115c8021bc62c17318554405">출력 조건</h3>
+<p>세 발의 총알을 쏜다고 할 때, 얻을 수 있는 최대 점수를 계산하는 프로그램을 자연수 형태로 반환하여라.</p>
+<div class="table-wrap"><table><tr><td>N</td><td>K</td><td>board</td><td>정답</td></tr><tr><td>5</td><td>3</td><td>[&quot;X&quot;, &quot;X&quot;, &quot;В&quot;, &quot;Х&quot;, &quot;X&quot;][&quot;B&quot;, , &quot;В&quot;, &quot;В&quot;, &quot;В&quot;, &quot;В&quot;][&quot;X&quot;, &quot;L&quot;, , &quot;U&quot;. &quot;, &quot;X&quot;, &quot;X&quot;][&quot;B&quot; &quot;U&quot; &quot;B&quot; ', &quot;Х&quot;, &quot;B&quot;][&quot;X&quot;, &quot;L&quot;, . &quot;X&quot;, &quot;B&quot;, &quot;X&quot;]]</td><td>7</td></tr><tr><td>5</td><td>3</td><td>[&quot;X&quot;, &quot;X&quot;, &quot;X&quot;, &quot;X&quot;, &quot;X&quot;[&quot;X&quot;, &quot;В&quot;, &quot;U&quot;, &quot;В&quot;, &quot;X&quot;][&quot;X&quot;, &quot;В&quot;, &quot;U&quot;, &quot;В&quot;, &quot;X&quot;][&quot;X&quot;, &quot;B&quot;, &quot;U&quot;, &quot;В&quot;, &quot;X&quot;][&quot;X&quot;, &quot;X&quot;, &quot;X&quot;, &quot;X&quot;, &quot;X&quot;]]</td><td>0</td></tr><tr><td>5</td><td>3</td><td>[&quot;Х&quot;, &quot;Х&quot;, &quot;В&quot;, &quot;Х&quot;, &quot;Х&quot;][&quot;X&quot;, &quot;В&quot;, &quot;U&quot;, &quot;В&quot;, &quot;Х&quot;][&quot;X&quot;, &quot;В&quot;, &quot;U&quot;, &quot;В&quot;, &quot;Х&quot;][&quot;X&quot;, &quot;В&quot;, &quot;L&quot;, &quot;В&quot;, &quot;Х&quot;][&quot;X&quot;, &quot;X&quot;, &quot;X&quot;, &quot;X&quot;, &quot;X&quot;]]</td><td>8</td></tr><tr><td>5</td><td>3</td><td>[&quot;U&quot;, &quot;В&quot;, &quot;В&quot;, &quot;В&quot;, &quot;B&quot;][&quot;B&quot;, &quot;В&quot;, &quot;Х&quot;, &quot;Х&quot;, &quot;Х&quot;][&quot;B&quot;, &quot;B&quot;, &quot;X&quot;, &quot;U&quot;, &quot;X&quot;][&quot;B&quot;, &quot;B&quot;, &quot;X&quot;, &quot;U&quot;, &quot;X&quot;][&quot;B&quot;, &quot;В&quot;, &quot;X&quot;, &quot;X&quot;, &quot;X&quot;]]</td><td>7</td></tr></table></div>
+<h3 id="block-14cb12c0115c80ef93fad5e170b1e49c">풀이</h3>
+<p>전체 코드</p>
+<pre data-lang="python"><code class="language-python"></code></pre>
+<h2 id="block-150b12c0115c80ddb77ac5805d3a8719">4. 시험문제 난이도 (일)</h2>
+<h3 id="block-150b12c0115c80ca8bf9de5e616d161c">문제 설명</h3>
+<p>출제자는 N개의 문제를 출제하고자 한다.</p>
+<p>각 N 개의 문제에 대한 난이도에 대한 정보가 주어질 때, N 개의 문제를 모두 사용하여 하나의 시험지를 구성하고자 한다.
+이때, 시험에 참여하는 사람의 입장에서 문제를 풀어나갈 때 문제의 난이도가 급격하게 올라가거나 내려가지 않았으면 한다. </p>
+<p>따라서 문제를 출제할 때, 인접 한 두 개의 문제의 난이도 차이의 최댓값을 최소화하는 것이 목표다.</p>
+<p>문제를 푸는 사람 중에서는 문제를 거꾸로 풀어나가거나, 중간부터 푸는 사람도 존재할 것이다. </p>
+<p>따라서 1번과 N 번도 인접한 문제로 간주한다. </p>
+<p>N 개의 문제에 대한 난이도 정보가 주어졌을 때, 인접한 두 개의 문제의 난이도 차이의 최대에 대한 최솟값을 계산하는 프로그램을 작성하여라. </p>
+<p>예를 들어 N=5 개의 문제의 각 난이도가 [1, 5, 3, 9, 2] 형태로 주어졌다고 가정하자. </p>
+<p>이 경우 [1, 3, 9, 5, 2]로 각 문제를 배치하면, 인접한 두 개의 문제의 난이도 차이의 최댓값은 6이다.</p>
+<h3 id="block-150b12c0115c8048a57df5a9426044f3">입력 조건</h3>
+<p>가장 먼저 문제의 개수 N이 주어진다.</p>
+<p>N은 100,000보다 작거나 같은 자연수 중 홀수로 주어진다.</p>
+<p>이어서 각 문제에 대한 난이도에 대한 정보가 담긴 배열 arr가 주어진다. </p>
+<p>이때 각 난이도의 값은 1 이상 100,000 이하의 자연수 중 하나이다.</p>
+<h3 id="block-150b12c0115c80bd871dd85770b49045">출력 조건</h3>
+<p>N 개의 문제에 대한 난이도 정보가 주어졌을 때, 인접한 두 문제의 난이도 차이의 최대의 최솟값을 반환한다.</p>
+<h3 id="block-150b12c0115c80c6ab84f1c462197554">입출력 예시</h3>
+<div class="table-wrap"><table><tr><td>N</td><td>arr</td><td>정답</td></tr><tr><td>5</td><td>[1, 5, 3, 9, 2]</td><td>6</td></tr><tr><td>7</td><td>[1, 5, 7, 2, 4, 6, 3]</td><td>2</td></tr></table></div>
+<h3 id="block-150b12c0115c80c8a7b3dd08f3dbf0f3">풀이</h3>
+<p>이 문제는 배열 원소를 적절히 배치하여 인접한 원소들 사이의 차이의 최대값을 최소화하는 문제이다.</p>
+<p>각 배열의 원소를 배치할 수 있는 모든 경우의 수를 permutation으로 구하고 각 경우 마다 원소 차의 최대값을 계산하여 그 중에서 최소값을 계산하도록 하면 된다.</p>
+<p>그러나 이건 O(N x N!) 만큼의 시간이 소요됨으로 비효율적이다.</p>
+<pre data-lang="python"><code class="language-python">def solution(arr):
+    perms = list(itertools.permutations(arr, len(arr)))
+    min_value = float('inf')
+    for perm in perms:
+        max_value = float('-inf')
+        for i in range(0, len(arr)):
+            max_value = max(abs(perm[i] - perm[i-1]), max_value)
+        
+        min_value = min(max_value, min_value)
+        if min_value == 6:
+            return perm
+        
+    return min_value</code></pre>
+<p>좀 더 효율적으로 푸는 방법을 고민해보면, 배열을 그냥 정렬하면 원하는 답이 나올 것이다. 다만 배열 양 끝 값도 같이 고려해야 한다는 점이다.</p>
+<p>만약 [1, 5, 3, 9, 2]라는 배열이 있을 때 아래 처럼 구성하면 우리가 원하는 답을 찾을 수 있게된다.</p>
+<figure><img src="/assets/notion/11월-1주차-주말-코딩-테스트-study/152b12c0-115c-8084-9a85-d27f1e3af7b6.png" alt="" loading="lazy" width="734" height="96" /></figure>
+<figure><img src="/assets/notion/11월-1주차-주말-코딩-테스트-study/152b12c0-115c-8051-b4a8-c7d13917335d.jpeg" alt="" loading="lazy" width="1089" height="1000" /></figure>
+<p>그러나 이를 구현하기는 단순하지 않다.</p>
+<p>따라서 위 배열을 만들기 위해 아래 방법을 사용하면 쉽게 만들어진다.</p>
+<ol><li>오름차순으로 정렬된 배열에서 짝수 인덱스와 홀수 인덱스를 분리해 두 개의 리스트를 만든다.</li></ol>
+<pre data-lang="python"><code class="language-python"># 오름차순 정렬
+[1, 2, 3, 5, 9]
+
+# 짝수 인덱스 분리
+[1, 3, 9]
+
+# 홀수 인덱스 분리
+[2, 5]</code></pre>
+<ol><li>두 리스트 중 홀수 인덱스를 가진 리스트를 Reverse한다.</li></ol>
+<pre data-lang="python"><code class="language-python"># 홀수 인덱스 Reverse
+[5, 2]</code></pre>
+<ol><li>짝수 인덱스 뒤에 홀수 인덱스를 합친다.</li></ol>
+<pre data-lang="python"><code class="language-python">[1, 3, 9] + [5, 2]</code></pre>
+<p>이렇게 하나로 합쳐진 배열에서 각 원소의 차가 가장 큰 것을 구하면 된다.</p>
+<p>문제 조건에서 첫번째와 마지막 원소의 값도 비교해야 함으로 반복문에서 시작을 0부터 시작한다.</p>
+<p>전체 코드</p>
+<pre data-lang="python"><code class="language-python">def solution(arr):
+    arr.sort()
+    even = arr[::2]
+    odd = arr[1::2][::-1]
+    nums = even + odd
+    max_diff = 0
+    for i in range(len(nums)):
+        max_diff = max(abs(nums[i] - nums[i-1]), max_diff)
+
+    return max_diff</code></pre>
+<h3 id="block-150b12c0115c80998abfc6b5de148be2">Test Case</h3>
+<pre data-lang="python"><code class="language-python"># Test1
+입력값 〉 5, [1, 5, 3, 9, 2]
+기댓값 〉 6
+
+# Test2
+입력값 〉 7, [1, 5, 7, 2, 4, 6, 3]
+기댓값 〉 2</code></pre>
+<h2 id="block-150b12c0115c803b8b60fab74bc058ea">5. 학생 전투력(일)</h2>
+<h3 id="block-150b12c0115c80ee9871c99ea05cf3a0">문제 설명</h3>
+<p>N 명의 학생을 K 개의 그룹으로 나누고자 한다.</p>
+<p>각 학생은 협동력 점수를 가지고 있으며, 단 하나의 그룹에만 속할 수 있다.</p>
+<p>모든 학생은 반드시 각자 특정한 하나의 그룹에 배치된다.</p>
+<p>모든 학생에 대한 그룹 배치가 끝나고 나면, 각 그룹의 전투력을 계산할 수 있다.</p>
+<p>이때 특정한 그룹의 전투력은 그룹에 포함된 각 학생에 대하여 (해당 그룹에 속한 구성원 수 X 해당 학생의 협동력 점수)을 계산하여 모두 더한 값이다. </p>
+<p>어떤 학생의 협동력 점수는 음수(-)일 수 있으며, 결과적으로 특정한 그룹의 전투력은 음수가 될 수도 있다.</p>
+<p>이때, N 명의 학생으로 K 개의 그룹을 구성하는 모든 경우를 고려했을 때, 가장 전투력이 높은 그룹과 전투력이 낮은 그룹의 전투력 차이의 최솟값을 구하여라. </p>
+<p>단, 모든 K 개의 그룹에 최소한 1명의 학생은 배치되어야 한다.</p>
+<p>예를 들어 N=4 명의 학생들의 협동력 점수가 다음의 표와 같으며, 그룹의 수 K=2 라고 하자.</p>
+<div class="table-wrap"><table><tr><td>학생 번호</td><td>1</td><td>2</td><td>3</td><td>4</td></tr><tr><td>협동력 점수</td><td>-1</td><td>0</td><td>3</td><td>-2</td></tr></table></div>
+<p>가장 먼저, 다음과 같이 두 그룹을 결성했다고 가정하자.</p>
+<div class="table-wrap"><table><tr><td>그룹 번호</td><td>1</td><td>2</td></tr><tr><td>학생 번호 구성</td><td>[1, 2]</td><td>[3, 4]</td></tr></table></div>
+<p>이때 전투력은 다음과 같이 계산되므로, 두 그룹의 전투력 차이는 4이다.</p>
+<p>(1) 1번 그룹의 전투력: <code>-2 = 2 * (-1) + 2 * 0</code></p>
+<p>(2) 2번 그룹의 전투력: <code>2 = 2 * 3 + 2 * (-2)</code></p>
+<p>혹은 다음과 같이 두 그룹을 결성했다고 가정하자.</p>
+<div class="table-wrap"><table><tr><td>그룹 번호</td><td>1</td><td>2</td></tr><tr><td>학생 번호 구성</td><td>[2]</td><td>[1, 3, 4]</td></tr></table></div>
+<p>이때 전투력은 다음과 같이 계산되므로, 두 그룹의 전투력 차이는 0이다.</p>
+<p>(1) 1번 그룹의 전투력: <code>0 = 1 * 0</code></p>
+<p>(2) 2번 그룹의 전투력: <code>0 = 3 * (-1) + 3 * 3 + 3 * (-2)</code></p>
+<p>따라서, 현재 입력 예시에서의 최적의 해는 0이다.</p>
+<h3 id="block-150b12c0115c80ebb987e84cf244b247">입력 조건</h3>
+<p>가장 먼저 학생의 수 N 이 자연수로 주어진다. </p>
+<p>N은 2이상 7이하의 자연수다.</p>
+<p>이어서 그룹의 수 K 가 자연수로 주어진다. </p>
+<p>K 는 2 이상 N 이하의 자연수다.</p>
+<p>이후에 각 학생의 협동력 점수 정보가 담긴 배열 arr가 주어진다. </p>
+<p>각 학생들의 협동력 점수는 -10 이상 10 이하의 정수이다.</p>
+<h3 id="block-150b12c0115c806eb9e0e03d7488ae4e">출력 조건</h3>
+<p>N 명의 학생으로 K 개의 그룹을 구성하는 모든 경우를 고려했을 때, 가장 전투력이 높은 그룹과 전투력이 낮은 그룹의 전투력 차이의 최솟값을 반환한다.</p>
+<h3 id="block-151b12c0115c80beb98eff853d097959">풀이</h3>
+<p>이 문제는 dfs를 활용하여 백드래킹하면서 모든 경우의 수에 대해서 탐색하여 답을 찾아나가면 된다.</p>
+<p>포인트는 학생수를 채워 넣을 때 몇번 그룹에 구성할지 그룹 번호를 지정한다.</p>
+<p>selected라는 배열이 4명의 학생을 몇번 자리에 넣을지 정한다.</p>
+<pre data-lang="python"><code class="language-python">dfs(N, K, arr, 0) # dfs 시작!, 0은 학생 수를 의미</code></pre>
+<pre data-lang="python"><code class="language-python">def dfs(N, K, arr, depth):
+	# 여기에 탈출 조건
+
+	for i in range(K):
+		selected.append(i)
+		dfs(N, K, arr, depth+1)
+		selected.pop()</code></pre>
+<p>탈출 조건은 모든 학생이 그룹에 배정된 경우이다.</p>
+<pre data-lang="python"><code class="language-python">def dfs(N, K, arr, depth):
+	# 여기에 탈출 조건
+	if depth == N: # N개의 학생을 다 담았을 때
+		pass		
+	
+	for i in range(K):
+		selected.append(i)
+		dfs(N, K, arr, depth+1)
+		selected.pop()</code></pre>
+<p>이후에는 K개의 이차원 리스트를 만든다. K = 2라면 <code>[[ ], [ ]]</code> 이렇게 만들어진다.</p>
+<p>그리고 학생들을 각 그룹에 배치한다.</p>
+<pre data-lang="python"><code class="language-python">def dfs(N, K, arr, depth):
+	# 여기에 탈출 조건
+	if depth == N: # N개의 학생을 다 담았을 때
+		groups = [[] for i in range(K)] # K개의 그룹 생성 		
+		for i in range(N):
+			index = selected[i]
+			groupsindex].append(arr[i])
+	
+	for i in range(K):
+		selected.append(i)
+		dfs(N, K, arr, depth+1)
+		selected.pop()</code></pre>
+<p>그룹에는 최소 1명 이상의 학생이 존재해야 함으로 하나라도 빈 그룹이 나오면 해당 경우는 제외해야 한다.</p>
+<p>예를들어 K = 2인 상황에서 depth가 4가되어 selected = [0, 0, 0, 0] 되었다면 전부 0번 그룹에 배정된다.</p>
+<p>예시: <code>[[-1, 0, 3, -2], []]</code> </p>
+<p>각 그룹에는 최소 1명이상의 학생이 있어야 한다.</p>
+<pre data-lang="python"><code class="language-python">def dfs(N, K, arr, depth):
+	# 여기에 탈출 조건
+	if depth == N: # N개의 학생을 다 담았을 때
+		groups = [[] for i in range(K)] # K개의 그룹 생성 		
+		for i in range(N):
+			index = selected[i]
+			groups[index].append(arr[i])
+			
+		for group in groups:
+			if len(group) == 0: # 학생이 없는 그룹이 있다면
+				return # 이 경우는 제외
+					
+	for i in range(K):
+		selected.append(i)
+		dfs(N, K, arr, depth+1)
+		selected.pop()</code></pre>
+<p>이제 문제의 조건에서 각 그룹의 전투력의 최대값과 최솟값의 차를 구하고 모든 경우의 수에 대해 이 차가 가장 작은 값을 구해야함으로 아래처럼 작성한다.</p>
+<pre data-lang="python"><code class="language-python">def dfs(N, K, arr, depth):
+	# 여기에 탈출 조건
+	if depth == N: # N개의 학생을 다 담았을 때
+		groups = [[] for i in range(K)] # K개의 그룹 생성 		
+		for i in range(N):
+			index = selected[i]
+			groups[index].append(arr[i])
+			
+		for group in groups:
+			if len(group) == 0: # 학생이 없는 그룹이 있다면
+				return # 이 경우는 제외
+		
+		min_score = float('inf')
+		max_score = float('-inf')
+		
+		for group in groups:
+			score = 0
+			for power in group: # 그룹별 스코어 계산
+				score += len(group) * power
+		
+			min_score = min(min_score, score)
+			max_score = max(max_score, score)
+		
+		result = min(result, abs(max_score - min_score))
+		return
+		
+	for i in range(K):
+		selected.append(i)
+		dfs(N, K, arr, depth+1)
+		selected.pop()</code></pre>
+<p>코드를 좀 다듬어 보면 전체코드는 아래와같다</p>
+<pre data-lang="python"><code class="language-python">def solution(N, K, arr):
+	
+	def dfs(depth):
+		nonlocal result
+		# 여기에 탈출 조건
+		if depth == N: # N개의 학생을 다 담았을 때
+			groups = [[] for i in range(K)] # K개의 그룹 생성 		
+			for i in range(N):
+				index = selected[i]
+				groups[index].append(arr[i])
+				
+			for group in groups:
+				if len(group) == 0: # 학생이 없는 그룹이 있다면
+					return # 이 경우는 제외
+			
+			min_score = float('inf')
+			max_score = float('-inf')
+			
+			for group in groups:
+				score = 0
+				for power in group: # 그룹별 스코어 계산
+					score += len(group) * power
+			
+				min_score = min(min_score, score)
+				max_score = max(max_score, score)
+			
+			result = min(result, abs(max_score - min_score))
+			return
+			
+		for i in range(K):
+			selected.append(i)
+			dfs(depth+1)
+			selected.pop()
+			
+	selected = []
+	result = float('inf')
+	dfs(0)
+	return result</code></pre>
+<h3 id="block-151b12c0115c80eb850cc689b6c8962b">TestCase</h3>
+<pre data-lang="python"><code class="language-python"># Test1
+입력값 〉 4, 2, [-1, 0, 3, -2]
+기댓값 〉 0
+
+# Test2
+입력값 〉 5, 4, [2, 1, 1, 2, 3]
+기댓값 〉 2</code></pre>
+<h3 id="block-151b12c0115c801cbe65ed960fba182b">출처:</h3>
+<p>해당 문제와 코드는 제로베이스(ZeroBase)에서 제공받았습니다.</p>
+<p>모든 자료는 저작권법에 의하여 보호받는 저작물로서 이에 대한 무단 복제 및 배포를 원칙적으로 금합니다.</p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/post.js?v=13" type="module"></script>
+    <script src="/assets/js/palette.js?v=8" defer></script>
+  </body>
+</html>

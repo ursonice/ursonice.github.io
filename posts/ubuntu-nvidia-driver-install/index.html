@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>Ubuntu Nvidia Driver Install — Woojae Joo</title>
+    <meta name="post-slug" content="ubuntu-nvidia-driver-install" />
+    <meta name="description" content="서론 우분투 20.04 환경에서 Nvidia driver 설치 방법에 대해서 설명한다. 목차 Nvidia-driver 설치 Driver 설치 확인 Nvidia-driver 설치 아래 명령어를 입력하면 다음과 같은 화면이 뜨는데 recommended 부분을 설치하면되는데 open버전이 아닌 걸로 설치하면 " />
+    <link rel="canonical" href="https://ursonice.github.io/posts/ubuntu-nvidia-driver-install/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="Ubuntu Nvidia Driver Install" />
+    <meta property="og:description" content="서론 우분투 20.04 환경에서 Nvidia driver 설치 방법에 대해서 설명한다. 목차 Nvidia-driver 설치 Driver 설치 확인 Nvidia-driver 설치 아래 명령어를 입력하면 다음과 같은 화면이 뜨는데 recommended 부분을 설치하면되는데 open버전이 아닌 걸로 설치하면 " />
+    <meta property="og:url" content="https://ursonice.github.io/posts/ubuntu-nvidia-driver-install/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Ubuntu%20Nvidia%20Driver%20Install&amp;cat=Tools" />
+    <meta property="article:published_time" content="2023-05-17T06:43:00.000Z" />
+    <meta property="article:modified_time" content="2025-08-16T07:37:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Ubuntu Nvidia Driver Install" />
+    <meta name="twitter:description" content="서론 우분투 20.04 환경에서 Nvidia driver 설치 방법에 대해서 설명한다. 목차 Nvidia-driver 설치 Driver 설치 확인 Nvidia-driver 설치 아래 명령어를 입력하면 다음과 같은 화면이 뜨는데 recommended 부분을 설치하면되는데 open버전이 아닌 걸로 설치하면 " />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Ubuntu%20Nvidia%20Driver%20Install&amp;cat=Tools" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Ubuntu Nvidia Driver Install","description":"서론 우분투 20.04 환경에서 Nvidia driver 설치 방법에 대해서 설명한다. 목차 Nvidia-driver 설치 Driver 설치 확인 Nvidia-driver 설치 아래 명령어를 입력하면 다음과 같은 화면이 뜨는데 recommended 부분을 설치하면되는데 open버전이 아닌 걸로 설치하면 ","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Ubuntu%20Nvidia%20Driver%20Install&cat=Tools","datePublished":"2023-05-17T06:43:00.000Z","dateModified":"2025-08-16T07:37:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/ubuntu-nvidia-driver-install/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://ursonice.github.io/topics/tools/"},{"@type":"ListItem","position":3,"name":"Ubuntu Nvidia Driver Install","item":"https://ursonice.github.io/posts/ubuntu-nvidia-driver-install/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/tools/">Tools</a>
+    </nav>
+    <h1>Ubuntu Nvidia Driver Install</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2023년 5월 17일</span><span class="dot"></span><span>수정 2025년 8월 16일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-7501b1513ce7439da1037f1acc9c3be1">서론</h2>
+<p>우분투 20.04 환경에서 Nvidia driver 설치 방법에 대해서 설명한다.</p>
+<h2 id="block-9d72232579284c8a9d243ca7e8aaea4b">목차</h2>
+<ol><li><a href="#block-e166ca670841440785e5a0658e950d16">Nvidia-driver 설치</a> </li><li><a href="#block-7f0b9893b5584061874f384ed43846e1">Driver 설치 확인</a> </li></ol>
+<h2 id="block-e166ca670841440785e5a0658e950d16">Nvidia-driver 설치</h2>
+<p>아래 명령어를 입력하면 다음과 같은 화면이 뜨는데 recommended 부분을 설치하면되는데 open버전이 아닌 걸로 설치하면 된다.</p>
+<p>driver: <code>nvidia-driver-530-open - distro non-free recommended</code> 이렇게 되어있는데 이걸 설치하지말고 open이 빠진 driver: <code>nvidia-driver-530 - distro non-free</code> 를 설치하자.</p>
+<p><strong>참고: 470을 설치했을 때 CUDA ToolKit이 Ubuntu 20.04까지만 지원한다 (CUDA Version 11.X), 500번대 버전이 Ubuntu22.04를 지원하니 참고하자(CUDA Version 12.X)</strong></p>
+<pre data-lang="shell"><code class="language-bash">$ ubuntu-drivers devices</code></pre>
+<figure><img src="/assets/notion/ubuntu-nvidia-driver-install/f2630ef7-de44-464e-94de-94eb571f67e7.png" alt="" loading="lazy" width="1064" height="581" /></figure>
+<p>수동 설치 명령어</p>
+<pre data-lang="python"><code class="language-python">$ sudo apt install nvidia-driver-530</code></pre>
+<p>설치가 완료되면 리부팅 해준다.</p>
+<pre data-lang="shell"><code class="language-bash">$ sudo reboot</code></pre>
+<h2 id="block-7f0b9893b5584061874f384ed43846e1">Driver 설치 확인</h2>
+<p>아래 명령어를 입력했을 때 GPU가 잡히는지 확인한다.</p>
+<pre data-lang="shell"><code class="language-bash">$ nvidia-smi</code></pre>
+<figure><img src="/assets/notion/ubuntu-nvidia-driver-install/44cf68fb-28e7-4dc6-8967-0fa77b122abf.png" alt="" loading="lazy" width="1490" height="931" /></figure>
+<h2 id="block-0843c3a01b8544a4bde24087d428124b">Nvidia Driver 삭제</h2>
+<figure><img src="/assets/notion/ubuntu-nvidia-driver-install/6c1e5ace-f0e5-4f58-945e-c4e92347cb12.png" alt="" loading="lazy" width="2054" height="1328" /></figure></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/post.js?v=13" type="module"></script>
+    <script src="/assets/js/palette.js?v=8" defer></script>
+  </body>
+</html>

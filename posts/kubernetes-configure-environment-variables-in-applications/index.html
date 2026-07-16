@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>[Kubernetes] Configure Environment Variables in Applications — Woojae Joo</title>
+    <meta name="post-slug" content="kubernetes-configure-environment-variables-in-applications" />
+    <meta name="description" content="서론 Kubernetes에서는 컨테이너 실행 시 필요한 환경 변수를 설정할 수 있다. 이 장에서는 Pod정의 파일에서 환경 변수를 설정하는 기본적인 방법과 ConfigMap, Secret대해 공부한다. Pod Pod 정의 파일에서 spec.containers.env 항목을 사용하여 환경 변수 설정 가능하" />
+    <link rel="canonical" href="https://ursonice.github.io/posts/kubernetes-configure-environment-variables-in-applications/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="[Kubernetes] Configure Environment Variables in Applications" />
+    <meta property="og:description" content="서론 Kubernetes에서는 컨테이너 실행 시 필요한 환경 변수를 설정할 수 있다. 이 장에서는 Pod정의 파일에서 환경 변수를 설정하는 기본적인 방법과 ConfigMap, Secret대해 공부한다. Pod Pod 정의 파일에서 spec.containers.env 항목을 사용하여 환경 변수 설정 가능하" />
+    <meta property="og:url" content="https://ursonice.github.io/posts/kubernetes-configure-environment-variables-in-applications/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5BKubernetes%5D%20Configure%20Environment%20Variables%20in%20Applications&amp;cat=Kubernetes" />
+    <meta property="article:published_time" content="2025-06-21T11:36:00.000Z" />
+    <meta property="article:modified_time" content="2025-06-22T09:05:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="[Kubernetes] Configure Environment Variables in Applications" />
+    <meta name="twitter:description" content="서론 Kubernetes에서는 컨테이너 실행 시 필요한 환경 변수를 설정할 수 있다. 이 장에서는 Pod정의 파일에서 환경 변수를 설정하는 기본적인 방법과 ConfigMap, Secret대해 공부한다. Pod Pod 정의 파일에서 spec.containers.env 항목을 사용하여 환경 변수 설정 가능하" />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5BKubernetes%5D%20Configure%20Environment%20Variables%20in%20Applications&amp;cat=Kubernetes" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"[Kubernetes] Configure Environment Variables in Applications","description":"서론 Kubernetes에서는 컨테이너 실행 시 필요한 환경 변수를 설정할 수 있다. 이 장에서는 Pod정의 파일에서 환경 변수를 설정하는 기본적인 방법과 ConfigMap, Secret대해 공부한다. Pod Pod 정의 파일에서 spec.containers.env 항목을 사용하여 환경 변수 설정 가능하","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5BKubernetes%5D%20Configure%20Environment%20Variables%20in%20Applications&cat=Kubernetes","datePublished":"2025-06-21T11:36:00.000Z","dateModified":"2025-06-22T09:05:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/kubernetes-configure-environment-variables-in-applications/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Kubernetes","item":"https://ursonice.github.io/topics/kubernetes/"},{"@type":"ListItem","position":3,"name":"[Kubernetes] Configure Environment Variables in Applications","item":"https://ursonice.github.io/posts/kubernetes-configure-environment-variables-in-applications/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/kubernetes/">Kubernetes</a>
+    </nav>
+    <h1>[Kubernetes] Configure Environment Variables in Applications</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 6월 21일</span><span class="dot"></span><span>수정 2025년 6월 22일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-219b12c0115c80f5abe2e4413cbf47de">서론</h2>
+<p>Kubernetes에서는 컨테이너 실행 시 필요한 환경 변수를 설정할 수 있다.</p>
+<p>이 장에서는 Pod정의 파일에서 환경 변수를 설정하는 기본적인 방법과 ConfigMap, Secret대해 공부한다.</p>
+<h2 id="block-219b12c0115c80d69f4bec9095cf1377">Pod</h2>
+<p>Pod 정의 파일에서 spec.containers.env 항목을 사용하여 환경 변수 설정 가능하다.</p>
+<p>env는 배열 형식이며, 각 항목은 - name과 value 키로 구성된다.</p>
+<figure><img src="/assets/notion/kubernetes-configure-environment-variables-in-applications/219b12c0-115c-8003-b873-d9ef50ba3259.png" alt="" loading="lazy" width="2216" height="1330" /></figure>
+<h2 id="block-219b12c0115c80c7b91fcb2bc35f26a2">ConfigMaps</h2>
+<p>많은 Pod 정의 파일에서 환경변수 설정을 하게되면, 그 안에 저장된 환경 변수들을 관리하기가 어려워진다.</p>
+<p>이 정보를 Pod정의 파일에서 분리하여 ConfigMap을 이용해 관리할 수 있다.</p>
+<figure><img src="/assets/notion/kubernetes-configure-environment-variables-in-applications/219b12c0-115c-80f6-b6c8-daa695f44720.png" alt="" loading="lazy" width="1710" height="932" /></figure>
+<p>위 이미지에서 환경변수 설정을 직접 key-value 형태로 작성했더라면 아래 처럼 ConfigMap을 따로 만들고 파드 정의 파일에 넣어주면 위와 동일한 효과가 나타난다.</p>
+<figure><img src="/assets/notion/kubernetes-configure-environment-variables-in-applications/219b12c0-115c-8063-8dc4-ece3dad72eb6.png" alt="" loading="lazy" width="1700" height="962" /></figure>
+<figure><img src="/assets/notion/kubernetes-configure-environment-variables-in-applications/219b12c0-115c-80a0-b09e-d70eae412199.png" alt="" loading="lazy" width="1720" height="978" /></figure>
+<p>ConfigMap파일을 만드는 방법은 정의 파일을 만들고 아래 처럼 구성해주면된다.</p>
+<p>기존 설정과 달리 spec필드대신에 data 필드로 들어간다는 것에 유념하자</p>
+<figure><img src="/assets/notion/kubernetes-configure-environment-variables-in-applications/219b12c0-115c-800d-98fa-f63ead515274.png" alt="" loading="lazy" width="1726" height="998" /></figure>
+<p>또는 파일을 만들지 않고 명령어로 한번에 구성해주고 싶다면 :</p>
+<p><code>—-from-literal=APP_COLOR=blue</code> </p>
+<p>위 옵션을 통해 작성해줄 수 있으며 여러 개가 있는 경우 반복적으로 옵션을 추가해 아래와 같이 작성해주면 된다.</p>
+<figure><img src="/assets/notion/kubernetes-configure-environment-variables-in-applications/219b12c0-115c-803a-8283-cbae606365f1.png" alt="" loading="lazy" width="1624" height="950" /></figure>
+<p>이렇게 아래 그림처럼 하나는 애플리케이션용, 하나는 MySQL용, 또 하나는 Redis용으로 용도에 맞게 설정 파일을 만들어줄 수 있다.</p>
+<p>나중에 Pod에 연결할 때 이 이름들을 사용하게 되므로 ConfigMap 이름을 잘 짓는 것이 중요하다.</p>
+<figure><img src="/assets/notion/kubernetes-configure-environment-variables-in-applications/219b12c0-115c-80e4-a0d7-cd46ff73d592.png" alt="" loading="lazy" width="1766" height="580" /></figure>
+<p>Configmap을 보려면 아래 명령어를 통해 볼 수 있으며 describe를 사용하면 설정되어있는 configmap들의 상세정보들과 함께 볼 수 있다.</p>
+<figure><img src="/assets/notion/kubernetes-configure-environment-variables-in-applications/219b12c0-115c-808b-94c6-cd5a73a25ad4.png" alt="" loading="lazy" width="1000" height="1004" /></figure>
+<p>파드에 ConfigMap을 넣는 방법에는 몇가지가 더 있다.</p>
+<h4 id="block-21ab12c0115c801ca92fd5f1191ff50e">단일 환경변수 주입</h4>
+<p>단일 환경 변수로 주입이 가능하다.</p>
+<p>아래처럼 ConfigMap의 특정 key하나만 Pod 내 환경 변수로 주입한다.</p>
+<p>아래 파드 정의 파일에서 COLOR라는 환경변수에 app-config의 APP_COLOR의 값을 담는다는 뜻이다.</p>
+<p>즉, 파드를 실행시키고 파드 내부의 터미널에서 아래와 같은 명령어를 입력하면 blue가 나온다.</p>
+<pre data-lang="bash"><code class="language-bash">$ echo $APP_COLOR
+blue</code></pre>
+<pre data-lang="yaml"><code class="language-yaml"># pod-definition.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: color-app
+spec:
+  containers:
+  - name: app-container
+    image: my-app-image
+    env:
+    - name: APP_COLOR
+      valueFrom:
+        configMapKeyRef:
+          name: app-config   # 참조할 ConfigMap 이름
+          key: APP_COLOR     # ConfigMap 안의 key 이름</code></pre>
+<pre data-lang="yaml"><code class="language-yaml"># ConfigMap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  APP_COLOR: blue</code></pre>
+<h4 id="block-21ab12c0115c804382a4f60e2722d863">Volume mount</h4>
+<p>또 하나의 방법은 ConfigMap을 볼륨 마운트시키는 것이다.</p>
+<p>먼저 아래처럼 ConfigMap을 실행한다.</p>
+<pre data-lang="yaml"><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  APP_COLOR: green
+  APP_MODE: production</code></pre>
+<p>그 다음 위 실행한 설정을 볼륨형태로 넣어주는 것이다.</p>
+<pre data-lang="yaml"><code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: configmap-volume-pod
+spec:
+  containers:
+  - name: app-container
+    image: busybox]
+    volumeMounts:
+    - name: config-volume
+      mountPath: /etc/config     # 이 디렉토리에 파일로 마운트됨
+  volumes:
+  - name: config-volume
+    configMap:
+      name: app-config           # 마운트할 ConfigMap 이</code></pre>
+<p>그럼 /etc/config 위치에 설정이 아래처럼 존재하게된다.</p>
+<pre data-lang="bash"><code class="language-bash">$ ls /etc/config
+APP_COLOR
+APP_MODE
+
+$ cat /etc/config/APP_COLOR
+green
+
+$ cat /etc/config/APP_MODE
+production</code></pre></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/post.js?v=13" type="module"></script>
+    <script src="/assets/js/palette.js?v=8" defer></script>
+  </body>
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>3월 1주차 코딩 테스트 — Woojae Joo</title>
+    <meta name="post-slug" content="3월-1주차-코딩-테스트" />
+    <meta name="description" content="목차 방탈출 열쇠편 좀비 바이러스 성역 평면 상의 MST 거꾸로 BFS 점프! 1. 방탈출 열쇠편 풀이 def solution(maze): def subprob(a, b, start): m = b[0] - a[0] + 1 n = b[1] - a[1] + 1 dp = [[0]*n for _ in range" />
+    <link rel="canonical" href="https://ursonice.github.io/posts/3%EC%9B%94-1%EC%A3%BC%EC%B0%A8-%EC%BD%94%EB%94%A9-%ED%85%8C%EC%8A%A4%ED%8A%B8/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="3월 1주차 코딩 테스트" />
+    <meta property="og:description" content="목차 방탈출 열쇠편 좀비 바이러스 성역 평면 상의 MST 거꾸로 BFS 점프! 1. 방탈출 열쇠편 풀이 def solution(maze): def subprob(a, b, start): m = b[0] - a[0] + 1 n = b[1] - a[1] + 1 dp = [[0]*n for _ in range" />
+    <meta property="og:url" content="https://ursonice.github.io/posts/3%EC%9B%94-1%EC%A3%BC%EC%B0%A8-%EC%BD%94%EB%94%A9-%ED%85%8C%EC%8A%A4%ED%8A%B8/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=3%EC%9B%94%201%EC%A3%BC%EC%B0%A8%20%EC%BD%94%EB%94%A9%20%ED%85%8C%EC%8A%A4%ED%8A%B8&amp;cat=Coding%20Test" />
+    <meta property="article:published_time" content="2025-03-08T07:04:00.000Z" />
+    <meta property="article:modified_time" content="2025-03-21T13:08:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="3월 1주차 코딩 테스트" />
+    <meta name="twitter:description" content="목차 방탈출 열쇠편 좀비 바이러스 성역 평면 상의 MST 거꾸로 BFS 점프! 1. 방탈출 열쇠편 풀이 def solution(maze): def subprob(a, b, start): m = b[0] - a[0] + 1 n = b[1] - a[1] + 1 dp = [[0]*n for _ in range" />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=3%EC%9B%94%201%EC%A3%BC%EC%B0%A8%20%EC%BD%94%EB%94%A9%20%ED%85%8C%EC%8A%A4%ED%8A%B8&amp;cat=Coding%20Test" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"3월 1주차 코딩 테스트","description":"목차 방탈출 열쇠편 좀비 바이러스 성역 평면 상의 MST 거꾸로 BFS 점프! 1. 방탈출 열쇠편 풀이 def solution(maze): def subprob(a, b, start): m = b[0] - a[0] + 1 n = b[1] - a[1] + 1 dp = [[0]*n for _ in range","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=3%EC%9B%94%201%EC%A3%BC%EC%B0%A8%20%EC%BD%94%EB%94%A9%20%ED%85%8C%EC%8A%A4%ED%8A%B8&cat=Coding%20Test","datePublished":"2025-03-08T07:04:00.000Z","dateModified":"2025-03-21T13:08:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/3%EC%9B%94-1%EC%A3%BC%EC%B0%A8-%EC%BD%94%EB%94%A9-%ED%85%8C%EC%8A%A4%ED%8A%B8/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Coding Test","item":"https://ursonice.github.io/topics/coding-test/"},{"@type":"ListItem","position":3,"name":"3월 1주차 코딩 테스트","item":"https://ursonice.github.io/posts/3%EC%9B%94-1%EC%A3%BC%EC%B0%A8-%EC%BD%94%EB%94%A9-%ED%85%8C%EC%8A%A4%ED%8A%B8/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/coding-test/">Coding Test</a>
+    </nav>
+    <h1>3월 1주차 코딩 테스트</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 3월 8일</span><span class="dot"></span><span>수정 2025년 3월 21일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-1b0b12c0115c8005bf65c928245a29d6">목차</h2>
+<ol><li>방탈출 열쇠편</li><li>좀비 바이러스 성역</li><li>평면 상의 MST</li><li>거꾸로 BFS</li><li>점프!</li></ol>
+<h2 id="block-1b0b12c0115c80999f16e337271a0d00">1. 방탈출 열쇠편</h2>
+<figure><img src="/assets/notion/3월-1주차-코딩-테스트/1b0b12c0-115c-8042-9582-eb6d3c21cb47.png" alt="" loading="lazy" width="2150" height="644" /></figure>
+<figure><img src="/assets/notion/3월-1주차-코딩-테스트/1b0b12c0-115c-80c7-81ae-f7ef5472f193.png" alt="" loading="lazy" width="2198" height="1262" /></figure>
+<figure><img src="/assets/notion/3월-1주차-코딩-테스트/1b0b12c0-115c-800f-a175-c1507da2e636.png" alt="" loading="lazy" width="2160" height="532" /></figure>
+<h3 id="block-1b0b12c0115c8064a60acfdc9a0a450b">풀이</h3>
+<pre data-lang="python"><code class="language-python">def solution(maze):
+    def subprob(a, b, start):
+        m = b[0] - a[0] + 1
+        n = b[1] - a[1] + 1
+        dp = [[0]*n for _ in range(m)]
+
+        for i in range(m):
+            if maze[a[0]+i][a[1]] == 1:
+                break
+            dp[i][0] = start
+        
+        for j in range(n):
+            if maze[a[0]][a[1]+j] == 1:
+                break
+            dp[0][j] = start
+        
+        for i in range(1, m):
+            for j in range(1, n):
+                if maze[a[0]+i][a[1]+j] == 1:
+                    dp[i][j] = 0
+                else:
+                    dp[i][j] = dp[i-1][j] + dp[i][j-1]
+        
+        return dp[-1][-1] % 1007
+    
+    M, N = len(maze), len(maze[0])
+
+    key = None
+    for i in range(M):
+        for j in range(N):
+            if maze[i][j] == 2:
+                key = (i, j)
+                break
+        if key:
+            break
+    
+    sub_sol = subprob((0, 0), key, 1)
+    if sub_sol == 0:
+        return 0
+        
+    return subprob(key, (M-1, N-1), sub_sol)
+</code></pre>
+<h3 id="block-1b0b12c0115c80bda99cde010430c833">Test case</h3>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 [[0, 1, 0], [0, 2, 0], [1, 0, 0]]
+기댓값 〉 2
+
+# 테스트 2
+입력값 〉 [[0, 1, 0, 0], [1, 2, 0, 0], [1, 0, 0, 0]]
+기댓값 〉 0</code></pre>
+<h2 id="block-1b0b12c0115c80b68f74cdcc954d2683">2. 좀비 바이러스 성역</h2>
+<figure><img src="/assets/notion/3월-1주차-코딩-테스트/1b0b12c0-115c-80c9-b0e0-d0d39edf9e5c.png" alt="" loading="lazy" width="2254" height="916" /></figure>
+<figure><img src="/assets/notion/3월-1주차-코딩-테스트/1b0b12c0-115c-8030-9921-ec705e80bb90.png" alt="" loading="lazy" width="2284" height="1210" /></figure>
+<figure><img src="/assets/notion/3월-1주차-코딩-테스트/1b0b12c0-115c-80f4-9c86-e7945938d323.png" alt="" loading="lazy" width="2278" height="466" /></figure>
+<h3 id="block-1b0b12c0115c800b95bfdc8e57faa7f5">풀이</h3>
+<pre data-lang="python"><code class="language-python">def solution(N, graph, infected):
+    parent = list(range(N))
+    rank = [1 for _ in range(N)]
+    
+    def find(node):
+        if parent[node] == node:
+            return node
+        
+        parent[node] = find(parent[node])
+        return parent[node]
+    
+    def union(p, q): 
+        prt, qrt = find(p), find(q)
+        if prt == qrt:
+            return False 
+        if rank[prt] &gt; rank[qrt]:
+            prt, qrt = qrt, prt
+        parent[prt] = qrt
+        rank[qrt] += rank[prt]
+        return True 
+    
+    for i in range(N):
+        for j in range(N):
+            if graph[i][j] == 1:
+                union(i, j)
+    
+    infected.sort()
+
+    comps = {}
+    for i in infected:
+        if find(i) in comps:
+            comps[find(i)].append(i)
+        else:
+            comps[find(i)] = [i]
+    
+    max_ind = -1
+    max_size = -1
+    for i in infected:
+        current_size = rank[find(i)]
+
+        if len(comps[find(i)]) &gt; 1:
+            current_size = 0
+        if current_size &gt; max_size:
+            max_ind = i
+            max_size = current_size
+
+    return max_ind</code></pre>
+<h3 id="block-1b0b12c0115c8034aa14e2fd9af502e7">Test case</h3>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 3, [[1, 1, 0], [1, 1, 0], [0, 0, 1]], [0, 2]
+기댓값 〉 0</code></pre>
+<h2 id="block-1b0b12c0115c80b4bc86d51895fce351">3. 평면 상의 MST</h2>
+<figure><img src="/assets/notion/3월-1주차-코딩-테스트/1b0b12c0-115c-8085-8d92-e04f8209eb2b.png" alt="" loading="lazy" width="1714" height="1314" /></figure>
+<figure><img src="/assets/notion/3월-1주차-코딩-테스트/1b0b12c0-115c-800c-ac0a-c2c82ddb30b3.png" alt="" loading="lazy" width="1702" height="776" /></figure>
+<figure><img src="/assets/notion/3월-1주차-코딩-테스트/1b0b12c0-115c-801c-906f-d91ba35d6f44.png" alt="" loading="lazy" width="1684" height="1084" /></figure>
+<h3 id="block-1b0b12c0115c807d944be079f8fdef1f">풀이</h3>
+<pre data-lang="python"><code class="language-python">from heapq import heappush, heappop
+
+def solution(x, y):
+    n = len(x)
+    root = list(range(n))
+    rank = [1]*n
+
+    def union(i, j):
+        i_root = find(i)
+        j_root = find(j)
+        if i_root != j_root:
+            if rank[i_root] &gt;= rank[j_root]:
+                root[j_root] = i_root
+                rank[i_root] += rank[j_root]
+            else:
+                root[i_root] = j_root
+                rank[j_root] += rank[i_root]
+        
+    def find(i):
+        if i != root[i]:
+            i = find(root[i])
+        return root[i]
+    
+    def manhattan(i, j):
+        return abs(x[i] - x[j]) + abs(y[i] - y[j])
+        
+    heap = []
+    for i in range(n-1):
+        for j in range(i+1, n):
+            d = manhattan(i, j)
+            heappush(heap, (d, i, j))
+    
+    total_dist = 0
+    edges = []
+    while len(edges) &lt; n - 1:
+        d, i, j = heappop(heap)
+        if find(i) == find(j):
+            continue
+        union(i, j)
+        edges.append((d, i, j))
+        total_dist += d
+    
+    return total_dist
+</code></pre>
+<h3 id="block-1b0b12c0115c80cc8602f64f20614486">Test case</h3>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 [0, 0, 3, 3, 6], [0, 3, 1, 4, 3]
+기댓값 〉 14</code></pre>
+<h2 id="block-1b0b12c0115c80239ac4c3a7ee8a3f86">4. 거꾸로 BFS</h2>
+<figure><img src="/assets/notion/3월-1주차-코딩-테스트/1b0b12c0-115c-80ca-ad36-d67eac60f02d.png" alt="" loading="lazy" width="2680" height="912" /></figure>
+<figure><img src="/assets/notion/3월-1주차-코딩-테스트/1b0b12c0-115c-8084-be26-ce4f379072b6.png" alt="" loading="lazy" width="2662" height="1202" /></figure>
+<figure><img src="/assets/notion/3월-1주차-코딩-테스트/1b0b12c0-115c-801c-946d-f4e3e4d2a8cf.png" alt="" loading="lazy" width="1858" height="1410" /></figure>
+<h3 id="block-1b0b12c0115c80fe915be80911f49b42">풀이</h3>
+<pre data-lang="python"><code class="language-python">def solution(N, left, right):
+    adj_list = [[None, None] for _ in range(N)]
+
+    for p, c in left:
+        adj_list[p][0] = c
+    
+    for p, c in right:
+        adj_list[p][1] = c
+    
+    is_visited = [False for _ in range(N)]
+    answer = []
+
+    def dfs(node):
+        left, right = adj_list[node]
+
+        if (not left or is_visited[left]) and \
+         (not right or is_visited[right]):
+            answer.append(node)
+            is_visited[node] = True
+            return
+
+        if right and not is_visited[right]:
+            dfs(right)
+
+        if left and not is_visited[left]:
+            dfs(left)
+        
+    while not all(is_visited):
+        dfs(0)
+    
+    return answer
+</code></pre>
+<h3 id="block-1b0b12c0115c8067a12cf9023848e0fc">Test case</h3>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 6, [[0, 1], [1, 5], [2, 3]], [[0, 2], [3, 4]]
+기댓값 〉 [4, 5, 3, 1, 2, 0]</code></pre>
+<h2 id="block-1b0b12c0115c80638a7bd38547aa8cf5">5. 점프!</h2>
+<figure><img src="/assets/notion/3월-1주차-코딩-테스트/1b0b12c0-115c-800b-b174-f9503e347348.png" alt="" loading="lazy" width="2380" height="968" /></figure>
+<figure><img src="/assets/notion/3월-1주차-코딩-테스트/1b0b12c0-115c-8041-84a7-f444077e0b31.png" alt="" loading="lazy" width="2388" height="830" /></figure>
+<h3 id="block-1b0b12c0115c803c8d86fb3e26b9e9d9">풀이</h3>
+<pre data-lang="python"><code class="language-python">def solution(nums):
+    max_reach = 0
+    n = len(nums)
+    
+    for i in range(n):
+        if i &gt; max_reach: 
+            return False
+        max_reach = max(max_reach, i + nums[i]) 
+        if max_reach &gt;= n - 1: 
+            return True
+
+    return False</code></pre>
+<h3 id="block-1b0b12c0115c807b9131e790ada32a42">Test case</h3>
+<pre data-lang="python"><code class="language-python">
+# 테스트 1
+입력값 〉 [3, 4, 1, 1, 0, 3]
+기댓값 〉 true
+
+# 테스트 2
+입력값 〉 [2, 3, 5, 2, 0, 2, 1, 1, 0, 0, 4]
+기댓값 〉 false</code></pre>
+<h2 id="block-1bdb12c0115c8054901ae59f5e57e232">출처</h2>
+<p>해당 문제와 코드는 제로베이스(ZeroBase)에서 제공받았습니다.</p>
+<p>모든 자료는 저작권법에 의하여 보호받는 저작물로서 이에 대한 무단 복제 및 배포를 원칙적으로 금합니다.</p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/post.js?v=13" type="module"></script>
+    <script src="/assets/js/palette.js?v=8" defer></script>
+  </body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>Manifold 개념 — Woojae Joo</title>
+    <meta name="post-slug" content="manifold-개념" />
+    <meta name="description" content="서론 이 장은 Manifold의 개념에 대해서 설명한다. 목차 Manifold Manifold Hypothesis 1. Data compression 2. Data visualization 3. Curse of dimensionality 개선 4. Discovering most important feat" />
+    <link rel="canonical" href="https://ursonice.github.io/posts/manifold-%EA%B0%9C%EB%85%90/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="Manifold 개념" />
+    <meta property="og:description" content="서론 이 장은 Manifold의 개념에 대해서 설명한다. 목차 Manifold Manifold Hypothesis 1. Data compression 2. Data visualization 3. Curse of dimensionality 개선 4. Discovering most important feat" />
+    <meta property="og:url" content="https://ursonice.github.io/posts/manifold-%EA%B0%9C%EB%85%90/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Manifold%20%EA%B0%9C%EB%85%90&amp;cat=AI%2F%20Deep%20Learning" />
+    <meta property="article:published_time" content="2023-06-11T05:05:00.000Z" />
+    <meta property="article:modified_time" content="2026-07-05T08:31:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Manifold 개념" />
+    <meta name="twitter:description" content="서론 이 장은 Manifold의 개념에 대해서 설명한다. 목차 Manifold Manifold Hypothesis 1. Data compression 2. Data visualization 3. Curse of dimensionality 개선 4. Discovering most important feat" />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Manifold%20%EA%B0%9C%EB%85%90&amp;cat=AI%2F%20Deep%20Learning" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Manifold 개념","description":"서론 이 장은 Manifold의 개념에 대해서 설명한다. 목차 Manifold Manifold Hypothesis 1. Data compression 2. Data visualization 3. Curse of dimensionality 개선 4. Discovering most important feat","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Manifold%20%EA%B0%9C%EB%85%90&cat=AI%2F%20Deep%20Learning","datePublished":"2023-06-11T05:05:00.000Z","dateModified":"2026-07-05T08:31:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/manifold-%EA%B0%9C%EB%85%90/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Deep Learning","item":"https://ursonice.github.io/topics/ai-deep-learning/"},{"@type":"ListItem","position":3,"name":"Manifold 개념","item":"https://ursonice.github.io/posts/manifold-%EA%B0%9C%EB%85%90/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/ai-deep-learning/">AI/ Deep Learning</a>
+    </nav>
+    <h1>Manifold 개념</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2023년 6월 11일</span><span class="dot"></span><span>수정 2026년 7월 5일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-4196bda6fb3743cba03fb5e55c05a4e1">서론</h2>
+<p>이 장은 Manifold의 개념에 대해서 설명한다.</p>
+<h2 id="block-6907ecd44ed2433da80b9d58c1dc3134">목차</h2>
+<ol><li><a href="#block-e8515b92faf4427ebadf01594df7abfd">Manifold</a> </li><li><a href="#block-4c20ba71d6e145669be1127fe386473f">Manifold Hypothesis</a> </li><li><a href="#block-7186991239ee433894c65dc967d905ab">1. Data compression</a> </li><li><a href="#block-d66f603db87c4a6a8783a5348f0d580a">2. Data visualization</a> </li><li><a href="#block-7bd52855d24c4af591750d69e7250990">3. Curse of dimensionality 개선</a> </li><li><a href="#block-4a10e10bb91b4f69bc8a0869d37de20e">4. Discovering most important features</a> </li></ol>
+<h2 id="block-e8515b92faf4427ebadf01594df7abfd">Manifold</h2>
+<p>공간상에 데이터들을 표현하면 각 데이터들은 점의 형태로 찍혀져 있을 것이다. Manifold는 이러한 Sample들을 잘 아우르는 고차원 공간안에 있는 어떤 하위 공간(subspace)에 놓여있다고 하자.</p>
+<p>의미가 추상적이라 잘 와 닿지 않는데 나는 이를 고차원으로 구성된 <strong>sample들을 잘 표현하도록 하는 저차원으로 embedding된 subspace(공간)로 이해했다.</strong></p>
+<p>Neural Network는 일반적으로 고차원 → 저차원으로 압축하는 Encoder 역할의 네트워크 부분이 발생하게 된다. 이 과정에서 feature extraction을 수행하게 된다. 이렇게 하는 이유는 고차원을 축소시켜서 저차원으로 데이터를 보게되면 유의미한 데이터만 남게되어 분류가 쉬워지기 때문이다.</p>
+<p>따라서 우리는 고차원 공간에서의 데이터들을 데이터의 손실 없이 잘 표현해주는 저차원 공간을 찾아야 한다.</p>
+<h2 id="block-4c20ba71d6e145669be1127fe386473f">Manifold Hypothesis</h2>
+<p>“고차원의 데이터가 있을 때 이 데이터(sample)를 잘 아우르는(표현하는) subspace가 존재할 것이다” 가 바로 mainfold의 가정이다. 이렇게 찾은 manifold를 가지고 데이터의 차원을 축소시킬 수도 있고 이로인해 데이터를 더 잘 표현할 수 있게 된다.</p>
+<h2 id="block-822f3f8afb9a4cc699bc20983ed22f1b">Manifold Learning</h2>
+<p>앞에 설명한 Manifold Hypothesis를 기반으로 manifold를 잘 찾는 것을 manifold learning이라 할 수 있다.</p>
+<p>쉽게 말해 원래 데이터의 특성을 잘 유지하면서 차원을 축소해야하는 작업이다.</p>
+<p>차원을 축소한 결과는 크게 4가지 용도로 사용된다.</p>
+<h4 id="block-7186991239ee433894c65dc967d905ab">1. Data compression</h4>
+<p>encoder와 같은 데이터 압축이다.</p>
+<h4 id="block-d66f603db87c4a6a8783a5348f0d580a">2. Data visualization</h4>
+<p><code>t-SNE</code> 방법으로 가장 많이 사용하는 Visualization 방법 중 하나다.</p>
+<figure><img src="/assets/notion/manifold-개념/0e30de1a-0af0-43ab-b09f-db35dd876cd6.jpg" alt="" loading="lazy" width="960" height="540" /></figure>
+<h4 id="block-7bd52855d24c4af591750d69e7250990">3. Curse of dimensionality 개선</h4>
+<p>아래 그림은 차원의 저주에 대한 설명인데, 차원의 저주는 차원이 높아질수록 공간이 커지는 반면에 데이터의 수는 고정되어 있어 데이터의 밀도가 희박해 지는 문제를 뜻한다.</p>
+<p>예를 들어 1차원 총 공간이 10만큼이고 데이터가 8개가 있다면 전체 공간에 80%만큼 데이터가 채워져 있었지만 2차원으로 늘어나면 전체 공간 100에서 8이므로 8% 공간만 차지하게 되고 3차원, 4차원으로 늘어날수록 그 비율은 더 줄어 들게 되는 문제이다.</p>
+<p>이렇게 데이터가 적은데 비하여 공간이 커질 수록 분석 자체가 어려워 성능이 나빠진다.</p>
+<figure><img src="/assets/notion/manifold-개념/ff2a783d-6a78-460c-858d-4cf3b95c2d13.jpg" alt="" loading="lazy" width="960" height="540" /></figure>
+<p>위와 같이 고차원의 밀도는 낮지만 이들의 집합을 포함하는 저차원의 매니폴드를 찾으면 이 매니폴드 상에서는 데이터의 밀도가 높게 나타난다.</p>
+<figure><img src="/assets/notion/manifold-개념/bc6cc8b1-ef18-416d-9170-7a7b72abf7c0.jpg" alt="" loading="lazy" width="960" height="540" /></figure>
+<p>이미지는 굉장히 높은 차원의 데이터이다. 예를 들어, 100x100 픽셀의 흑백 이미지는 10,000차원의 데이터라고 볼 수 있다. </p>
+<p>이러한 고차원의 이미지 데이터에서 균등 분포로 데이터를 샘플링 한다면 의미 있는 데이터를 얻을 수 없을 것이다. </p>
+<p>그 의미는 이미지 데이터 자체가 균등하게 공간상에 존재하는 것이 아니라 이미지 유형에 따라서 공간에 밀집되어 있다는 것을 뜻한다.</p>
+<p>균등 분포를 통해서 데이터를 샘플링 하면 노이즈 같은 이미지가 생기지만 어떤 공간에는 얼굴 이미지가, 어떤 공간에는 글씨가 있을 수 있다.</p>
+<p>만약 얼굴 이미지를 잘 아우르는 매니폴드를 알고있고 얼굴 이미지 간의 관계성 및 확률 분포를 찾을 수가 있고 그 확률 분포에서 샘플링을 한다면 의미 있는 얼굴 이미지를 생성할 수 있다.</p>
+<figure><img src="/assets/notion/manifold-개념/37d589b8-e2db-4f31-b1b2-97034d8c10f6.jpg" alt="" loading="lazy" width="960" height="540" /></figure>
+<p>가장 많이 사용되는 manifold learning의 역할 중 마지막으로 언급하려는 것은 가장 중요한 feature를 찾는 것이다.</p>
+<p>아래 슬라이드의 MNIST 이미지는 28 x 28 크기로 784 차원을 가지는 데 여기서 데이터를 잘 아우르는 manifold를 찾는다면 그 manifold에는 이미지의 회전, 변형, 두께등의 유의미한 feature가 있을 수 있다.</p>
+<p>이러한 feature들은 자동으로 찾아지는데 그 이유는 Unsupervised learning으로 학습되어 지기 때문이다.</p>
+<p>학습 방식이 비지도학습인것이지 비지도학습에서만 사용되는 것은 아니며 이러한 개념을 착안하여 manifold의 개념이 지도학습에서도 이용되어 진다.</p>
+<p>Deep Neural Networks은 고차원 입력 데이터에서 유용한 특징을 추출하는 역할을 하는데 이런 과정에서, 매니폴드 학습과 비슷한 원리가 사용될 수 있다. 신경망의 각 계층은 입력 데이터의 점점 더 낮은 차원의 표현(representation)을 학습하는데, 이는 본질적으로 매니폴드를 학습하는 것과 유사하다. </p>
+<p>예를 들어, 이미지 인식에서 심층 신경망은 처음에는 저차원 특징(예: 선, 색상 등)을 학습하고, 이런 특징을 결합하여 점점 더 복잡한 패턴(예: 얼굴, 객체 등)을 학습하는 방식으로 작동하기 때문이다.</p>
+<h4 id="block-4a10e10bb91b4f69bc8a0869d37de20e">4. Discovering most important features</h4>
+<figure><img src="/assets/notion/manifold-개념/0c338ea5-428c-4488-a9f3-c37d7c483f66.jpg" alt="" loading="lazy" width="960" height="540" /></figure>
+<p>또한 manifold를 잘 찾으면 의미적으로 가까운 데이터들을 찾을 수 있다.</p>
+<p>아래 그림에서 왼쪽의 고차원 데이터에서는 유클리디안 거리로 A1은 B와 가깝지만 manifold상에서의 거리를 오른쪽에서 보면 A1은 A2와 가깝다.</p>
+<figure><img src="/assets/notion/manifold-개념/0a7d5ebf-a54c-4331-b0c2-92e9ec138eb9.jpg" alt="" loading="lazy" width="960" height="540" /></figure>
+<p>아래 그림을 보면 manifold상에서가 아닌 고차원 상에서의 유클리디안의 거리가 가까우니 image간의 관계가 높을 것이라는 기대로 이미지를 sampling해보면 가운데에 있는 이미지는 팔이 여러개인 의미없는 데이터임을 알 수 있다.</p>
+<figure><img src="/assets/notion/manifold-개념/08dd708e-752e-4202-92c9-18c9ec418792.jpg" alt="" loading="lazy" width="960" height="540" /></figure>
+<p>하지만 고차원 공간에서가 아니라 manifold상에서 가운데에 위치할 이미지를 찾는다면 기대하는 의미가 있는 이미지가 나올 수도 있다.</p>
+<figure><img src="/assets/notion/manifold-개념/a0a3daa2-0583-421a-a934-2232d88b53b3.jpg" alt="" loading="lazy" width="960" height="540" /></figure>
+<p>잘 학습된 manifold에서는 오른쪽 이미지와 같이 Disentangled형태를 가지게 된다.</p>
+<p>위 그래프는 0 ~ 9 까지의 숫자 이미지를 2차원으로 차원 축소한 다음에 그래프상에 표시한 것인데 오른쪽 같이 숫자별로 군집되어 있어야 유의미한 feature로 manifold가 만들어 졌다고 할 수 있다.</p>
+<figure><img src="/assets/notion/manifold-개념/7cc2936e-a94c-4c9c-8701-5c22c679720f.png" alt="" loading="lazy" width="1294" height="638" /></figure>
+<p>[reference]</p>
+<p><a href="https://deepinsight.tistory.com/124" target="_blank" rel="noreferrer">https://deepinsight.tistory.com/124</a></p>
+<p><a href="https://greatjoy.tistory.com/51" target="_blank" rel="noreferrer">https://greatjoy.tistory.com/51</a></p>
+<p><a href="https://velog.io/@xuio/TIL-Data-Manifold-학습이란" target="_blank" rel="noreferrer">https://velog.io/@xuio/TIL-Data-Manifold-학습이란</a></p>
+<p><a href="https://kh-mo.github.io/notation/2019/03/10/manifold_learning/" target="_blank" rel="noreferrer">https://kh-mo.github.io/notation/2019/03/10/manifold_learning/</a></p>
+<p><a href="https://gaussian37.github.io/dl-concept-autoencoder2/" target="_blank" rel="noreferrer">https://gaussian37.github.io/dl-concept-autoencoder2/</a></p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/post.js?v=13" type="module"></script>
+    <script src="/assets/js/palette.js?v=8" defer></script>
+  </body>
+</html>

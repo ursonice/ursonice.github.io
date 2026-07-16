@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>[Kubernetes] Cluster Upgrade — Woojae Joo</title>
+    <meta name="post-slug" content="kubernetes-cluster-upgrade" />
+    <meta name="description" content="서론 Kubernetes는 최근 3개의 버전만을 공식 지원하기 때문에, 정기적인 업그레이드가 필요하다. 예를 들어 최신 버전이 1.13일 경우, 지원 대상은 1.13, 1.12, 1.11이며 1.10은 지원되지 않는다. 따라서 최신 버전(1.13)이 release되기 전에 1.10을 사용하고 있다면 1." />
+    <link rel="canonical" href="https://ursonice.github.io/posts/kubernetes-cluster-upgrade/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="[Kubernetes] Cluster Upgrade" />
+    <meta property="og:description" content="서론 Kubernetes는 최근 3개의 버전만을 공식 지원하기 때문에, 정기적인 업그레이드가 필요하다. 예를 들어 최신 버전이 1.13일 경우, 지원 대상은 1.13, 1.12, 1.11이며 1.10은 지원되지 않는다. 따라서 최신 버전(1.13)이 release되기 전에 1.10을 사용하고 있다면 1." />
+    <meta property="og:url" content="https://ursonice.github.io/posts/kubernetes-cluster-upgrade/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5BKubernetes%5D%20Cluster%20Upgrade&amp;cat=Kubernetes" />
+    <meta property="article:published_time" content="2025-07-03T15:13:00.000Z" />
+    <meta property="article:modified_time" content="2025-07-13T07:31:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="[Kubernetes] Cluster Upgrade" />
+    <meta name="twitter:description" content="서론 Kubernetes는 최근 3개의 버전만을 공식 지원하기 때문에, 정기적인 업그레이드가 필요하다. 예를 들어 최신 버전이 1.13일 경우, 지원 대상은 1.13, 1.12, 1.11이며 1.10은 지원되지 않는다. 따라서 최신 버전(1.13)이 release되기 전에 1.10을 사용하고 있다면 1." />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5BKubernetes%5D%20Cluster%20Upgrade&amp;cat=Kubernetes" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"[Kubernetes] Cluster Upgrade","description":"서론 Kubernetes는 최근 3개의 버전만을 공식 지원하기 때문에, 정기적인 업그레이드가 필요하다. 예를 들어 최신 버전이 1.13일 경우, 지원 대상은 1.13, 1.12, 1.11이며 1.10은 지원되지 않는다. 따라서 최신 버전(1.13)이 release되기 전에 1.10을 사용하고 있다면 1.","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5BKubernetes%5D%20Cluster%20Upgrade&cat=Kubernetes","datePublished":"2025-07-03T15:13:00.000Z","dateModified":"2025-07-13T07:31:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/kubernetes-cluster-upgrade/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Kubernetes","item":"https://ursonice.github.io/topics/kubernetes/"},{"@type":"ListItem","position":3,"name":"[Kubernetes] Cluster Upgrade","item":"https://ursonice.github.io/posts/kubernetes-cluster-upgrade/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/kubernetes/">Kubernetes</a>
+    </nav>
+    <h1>[Kubernetes] Cluster Upgrade</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 7월 3일</span><span class="dot"></span><span>수정 2025년 7월 13일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-22eb12c0115c806d9665cb8518411228">서론</h2>
+<p>Kubernetes는 최근 3개의 버전만을 공식 지원하기 때문에, 정기적인 업그레이드가 필요하다.</p>
+<p>예를 들어 최신 버전이 1.13일 경우, 지원 대상은 1.13, 1.12, 1.11이며 1.10은 지원되지 않는다.</p>
+<p>따라서 최신 버전(1.13)이 release되기 전에 1.10을 사용하고 있다면 1.11로 업그레이드를 해주는 것이 좋다.</p>
+<p>만약 최신버전이 1.13이고 현재 버전이 1.10일 때 1.13버전으로 업그레이드를 해주고 싶은 경우</p>
+<p>1.10 에서 1.13으로 한번에 가는 것이 아니라 1.10 → 1.11 → 1.12 → 1.13 으로 한 버전씩 업그레이드 해야 한다.</p>
+<p>이렇게 정기적으로 업그레이드를 해줘야하는데 쿠버네티스 각 컴포넌트들의 버전 체계에 대해 알아보자.</p>
+<h2 id="block-22eb12c0115c806aa263d675ae2ef0f5">본론</h2>
+<h3 id="block-22eb12c0115c8049b818d746dac0eebc">Version 체계</h3>
+<p>Kubernetes는 제어 플레인 컴포넌트들(Kube-apiserver, controller manager, kube-scheduler, kubelet, kube-proxy등)로 구성되어 있으며 이들은 서로 다른 버전을 가질 수 있다.</p>
+<p>다른 제어 플레인 컴포넌트들이 kube-apiserve에 의존하므로 가장 높은 버전이 될 수 없다.</p>
+<p>따라서 controller-manager와 scheduler는 kube-apiserver보다 한 버전 낮을 수 있고, kubelet과 kube-proxy는 두 버전 낮을 수 있다.</p>
+<p>kubectl은 유연하게 동작하여 kube-apiserver보다 높거나 낮은 버전 모두 허용된다.</p>
+<ul><li>kubectl은 클라이언트 툴(Command Line Interface)로 사용자가 Kubernetes 클러스터에 명령을 내리는 도구이다.</li></ul>
+<figure><img src="/assets/notion/kubernetes-cluster-upgrade/22eb12c0-115c-808d-860a-caba03293c21.png" alt="" loading="lazy" width="1582" height="864" /></figure>
+<h3 id="block-22eb12c0115c80d5a785fc8b36db054f">Mannual Update(수동 업데이트)</h3>
+<p>클라우드의 경우 Google Kubernetes Engine(GKE)은 몇 번의 클릭만으로 클러스터 업그레이드를 쉽게 수행할 수 있으나 kubeadm과 같은 도구를 사용해 클러스터를 구성했다면, 각 컴포넌트를 직접 수동으로 업그레이드해야 한다.</p>
+<p>클러스터 업그레이드는 마스터 노드를 먼저 업데이트하고 그 다음 워커 노드를 업데이트 한다.</p>
+<h4 id="block-22eb12c0115c80a78ed9fee0f15792ce">마스터 노드 업데이트</h4>
+<p>마스터노드의 API 서버, 스케줄러, 컨트롤러 매니저 같은 제어 플레인 컴포넌트들이 잠시 중단되었어도 워커 노드에 배포된 모든 워크로드(Pod)가 도중에 죽지만 않는다면 정상적으로 사용자에게 서비스를 계속 제공한다.</p>
+<p>하지만 마스터가 중단되어 있기 때문에, 클러스터 관리 기능은 모두 사용할 수 없다.</p>
+<ul><li>kubectl이나 다른 Kubernetes API로 클러스터에 접근 불가</li><li>새 애플리케이션을 배포하거나 기존 애플리케이션을 삭제/수정 불가</li><li>Pod가 죽어도, 새 Pod가 자동으로 생성되지 않습니다.(Controller manager가 동작하지 않기 때문)</li></ul>
+<figure><img src="/assets/notion/kubernetes-cluster-upgrade/22eb12c0-115c-805a-aeea-fd19a68727b8.png" alt="" loading="lazy" width="1524" height="466" /></figure>
+<h4 id="block-22eb12c0115c80fc8cfbcd345448d4ce">워커 노드 업데이트</h4>
+<p>워커 노드 업데이트에는 3가지 전략이 존재한다.</p>
+<ol><li> 모든 워커 노드를 한 번에 업그레이드</li></ol>
+<p> 이 경우 Pod들이 중단되고, 사용자들이 애플리케이션에 접근할 수 없게 된고 업그레이드가 완료되면 노드가 다시 올라오고, 새 Pod들이 스케줄되며 사용자 접근이 다시 가능해진다.</p>
+<figure><img src="/assets/notion/kubernetes-cluster-upgrade/22eb12c0-115c-8034-b8ed-ed1cdb40baa3.png" alt="" loading="lazy" width="1576" height="792" /></figure>
+<ol><li>노드를 하나씩 순차적으로 업그레이드</li></ol>
+<p>먼저 첫 번째 노드를 업그레이드하면, 그 노드의 워크로드(Pod)들은 두 번째와 세 번째 노드로 옮겨지고, 사용자들은 그곳에서 서비스를 받는다.</p>
+<p>첫 번째 노드가 업그레이드되어 다시 작동하면, 두 번째 노드를 업그레이드를 시작한다.</p>
+<p>이번에는 워크로드가 첫 번째와 세 번째 노드로 이동한다.</p>
+<p>마지막으로 세 번째 노드를 업그레이드할 때는, 워크로드가 첫 번째와 두 번째 노드에 분산된다.</p>
+<p>이 과정을 통해 모든 노드를 새로운 버전으로 업그레이드하게 된다.</p>
+<figure><img src="/assets/notion/kubernetes-cluster-upgrade/22eb12c0-115c-8051-a1e2-e72305c88627.png" alt="" loading="lazy" width="1612" height="858" /></figure>
+<figure><img src="/assets/notion/kubernetes-cluster-upgrade/22eb12c0-115c-8089-8cda-d17a99deaa0c.png" alt="" loading="lazy" width="1620" height="912" /></figure>
+<figure><img src="/assets/notion/kubernetes-cluster-upgrade/22eb12c0-115c-8007-bf51-f92506c3a8e0.png" alt="" loading="lazy" width="1612" height="912" /></figure>
+<ol><li>새로운 버전의 노드를 클러스터에 추가한다.</li></ol>
+<p>이 방법은 클라우드 환경처럼 새로운 노드를 쉽게 프로비저닝하고, 기존 노드를 제거할 수 있는 환경에서 특히 편리하다.</p>
+<p>새로운 소프트웨어 버전을 가진 노드를 클러스터에 추가하고, 워크로드(Pod)를 새 노드로 옮긴 후, 기존 노드를 제거한다.</p>
+<p>결국에는 모든 노드가 새로운 소프트웨어 버전을 갖도록 교체하는 방식이다.</p>
+<h2 id="block-22eb12c0115c800990fdeab23757364c">Kubeadm을 통한 업그레이드</h2>
+<p>kubeadm에는 클러스터 업그레이드를 도와주는 upgrade 명령어가 있다.</p>
+<p><code>kubeadm upgrade plan</code> 명령어를 통해 현재 클러스터 버전, kubeadm 도구 버전, 현재 Kubernetes의 최신 안정 버전 등 업그레이드 관련 다양한 정보를 볼 수 있다.</p>
+<p>kubeadm은 kubelet을 설치하거나 업그레이드하지 않기 때문에 각 노드의 kubelet버전은 수동으로 업그레이드해야 한다.</p>
+<figure><img src="/assets/notion/kubernetes-cluster-upgrade/22fb12c0-115c-80dc-bc1b-f91363d1c611.png" alt="" loading="lazy" width="1960" height="1090" /></figure>
+<p>주의할점은 클러스터를 업그레이드하기 전에 kubeadm 자체도 업그레이드해야 한다.</p>
+<p>kubeadm 도구 역시 Kubernetes와 동일한 버전 정책을 따른다.</p>
+<p>만약 쿠버네티스를 1.11버전에서 1.12로 올리고싶다면 kubeadm도 1.12로 업데이트해줘야 한다는 뜻이다.</p>
+<p>순서는 마스터노드를 먼저 업데이트 후 워커노드를 업데이트 하는 순임으로 마스터노드를 먼저 업데이트 해보자.</p>
+<h4 id="block-22fb12c0115c80159ab2de893b4ccb3e">Master Node Upgrade</h4>
+<p><code>kubeadm upgrade apply v1.12.0</code> 명령어를 입력하면 마스토 노드의 컨트롤 플레인 컴포넌트들이 업데이트 된다.</p>
+<p>kubectl get nodes를 하면 Version이 뜨는걸 볼 수 있는데, 이것은 각 노드에 설치된 kubelet 버전을 표시하는 것으로 API 서버 자체의 버전은 보여주지 않는다.(kubelet은 클러스터를 업데이트해도 업데이트 되지 않기 때문에 수동으로 업데이트 시켜줘야함)</p>
+<figure><img src="/assets/notion/kubernetes-cluster-upgrade/22fb12c0-115c-804f-a51f-dd9c948cae75.png" alt="" loading="lazy" width="1946" height="1106" /></figure>
+<p>클러스터 업데이트 후 마스터노드에서 kubelet을 수동으로 업데이트 해주면 아래처럼 나타난다.</p>
+<figure><img src="/assets/notion/kubernetes-cluster-upgrade/22fb12c0-115c-80fd-95b8-ed177abf8a4f.png" alt="" loading="lazy" width="1908" height="978" /></figure>
+<h4 id="block-22fb12c0115c8090b407ced2183b2861">Worker Node Upgrade</h4>
+<p>이제 워커노드의 kubelet을 업데이트 해면 끝난다.</p>
+<p>이를 위해서는 업데이트할 워커노드의 워크로드(Pod)를 다른 노드로 옮겨야한다.</p>
+<p>kubectl drain 명령어를 사용하면 해당 노드의 모든 Pod를 안전하게 종료하고, 다른 노드로 재스케줄할 수 있다.
+또한 이 명령어를 사용하면 노드를 자동으로 cordon 처리하여 새로운 Pod가 스케줄되지 않도록 한다.</p>
+<pre data-lang="bash"><code class="language-bash">kubectl drain {node_name}</code></pre>
+<p>그 다음, 마스터 노드에서와 마찬가지로 워커 노드의 kubeadm과 kubelet 패키지를 업그레이드한다.</p>
+<pre data-lang="bash"><code class="language-bash">apt-get upgrade -y kubeadm=1.12.0-00</code></pre>
+<pre data-lang="bash"><code class="language-bash">apt-get upgrade -y kubelet=1.12.0-00</code></pre>
+<p>마스터노드에서는 kubeadm upgrade apply 명령어를 통해 아래 명령어 작업을 포함하므로 별도로 실행할 필요가 없지만 워커노드를 업데이트할 때는 해줘야 한다.</p>
+<pre data-lang="bash"><code class="language-bash">kubeadm upgrade node config --kubelet-version</code></pre>
+<p>그리고 kubelet을 재시작해준다.</p>
+<pre data-lang="bash"><code class="language-bash">systemctl restart kubelet</code></pre>
+<p>이후 업데이트가 끝나면 Drain 명령어로 Cordon 처리가된 노드를 uncordon해준다.</p>
+<pre data-lang="bash"><code class="language-bash">kubectl uncordon {node_name}</code></pre></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/post.js?v=13" type="module"></script>
+    <script src="/assets/js/palette.js?v=8" defer></script>
+  </body>
+</html>

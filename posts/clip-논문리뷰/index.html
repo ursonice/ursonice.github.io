@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>CLIP 논문리뷰 — Woojae Joo</title>
+    <meta name="post-slug" content="clip-논문리뷰" />
+    <meta name="description" content="서론 이 장은 Open Ai에서 발표한 CLIP논문 에 대해 설명한다. 목차 CLIP (contrastiv Language-Image Pre-Training) Data Data Advantage of using Image-Text pair on Web Based Contrastive Pre-Trainin" />
+    <link rel="canonical" href="https://ursonice.github.io/posts/clip-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="CLIP 논문리뷰" />
+    <meta property="og:description" content="서론 이 장은 Open Ai에서 발표한 CLIP논문 에 대해 설명한다. 목차 CLIP (contrastiv Language-Image Pre-Training) Data Data Advantage of using Image-Text pair on Web Based Contrastive Pre-Trainin" />
+    <meta property="og:url" content="https://ursonice.github.io/posts/clip-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=CLIP%20%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0&amp;cat=AI%2F%20Deep%20Learning" />
+    <meta property="article:published_time" content="2022-12-06T05:25:00.000Z" />
+    <meta property="article:modified_time" content="2023-06-16T08:28:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="CLIP 논문리뷰" />
+    <meta name="twitter:description" content="서론 이 장은 Open Ai에서 발표한 CLIP논문 에 대해 설명한다. 목차 CLIP (contrastiv Language-Image Pre-Training) Data Data Advantage of using Image-Text pair on Web Based Contrastive Pre-Trainin" />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=CLIP%20%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0&amp;cat=AI%2F%20Deep%20Learning" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"CLIP 논문리뷰","description":"서론 이 장은 Open Ai에서 발표한 CLIP논문 에 대해 설명한다. 목차 CLIP (contrastiv Language-Image Pre-Training) Data Data Advantage of using Image-Text pair on Web Based Contrastive Pre-Trainin","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=CLIP%20%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0&cat=AI%2F%20Deep%20Learning","datePublished":"2022-12-06T05:25:00.000Z","dateModified":"2023-06-16T08:28:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/clip-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Deep Learning","item":"https://ursonice.github.io/topics/ai-deep-learning/"},{"@type":"ListItem","position":3,"name":"CLIP 논문리뷰","item":"https://ursonice.github.io/posts/clip-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/ai-deep-learning/">AI/ Deep Learning</a>
+    </nav>
+    <h1>CLIP 논문리뷰</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2022년 12월 6일</span><span class="dot"></span><span>수정 2023년 6월 16일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-cbd71545e1cf4d358ee122bd0bf5b097">서론</h2>
+<p>이 장은 Open Ai에서 발표한 <a href="https://arxiv.org/pdf/2103.00020.pdf" target="_blank" rel="noreferrer">CLIP논문</a> 에 대해 설명한다.</p>
+<h2 id="block-e7fb249dd2b644ea8d492af0bd6202b1">목차</h2>
+<ol><li><a href="#block-0a5af984c2da464fa8df0921efb58db4">CLIP (contrastiv Language-Image Pre-Training)</a> <ol><li><a href="#block-e307e1bfc99e41ee89e2ae7cf308ee3e">Data</a> </li><li><a href="#block-e307e1bfc99e41ee89e2ae7cf308ee3e">Data</a> </li><li><a href="#block-e2d362de6c1c44c8aa11f5b431f442c8">Advantage of using Image-Text pair on Web Based </a> </li><li><a href="#block-d9407b27936e47eca0468771b89c47ff">Contrastive Pre-Training Method</a> </li><li><a href="#block-d9407b27936e47eca0468771b89c47ff">Contrastive Pre-Training Method</a> </li></ol></li><li><a href="#block-5480d569acf54bb6add66f77d8bfd8b3">Training Details</a> </li><li><a href="#block-8f3ea25210d24b1c9c61301c7c2ebc8f">Inference(Zero-shot prediction)</a> </li><li><a href="#block-99aaf2b3bb324fb3b4d3f81678704285">Inference(Prompt Engineering)</a> </li><li><a href="#block-1c392374a95c44caa801db9d8c81f8a7">Inference Code</a> </li></ol>
+<h2 id="block-0a5af984c2da464fa8df0921efb58db4">CLIP (contrastiv Language-Image Pre-Training)</h2>
+<h3 id="block-e307e1bfc99e41ee89e2ae7cf308ee3e">Data</h3>
+<ul><li>이미지를 설명하는 텍스트를 결합한 image-text par를 입력으로 사용</li><li>논문에서는 4억개의(image, text) pair를 인터넷으로 부터 수집해 학습</li></ul>
+<h3 id="block-e2d362de6c1c44c8aa11f5b431f442c8">Advantage of using Image-Text pair on Web Based </h3>
+<ul><li>Data set 크기를 무한히 키울 수 있음</li><li>Web-Based image-text pair을 사용하여 별도의 라벨링 작업이 필요없음</li><li>Vision representation만을 학습하는게 아니라 Language representation을 함께 학습하여 Downstream task에서 일반화된 특징 학습이 가능</li></ul>
+<h3 id="block-d9407b27936e47eca0468771b89c47ff">Contrastive Pre-Training Method</h3>
+<ol><li>Text Mini-Batch → Text Encoder → Text Representation</li><li>Image Mini-Batch →Image Encoder → Image Representation</li><li>Text, Image Representation을 Dot Product를 통해 (N x N)Matrix가 생성됨</li><li>Positive Pair(Diagonal of Matrix)의 cosine similarity를 Maximize하고 <p>\(N^2 -N\)개 Negative Pair의 cosine similarity Minimize하는 방향으로 학습</p></li><li>cosine similarity를 optimize하기 위해 Cross Entropy Loss 사용</li></ol>
+<h3 id="block-5480d569acf54bb6add66f77d8bfd8b3">Training Details</h3>
+<p>Image Encoder : 5 ResNets and 3 Vision Transformers.</p>
+<p>Text Encoder : Transformer (Vaswani et al., 2017) with the architecture modifications described in Radford et al. (2019).</p>
+<div class="columns"><div class="column"><figure><img src="/assets/notion/clip-논문리뷰/6a482e79-0791-43f8-a595-556898b7d9d2.png" alt="" loading="lazy" width="1924" height="1246" /></figure></div><div class="column"><figure><img src="/assets/notion/clip-논문리뷰/9927df91-339b-4bb6-816f-c5c9b9595806.png" alt="" loading="lazy" width="1066" height="932" /></figure></div></div>
+<h3 id="block-8f3ea25210d24b1c9c61301c7c2ebc8f">Inference(Zero-shot prediction)</h3>
+<p>Pretraining이 끝나면 따로 Downstream task를 진행하기 위해 fine tuning을 하지 않아도 Dot product를 통해 zero-shot prediction이 가능하다.</p>
+<figure><img src="/assets/notion/clip-논문리뷰/9ba4ec71-0f00-4d8a-a268-185b1760fb83.png" alt="" loading="lazy" width="816" height="592" /></figure>
+<h3 id="block-99aaf2b3bb324fb3b4d3f81678704285">Inference(Prompt Engineering)</h3>
+<p>별도로 labeling작업을 통해 학습시킨 것이 아닌 Web-Based image-text pair로 학습시켰기 때문에 단어들이 대부분 문장구조이다. </p>
+<ul><li>추론할 때 단어를 문장 형태로 고쳐서 사용<ul><li>동음이의어 문제를 해결하기 위함<ul><li>A photo of a {label}</li></ul></li><li>Customizing prompt text to each task<ul><li>A photo of a {label}, a type of pet</li></ul></li><li>Ensemble of different context prompts :<ul><li>A photo of a big {label} + A photo of a small {label}</li></ul></li></ul></li></ul>
+<p>아래 표는  Prompt Engineering을 적용한 것과 하지 않은 것의 정확도 지표다</p>
+<figure><img src="/assets/notion/clip-논문리뷰/0accb45e-1db4-476d-80f6-e06d75170da6.png" alt="" loading="lazy" width="754" height="722" /></figure>
+<h3 id="block-1c392374a95c44caa801db9d8c81f8a7">Inference Code</h3>
+<p>아래는 실질적으로 모델에서 추론하는 코드다.</p>
+<figure><img src="/assets/notion/clip-논문리뷰/49cef8db-8e0d-497d-9ec8-720bb1d6123f.png" alt="" loading="lazy" width="1653" height="979" /></figure>
+<p>[참조]</p>
+<p><a href="https://github.com/openai/CLIP" target="_blank" rel="noreferrer">https://github.com/openai/CLIP</a></p>
+<p><a href="https://arxiv.org/pdf/2103.00020.pdf" target="_blank" rel="noreferrer">https://arxiv.org/pdf/2103.00020.pdf</a></p>
+<p><a href="https://www.youtube.com/watch?v=HkkaKI6NN-8&amp;t=865" target="_blank" rel="noreferrer">https://www.youtube.com/watch?v=HkkaKI6NN-8&amp;t=865</a></p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/post.js?v=13" type="module"></script>
+    <script src="/assets/js/palette.js?v=8" defer></script>
+  </body>
+</html>

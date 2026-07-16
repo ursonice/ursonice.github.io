@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>DRÆM – A discriminatively trained reconstruction embedding for surface anomaly detection 논문 전체 번역 — Woojae Joo</title>
+    <meta name="post-slug" content="dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det" />
+    <meta name="description" content="서론 Vitjan Zavrtanik, Matej Kristan, Danijel Skočaj; Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2021, pp. 1-10. DRÆM – A Discrim" />
+    <link rel="canonical" href="https://ursonice.github.io/posts/dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="DRÆM – A discriminatively trained reconstruction embedding for surface anomaly detection 논문 전체 번역" />
+    <meta property="og:description" content="서론 Vitjan Zavrtanik, Matej Kristan, Danijel Skočaj; Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2021, pp. 1-10. DRÆM – A Discrim" />
+    <meta property="og:url" content="https://ursonice.github.io/posts/dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=DR%C3%86M%20%E2%80%93%20A%20discriminatively%20trained%20reconstruction%20embedding%20for%20surface%20anomaly%20detection%20%EB%85%BC%EB%AC%B8%20%EC%A0%84%EC%B2%B4%20%EB%B2%88%EC%97%AD&amp;cat=AI%2F%20Deep%20Learning" />
+    <meta property="article:published_time" content="2023-07-13T05:16:00.000Z" />
+    <meta property="article:modified_time" content="2024-11-21T03:54:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="DRÆM – A discriminatively trained reconstruction embedding for surface anomaly detection 논문 전체 번역" />
+    <meta name="twitter:description" content="서론 Vitjan Zavrtanik, Matej Kristan, Danijel Skočaj; Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2021, pp. 1-10. DRÆM – A Discrim" />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=DR%C3%86M%20%E2%80%93%20A%20discriminatively%20trained%20reconstruction%20embedding%20for%20surface%20anomaly%20detection%20%EB%85%BC%EB%AC%B8%20%EC%A0%84%EC%B2%B4%20%EB%B2%88%EC%97%AD&amp;cat=AI%2F%20Deep%20Learning" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"DRÆM – A discriminatively trained reconstruction embedding for surface anomaly detection 논문 전체 번역","description":"서론 Vitjan Zavrtanik, Matej Kristan, Danijel Skočaj; Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2021, pp. 1-10. DRÆM – A Discrim","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=DR%C3%86M%20%E2%80%93%20A%20discriminatively%20trained%20reconstruction%20embedding%20for%20surface%20anomaly%20detection%20%EB%85%BC%EB%AC%B8%20%EC%A0%84%EC%B2%B4%20%EB%B2%88%EC%97%AD&cat=AI%2F%20Deep%20Learning","datePublished":"2023-07-13T05:16:00.000Z","dateModified":"2024-11-21T03:54:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Deep Learning","item":"https://ursonice.github.io/topics/ai-deep-learning/"},{"@type":"ListItem","position":3,"name":"DRÆM – A discriminatively trained reconstruction embedding for surface anomaly detection 논문 전체 번역","item":"https://ursonice.github.io/posts/dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/ai-deep-learning/">AI/ Deep Learning</a>
+    </nav>
+    <h1>DRÆM – A discriminatively trained reconstruction embedding for surface anomaly detection 논문 전체 번역</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2023년 7월 13일</span><span class="dot"></span><span>수정 2024년 11월 21일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-c696d1f79868475e9970bd61f08ba106">서론</h2>
+<ul><li>Vitjan Zavrtanik, Matej Kristan, Danijel Skočaj; Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2021, pp. 1-10. <code>DRÆM – A Discriminatively Trained Reconstruction Embedding for Surface Anomaly Detection.</code></li><li>논문 리뷰: <a href="https://app.notion.com/p/30cd1c6a5aed483c96a56a15183740e2" target="_blank" rel="noreferrer">DRÆM – A discriminatively trained reconstruction embedding for surface anomaly detection 논문 리뷰</a> </li><li><a href="https://arxiv.org/pdf/2108.07610.pdf" target="_blank" rel="noreferrer">https://arxiv.org/pdf/2108.07610.pdf</a></li></ul>
+<h2 id="block-becc17d0e1ae41b98bd89274578e1200">목차</h2>
+<ol><li><a href="#block-72f17d044bc347d1b5cb4d1c4ae2b2ac">Introduction &amp; Related Work</a> <ol><li><a href="#block-bd80cf5bc69f4853b6a9216c306fe4d2">background Research</a> </li><li><a href="#block-170b3e2bb7bd480ab6326a0903d94461">Recent Research</a> </li><li><a href="#block-cab333fee79c4d7785705d2901efb85f">Propose</a> </li></ol></li><li><a href="#block-bd50b6170b0b4b60bdf28ddcda063989">Abstract</a> </li><li><a href="#block-64c5a4ceb1b5441ca8f2301c6eb18cf0">Introduction</a> </li><li><a href="#block-ea490e57cdee4b03b90b5c127b49e722">Related work</a> </li><li><a href="#block-97575151e8ed4acaa9bd8c0c4aba318d">DRÆM</a> <ol><li><a href="#block-14ee650de6a44df991b3f73a85aeb419">3.1 Reconstructive subnetwork</a> </li><li><a href="#block-550b26a05dd44c2495f669a9a8846abd">3.2. Discriminative subnetwork</a> </li><li><a href="#block-25db9a3bd6c2464a8b405d6268f6ad3f">3.3. Simulated anomaly generation</a> </li><li><a href="#block-5ab8350def844cbf87b6d25b9b1d7859">3.4. Surface anomaly localization and detection</a> </li></ol></li><li><a href="#block-d0204c7d9c944f5481677cc4abaf2703">Experiments</a> <ol><li><a href="#block-5c11ad24659547898ed95cbb77860d7b">Datasets</a> <ol><li><a href="#block-367d900ee36f4735bcd66f1ec7bc08e5">MVTec(15 classes)</a> </li><li><a href="#block-6c96ee093dac4e84af788bbce8831af4">DTD(Describable Textures Dataset)</a> </li></ol></li><li><a href="#block-228c2835ac154fdd85bd1147cc95b9ff">Setting</a> </li><li><a href="#block-5e19bfc6f999472280b81cddda62bd64">Surface Anomaly Detection</a> </li><li><a href="#block-2ac63fa1f7834503a08651feabcff966">Anomaly localization</a> </li><li><a href="#block-a3912529cb834493849918fd7caa3263">Ablation Study</a> </li><li><a href="#block-ba1e943f1fba48dc821ff0731508f8cd">Comparison with supervised methods</a> </li></ol></li></ol>
+<h2 id="block-72f17d044bc347d1b5cb4d1c4ae2b2ac">Introduction &amp; Related Work</h2>
+<h4 id="block-bd80cf5bc69f4853b6a9216c306fe4d2">background Research</h4>
+<p>Recent surface anomaly detection methods rely on generative models to accurately reconstruct the normal areas and to fail on anomalies.</p>
+<ul><li>최근 surface anomaly detection방법들이 generative model을 활용하여 정상적인 이미지에 대해서는 정확하게 reconstruction하고 비정상적인 이미지에서는 실패하는 방식으로 네트워크가 설계되었다.</li></ul>
+<h4 id="block-170b3e2bb7bd480ab6326a0903d94461">Recent Research</h4>
+<p>Reconstructive methods, such as Autoencoders [5, 1, 2, 26] and GANs [24, 23], have been extensively explored since they enable learning of a powerful reconstruction subspace, using only anomaly-free images.</p>
+<ul><li>AutoEncoder와 GANs와 같은 Reconstructive 방법은 정상적인 이미지만을 가지고 강력한 reconstruction subspace(부분공간)을 학습할 수 있음으로 광범위하게 탐구되었다.</li></ul>
+<p>These methods are trained only on anomaly-free images, and often require hand-crafted post-processing steps to localize the anoma- lies, which prohibits optimizing the feature extraction for maximal detection capability.</p>
+<ul><li>이러한 방법은 이상치가 없는 이미지(anomaly-free images)에 대해서만 학습해야 하고 이상치(anomaly)가 어디에 위치하는지 식별하기 위해 서는 사람이 손수 후처리 단계를 요구한다. 그러나 손수 후처리 과정이 모델의 학습 과정에 포함되어 있지 않기 때문에 이상치의 위치를 감지에 필요한 중요한 feature extraction을 최적화하지 못하게 된다.</li></ul>
+<p>Significant effort has thus been recently invested in designing robust surface anomaly detection methods that preferably require minimal supervision from manual annotation.</p>
+<ul><li>그래서 최근에는 최소한의 라벨링으로 Robust한 surface anomaly detection 설계에 상당한 노력이 이뤄진다.</li></ul>
+<h4 id="block-cab333fee79c4d7785705d2901efb85f">Propose</h4>
+<p>In addition to reconstructive approach, we cast surface anomaly detection primarily as a discriminative problem and propose a discrimi- natively trained reconstruction anomaly embedding model (DRÆM).</p>
+<ul><li>우리는 앞서 설명한 reconstructive 접근 방식 뿐만 아니라 discriminative 접근 방식도 사용하여 surface anomaly detection을 다루는 DRÆM에 대해 소개한다.</li></ul>
+<p>The method enables direct anomaly localization without the need for additional complicated post-processing of the network output and can be trained using simple and general anomaly simulations.</p>
+<ul><li>이 방법을 사용하면 네트워크의 output을 가지고 복잡한 후처리 작업 없이 이상치가 어디에 위치하는지 식별할 수 있으며 이 방법을 통해 쉽게 이상치를 탐지해 낼 수 있으며 더 좋은 성능을 보인다.</li></ul>
+<h2 id="block-bd50b6170b0b4b60bdf28ddcda063989">Abstract</h2>
+<p>Visual surface anomaly detection aims to detect local image regions that significantly deviate from normal appearance.</p>
+<ul><li>Visual surface anomaly detection은 이미지의 일부 local한 부분이 정상적인 외형에서 벗어난 경우를 감지하는 것을 목표로한다.</li></ul>
+<p>Recent surface anomaly detection methods rely on generative models to accurately reconstruct the normal areas and to fail on anomalies.</p>
+<ul><li>최근 surface anomaly detection방법들이 generative model을 활용하여 정상적인 이미지에 대해서는 정확하게 reconstruction하고 비정상적인 이미지에서는 실패하도록 설계되었다.</li></ul>
+<p>These methods are trained only on anomaly-free images, and often require hand-crafted post-processing steps to localize the anoma- lies, which prohibits optimizing the feature extraction for maximal detection capability. </p>
+<ul><li>이러한 방법은 이상치가 없는 이미지에 대해서만 학습해야 하며 이상치가 어디에 위치하는지 식별하기 위해 서는 사람이 손수 후처리 단계를 요구한다. 그러나 손수 후처리 과정이 모델의 학습 과정에 포함되어 있지 않기 때문에 이상치의 위치를 감지에 필요한 중요한 feature extraction을 최적화하지 못하게 된다. </li></ul>
+<p>In addition to reconstructive approach, we cast surface anomaly detection primarily as a discriminative problem and propose a discrimi- natively trained reconstruction anomaly embedding model (DRÆM). </p>
+<ul><li>우리는 앞서 설명한 <a href="#block-3fd4bcdd22224bba966c59ebb4438355">reconstructive 접근 방식</a> 뿐만 아니라 discriminative 접근 방식도 사용하여 surface anomaly detection을 다루는 DRÆM에 대해 소개한다.</li><li>discriminative 접근 방식은 이상치와 정상치 사이의 차이를 학습하여 두 클래스를 구분한다.</li></ul>
+<p>The proposed method learns a joint representation of an anomalous image and its anomaly-free reconstruction, while simultaneously learning a decision boundary between normal and anomalous examples. </p>
+<ul><li>본 논문은 데이터의 reconstructive을 학습하면서 동시에 reconstruction가 생성한 정상 데이터와 이상치 데이터를 같이 학습하여 이상치를 감지하게 된다.</li><li>이를 통해 이상치 감지의 정확성을 향상시키려는 것이다.</li></ul>
+<p>The method enables direct anomaly localization without the need for additional complicated post-processing of the network output and can be trained using simple and general anomaly simulations.</p>
+<ul><li>이 방법을 사용하면 네트워크의 output을 가지고 복잡한 후처리 작업 없이 이상치가 어디에 위치하는지 식별할 수 있으며 이 방법을 통해 쉽게 이상치를 탐지해 낼 수 있다.</li><li>On the challenging MVTec anomaly detection dataset, DRÆM outperforms the current state-of-the- art unsupervised methods by a large margin and even delivers detection performance close to the fully-supervised methods on the widely used DAGM surface-defect detection dataset, while substantially outperforming them in localization accuracy.</li><li>DRÆM은 까다로운 anomaly detection dataset인 MVTec에서 비지도 학습으로 우수한 성적을 보였고 surface-defect detection dataset DAGM에서 지도학습으로 좋은 성능을 보였다.</li></ul>
+<h2 id="block-64c5a4ceb1b5441ca8f2301c6eb18cf0">Introduction</h2>
+<p>Surface anomaly detection addresses localization of image regions that deviate from a normal appearance (Figure 1).</p>
+<ul><li>Surface anomaly detection은 이미지내에서 위치한 비정상적인 부분을 감지한다.</li></ul>
+<p>A closely related general anomaly detection problem considers anomalies as entire images that significantly differ from the non-anomalous training set images.</p>
+<ul><li>일반적인 anomaly detection problem은 이미지 전체를 보고 비정상 이미지로 판단한다. 이는 학습에 사용된 정상 이미지와 크게 다른 경우의 이미지를 고려한다.</li><li>쉽게 말해, 이미지를 전체적으로 보았을 때 학습 데이터 셋의 '정상' 이미지와 얼마나 다른지를 기반으로 그 이미지가 비정상이미지인지 아닌지를 판단하는데 이 방법은 이상치가 이미지 내의 부분 또는 세부적인 것에 국한되지 않고, 전체 이미지 수준에서 판단된다는 것이다.</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/6c9446e5-6fca-4892-aa24-b516a03c9012.png" alt="" loading="lazy" width="762" height="800" /></figure>
+<p>In contrast, in surface anomaly detection problems, the anomalies occupy only a small fraction of image pixels and are typically close to the training set distribution. This is a particularly challenging task, which is common in quality control and surface defect localization applications.</p>
+<ul><li>반면에, surface anomaly detection는 이미지의 비정상적인 부분을 작은 영역의 픽셀로 나타내며 이러한 비정상 이미지는 일반적으로 학습 데이터의 분포에 가까운 아주 유사한 이미지 라는 것이다. 이는 특히 품질 관리 및 표면의 결함을 찾아내는 어려운 작업이다.</li></ul>
+<p>In practice, anomaly appearances may significantly vary, and in applications like quality control, images with anomalies present are rare and manual annotation may be overly time consuming.</p>
+<ul><li>실제로, anomaly 부분은 매우 다양하게 나타날수 있으며, 품질 관리와 같은 측면에서 볼 때 결함이 있는 이미지는 상대적으로 결함이 없는 이미지 보다 데이터 수가 적어 라벨링 작업에서 매우 많은 시간이 소모될 수 있다.</li></ul>
+<p>This leads to highly imbalanced training sets, often containing only anomaly-free images.</p>
+<ul><li>이러한 이유로 training dataset은 주로 정상적인 이미지만을 포함하게 됨으로 데이터 분포가 매우 불균형하게 된다. </li></ul>
+<p>Significant effort has thus been recently invested in designing robust surface anomaly detection methods that preferably require minimal supervision from manual annotation.</p>
+<ul><li>그래서 최근에는 최소한의 라벨링으로 Robust한 surface anomaly detection 설계에 상당한 노력이 이뤄진다.</li></ul>
+<p>Reconstructive methods, such as Autoencoders [5, 1, 2, 26] and GANs [24, 23], have been extensively explored since they enable learning of a powerful reconstruction subspace, using only anomaly-free images.</p>
+<ul><li>AutoEncoder와 GANs와 같은 Reconstructive 방법은 정상적인 이미지만을 가지고 강력한 reconstruction subspace(부분공간)을 학습할 수 있음으로 광범위하게 탐구되었다.</li></ul>
+<p>Relying on poor reconstruction capability of anomalous regions, not observed in training, the anomalies can then be detected by thresholding the difference between the input image and its construction.</p>
+<ul><li>anomaly한 영역은 training에서 단계에서 학습되지 않기 때문에, 입력 이미지와 그 reconstruction 사이의 차이를 임계값으로 설정함으로써 이상치를 감지할 수 있다.</li></ul>
+<p>However, determining the presence of anomalies that are not substantially different from normal appearance remains challenging, since these are often well reconstructed, as depicted in Figure 2, top-left.</p>
+<ul><li>그러나 세부적인 anomlay들은 종종 잘 복원되기 때문에, 이를 감지하는 것이 어렵다. 이는 논문의 그림 2, 왼쪽 상단에 있다.</li></ul>
+<p>Recent improvements thus consider the difference between deep features extracted from a general-purpose network and a network specialized for anomaly-free images [4]. </p>
+<ul><li>최근 위 문제를 개선한 사항으로는 general-purpose의 네트워크에서 추출된 특징들과 이상치가 없는 이미지들에 특화해 학습환 네트워크 사이의 차이를 고려한다는 것이다.</li><li>예를 들어, 일반적인 목적(general-purpose)의 네트워크는 이미지의 다양한 특징을 인식하고 이해하는 데 중점을 두는 반면, 이상치가 없는 이미지들을 위한 전문 네트워크(specialized network)는 이상치가 없는 이미지의 특정 특징에 초점을 맞추고 있을 수 있다.</li><li>따라서, 이 두 네트워크에서 추출된 깊은 특징들 사이의 차이를 고려함으로써, 이상치 감지의 정확성을 향상시킬 수 있다. </li></ul>
+<p>Discrimination can also be formulated as a deviation from a dense clustering of non-anomalous textures within the deep subspace [22, 7], as forming such a compact subspace prevents anomalies from being mapped close to anomaly-free samples.</p>
+<ul><li>네트워크의 어떤 고차원 공간에서 정상적인 이미지의 특성들은 서로 밀집된 형태로 있게 되는데 Discrimination은 이러한 정상이미지의 클러스터에 비정상 이미지가 맵핑되는 것을 방지한다. 따라서 비정상 이미지는 정상 이미지의 클러스터에서 벗어나 있을 가능성이 높으며 이러한 둘의 차이를 deviation(편차)로 표현할 수 있다.</li><li> 편차로서 표현될 수 있다는 것을 설명하고 있습니다. 이러한 컴팩트한 부분 공간을 형성함으로써, 이상치가 이상치가 없는 샘플에 가깝게 매핑되는 것을 방지할 수 있습니다.</li><li>예를 들어, 우리가 얼굴 이미지를 처리하는 딥 러닝 모델을 가지고 있다고 가정해보자. 이 모델의 깊은 부분 공간에서, 정상적인 얼굴 텍스처들은 밀집된 클러스터를 형성할 것이다. 그러나 비정상적인 얼굴 이미지 (예를 들어, 얼굴에 큰 흉터가 있는 이미지)는 이 밀집된 클러스터에서 벗어나 있을 것임으로 이상치 감지는 이 밀집된 클러스터에서의 편차를 찾는 것으로 표현될 수 있다는 것이다.</li></ul>
+<p>A common drawback of the generative methods is that they only learn the model from anomaly-free data, and are not explicitly optimized for discriminative anomaly detection, since positive examples (i.e., anomalies) are not available at training time. </p>
+<ul><li> generative methods의 일반적인 단점은 정상 이미지만을 학습으로 사용하고 비정상 이미지를 학습에 사용하지 않기 때문에 discriminative anomaly detection의 비정상 이미지를 탐지하는 것에 최적화되기 어렵다.</li></ul>
+<p>Synthetic anomalies could be considered to train discriminative segmentation methods [8, 21], but this leads to over-fitting to synthetic appearances and results in a learned decision boundary that generalizes poorly to real anomalies (Figure 2, top-right).</p>
+<ul><li>합성된 비정상 이미지(인위적으로 생성한 이상치, Synthetic anomalies)를 사용하여 discriminative segmentation 방법을 사용해 훈련시킬 수 있지만, 이는 합성된 비정상 이미지에 대한 over-fitting을 초래하고, 실제 비정상 이미지에 대해서는 잘 일반화되지 않는 decision boundary를 생성할 수 있다.(그림 2, 오른쪽 상단)</li></ul>
+<p>We hypothesize that over-fitting can be substantially reduced by training a discriminative model over the joint, reconstructed and original, appearance along with the reconstruction subspace. </p>
+<ul><li>over-fitting을 크게 줄일 수 있는 가설은 본 논문에서 제안하는데, Discriminative 네트워크를 학습시킬 때 reconstructed된 이미지와 원본 이미지를 합치는 방법을 사용하면 이상치가 있는 부분과 없는 부분의 차이가 명확히 드러날 것이고, 이미지를 복원하는 과정에서 만들어내는 고차원 특징 공간인 reconstruction subspace에는 이미지의 특징이 잘 표현되어 있으므로 두 가지 정보를 사용하여 학습시키겠다는 것이다.</li></ul>
+<p>This way the model does not overfit to resynthetic appearance, but rather learns a local-appearance-conditioned distance function between the original and reconstructed anomaly appearance, which generalizes well over a range of real anomalies (see Figure 2, bottom).</p>
+<ul><li>이 방법을 통해 모델이 resynthetic appearance(합성된 비정상 이미지에)에 overfit되지 않고, local-appearance-conditioned distance function을 사용해 원본 이미지와 reconstructed된 이미지간의 차이를 측정하겠다는 것이다. 이 차이를 측정하는 거리 함수를 학습함으로써, 모델은 다양한 실제 이상치에 대해 잘 일반화할 수 있을 것이다.</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/3eb4657f-5423-4bde-82f8-91d8a50f7096.png" alt="" loading="lazy" width="772" height="996" /></figure>
+<p>To validate our hypothesis, we propose, as our main contribution, a new deep surface anomaly detection network, discriminatively trained in an end-to-end manner on synthetically generated just-out-of-distribution patterns, which do not have to faithfully represent the target-domain anomalies.</p>
+<ul><li>가설을 검증하기 위해, 본 논문에서는 인위적으로(합성) 생성된 학습 데이터의 분포에서 약간 바깥에 있는 분포 데이터들의 패턴들에 대해 end-to-end 방식을 사용하고 판별적 학습(discriminative learning)을 통해 새로운 surface anomaly detection network를 제안한다.</li><li>쉽게 말해 학습할 때 정상적인 이미지를 판별하기 위해 기존의 학습 데이터(정상이미지)도 보고 학습 데이터에서 약간 벗어난 데이터(just-out-of-distribution) 즉, 정상적인 분포에서 약간 벗어난 패턴을 학습에 사용하여 다양한 상황을 학습하도록 만든다. 따라서 실제 Target Domain에 해당하는 비정상적인 이미지를 정확하게 반영하지 않아도 어느정도 잘 감지할 수 있다는 것이 컨샙이다. </li></ul>
+<p>The network is composed of a reconstructive subnetwork, followed by a discriminative subnetwork (Figure 3).</p>
+<ul><li>이 제안하는 네트워크는 reconstructive subnetwork가 앞단에, discriminative subnetwork가 뒷단에 있다.</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/876d3077-b6a7-4045-b5a4-3174ab0c9d8f.png" alt="" loading="lazy" width="1546" height="598" /></figure>
+<p>The reconstructive subnetwork is trained to learn anomaly-free reconstruction, while the discriminative subnetwork learns a discriminative model over the joint appearance of the original and reconstructed images, producing a high-fidelity per-pixel anomaly detection map (Figure 1).</p>
+<ul><li>reconstructive subnetwork는 정상이미지(anomaly-free)를 reconstruction하도록 학습하고 discriminative subnetwork는 input이미지(original image)와 reconstructive subnetwork를 통해 나온 reconstruction image 사이의 차이를 학습하여 이상치를 판별한다. 그리고 두 네트워크가 연결되어 동작하면서 고해상도 픽셀 별 anomaly detection map을 출력한다.</li></ul>
+<p>In contrast to related approaches that learn surrogate generative tasks, the proposed model is trained discriminatively, yet does not require the synthetic anomaly appearances to closely match the anomalies at test time and out-performs the recent, more complex, state-of-the-art methods by a large margin</p>
+<ul><li>이상치 검출(anomaly detection)을 위해 생성 모델을 사용하는 기존의 방법과는 달리(실제 비정상 이미지가 아닌 인위적으로 생성한 합성 비정상 이미지), 제안된 모델은 생성 모델이 아닌 판별 모델로서 학습된다(비정상 이미지와 정상이미지를 구별하는 것) 이 모델을 훈련시키기 위해 인위적으로 생성된 비정상 이미지(합성 비정상 이미지)는 실제 이상치와 완벽히 일치하지 않아도 이 모델은 잘 작동한다. 왜냐하면 이상치의 일반적인 특성만 학습하면 되기 때문이다. 따라서 학습 데이터가 실제 이상치와 완벽히 일치하지 않지만, 이 방법은 최근에 나온 더 복잡한 방법들보다 훨씬 더 좋은 성능을 보여준다.</li></ul>
+<h2 id="block-ea490e57cdee4b03b90b5c127b49e722">Related work</h2>
+<p>Many surface anomaly detection methods focus on image reconstruction and detect anomalies based on image reconstruction error [1, 2, 5, 24, 23, 26, 31].</p>
+<ul><li>대부분의  surface anomaly detection방법은 이미지 생성에 해당하는 reconstruction에 초점을 맞추고 reconstruction error를 통해 anomaly detection을 한다.</li></ul>
+<p>Auto-encoders are commonly used for image reconstruction. In [1, 2, 26] auto-encoders are trained with adversarial losses.</p>
+<ul><li>Auto-Encoder는 주로 이미지 reconstruction(생성)에 해당되는데, 이는 adversarial(적대적) loss로 훈련된다.(적대적 생성 신경망은 Generator(생성자)와 Discriminator(식별자)가 서로 경쟁(Adversarial)하며 데이터를 생성(Generative)하는 모델(Network)을 뜻한다.)</li></ul>
+<p>The anomaly score of the image is then based on the image reconstruction quality or in the case of adversarially trained auto-encoders, the discriminator output.</p>
+<ul><li>이미지의 anomaly score는 reconstruction 이미지의 quality 또는 adversarially trained(적대적으로 훈련된) auto-encoders의 경우 discriminator의 출력을 기반으로 한다.</li></ul>
+<p>In [24, 23] a GAN [13] is trained to generate images that fit the training distribution.</p>
+<ul><li>GAN은 훈련 데이터셋의 분포를 학습해 훈련 데이터셋과 일치하도록 이미지를 생성해 낸다.</li></ul>
+<p>In [23] an encoder network is additionally trained that finds the latent representation of the input image that minimizes the reconstruction loss when used as the input by the pretrained generator.</p>
+<ul><li>encoder 네트워크를 추가로 학습시켜 encoder가 input 이미지의 latent space(latent representation)을 찾아내는데 reconstruction loss를 최소화 하기 위해 input 이미지의 latent space를 학습한다.</li></ul>
+<p>The anomaly score is then based on the reconstruction quality and the discriminator output.</p>
+<ul><li>anomaly score는 reconstruction quality와 discriminator의 출력에 기반한다.</li></ul>
+<p>In [29] an interpolation auto-encoder is trained to learn a dense representation space of in distribution samples.</p>
+<ul><li>Interpolation auto-encoder는 sample 분포 대한 representation space를 학습한다.</li></ul>
+<p>The anomaly score is then based on a discriminator, trained to estimate the distance between the input-input and input output joint distributions, however the approach to surface anomaly detection remains generative as the discriminator evaluates the reconstruction quality. (<code>정통적인 auto encoder 방법</code>)</p>
+<ul><li> Anomaly score는 입력-입력 및 입력-출력 결합 분포 간의 거리를 추정하도록 훈련된 판별자를 기반으로 한다. 그러나 (기존) surface anomaly detection 방식은 reconstruction quality를 평가하는 discriminator로 인해 여전히 generative하다.</li><li>쉽게 설명하면 Auto-encoder의 입력과 출력에 대한 joint distribution의 거리를 측정하는 discriminator가 있는데 이 joint distribution는 입력 이미지와 입력 이미지로 부터 생성한 출력 이미지(reconstruction Image) 사이의 관계를 나타낸다.</li><li>discriminator는 입력 이미지와 reconstruction Image 사이의 거리를 측정하는 역할을 하며 이 거리는 Anomaly score를 계산하는데 사용된다. </li><li>만약 reconstruction Image가 원래 이미지와 매우 다르다면, 이는 Input Image가 비정상 이미지라고 생각할 수 있으므로 이 거리(또는 차이)가 크면 Anomaly score도 높게 책정된다.</li><li>따라서 이 방법은 discriminator가 reconstruction된 이미지의 quality를 평가한다는 점에서 generative한 anomaly detection이라고 말한다. </li><li>왜냐하면 네트워크가 입력 이미지를 reconstruction하고, 그 reconstruction의 quality를 판별하는(discriminative) 방식을 통해 anomaly detection(이상치를 탐지)하기 때문이다. </li></ul>
+<p>Instead of the commonly used image space reconstruction, the reconstruction of pretrained network features can also be used for surface anomaly detection [4, 25].</p>
+<ul><li>일반적으로 사용되는 image space reconstruction 대신에, <code>pretrained network(decoder) 네트워크를 사용해</code> reconstruction하는 방법도 surface anomaly detection에 사용될 수 있다.</li></ul>
+<p>Anomalies are detected based on the assumption that features of a pre-trained network will not be faithfully reconstructued by another network trained only on anomaly-free images.</p>
+<ul><li>이상치는 정상 이미지에 대해서만 훈련된 네트워크(encoder)에 의해 pre-trained 네트워크(decoder)가 특징을 제대로 추출하지 못하기 때문에 이미지를 잘 reconstructued되지 않을 것이라는 가정을 기반으로 탐지한다.</li></ul>
+<p>Alternatively [20, 11] propose surface anomaly detection as identifying significant deviations from a Gaussian fitted to construction.</p>
+<ul><li>또는 정상적인 데이터의 분포를 가우시안 분포에 맞춰 학습하고, 이 분포에서 크게 벗어나는 데이터를 이상치로 판단하는 방식이다.</li></ul>
+<p>However, determining the presence of anomalies that are not substantially different from normal appearance remains challenging, since these are often well recon- structed, as depicted in Figure 2, top-left.</p>
+<ul><li>그러나, 정상 이미지의 모습과 크게 다르지 않은 비정상 이미지를 파악하는 것은 여전히 도전적인 작업이다. 왜냐하면 이러한 이상치들은 종종 잘 재구성되기 때문이다.</li></ul>
+<p>We hypothesize that over-fitting can be substantially reduced by training a discriminative model over the joint, reconstructed and original, appearance along with the reconstruction subspace.</p>
+<ul><li>reconstructed된 이미지와 원래 이미지를 함께 사용하여 훈련시킴으로써 over-fitting 문제를 해결할 수 있다는 가설을 세웠다.</li></ul>
+<p>This way the model does not overfit to anomaly-free features of a pre-trained network.</p>
+<ul><li>이 방식은 모델이 pre-trained된 네트워크(decoder)가 정상적인 이미지에 대해 over-fitting되지 않게 된다.</li></ul>
+<p>This requires a unimodal distribution of the anomaly-free visual features which is problematic on diverse datasets.</p>
+<ul><li>이 방법은 정상 이미지가 따르는 unimodal distribution(분포가 단일한)를 갖는 것을 요구하는데, 다양한 데이터셋으로 인해 분포가 여러 개가 될 수 있는 문제가 있다.</li></ul>
+<p>[16] propose a one-class variational auto-encoder gradient-based attention maps as output anomaly maps.</p>
+<ul><li><code>VAE</code>는 이상치 맵 출력으로 사용되는 그래디언트 기반의 <code>attention maps을 사용</code>하는 것을 제안했다.</li></ul>
+<p>However the method is sensitive to subtle anomalies close to the normal sample distribution.</p>
+<ul><li>이상치가 정상 데이터와 매우 비슷할 경우, 이 방법은 이를 제대로 감지하지 못하게 된다.</li></ul>
+<p>Recently Patch-based one-class classification methods have been considered for surface anomaly detection [30].</p>
+<ul><li>최근에는 <code>Patch-based one-class classification</code>이 표면 이상 감지에 사용되고 있습니다</li><li>Patch-based one-class classification는 이미지를 여러 개의 작은 부분(패치)으로 나누고, 각 패치를 분류하는 방법이다.</li></ul>
+<p>These are based on one-class methods [22, 7] which attempt to estimate a decision boundary around anomaly-free data that separates it from anomalous samples by assuming a unimodal distribution of the anomaly-free data.</p>
+<ul><li>one-class methods(클래스 하나분류 방법)을 기반으로하여 정상 데이터 주변에 decision boundary를 추정해 비정상 샘플과 분리한다. 이때 정상 이미지가  unimodal distribution(단일 분포)이라는 것을 가정한다.</li><li>단일 모드 분포(unimodal distribution)라는 가정은, 정상 데이터가 대부분 비슷한 특징을 가지고 있으며, 이 특징들이 어떤 중심을 중심으로 뭉쳐 있다는 것을 의미해 데이터의 분포가 한 군데에 몰려있다고 가정하는 것이다.</li></ul>
+<p>This assumption is often violated in surface anomaly data.</p>
+<ul><li>이 가정은 surface anomaly 데이터에 종종 위반된다. 왜냐하면  surface anomaly 데이터는 한 곳에 집중되어 있지 않고, 여러 위치에 분산되어 있을 수 있기 때문이다. </li></ul>
+<h2 id="block-97575151e8ed4acaa9bd8c0c4aba318d"><strong>DRÆM</strong></h2>
+<p>The proposed discriminative joint reconstruction anomaly embedding method (DRÆM) is composed from a reconstructive and a discriminative subnetworks (see Figure 3).</p>
+<ul><li>제안된 discriminative 방법과 reconstruction방법을 같이 사용하는 anomaly 임베딩 방법(DRAM)은 reconstructive와 discriminative 네트워크로 구성된다.(그림 3 참조).</li></ul>
+<p>The reconstructive sub-network is trained to implicitly detect and reconstruct the anomalies with semantically plausible anomaly-free content, while keeping the non-anomalous regions of the input image unchanged.</p>
+<ul><li>reconstructive 네트워크는 입력 이미지의 비정상 영역은 변경하지 않고 입력 이미지와 유사한 이미지를 생성해 이상치를 감지한다.</li></ul>
+<p>Simultaneously, the discriminative sub-network learns a joint reconstruction-anomaly embedding and produces accurate anomaly segmentation maps from the concatenated reconstructed and original appearance.</p>
+<ul><li>discriminative 네트워크는 reconstruction 네트워크의 출력과 원래 이미지를 함께 고려한다. 이를 바탕으로, 네트워크는 이상치를 정확하게 찾아낼 수 있는 '맵'을 생성합니다. 이 '맵'은 이미지의 각 픽셀이 이상치인지 아닌지를 나타내는 정보를 담고 있다.</li></ul>
+<p>Anomalous training examples are created by a conceptually simple process that simulates anomalies on anomaly-free images. </p>
+<ul><li>이상치 training 예시로는 이상치가 없는 이미지에서 이상치를 시뮬레이션하는 개념적으로 간단한 과정에 의해 생성된다.</li></ul>
+<p>This anomaly generation method provides an arbitrary amount of anomalous samples as well as pixel-perfect anomaly segmentation maps which can be used for training the proposed method without real anomalous samples.</p>
+<ul><li>이상치를 '생성'하는 방법에 대해 설명하는데 이상치가 없는 이미지에 '가짜' 이상치를 추가함으로써, 모델은 이상치를 감지하고 처리하는 방법을 배울 수 있다. 이렇게 생성된 이상치와 '이상치 맵'은 모델의 훈련에 사용된다.</li></ul>
+<h2 id="block-14ee650de6a44df991b3f73a85aeb419">3.1 Reconstructive subnetwork</h2>
+<p>The reconstructive subnetwork is formulated as an encoder-decoder architecture that converts the local patterns of an input image into patterns closer to the distribution of normal samples.</p>
+<ul><li>reconstructive subnetwork는 encoder-decoder 아키텍처로 구성되며, 입력 이미지의 local pattern을 정상 이미지의 샘플 분포에 가깝게 변환한다.</li><li>즉, 입력 이미지에서 이상치를 찾아내고, 그 이상치 부분을 '정상' 샘플의 분포와 가까운 패턴으로 reconstruction하는 것이다. 즉, 네트워크는 이상치를 '보정'하려고 시도한다.</li></ul>
+<p>The network is trained to reconstruct the original image \(I\) from an artificially corrupted version Ia obtained by a simulator (see Section 3.3).</p>
+<ul><li>네트워크는 simulator에서 얻은 인공적으로 손상된 이미지(정상 이미지를 비정상 이미지로 변환한) \(I_a\)에서 원본 이미지 \(I\)을 reconstruction하도록 훈련된다.(섹션 3.3 참조).</li></ul>
+<p>An \(l2\) loss is often used in reconstruction based anomaly detection methods [1, 2], however this assumes an independence between neighboring pixels, therefore a patch based SSIM [27] loss is additionally used as in [5, 31]:</p>
+<ul><li>reconstruction 기반 anomaly detection방법에서는 종종 L2 loss가 사용되지만, 해당 loss는 인접한 픽셀 간에 독립성을 가정한다. 따라서 패치 기반 SSIM[27] 손실이 [5, 31]에서처럼 추가적으로 사용된다.</li><li>쉽게 설명하면, L2 손실함수는 이미지 reconstruction의 전형적인 방법 중 하나로 이 방법은 원본 이미지와 reconstruction된 이미지 사이의 픽셀 간 차이의 제곱을 계산하여 손실을 측정하는데 이 방법은 각 픽셀이 서로 독립적이라는 가정을 내포하고 있다. 즉, 인접한 픽셀들 사이의 상관관계를 고려하지 않는다.</li><li>그런데 실제 이미지에서는 인접한 픽셀들 사이에는 상관관계가 존재한다. 이런 관계를 고려하려면 다른 유형의 손실 함수를 사용해야 하는데 그래서 패치 기반 SSIM(Structural Similarity Index Measure) 손실 함수를 추가로 사용한다. </li><li>SSIM은 두 이미지가 얼마나 구조적으로 유사한지를 측정하는 방법이다. 이는 인접한 픽셀들 사이의 상관관계를 고려하여 이미지의 전반적인 구조를 보존하려는 것이다.</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/172b7696-052e-48cd-9412-728510ae309a.png" alt="" loading="lazy" width="1006" height="176" /></figure>
+<p>where \(H\) and \(W\) are the height and width of image \(I\), respectively. \(N_p\) is equal to the number of pixels in \(I\). \(I_r\) is the reconstructed image output by the network. \(SSIM(I,\;I_r)_(i,\;j)\) is the SSIM value for patches of \(I\) and \(I_r\), centered at image coordinates \((i,\;j)\). The reconstruction loss is therefore:</p>
+<ul><li>\(H\)와 \(W\)는 Image \(I\)의 세로, 가로. \(N_p\)는 \(I\)의 픽셀 수. \(I_r\)은 네트워크의 출력인 reconstructed된 이미지. </li><li>\((i, \;j)\)는 이미지 픽셀을 중앙으로 하는 좌표 값</li><li>아래는 reconstruction loss이다.</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/590e265e-9c6e-4dc1-8148-8c7296e0681c.png" alt="" loading="lazy" width="874" height="108" /></figure>
+<p>where λ is a loss balancing hyper-parameter. Note that an additional training signal is acquired</p>
+<p>from the downstream discriminative network (Section 3.2), which performs anomaly localization by detecting the reconstruction difference.</p>
+<ul><li>λ는 loss balancing hyper-parameter이다. downstream 부분의 discriminative networks는 원본 이미지와 reconstruction이미지의 차이를 통해 이상치를 탐지하는 역할을 하는 추가적인 학습을 한다.</li><li>쉽게 말해 reconstructive subnetwork는 이미지를 정상적인 상태로 복구하려고 시도하고, discriminative subnetworks는 이 reconstructive된 이미지와 원본 이미지의 발생하는 차이를 통해 이상을 감지한다.</li></ul>
+<h2 id="block-550b26a05dd44c2495f669a9a8846abd">3.2. Discriminative subnetwork</h2>
+<p>The discriminative subnetwork uses U-Net [21]-like architecture.</p>
+<ul><li>discriminative subnetwork는 U-Net 구조를 사용한다.</li></ul>
+<p>The subnetwork input Ic is defined as the channel-wise concatenation of the reconstructive sub- network output Ir and the input image I.</p>
+<ul><li>Discriminative subnetwork의 Input인 \(I_c\)는 reconstructive subnetwork의 출력인 \(I_r\)과 원본 입력이미지인 \(I\)의 channel-wise concatenation 으로 정의된다.</li></ul>
+<p>Due to the normality-restoring property of the reconstructive subnetwork, the joint appearance of I and Ir differs significantly in anomalous images, providing the information necessary for anomaly segmentation.</p>
+<ul><li>reconstructive subnetwork의 normality-restoring 특성 때문에 원본 이미지(I)와 복원된 이미지(Ir)의 결합된(합친) 이미지는 이상치가 있는 이미지에서는 크게 다를 것이고 이 차이는 anomaly segmentation에 필요한 정보를 제공한다.</li><li>쉽게 말해 normality-restoring 이상치가 없는 이미지(정상 이미지로)를 복원하는 능력을 의미하는데 reconstructive subnetwork는 입력 이미지에 이상치가 있더라도 그것을 무시하고 이상치가 없는 이미지를 복원하려고 시도한다.</li><li>입력 이미지가 이상치가 있는 이미지라면 reconstructive subnetwork로 복원된 이미지의 차이가 크게 나타날 것다. 왜냐하면 reconstructive subnetwork는 이상치를 무시하고 이상치가 없는 이미지를 복원하려고 시도하기 때문이다.</li></ul>
+<p>In reconstruction-based anomaly detection methods anomaly maps are obtained using similarity functions such as SSIM [27] to compare the original image to its reconstruction, however a surface anomaly detection-specific similarity measure is difficult to hand-craft.</p>
+<ul><li>reconstruction을 기반으로한 anomaly detection 방법에서는 원본 이미지와 reconstruction이미지를 비교하기 위해 SSIM과 같은 유사성 function을 사용해 이미지의 전반적인 유사성을 측정한다.</li><li>그리고 이 유사성을 가지고 anomaly maps를 얻는다.</li><li>그러나 surface anomaly detection-specific과 같이 표면 anomaly가 다양하고 복잡하기 때문에 이에 특화된 유사성 측정 방법을 직접 만드는 것은 어렵다. 따라서 이러한 복잡성을 처리하려면, 모델이 데이터로부터 다양한 패턴을 자동으로 학습할 수 있어야 한다.</li></ul>
+<p>In contrast, the discriminative subnetwork learns the appropriate distance measure automatically.</p>
+<ul><li>대조적으로, discriminative subnetwork는 reconstruction subnetwork의 출력과 원본 이미지 사이의 차이를 감지하여 이상을 지역화하는 역할을 하는데 이 과정에서 적절한 거리 측정 방법을 자동으로 학습한다.</li></ul>
+<p>The network outputs an anomaly score map \(M_o\) of the same size as \(I\). Focal Loss [14] (Lseg) is applied on the discriminative sub-network output to increase robustness towards accurate segmentation of hard examples.</p>
+<ul><li>discriminative subnetwork는 anomaly score map \(M_o\)를 출력한다. 이 맵은 원본 이미지 \(I\)와 동일한 크기를 가지며, 각 픽셀에 대한 이상 점수를 나타내는데 이상 점수는 해당 픽셀이 이상을 나타내는 정도를 측정한 값이다.</li><li>Focal Loss를 discriminative subnetwork의 출력에 적용하여, 이상 탐지의 정확성을 향상시키고 어려운 예제에 대한 robustness를 높이는 데 사용한다. 이를 통해, discriminative subnetwork는 이상 점수 맵을 더 정확하게 생성하고 이상 부분을 더 정확하게 세분화(segmentation)할 수 있게 된다.</li><li>Focal Loss는 분류 문제에서 어려운 예제(hard examples)에 대한 분류 성능을 향상시키기 위해 설계된 손실 함수로  잘못 분류된 예제에 더 큰 가중치를 부여하여, 네트워크가 이러한 예제에 더 집중하도록 한다.</li></ul>
+<p>Considering both the segmentation and the reconstructive objectives of the two subnetworks, the total loss used in training DRÆM is</p>
+<ul><li>두 subnetworks의 segmentation 및 reconstructive 목표를 모두 고려할 때, DRAM 훈련에 사용되는 최종 loss는 다음과 같다.</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/6d89407b-dfd1-48a3-9a3e-ddf1436fe921.png" alt="" loading="lazy" width="1372" height="164" /></figure>
+<p>where Ma and M are the ground truth and the output anomaly segmentation masks, respectively.</p>
+<ul><li>실제로 이상이 발생한 위치를 나타내는 정보 \(M_a\)(정답)와 네트워크의 출력인 \(M\)를 비교해 네트워크를 학습시킨다.  </li></ul>
+<h3 id="block-25db9a3bd6c2464a8b405d6268f6ad3f">3.3. Simulated anomaly generation</h3>
+<p>DRÆM does not require simulations to realistically reflect the real anomaly appearance in the target domain, but rather to generate just-out-of-distribution appearances, which allow learning the appropriate distance function to recognize the anomaly by its deviation from normality.</p>
+<ul><li>DRÆM은 target domain의 실제 비정상적인 이미지 데이터가 필요하지 않다. 대신, DRÆM은 정상 이미지의 분포에서 약간 벗어난 분포를 생성하는 것을 목표로 한다.</li></ul>
+<p>The proposed anomaly simulator follows this paradigm.</p>
+<ul><li>제안된 anomaly simulator는 이러한 패러다임을 따른다.</li></ul>
+<p>A noise image is generated by a Perlin noise generator [18] to capture a variety of anomaly shapes (Figure 4, P ) and binarized by a threshod sampled uniformly at random (Figure 4, Ma) into an anomaly map Ma. </p>
+<ul><li>먼저, Perlin noise generator를 사용하여 다양한 이상 패턴을 얻기 위해 노이즈 이미지를 생성한다(\(P\)). 그런 다음, 균일하게 무작위로 샘플링된 임계값을 하나 추출하고 랜덤 노이즈(\(P)\)에 대해 이미지를 이진화하여 이상 맵 \(M_a\)를 생성합니다.</li><li>이미지 이진화는 이미지의 각 픽셀 값을 임계값과 비교하여 0 또는 1로 변환하는 과정이다. 임계값보다 높은 픽셀 값은 1로, 임계값보다 낮은 픽셀 값은 0으로 변환된다. 예를 들어, 노이즈 이미지의 픽셀 값이 [0.1, 0.3, 0.5, 0.7, 0.9]이고, 무작위로 선택된 임계값이 0.5라면, 이진화 과정을 거친 후의 이미지의 픽셀 값은 [0, 0, 1, 1, 1]이 된다.</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/21b54bfc-3ab5-4b9e-b741-cc322fa1e184.png" alt="" loading="lazy" width="1462" height="1336" /></figure>
+<p>The anomaly texture source image A is sampled from an anomaly source image dataset which is unrelated to the input image distribution (Figure 4, A). Random augmentation sampling, inspired by RandAugment [10], is then applied by a set of 3 random augmentation functions sampled from the set: {posterize, sharpness, solarize, equalize, brightness change, color change, auto-contrast}. </p>
+<ul><li>이미지 \(A\)는 입력 이미지 분포와 무관한, 입력 이미지 분포에 포함되있지 않은 데이터셋에서 샘플링 된다. 그런 다음 \(A\)에 RandAugment에서 영감을 받은 Random augmentation sampling이 적용된다.</li><li>\(A\)에 RandAugment: {posterize, sharpness, solarize, equalize, brightness change, color change, auto-contrast} 중에서 랜덤하게 3개를 sampling하여 적용한다</li><li>posterize: 사용하는 색상의 수를 강제적으로 줄여줌으로써 이미지의 색상을 단순화시키는 동시에 이로 인해 포스터로 그린 듯한 단순한 느낌이 나도록 하는 효과<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/178c9556-e7fc-439b-a4df-6b3b578db586.jpg" alt="" loading="lazy" width="658" height="894" /></figure></li><li>sharpness(선명도), solarize(과대 노출), equalize(평활화), brightness change(밝기 변경), color change (색상 변경), auto-contrast(명암 자동 조절)</li></ul>
+<p>The augmented texture image A is masked with the anomaly map Ma and blended with I to create anomalies that are just-out-of-distribution, and thus help tighten the decision boundary in the trained network. The augmented training image Ia is therefore defined as</p>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/b943ecaa-f3db-4a58-9459-ba3e0a37ddb2.png" alt="" loading="lazy" width="1238" height="112" /></figure>
+<ul><li>Augmention과 anomaly map인 \(M_a\)가 적용된 이미지 \(A\)와 원본 이미지 \(I
+\)와 혼합되어 원본 이미지 분포에서 약간 벗어난 이상 이미지를 만들어 낸다. 따라서 훈련된 네트워크의 decision boundary을 강화하는 데 도움이 된다.(성능이 향상된다). \(M_a\)와 \(I\)와 혼합된 이미지를 \(I_a\)라고 하며 정의는 다음과 같다.</li></ul>
+<p>where \(\overline{M_a}\) is the inverse of \(M_a\), ⊙ is the element-wise multiplication operation and β is the opacity parameter in blending.</p>
+<ul><li>\(\overline{M_a}\)는 \(M_a\)의 inverse한 형태이며 ⊙는 element-wise multiplication연산이고 β는 \(I\)와 \(\overline{M_A}\)의 이미지 혼합에서 사용되는 불투명도 파라미터로 만약 A의 불투명도 파라미터 β가 0.7이라면, 최종 이미지는 A의 70%와 B의 30%를 합친 결과가 된다. 이는 A가 최종 이미지에 더 큰 영향을 미침을 의미한다.</li></ul>
+<p>This parameter is sampled uniformly from an interval, i.e., β ∈ [0.1, 1.0]. </p>
+<ul><li>이 parameter는 [0.1, 1.0]에서 균일하게 랜덤으로 샘플링 된다.</li></ul>
+<p>The randomized blending and augmentation afford generating diverse anomalous images from as little as a single texture (see Figure 5).</p>
+<ul><li>랜덤으로 혼합하고 augmentation을 통해 다양한 이상 이미지를 단일 texture(\(A\))를 통해 이미지를 생성할 수 있다.</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/2572beab-0541-4537-acdd-03b3c45ee180.png" alt="" loading="lazy" width="1272" height="846" /></figure>
+<p>The above described simulator thus generates training sample triplets containing the original anomaly-free image \(I\), the augmented image containing simulated anomalies \(I_a\) and the pixel-perfect anomaly mask \(M_a\).</p>
+<ul><li>따라서 위에서 설명한 simulator는 원본 이미지(정상) \(I\), simulator 이후 비정상 이미지 \(I_a\), 이상치 마스크 \(M_a\)를 포함하는 훈련 샘플 쌍(triplets)을 생성한다.</li></ul>
+<h3 id="block-5ab8350def844cbf87b6d25b9b1d7859">3.4. Surface anomaly localization and detection</h3>
+<p>The output of the discriminative subnetwork is a pixel-level anomaly detection mask Mo, which can be interpreted in a straight-forward way for the image-level anomaly score estimation, i.e., whether an anomaly is present in the image.</p>
+<ul><li>discriminative subnetwork의 출력인 픽셀 단위의 anomaly detection mask \(M_o\)는 이미지 전체에 대한 이상 점수를 추정하는 데 사용될 수 있다.</li></ul>
+<p>First, \(M_o\) is smoothed by a mean filter convolution layer to aggregate the local anomaly response information. </p>
+<ul><li>먼저, 이상 탐지 마스크(\(M_o\))는 convolution layer에서 mean filter를 사용하여 이상치에 대한 정보를 더 극대화 시킨다. mean filter in CNN은 픽셀 값을 해당 픽셀 주변의 값들의 평균으로 대체하는 방식이다.</li></ul>
+<p>The final image-level anomaly score η is computed by taking the maximum value of the smoothed anomaly score map:</p>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/ee99ce75-19f8-4787-95f8-c7226112b5b1.png" alt="" loading="lazy" width="1230" height="132" /></figure>
+<ul><li>mean filter가 적용된 \(M_0\)에 최대값을 취하여 이상 점수 η를 계산한다. 즉, 이미지 전체에서 가장 높은 이상 점수를 가진 픽셀의 점수를 이미지 전체의 이상 점수로 사용한다는 것이다. </li></ul>
+<p>where \(f_{sf\times sf}\) is a mean filter of size \(sf\times sf\) and ∗ is the convolution operator.</p>
+<ul><li>\(f_{sf\times sf}\)는 \(sf\times sf\) 크기의 mean filter라는 것을 의미하고 *은 CNN 연산자를 의미한다.</li></ul>
+<p>In a preliminary study, we trained a classification network for the image-level anomaly classification, but did not observe improvements over the direct score estimation method (5).</p>
+<ul><li>이전 연구에서, Image-level anomaly classification에서의 결과는 direct score estimation method는 개선된 결과를 보지 못했다</li><li>이미지 수준의 이상 분류(Image-level anomaly classification): 전체 이미지를 기반으로 이상을 분류하는 방법으로 예를 들어, 공장에서 생산되는 제품의 이미지를 분석하여 제품에 결함이 있는지 없는지를 판단하는 것이 이에 해당된다.</li><li>직접적인 점수 추정 방법(Direct score estimation method): 이상 점수 맵에서 최대 이상 점수를 추출하여 이미지 전체의 이상 점수를 계산하는 방법으로 이 방법은 각 픽셀에 대한 이상 점수를 계산한 후, 이 점수들을 종합하여 이미지 전체의 이상 점수를 추정한다. 이 방법은 픽셀 수준에서 이상을 탐지하므로, 이상이 발생한 구체적인 위치를 파악하는 데 유용하다.</li></ul>
+<h2 id="block-d0204c7d9c944f5481677cc4abaf2703">Experiments</h2>
+<p>Image-level AUROC is used for anomaly de- tection and a pixel-based AUROC for evaluating anomaly localization.</p>
+<p>We thus additionally report the pixel-wise average precision metric (AP), which is more appropriate for highly imbalanced classes and in particular for surface anomaly detection, where the precision plays an important role.</p>
+<h3 id="block-5c11ad24659547898ed95cbb77860d7b">Datasets</h3>
+<h4 id="block-367d900ee36f4735bcd66f1ec7bc08e5">MVTec(15 classes)</h4>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/306df6fd-3ebb-45ae-a1b9-be2fe8bfc8db.png" alt="" loading="lazy" width="1714" height="916" /></figure>
+<h4 id="block-6c96ee093dac4e84af788bbce8831af4">DTD(Describable Textures Dataset)</h4>
+<p>Use Anomaly source dataset. Consisting of 5640 images, organized according to a list of 47 terms (categories).</p>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/84382657-a7af-4833-931c-bb746237e716.png" alt="" loading="lazy" width="1332" height="464" /></figure>
+<h3 id="block-228c2835ac154fdd85bd1147cc95b9ff">Setting</h3>
+<p>The network is trained for 700 epochs on the MVTec anomaly detection dataset. </p>
+<p>The learning rate is set to \(10^{-4}\) and is multiplied by 0.1 after 400 and 600 epochs.</p>
+<p>Image rotation in the range of (−45, 45) degrees is used as a data augmentation method on anomaly free images during training to alleviate overfitting due to the relatively small anomaly-free training set size.</p>
+<h3 id="block-5e19bfc6f999472280b81cddda62bd64">Surface Anomaly Detection</h3>
+<p>AUROC를 지표로 하여 나타난 결과로 MVTec dataset에서 15개의 class중 9개의 class에 대해서 가장 높은 성능을 달성 했다. [1] GANomaly, [26] DAGAN, [4] Student-Teacher AD, [31] RIAD, [20] Gaussian AD, [11] Padim 순으로 비교하면 된다.</p>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/ca07f4d5-4c88-4be8-982c-2ab9adc900b4.png" alt="" loading="lazy" width="948" height="872" /></figure>
+<h3 id="block-2ac63fa1f7834503a08651feabcff966">Anomaly localization</h3>
+<p>Anomaly localization에서의 MVTec dataset의 결과로 평가 지표는 (AUROC/ AP) 이다.</p>
+<p>15개의 class중 11개의 class에서 가장 높은 AP(Average Precision)스코어를 얻었다.</p>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/21a36cc6-8749-4d18-b0eb-c14dcdc09042.png" alt="" loading="lazy" width="1264" height="1084" /></figure>
+<h3 id="block-a3912529cb834493849918fd7caa3263">Ablation Study</h3>
+<h4 id="block-22acb51839d14d028ba44ea22cad799b">Architecture</h4>
+<ul><li>Disc. 를 보면 Reconstruction Subnetwork를 제거한 후 Discriminative subnetwork만을 학습시켜 평가한다. 성능 하락이 보이는데 그 이유는 simulated anomalies에 discriminative subnetwork가 overfitting되기 때문이다.</li><li>Recon. -AE에서는 reconstructive subnetwork만을 남기고 discriminative subnetwork 제거하여 성능을 평가하고 있다..</li><li>Recon-AE(MSGMS)에서는 유사도 함수를 SSIM이 아닌 MS-GMS로 사용하였을 때의 성능지표이다. 그러나 기존 SSIM을 Draem에 적용한 것이 더 높은 성능을 보였다.</li><li>Bozicet al. 에서는 DRÆM의 backbone을 최신 SOTA supervised surface anomaly detection network로 대체하고, 평가했으나 성능이 크게 떨어졌다. 그 이유는 정상이나 이상치의 모습 자체를 학습하는 것보다 기존 Draem에서 소개되었던 정상이미지와 비정상이미지가 얼마나 벗어났는지를 학습하는 것이 더 효과적이다라는 것을 보여준다.</li><li>DRAEM_no_aug, DRAEM_aug에서는 크게 차이가 나지 않으나 β(the opacity parameter)를 적용한 것과는 꽤나 차이가 있음을 볼 수 있다.</li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/b540a9b4-5f7a-4d6c-9987-492bd5695f2f.png" alt="" loading="lazy" width="1734" height="598" /></figure>
+<p>아래 색깔친 박스는 Texture source image from an anomaly source image dataset에 따른 실험한 결과를 보여준다.</p>
+<ul><li>아래 그림에서 빨강박스는 DRAEM에 Texture source dataset으로 DTD dataset을 적용한 결과</li><li>파란색 박스는 DRAEM에 Texture source dataset으로 ImageNet을 적용한 결과</li><li>초록색 박스는 DRAEM에 random하게 sampling된 색으로 적용한 결과</li><li>노란색 박스는 DRAEM에 random하게 sampling된 직사각형을 적용한 결과이고 이 결과가 Navie DRAEM과 비교해 볼 때 약간의 성능차이만 있었기 때문에 Simulated로 부터 나온 Anomaly의 모양이 실제 Anomaly모양과 비슷하지 않아도 된다는 것이다. </li></ul>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/670e88a9-2467-4fcd-87b9-626d7c24b623.png" alt="" loading="lazy" width="1114" height="500" /></figure>
+<p>Anomaly source dataset으로 이용되는 데이터 크기에 따른 성능을 평가한 결과이다.</p>
+<p>위 결과에서 볼 수 있듯이 β(the opacity parameter)와 Augmentation의 성능에 크게 영향을 주고 있으며 적은 수의 Texture source image로도 높은 성능을 달성할 수 있다고 말한다.</p>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/9bd18658-b16e-4448-9f79-fc70393ec1b3.png" alt="" loading="lazy" width="1282" height="1018" /></figure>
+<h3 id="block-ba1e943f1fba48dc821ff0731508f8cd">Comparison with supervised methods</h3>
+<p>We thus compare DRÆM with the supervised methods on the DAGM dataset [28] that contains <strong>10 textured object classes</strong>.</p>
+<h4 id="block-8e95ad8120414b909d51c3706cca78b7">DAGM dataset</h4>
+<figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/7e544b08-a187-470a-bafe-fb0be299157b.png" alt="" loading="lazy" width="2066" height="486" /></figure>
+<p>Supervised Learning에서의 Draem은 surface anomaly을 대략적으로 타원의 형태로 cover하고 있는 모습을 볼 수 있다.(Bozic et al.)</p>
+<p>그 이유는 대략적으로 라벨링(coarsely annotated) 되었기 때문에, 테스트 이미지에서도 anomaly한 부분을 정확하게 segmentation하기는 어렵다. 아래 보면 Ground Truth를 정답으로 학습하여 테스트한 Bozic et al.행의 결과와 unsupervised로 학습된 DRAEM의 결과 차이를 보면 알 수 있다.</p>
+<div class="columns"><div class="column"><figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/03688fb9-5f87-44dd-9242-d574ca681eee.png" alt="" loading="lazy" width="1218" height="610" /></figure></div><div class="column"><figure><img src="/assets/notion/dræm-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/54ff6cab-001e-4db0-983b-9b0cd367ba51.png" alt="" loading="lazy" width="1290" height="1040" /></figure></div></div>
+<p>또한 Unsupervised Learning이 Supervised Learning과 거의 준하는 결과를 보여준다.</p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/post.js?v=13" type="module"></script>
+    <script src="/assets/js/palette.js?v=8" defer></script>
+  </body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>Docker에 VNC 설치 — Woojae Joo</title>
+    <meta name="post-slug" content="docker에-vnc-설치" />
+    <meta name="description" content="Ubuntu Image 다운로드 및 실행 --net=host 를 옵션에 꼭 넣어줘야 외부포트 접속이 가능하다. docker run -it --net=host --name ubuntu-desktop ubuntu:22.04 /bin/bash 컨테이너 접속 명령어 만약 컨테이너에서 나왔다면 아래 명령어로 다시" />
+    <link rel="canonical" href="https://ursonice.github.io/posts/docker%EC%97%90-vnc-%EC%84%A4%EC%B9%98/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="Docker에 VNC 설치" />
+    <meta property="og:description" content="Ubuntu Image 다운로드 및 실행 --net=host 를 옵션에 꼭 넣어줘야 외부포트 접속이 가능하다. docker run -it --net=host --name ubuntu-desktop ubuntu:22.04 /bin/bash 컨테이너 접속 명령어 만약 컨테이너에서 나왔다면 아래 명령어로 다시" />
+    <meta property="og:url" content="https://ursonice.github.io/posts/docker%EC%97%90-vnc-%EC%84%A4%EC%B9%98/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Docker%EC%97%90%20VNC%20%EC%84%A4%EC%B9%98&amp;cat=Tools" />
+    <meta property="article:published_time" content="2026-01-19T05:19:00.000Z" />
+    <meta property="article:modified_time" content="2026-01-20T11:42:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Docker에 VNC 설치" />
+    <meta name="twitter:description" content="Ubuntu Image 다운로드 및 실행 --net=host 를 옵션에 꼭 넣어줘야 외부포트 접속이 가능하다. docker run -it --net=host --name ubuntu-desktop ubuntu:22.04 /bin/bash 컨테이너 접속 명령어 만약 컨테이너에서 나왔다면 아래 명령어로 다시" />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Docker%EC%97%90%20VNC%20%EC%84%A4%EC%B9%98&amp;cat=Tools" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Docker에 VNC 설치","description":"Ubuntu Image 다운로드 및 실행 --net=host 를 옵션에 꼭 넣어줘야 외부포트 접속이 가능하다. docker run -it --net=host --name ubuntu-desktop ubuntu:22.04 /bin/bash 컨테이너 접속 명령어 만약 컨테이너에서 나왔다면 아래 명령어로 다시","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Docker%EC%97%90%20VNC%20%EC%84%A4%EC%B9%98&cat=Tools","datePublished":"2026-01-19T05:19:00.000Z","dateModified":"2026-01-20T11:42:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/docker%EC%97%90-vnc-%EC%84%A4%EC%B9%98/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://ursonice.github.io/topics/tools/"},{"@type":"ListItem","position":3,"name":"Docker에 VNC 설치","item":"https://ursonice.github.io/posts/docker%EC%97%90-vnc-%EC%84%A4%EC%B9%98/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/tools/">Tools</a>
+    </nav>
+    <h1>Docker에 VNC 설치</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2026년 1월 19일</span><span class="dot"></span><span>수정 2026년 1월 20일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-2edb12c0115c80b9889dfc1dd0b439c0">Ubuntu Image 다운로드 및 실행</h2>
+<ul><li><code>--net=host</code> 를 옵션에 꼭 넣어줘야 외부포트 접속이 가능하다.</li></ul>
+<pre data-lang="javascript"><code class="language-javascript">docker run -it --net=host --name ubuntu-desktop ubuntu:22.04 /bin/bash</code></pre>
+<h2 id="block-2edb12c0115c803fbf23d2a7fd435ba6">컨테이너 접속 명령어</h2>
+<ul><li>만약 컨테이너에서 나왔다면 아래 명령어로 다시 들어갈 수 있다.</li></ul>
+<pre data-lang="javascript"><code class="language-javascript">docker exec -it ubuntu-desktop bash</code></pre>
+<h2 id="block-2edb12c0115c800a957afb6c75d5d0c0">Install Dependencies</h2>
+<ul><li>컨테이너 안으로 들어왔다면 아래 명령어들을 터미널에 실행 및 설치해준다</li></ul>
+<pre data-lang="javascript"><code class="language-javascript">export DEBIAN_FRONTEND=noninteractive
+
+apt-get update
+apt-get install -y sudo vim wget curl dbus-x11 \
+    openssh-server tightvncserver \
+    xfce4 xfce4-goodies xtermr</code></pre>
+<h2 id="block-2edb12c0115c80228169deaacd9dfc3b">사용자 계정만들기</h2>
+<ul><li>Root계정으로 GUI를 사용하면 문제가 발생할 수 있으니 사용자를 만든다.</li></ul>
+<pre data-lang="javascript"><code class="language-javascript"># 사용자 생성 (비밀번호: YOUR_PASSWORD_HERE 를 원하는 걸로 수정 - 아래 명령어는 1)
+useradd -m -s /bin/bash dockeruser
+echo 'dockeruser:1' | chpasswd
+echo 'dockeruser ALL=(ALL) NOPASSWD: ALL' &gt; /etc/sudoers.d/dockeruser
+chmod 0440 /etc/sudoers.d/dockeruser
+
+# root 상태에서 실행
+chown -R dockeruser:dockeruser /home/dockeruser</code></pre>
+<h2 id="block-2edb12c0115c80ac8467f0e0c7777f93">SSH 서버 설정(Optional)</h2>
+<pre data-lang="javascript"><code class="language-javascript">mkdir /var/run/sshd
+
+# SSH 포트를 2022로 변경
+sed -i 's/#Port 22/Port 2022/' /etc/ssh/sshd_config
+sed -i 's/Port 22/Port 2022/' /etc/ssh/sshd_config
+
+# 비밀번호 인증 허용 및 루트 로그인 제한
+sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+echo &quot;PermitRootLogin no&quot; &gt;&gt; /etc/ssh/sshd_config
+
+# SSH 서비스 시작
+service ssh start</code></pre>
+<ul><li>접속방법</li></ul>
+<pre data-lang="javascript"><code class="language-javascript">ssh dockeruser@localhost -p 2022</code></pre>
+<h2 id="block-2edb12c0115c80e8a69fd1b02c001adc">VNC Server 환경설정</h2>
+<pre data-lang="javascript"><code class="language-javascript"># 사용자로 전환
+su - dockeruser
+
+# VNC 비밀번호 설정 (명령어 입력 후 8자 이내 비밀번호 설정하세요)
+vncserver</code></pre>
+<pre data-lang="javascript"><code class="language-javascript"># 설정을 위해 서버 잠시 종료
+vncserver -kill :1
+
+# 설정 파일 수정 (기존 내용 삭제 후 GUI 로드 스크립트 삽입)
+cat &lt;&lt;EOT &gt; ~/.vnc/xstartup
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+[ -x /etc/vnc/xstartup ] &amp;&amp; exec /etc/vnc/xstartup
+[ -r \$HOME/.Xresources ] &amp;&amp; xrdb \$HOME/.Xresources
+
+# XFCE4 실행
+startxfce4 &amp;
+EOT
+
+# 실행 권한 부여
+chmod +x ~/.vnc/xstartup</code></pre>
+<h2 id="block-2edb12c0115c8069939bdc5714a1ea23">VNC 서버 실행</h2>
+<pre data-lang="javascript"><code class="language-javascript">
+su - dockeruser
+vncserver :2 -geometry 1280x800 -depth 24
+</code></pre>
+<h2 id="block-2edb12c0115c80f8a3ebe7deacd50af5">VNC Viewer(Client) 접속</h2>
+<ul><li>Remmina를 사용하여 VNC로 바꾸고 아래 주소를 입력한다.</li><li>또는 VNC Viewer를 키고 아래 명령어를 입력하여 접속한다.</li></ul>
+<pre data-lang="javascript"><code class="language-javascript">localhost:5902</code></pre>
+<h2 id="block-2edb12c0115c802f98d5e0cad14cbd6a">VNC에 브라우저 설치</h2>
+<ul><li>docker에서 켜진 GUI는 브라우저 실행이 불가하다.</li></ul>
+<pre data-lang="javascript"><code class="language-javascript">sudo apt-get update
+sudo apt-get install -y software-properties-common
+
+# 2. Chromium 전용 PPA 추가 (애플리케이션 저장소)
+sudo add-apt-repository -y ppa:xtradeb/apps
+sudo apt-get update
+
+# 3. Chromium 설치
+sudo apt-get install -y chromium
+
+# 실행
+sudo chromium --no-sandbox
+
+# Chromium 설정 수정
+sudo sed -i 's|CHROME_EXE_PATH &quot;$@&quot;|CHROME_EXE_PATH &quot;--no-sandbox&quot; &quot;$@&quot;|g' /usr/bin/X11/chromium
+</code></pre>
+<ul><li>root 계정으로 아래 명령어 실행</li></ul>
+<pre data-lang="javascript"><code class="language-javascript">exit
+service dbus start</code></pre>
+<ul><li>dockeruser로 아래 명령어 실행</li></ul>
+<pre data-lang="javascript"><code class="language-javascript">su - dockeruser
+
+# 1. 화면 변수 강제 지정 (VNC가 :1번이면 :1, :2번이면 :2)
+export DISPLAY=:2
+
+# 2. 브라우저 실행 (sudo 사용X)
+chromium --no-sandbox</code></pre>
+<h2 id="block-2edb12c0115c80a389c3c678ad610665">Direct 접속: PC1 → Server PC + Docker</h2>
+<ul><li>MAC + AnyDesk → Server + Docker의 상황이라면 애니데스크로 또 서버의 화면을 보기 불편하다.</li><li>같은 망에 있다면 맥에서 다이렉트로 서버의 도커 화면을 볼 수 있다.</li><li>아래처럼 설정해준다.</li></ul>
+<p>SSH 터널링으로 맥과 서버와 포트연결(5902번 포트사용)</p>
+<ul><li>만약 VNC가 3번이면 5903번 사용해야함</li></ul>
+<pre data-lang="javascript"><code class="language-javascript">ssh -L 5902:localhost:5902 -p 22 jj@192.168.0.210</code></pre>
+<ul><li>서버 PC에서 아래명령어로 테이블확인</li></ul>
+<pre data-lang="javascript"><code class="language-javascript"># 5902 포트로 들어오는 패킷이 DROP 되고 있는지 확인
+sudo iptables -L INPUT -n | grep 5902
+
+만약 아무것도 안 나오거나 DROP이라고 되어 있다면, 아래 명령어로 강제로 길을 여세요:
+sudo iptables -I INPUT -p tcp --dport 5902 -j ACCEPT</code></pre>
+<ul><li>맥에서 VNC Viewer로 바로 접속</li></ul>
+<pre data-lang="javascript"><code class="language-javascript">localhost:5902</code></pre>
+<h2 id="block-2edb12c0115c80a1be28db557a802a42">오류 해결</h2>
+<p>한글깨짐이 있다면</p>
+<pre data-lang="javascript"><code class="language-javascript">apt-get install -y fonts-nanum fonts-nanum-coding fonts-nanum-extra</code></pre></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/post.js?v=13" type="module"></script>
+    <script src="/assets/js/palette.js?v=8" defer></script>
+  </body>
+</html>

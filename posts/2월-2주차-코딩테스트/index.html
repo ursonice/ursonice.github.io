@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>2월 2주차 코딩테스트 — Woojae Joo</title>
+    <meta name="post-slug" content="2월-2주차-코딩테스트" />
+    <meta name="description" content="목차 유사 삼합 나만의 atoi 직사각형들과 직사각형 의리의 짐싸기 효율적인 문제 풀이 1. 유사 삼합 풀이 /* * 3개의 숫자를 뽑는 것은 brute-force로 할 경우 * nC3 = n*(n-1)*(n-3) / (3*2*1) 가지이므로, O(n^3)에 해당합니다. * 숫자를 정렬한 후에 투포인터 " />
+    <link rel="canonical" href="https://ursonice.github.io/posts/2%EC%9B%94-2%EC%A3%BC%EC%B0%A8-%EC%BD%94%EB%94%A9%ED%85%8C%EC%8A%A4%ED%8A%B8/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="2월 2주차 코딩테스트" />
+    <meta property="og:description" content="목차 유사 삼합 나만의 atoi 직사각형들과 직사각형 의리의 짐싸기 효율적인 문제 풀이 1. 유사 삼합 풀이 /* * 3개의 숫자를 뽑는 것은 brute-force로 할 경우 * nC3 = n*(n-1)*(n-3) / (3*2*1) 가지이므로, O(n^3)에 해당합니다. * 숫자를 정렬한 후에 투포인터 " />
+    <meta property="og:url" content="https://ursonice.github.io/posts/2%EC%9B%94-2%EC%A3%BC%EC%B0%A8-%EC%BD%94%EB%94%A9%ED%85%8C%EC%8A%A4%ED%8A%B8/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=2%EC%9B%94%202%EC%A3%BC%EC%B0%A8%20%EC%BD%94%EB%94%A9%ED%85%8C%EC%8A%A4%ED%8A%B8&amp;cat=Coding%20Test" />
+    <meta property="article:published_time" content="2025-02-15T06:38:00.000Z" />
+    <meta property="article:modified_time" content="2025-03-08T07:05:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="2월 2주차 코딩테스트" />
+    <meta name="twitter:description" content="목차 유사 삼합 나만의 atoi 직사각형들과 직사각형 의리의 짐싸기 효율적인 문제 풀이 1. 유사 삼합 풀이 /* * 3개의 숫자를 뽑는 것은 brute-force로 할 경우 * nC3 = n*(n-1)*(n-3) / (3*2*1) 가지이므로, O(n^3)에 해당합니다. * 숫자를 정렬한 후에 투포인터 " />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=2%EC%9B%94%202%EC%A3%BC%EC%B0%A8%20%EC%BD%94%EB%94%A9%ED%85%8C%EC%8A%A4%ED%8A%B8&amp;cat=Coding%20Test" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"2월 2주차 코딩테스트","description":"목차 유사 삼합 나만의 atoi 직사각형들과 직사각형 의리의 짐싸기 효율적인 문제 풀이 1. 유사 삼합 풀이 /* * 3개의 숫자를 뽑는 것은 brute-force로 할 경우 * nC3 = n*(n-1)*(n-3) / (3*2*1) 가지이므로, O(n^3)에 해당합니다. * 숫자를 정렬한 후에 투포인터 ","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=2%EC%9B%94%202%EC%A3%BC%EC%B0%A8%20%EC%BD%94%EB%94%A9%ED%85%8C%EC%8A%A4%ED%8A%B8&cat=Coding%20Test","datePublished":"2025-02-15T06:38:00.000Z","dateModified":"2025-03-08T07:05:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/2%EC%9B%94-2%EC%A3%BC%EC%B0%A8-%EC%BD%94%EB%94%A9%ED%85%8C%EC%8A%A4%ED%8A%B8/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Coding Test","item":"https://ursonice.github.io/topics/coding-test/"},{"@type":"ListItem","position":3,"name":"2월 2주차 코딩테스트","item":"https://ursonice.github.io/posts/2%EC%9B%94-2%EC%A3%BC%EC%B0%A8-%EC%BD%94%EB%94%A9%ED%85%8C%EC%8A%A4%ED%8A%B8/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/coding-test/">Coding Test</a>
+    </nav>
+    <h1>2월 2주차 코딩테스트</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2025년 2월 15일</span><span class="dot"></span><span>수정 2025년 3월 8일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-19bb12c0115c80c79ff8ce42a39d6796">목차</h2>
+<ol><li>유사 삼합</li><li>나만의 atoi</li><li>직사각형들과 직사각형</li><li>의리의 짐싸기</li><li>효율적인 문제 풀이</li></ol>
+<h2 id="block-19bb12c0115c8081a166fa42ea947e54">1. 유사 삼합</h2>
+<figure><img src="/assets/notion/2월-2주차-코딩테스트/19bb12c0-115c-80bd-b6b1-fd000e45f07f.png" alt="" loading="lazy" width="1682" height="1190" /></figure>
+<figure><img src="/assets/notion/2월-2주차-코딩테스트/19bb12c0-115c-8086-8091-cc1ecc4bb733.png" alt="" loading="lazy" width="1676" height="996" /></figure>
+<h3 id="block-19bb12c0115c80f6973fdbeb215dcfd3">풀이</h3>
+<pre data-lang="python"><code class="language-python">/*
+ * 3개의 숫자를 뽑는 것은 brute-force로 할 경우
+ * nC3 = n*(n-1)*(n-3) / (3*2*1) 가지이므로, O(n^3)에 해당합니다.
+ * 숫자를 정렬한 후에 투포인터 알고리즘을 사용할 경우 O(n^2)까지 줄일 수 있습니다.
+ * left를 고정하고 right와 mid를 결정하는 방식입니다.
+ */
+
+
+def solution(arr, target):
+    N = len(arr)
+    closest_diff = float('inf')
+    closest_sum = 0
+    
+    arr.sort()
+    
+    for left in range(N-2):
+        if left &gt; 0 and arr[left] == arr[left-1]:
+            continue
+        mid = left + 1
+        right = N - 1
+        while mid &lt; right:
+            curr_sum = arr[left] + arr[mid] + arr[right]
+            diff = abs(target-curr_sum)
+
+            if diff &lt; closest_diff:
+                closest_diff = diff
+                closest_sum = curr_sum
+            elif diff == closest_diff and closest_sum &gt; curr_sum:
+                closest_sum = curr_sum
+
+            if curr_sum &lt; target:
+                mid += 1
+            elif curr_sum &gt; target:
+                right -= 1
+            else:
+                return target
+    return closest_sum
+</code></pre>
+<h3 id="block-19bb12c0115c8077b08dc3c7b7a02201">Test case</h3>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 [2, 3, 5, 10, 12, 15], 21
+기댓값 〉 20
+
+# 테스트 2
+입력값 〉 [-5, 2, 4, 10, 23], 15
+기댓값 〉 16</code></pre>
+<h2 id="block-19bb12c0115c807a9724dd42f9870d43">2. 나만의 atoi</h2>
+<figure><img src="/assets/notion/2월-2주차-코딩테스트/19bb12c0-115c-806e-8977-e58a775b79ef.png" alt="" loading="lazy" width="2410" height="1242" /></figure>
+<figure><img src="/assets/notion/2월-2주차-코딩테스트/19bb12c0-115c-80ff-b68f-f44ee23b78bb.png" alt="" loading="lazy" width="2428" height="486" /></figure>
+<h3 id="block-19bb12c0115c8079b3a9e2e1fbf4e9f1">풀이</h3>
+<pre data-lang="python"><code class="language-python">/*
+ * 기본적인 정수 변환 기능을 구현하는 문제입니다.
+ * 문제에서 제시하는 추가 기능을 적절하게 잘 구현하는 것이 핵심입니다.
+ * 다양한 테스트케이스에 대비하여 빈틈없는 코드를 짜는 습관을 들입시다.
+ */
+
+MAX_INT = 2**31 - 1
+MIN_INT = -2**31
+
+def solution(s):
+    num = []
+    s = s.lstrip()
+    for i in range(len(s)):
+        if s[i] == '-' or s[i] == '+':
+            num += [s[i]]
+        if '0' &lt;= s[i] &lt;= '9':
+            while i &lt; len(s) and s[i] == '0':
+                i += 1
+            if not('0' &lt;= s[i] &lt;= '9'):
+                return 0
+            while i &lt; len(s) and '0' &lt;= s[i] &lt;= '9':
+                num += [s[i]]
+                i += 1
+            return clip_num(num)
+    return 0
+
+def clip_num(s):
+    if len(s) == 0:
+        return 0
+    elif s[0] == '-' and len(s) &gt; len(str(MIN_INT)):
+        return MIN_INT
+    elif s[0] == '+' and len(s) &gt; len(str(MAX_INT)) + 1:
+        return MAX_INT
+    elif len(s) &gt; len(str(MAX_INT)):
+        return MAX_INT
+    else:
+        num = int(''.join(s))
+        return max(MIN_INT, min(MAX_INT, num))
+</code></pre>
+<h3 id="block-19bb12c0115c808d8461fb774fde65b9">Test case</h3>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 &quot; - 42514243zero123base&quot;
+기댓값 〉 -42514243
+
+# 테스트 2
+입력값 〉 &quot; + 00051241231004242542514243_41251243&quot;
+기댓값 〉 2147483647</code></pre>
+<h2 id="block-19bb12c0115c80299f90e1d8c4c7813e">3. 직사각형들과 직사각형</h2>
+<figure><img src="/assets/notion/2월-2주차-코딩테스트/19bb12c0-115c-80f5-8666-e6ec1e557881.png" alt="" loading="lazy" width="1810" height="1318" /></figure>
+<figure><img src="/assets/notion/2월-2주차-코딩테스트/19bb12c0-115c-803e-9281-ecc3de4a664f.png" alt="" loading="lazy" width="1896" height="1314" /></figure>
+<figure><img src="/assets/notion/2월-2주차-코딩테스트/19bb12c0-115c-800c-a20b-e179cb3432a2.png" alt="" loading="lazy" width="1888" height="718" /></figure>
+<h3 id="block-19bb12c0115c806aa0f6ea1875492b88">풀이</h3>
+<pre data-lang="python"><code class="language-python">def solution(heights):
+    stack = []  # 스택을 활용하여 높이의 인덱스를 저장
+    max_area = 0  # 최대 직사각형 넓이
+    n = len(heights)
+    
+    for i in range(n + 1):  # 마지막에 0을 추가한 효과를 위해 (높이 비교)
+        h = heights[i] if i &lt; n else 0  # 마지막 인덱스 이후에는 높이 0을 추가
+
+        # 스택이 비어있지 않고, 현재 높이가 스택의 top보다 작으면 계산
+        while stack and heights[stack[-1]] &gt; h:
+            height = heights[stack.pop()]  # 스택에서 pop한 높이
+            width = i if not stack else i - stack[-1] - 1  # 폭 계산
+            max_area = max(max_area, height * width)  # 최대 넓이 갱신
+
+        # 현재 인덱스를 스택에 push
+        stack.append(i)
+
+    return max_area</code></pre>
+<h3 id="block-19bb12c0115c80e6a737ca45a492eb73">Test case</h3>
+<pre data-lang="python"><code class="language-python"># 테스트 1 
+입력값 〉 [5, 2, 1, 3, 4, 2, 5]
+기댓값 〉 8
+
+# 테스트 2
+입력값 〉 [3, 4, 5, 6, 5, 4, 3, 2, 1]
+기댓값 〉 21</code></pre>
+<h2 id="block-19bb12c0115c80ef9120ececfd6352f5">4. 의리의 짐싸기</h2>
+<figure><img src="/assets/notion/2월-2주차-코딩테스트/19bb12c0-115c-80c8-8e0b-d4f052316835.png" alt="" loading="lazy" width="1522" height="1300" /></figure>
+<figure><img src="/assets/notion/2월-2주차-코딩테스트/19bb12c0-115c-80fa-a56b-fbb35bd78147.png" alt="" loading="lazy" width="1500" height="1402" /></figure>
+<h3 id="block-19bb12c0115c80d6966ec8aec5a3b7d4">풀이</h3>
+<pre data-lang="python"><code class="language-python">def solution(N, K1, K2, W, V):
+    dp = [[[0 for _ in range(K2 + 1)] for _ in range(K1 + 1)] for _ in range(2)]
+
+    for i in range(N):
+        for k1 in range(K1 + 1):
+            for k2 in range(K2 + 1):
+                val1, val2 = 0, 0
+                if k1 &gt;= W[i]:
+                    val1 = dp[(i-1)%2][k1 - W[i]][k2] + V[i]
+                if k2 &gt;= W[i]:
+                    val2 = dp[(i-1)%2][k1][k2 - W[i]] + V[i]
+                dp[i%2][k1][k2] = max(dp[(i-1)%2][k1][k2], val1, val2)
+
+    return dp[(N-1)%2][K1][K2]</code></pre>
+<h3 id="block-19bb12c0115c8010bf46f5e9c4ae8549">Test case</h3>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 8, 10, 15, [6, 4, 5, 6, 8, 9, 10, 3], [10, 4, 6, 8, 2, 8, 5, 6]
+기댓값 〉 34
+
+# 테스트 2
+입력값 〉 14, 13, 18, [3, 4, 1, 5, 2, 5, 2, 3, 4, 2, 3, 4, 1, 3], [7, 6, 3, 15, 18, 12, 7, 16, 11, 8, 13, 14, 7, 3]
+기댓값 〉 121</code></pre>
+<h2 id="block-19bb12c0115c800db88bf292aa2bf301">5. 효율적인 문제 풀이</h2>
+<figure><img src="/assets/notion/2월-2주차-코딩테스트/19bb12c0-115c-8069-9a82-d52b9f5dcd51.png" alt="" loading="lazy" width="1850" height="1292" /></figure>
+<figure><img src="/assets/notion/2월-2주차-코딩테스트/19bb12c0-115c-80c7-8a72-dbbc71b351b7.png" alt="" loading="lazy" width="1816" height="1156" /></figure>
+<h3 id="block-19bb12c0115c80449d05d082c5a912ac">풀이</h3>
+<pre data-lang="python"><code class="language-python">import heapq
+
+def prim(graph, start_node):
+    mst = []
+    heap = []
+    weights = [float('inf')] * len(graph)
+    connected = set()
+
+    weights[start_node] = 0
+    connected.add(start_node)
+    for node, weight in graph[start_node]:
+        heapq.heappush(heap, (weight, start_node, node))
+
+    weight_sum = 0
+    while heap:
+        weight, a, b = heapq.heappop(heap)
+
+        if (weights[b] &lt;= weight) or (b in connected):
+            continue
+        
+        weights[b] = weight
+        connected.add(b)
+        weight_sum += weight
+        mst.append((weight, a, b))
+
+        adj_list = graph[b]
+        for n, w in adj_list:
+            if weights[n] &gt; w:
+                heapq.heappush(heap, (w, b, n))
+
+    return weight_sum
+
+
+def get_connected(graph, node):
+    connected = [node]
+    stack = [adj_node for adj_node, weight in graph[node]]
+
+    while stack:
+        adj = stack.pop()
+        if adj in connected:
+            continue
+        connected.append(adj)
+        stack += [adj_node for adj_node, weight in graph[adj]]
+
+    return connected
+        
+
+def solution(N, relations):
+    graph = [[] for _ in range(N)]
+    for a, b, w in relations:
+         graph[a].append((b, w))
+         graph[b].append((a, w))
+    
+    all_nodes = list(range(N))
+    connected_graphs = []
+    while all_nodes:
+        connected = get_connected(graph, all_nodes[0])
+        for node in connected:
+            all_nodes.remove(node)
+        connected_graphs.append(connected)
+
+    result = 0
+    for connected in connected_graphs:
+        result += 30
+        result += prim(graph, connected[0])
+
+    return result
+</code></pre>
+<h3 id="block-19bb12c0115c809f80ffd4ab7e72b47e">Test case</h3>
+<pre data-lang="python"><code class="language-python"># 테스트 1
+입력값 〉 6, [[2, 3, 15], [1, 5, 10], [3, 4, 25], [1, 2, 27], [1, 4, 29], [2, 5, 5]]
+기댓값 〉 115</code></pre>
+<h2 id="block-1b0b12c0115c80fbb69fcb993135df53">출처</h2>
+<p>해당 문제와 코드는 제로베이스(ZeroBase)에서 제공받았습니다.</p>
+<p>모든 자료는 저작권법에 의하여 보호받는 저작물로서 이에 대한 무단 복제 및 배포를 원칙적으로 금합니다.</p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/post.js?v=13" type="module"></script>
+    <script src="/assets/js/palette.js?v=8" defer></script>
+  </body>
+</html>

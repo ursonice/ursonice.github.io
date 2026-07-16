@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>SSIM (Structural Similarity Index Measure) — Woojae Joo</title>
+    <meta name="post-slug" content="ssim-structural-similarity-index-measure" />
+    <meta name="description" content="서론 사람의 시각체계는(HVS) 이미지의 밝기(Luminance), 대비(Contrast), 구조(Structure) 등에 자각하여 이미지의 품질(Quality)을 관찰하는데 L2 loss는 모든 픽셀이 독립적이라는 가정 가정이 내포되어 있다. 이는 한 이미지의 특정 픽셀이 다른 이미지의 동일한 위치의 " />
+    <link rel="canonical" href="https://ursonice.github.io/posts/ssim-structural-similarity-index-measure/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="SSIM (Structural Similarity Index Measure)" />
+    <meta property="og:description" content="서론 사람의 시각체계는(HVS) 이미지의 밝기(Luminance), 대비(Contrast), 구조(Structure) 등에 자각하여 이미지의 품질(Quality)을 관찰하는데 L2 loss는 모든 픽셀이 독립적이라는 가정 가정이 내포되어 있다. 이는 한 이미지의 특정 픽셀이 다른 이미지의 동일한 위치의 " />
+    <meta property="og:url" content="https://ursonice.github.io/posts/ssim-structural-similarity-index-measure/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=SSIM%20(Structural%20Similarity%20Index%20Measure)&amp;cat=AI%2F%20Deep%20Learning" />
+    <meta property="article:published_time" content="2023-07-18T05:55:00.000Z" />
+    <meta property="article:modified_time" content="2026-07-05T08:31:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="SSIM (Structural Similarity Index Measure)" />
+    <meta name="twitter:description" content="서론 사람의 시각체계는(HVS) 이미지의 밝기(Luminance), 대비(Contrast), 구조(Structure) 등에 자각하여 이미지의 품질(Quality)을 관찰하는데 L2 loss는 모든 픽셀이 독립적이라는 가정 가정이 내포되어 있다. 이는 한 이미지의 특정 픽셀이 다른 이미지의 동일한 위치의 " />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=SSIM%20(Structural%20Similarity%20Index%20Measure)&amp;cat=AI%2F%20Deep%20Learning" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"SSIM (Structural Similarity Index Measure)","description":"서론 사람의 시각체계는(HVS) 이미지의 밝기(Luminance), 대비(Contrast), 구조(Structure) 등에 자각하여 이미지의 품질(Quality)을 관찰하는데 L2 loss는 모든 픽셀이 독립적이라는 가정 가정이 내포되어 있다. 이는 한 이미지의 특정 픽셀이 다른 이미지의 동일한 위치의 ","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=SSIM%20(Structural%20Similarity%20Index%20Measure)&cat=AI%2F%20Deep%20Learning","datePublished":"2023-07-18T05:55:00.000Z","dateModified":"2026-07-05T08:31:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/ssim-structural-similarity-index-measure/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Deep Learning","item":"https://ursonice.github.io/topics/ai-deep-learning/"},{"@type":"ListItem","position":3,"name":"SSIM (Structural Similarity Index Measure)","item":"https://ursonice.github.io/posts/ssim-structural-similarity-index-measure/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/ai-deep-learning/">AI/ Deep Learning</a>
+    </nav>
+    <h1>SSIM (Structural Similarity Index Measure)</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2023년 7월 18일</span><span class="dot"></span><span>수정 2026년 7월 5일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-f783ab8f610e4855b56a2f56b7e8d129">서론</h2>
+<p>사람의 시각체계는(HVS) 이미지의 밝기(Luminance), 대비(Contrast), 구조(Structure) 등에 자각하여 이미지의 품질(Quality)을 관찰하는데 L2 loss는 모든 픽셀이 <code>독립적</code>이라는 가정 가정이 내포되어 있다.</p>
+<p>이는 한 이미지의 특정 픽셀이 다른 이미지의 동일한 위치의 픽셀과 얼마나 다른지만 계산하고, 그 픽셀이 주변 픽셀에 어떤 영향을 미치는지는 고려하지 않는다는 것이다.</p>
+<ul><li>예를 들어, 크기가 3x3인 두 이미지를 비교할 때, 첫 번째 이미지는 모든 픽셀이 밝은 색이고, 두 번째 이미지는 가운데 픽셀만 어두운 색이라 하자. </li><li>L2 loss는 가운데 픽셀만 다르기 때문에 두 이미지 사이의 차이를 매우 작게 계산할 것이다.</li><li>그러나 사람의 눈으로 보면, 가운데 픽셀이 어두워지면 이미지 전체가 달라보일 수 있다.</li><li>즉, 가운데 픽셀의 특성이 이미지의 전체적인 품질(Quality)에 큰 영향을 미칠 수 있다는 것이다.  이런 부분이 L2 loss의 한계점이다. </li></ul>
+<p>이를 해결하기 위해 사람의 시각체계를 고려한 이미지의 유사도를 측정하는 측도로 <code>SSIM</code>을 사용한다.</p>
+<p>또한 SSIM은 두 이미지의 유사도를 측정하는데 사용되기도 하지만 두 이미지가 유사해지도록 만들어야 되는 문제일때도 사용된다. </p>
+<p>참조: <a href="https://arxiv.org/pdf/1511.08861.pdf" target="_blank" rel="noreferrer">https://arxiv.org/pdf/1511.08861.pdf</a></p>
+<figure><img src="/assets/notion/ssim-structural-similarity-index-measure/dafc1148-4c60-41e2-8b3f-417f7ae0bad3.png" alt="" loading="lazy" width="1134" height="552" /></figure>
+<h2 id="block-b750cae8bf124752ae92aa89737f209b">목차</h2>
+<ol><li><a href="#block-c6cd9ddafd464a6d8eb9cc7f6ca8e101">본론</a> <ol><li><a href="#block-e28a68ba70af4a02834bc584fffd7e4c">Luminance</a> </li><li><a href="#block-b44ffe5d5eb54291ad2198b56800212b">Contrast</a> </li><li><a href="#block-2a4bd6e044fe4bdbb2c6832365ee1572">Structure</a> </li></ol></li><li><a href="#block-6592b5ae233e4583bc00e1092b106b13">SSIM Loss</a> </li></ol>
+<h2 id="block-c6cd9ddafd464a6d8eb9cc7f6ca8e101">본론</h2>
+<p>SSIM은 <code>luminance</code>, <code>contrast</code>, <code>structure</code> 3가지 요소를 이용한다.</p>
+<p>SSIM의 결과값은 <code>0~1사이</code>이며 <code>1에 가까울수록 두 이미지가 유사</code>하다. </p>
+<p>입력값의 범위에 따라 -1~1 사이의 값을 가질 수도 있으며 마찬가지로 1에 가까울수록 두 이미지가 유사하다는 것은 동일하다.</p>
+<p>SSIM의 전체 수식은 아래와 같다. </p>
+<p>SSIM에서 일반적으로 \(\alpha, \beta, \gamma\)는 1로 사용하며 이는 하이퍼파라미터이다.</p>
+<div class="math-block">\[SSIM(x,\;y) = l(x, y)^{\alpha}\cdot c(x,\;y)^{\beta}\cdot s(x,\;y)^{\gamma}\]</div>
+<h3 id="block-e28a68ba70af4a02834bc584fffd7e4c">Luminance</h3>
+<p>휘도라고 하며 빛의 밝기를 나타내는 양이다. 이미지에서 별도의 빛의 밝기를 추출해 사용하지 않고 이미지의 픽셀값을 사용한다.</p>
+<p>그 이유는 <code>이미지가 밝을 수록 픽셀의 값 크기 때문이다.</code></p>
+<p><code>두 이미지를 </code>\(x, y\)라 할때 공식은 아래와 같다.</p>
+<ul><li>\(\mu_x\)<code>: 이미지의 평균</code></li></ul>
+<div class="math-block">\[l(x, \;y)=\frac{2\mu_x\mu_y +C_1}{\mu^2+\mu_y^2+C_1}\]</div>
+<p>이미지의 평균(\(\mu_x\))는 아래 수식으로 구한다</p>
+<ul><li>\(x_i:\) 각 픽셀의 값</li><li>\(N\): 전체 픽셀의 갯수</li></ul>
+<div class="math-block">\[\mu_x = \frac{1}{N}\underset{i=1}{\overset{n}{\sum}}x_i\]</div>
+<p>\(C_1\)은 <code>분모가 0이 되지 않도록</code> 하기 위해서 사용되는 <code>상수값</code>이며 아래와 같은 수식으로 정의된다.</p>
+<p>\(K_1\)은 일반 상수이며 보통 0.01을 많이 사용한다.</p>
+<p>\(L\)은 픽셀값의 범위를 의미하며 일반적으로 8비트의 값을 사용하기 때문에(0~255) 255를 \(L\)로 사용한다.</p>
+<p>따라서 \(C_1=(0.01\times 255)^2=6.5025\) 를 주로 사용한다.</p>
+<div class="math-block">\[C_1 = (K_1L)^2\]</div>
+<h3 id="block-b44ffe5d5eb54291ad2198b56800212b">Contrast</h3>
+<p>대조는 이미지 내에서 빛의 밝기가 바뀌는 정도를 나타내는 양이다. 이 값은 평균 <code>픽셀 간의 값이 얼마나 차이가 나는지 통해 정량화 할 수 있다.</code></p>
+<div class="math-block">\[c(x,\;y) =\frac{2\sigma_x\sigma_y+C_2}{\sigma_x^2+\sigma_y^2+C_2}\]</div>
+<p>이미지의 <code>표준편차(</code>\(\sigma_x\)<code>)</code>는 아래 수식으로 구한다.</p>
+<ul><li>\(N-1\): 표본의 표준 편차를 구하기 때문에 표본의 표준편차가 모표준 편차가 될 수 있도록 하기 위해 \(N-1\)을 사용한다.</li></ul>
+<div class="math-block">\[\sigma_x = \left(\frac{1}{N-1}\underset{i=1}{\overset{n}{\sum}}(x_i-\mu_x)^2\right)^\frac{1}{2}\]</div>
+<p>\(C_2\)역시 <code>상수</code>이며 이 경우 아래와 같은 수식을 사용하며 \(K_2=0.03\)을 주로 사용한다.</p>
+<div class="math-block">\[C_2=(K_2L)^2=(0.03\times255)^2=58.5225\]</div>
+<h3 id="block-2a4bd6e044fe4bdbb2c6832365ee1572">Structure</h3>
+<p>픽셀의 <code>구조적 차이점</code>을 나타낸다. 즉 픽셀의 패턴을 표현하는 요소이다.</p>
+<ul><li>예를들어 두 장의 이미지에 사과와 배가 포함되어있다고 하자. 하나는 사과가 배의 왼쪽에 있고 다른 하나는 사과가 배의 오른쪽에 있다면 픽셀 단위의 비교만으로는 두 이미지가 매우 유사하다고 판단할 수 있지만 SSIM의 structure를 통해 이미지의 객체 배치가 다르다는 것을 포착할 수 있다.</li><li>정의는 아래와 같으며 \(\sigma_x, \sigma_y\)는 각각 \(x,y\)이미지의 표준편차이다.</li></ul>
+<div class="math-block">\[s(x,\;y) =\frac{\sigma_{xy}+C_3}{\sigma_x\sigma_y+C_3}\]</div>
+<p>\(x,y\) 이미지에 대한 <code>공분산</code>은 아래 수식으로 구할 수 있다.</p>
+<div class="math-block">\[\sigma_{xy}=\frac{1}{N-1}\underset{i=1}{\overset{n}{\sum}}(x_i-\mu_x)(y_i-\mu_y)\]</div>
+<ul><li>\(C_3\)<code>은 </code>\(\frac{C_2}{2}\)<code>로 사용</code>한다. 이렇게 하는 이유는 <code>SSIM은 </code>\(l(x,y), c(x,y), s(x,y)\)<code>의 곱</code>으로 정의되어 계산할 때  <code>식을 간편화</code> 할 수 있기 때문이다.</li><li> \(\frac{\sigma_{xy}}{\sigma_x\sigma_y}\) 수식의 의미를 살펴 보면,<code> luminance을 평균</code>, <code>contrast를 표준 편차</code>로 이용하여 <code>Normalized(정규화)</code>된 픽셀 값의 분포에서 픽셀 값을 다시 정의하는 것을 볼 수 있다.</li><li>최종적으로 각 이미지의 <code>structure</code> 성분의 곱(원본 픽셀에서 평균을 빼고 해당 이미지의 표준편차로 나눈 Normalized된 픽셀값)의 평균을 구하는 것과 같다.</li><li>\(\sigma_{xy}\)<code>: 공분산</code></li><li>\(\sigma_x,\;\sigma_y:\)<code> 각 이미지의 표준편차</code></li></ul>
+<div class="math-block">\[corr(X,Y) = \frac{\sigma_{xy}}{\sigma_x\sigma_y} = \frac{E[(x-\mu_x)(y-\mu_y)]}{\sigma_x\sigma_y}= E \Bigg[\frac{(x-\mu_x)(y-\mu_y)}{\sigma_x\sigma_y}\Bigg]\]</div>
+<div class="math-block">\[=E\Bigg[\frac{(x-\mu_x)}{\sigma_x}\frac{(y-\mu_y)}{\sigma_y}\Bigg]\]</div>
+<p>위에서 설명했던 것 처럼 최종 수식은 다음과 같으며 \(\alpha, \beta, \gamma\)는 1로 주로 사용된다.</p>
+<p>distance로 사용되기 위한 여러 조건중 <code>triangle inequality(삼각부등식)</code>  \(|a+b| \leq |a|+|b|\)를 만족하지 않아서 <code>distance를 구하기 위한 함수로는 사용할 수 없다.</code></p>
+<ul><li>삼각부등식은 유클리디안 공간에서의 거리 개념에서 사용되는데 임의의 세 개의 점 \(a,b,c\)에 대해 다음이 성립해야 한다.</li><li>\(d(a,b)+d(b,c) \geq d(a,c)\)</li><li>\(d(x,y)\)는 점 \(x,y\)사이의 거리를 의미함</li></ul>
+<div class="math-block">\[SSIM(x,\;y) = l(x, y)^{\alpha}\cdot c(x,\;y)^{\beta}\cdot s(x,\;y)^{\gamma} \]</div>
+<div class="math-block">\[ = \frac{2\mu_x\mu_y +C_1}{\mu^2+\mu_y^2+C_1}\;\frac{2\sigma_x\sigma_y+C_2}{\sigma_x^2+\sigma_y^2+C_2}\;\frac{\sigma_{xy}+C_3}{\sigma_x\sigma_y+C_3}\]</div>
+<div class="math-block">\[ = \frac{(2\mu_x\mu_y+C_1)(2\sigma_{xy}+C_2)}{\sigma^2_{x}+\sigma^2_{y}+C_2}\]</div>
+<p>만약 <code>RGB 이미지에서 SSIM</code>을 적용해야 한다면 각 채널 별로 SSIM을 구한 후 모두 합해주면 된다.</p>
+<p>식으로 나타내면 아래와 같다.</p>
+<ul><li>\(w_r,w_g,w_b\) : 각 채널별 SSIM에 가중을 부여하는 hyper parameter</li><li>\(SSIM_R, SSIM_G, SSIM_B\) : 각 채널별 SSIM 값</li><li>특정 채널에 대하여 더 가중치를 줄 수도 있으며 일반적으로 <code>RGB</code>에 1/3 씩 균등하게 가중치를 주어서 사용한다.</li></ul>
+<div class="math-block">\[SSIM_{rgb} =w_rSSIM_R(I_1,I_2)+w_gSSIM_G(I_1,I_2)+w_bSSIM_B(I_1,I_2)\]</div>
+<h2 id="block-6592b5ae233e4583bc00e1092b106b13">SSIM Loss</h2>
+<p>SSIM을 Loss로 사용하려면 아래와 같이 식을 변경해서 사용할 수 있다.</p>
+<p>SSIM은 미분 가능하므로 Loss로 사용 가능하며 0 ~ 1 사이의 스코어 값을 1에서 빼주면 두 이미지의 유사도가 낮을수록 값이 커지기 때문에 Loss로 사용할 수 있다.</p>
+<p>SSIM을 좀 더 효과적으로 사용하기 위해서는 이미지 전체(<code>globally</code>)를 한번에 비교하기 보다는 <code>N x N 윈도우를 이용</code>하여 (ex. 8 X 8, 11 X 11) 지역적(<code>locally</code>)으로 비교하여 사용하는 것이 효과적이다.</p>
+<p>왜냐하면 이미지의 왜곡이나 통계적 특성이 이미지 전반에 걸쳐서 나타나는 경우보다 지역적으로 나타나는 경우가 많고 지역적으로 더 다양한 특성을 분석할 수 있기 때문이다.</p>
+<div class="math-block">\[L_{SSIM}= 1-SSIM(x,y)\]</div>
+<h2 id="block-d7791559382f40f2b8ef2a28a38d4a10">Example</h2>
+<p><code>#tensor(0.2894) tensor(0.7756) tensor(0.8177)</code></p>
+<figure><img src="/assets/notion/ssim-structural-similarity-index-measure/b063007e-03fd-450d-b92a-3496c9c1645c.png" alt="" loading="lazy" width="1934" height="776" /></figure></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/post.js?v=13" type="module"></script>
+    <script src="/assets/js/palette.js?v=8" defer></script>
+  </body>
+</html>

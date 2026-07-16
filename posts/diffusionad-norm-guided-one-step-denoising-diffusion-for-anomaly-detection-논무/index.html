@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>DiffusionAD: Norm-guided One-step Denoising Diffusion for Anomaly Detection 논문리뷰 — Woojae Joo</title>
+    <meta name="post-slug" content="diffusionad-norm-guided-one-step-denoising-diffusion-for-anomaly-detection-논무" />
+    <meta name="description" content="Cite Hui Zhang1,2 Zheng Wang3 Zuxuan Wu1,2 Yu-Gang Jiang1,2; arXiv preprint arXiv:2303.08730 https://arxiv.org/pdf/2407.09359 출간일: 2024. 07. 12 Abstract Unsupervised Abno" />
+    <link rel="canonical" href="https://ursonice.github.io/posts/diffusionad-norm-guided-one-step-denoising-diffusion-for-anomaly-detection-%EB%85%BC%EB%AC%B4/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="DiffusionAD: Norm-guided One-step Denoising Diffusion for Anomaly Detection 논문리뷰" />
+    <meta property="og:description" content="Cite Hui Zhang1,2 Zheng Wang3 Zuxuan Wu1,2 Yu-Gang Jiang1,2; arXiv preprint arXiv:2303.08730 https://arxiv.org/pdf/2407.09359 출간일: 2024. 07. 12 Abstract Unsupervised Abno" />
+    <meta property="og:url" content="https://ursonice.github.io/posts/diffusionad-norm-guided-one-step-denoising-diffusion-for-anomaly-detection-%EB%85%BC%EB%AC%B4/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=DiffusionAD%3A%20Norm-guided%20One-step%20Denoising%20Diffusion%20for%20Anomaly%20Detection%20%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0&amp;cat=AI%2F%20Deep%20Learning" />
+    <meta property="article:published_time" content="2024-08-10T08:48:00.000Z" />
+    <meta property="article:modified_time" content="2025-11-05T08:38:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="DiffusionAD: Norm-guided One-step Denoising Diffusion for Anomaly Detection 논문리뷰" />
+    <meta name="twitter:description" content="Cite Hui Zhang1,2 Zheng Wang3 Zuxuan Wu1,2 Yu-Gang Jiang1,2; arXiv preprint arXiv:2303.08730 https://arxiv.org/pdf/2407.09359 출간일: 2024. 07. 12 Abstract Unsupervised Abno" />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=DiffusionAD%3A%20Norm-guided%20One-step%20Denoising%20Diffusion%20for%20Anomaly%20Detection%20%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0&amp;cat=AI%2F%20Deep%20Learning" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"DiffusionAD: Norm-guided One-step Denoising Diffusion for Anomaly Detection 논문리뷰","description":"Cite Hui Zhang1,2 Zheng Wang3 Zuxuan Wu1,2 Yu-Gang Jiang1,2; arXiv preprint arXiv:2303.08730 https://arxiv.org/pdf/2407.09359 출간일: 2024. 07. 12 Abstract Unsupervised Abno","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=DiffusionAD%3A%20Norm-guided%20One-step%20Denoising%20Diffusion%20for%20Anomaly%20Detection%20%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0&cat=AI%2F%20Deep%20Learning","datePublished":"2024-08-10T08:48:00.000Z","dateModified":"2025-11-05T08:38:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/diffusionad-norm-guided-one-step-denoising-diffusion-for-anomaly-detection-%EB%85%BC%EB%AC%B4/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Deep Learning","item":"https://ursonice.github.io/topics/ai-deep-learning/"},{"@type":"ListItem","position":3,"name":"DiffusionAD: Norm-guided One-step Denoising Diffusion for Anomaly Detection 논문리뷰","item":"https://ursonice.github.io/posts/diffusionad-norm-guided-one-step-denoising-diffusion-for-anomaly-detection-%EB%85%BC%EB%AC%B4/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/ai-deep-learning/">AI/ Deep Learning</a>
+    </nav>
+    <h1>DiffusionAD: Norm-guided One-step Denoising Diffusion for Anomaly Detection 논문리뷰</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2024년 8월 10일</span><span class="dot"></span><span>수정 2025년 11월 5일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-7a35b6f53d584656b90dae9125753513">Cite</h2>
+<p>Hui Zhang1,2 Zheng Wang3 Zuxuan Wu1,2 Yu-Gang Jiang1,2; arXiv preprint arXiv:2303.08730</p>
+<hr />
+<ul><li><a href="https://arxiv.org/pdf/2407.09359" target="_blank" rel="noreferrer">https://arxiv.org/pdf/2407.09359</a></li><li>출간일: 2024. 07. 12</li></ul>
+<h2 id="block-6645f92fa3c345b2b12a5965adfa2a79">Abstract</h2>
+<p><strong>Unsupervised Abnormal Detection에서 Generative Model 기반 접근법은 두 가지 주요 문제를 가지고 있습니다.</strong></p>
+<h4 id="block-c14a7242d9e247bba100e258e613e8cb"><strong>1. 미탐(False Negative)</strong></h4>
+<ul><li>문제: 이미지에 실제로 비정상적인 영역이 있어도, 그 영역이 미세한 결함일 경우, 모델이 이를 정상 영역으로 인식하여 복원된 이미지에서도 그대로 미세한 결함이 나타난다는 것입니다. 
+즉, 이상 영역을 가진 이미지를 그대로 재구성하게 되어, 모델이 이상을 탐지하지 못하는 상황이 발생합니다.</li><li>근거: U-Net 기반의 생성 모델은 입력 이미지를 압축하여 저차원 공간에 표현한 후 다시 복원하는 방식으로 작동합니다. 이 과정에서 작은 결함 같은 미세한 이상은 저차원 공간에서 충분히 표현되지 못하고 무시될 가능성이 큽니다.</li></ul>
+<h4 id="block-5fecff87a6e84e98b4d6694a1b869596"><strong>2. 오탐(False Positive)</strong></h4>
+<ul><li>문제: 정상적인 이미지임에도 불구하고, 모델이 이미지를 정확하게 복원하지 못하고 대략적으로만 복원할 경우, 원본 이미지와 복원된 이미지 사이에 오차가 발생할 수 있습니다. 
+이 오차로 인해 모델은 정상 이미지를 비정상으로 잘못 판단하게 됩니다. 이를 Coarse Reconstruction이라고 하며, 이로 인해 모델의 성능이 저하되고 오탐이 발생합니다. </li><li>근거: U-Net 기반의 생성 모델은 입력 이미지를 저차원 공간에 압축한 후 다시 복원합니다. 이때 복잡한 정상 패턴이 저차원으로 압축되면서 대략적으로만 복원될 수 있습니다. 이로 인해 정상적인 패턴에서 불필요한 복원 오차가 발생할 수 있습니다.</li></ul>
+<h4 id="block-1aa476d8749541a3bf37e4b4838c12c1"><strong>논문에서 제안한 해결 방법:</strong></h4>
+<p>본 논문에서는 위 두 문제를 해결하기 위해, Diffusion Model을 기반으로한 다양한 이상 영역의 픽셀들을 노이즈 처리하여, 노이즈 된 이미지를 가지고 모델이 정상 영역(이미지)으로 복원하도록(Noise-to-Norm)합니다. 이를 통해 보다 정확한 복원(Reconstructed as Normal)이 가능해지며 오탐과 미탐을 줄이게 됩니다.</p>
+<p>그리고 Diffusion Model의 느린 추론 속도를 개선합니다.
+Diffusion Model은 하나의 데이터를 생성하기 위해 노이즈 이미지로부터 interative하게 노이즈를 제거하는 과정을 거쳐야하기 때문에 수행시간이 느리다는 단점이 있습니다.
+이를 해결하기 위해 One-step denosing(한 번에 노이즈를 제거하는)방법을 사용함으로써 속도를 향상 시켰다.</p>
+<h2 id="block-8b2542d146a94089972026a2124c8039">Introduction</h2>
+<h3 id="block-8b7571c07e6b42f088829d3b4b88d8ca">DRAEM과 Diffusion AD 비교</h3>
+<figure><img src="/assets/notion/diffusionad-norm-guided-one-step-denoising-diffusion-for-anomaly-detection-논무/c95cfc5c-caa5-4582-860f-14078dfa9080.png" alt="" loading="lazy" width="1000" height="1012" /></figure>
+<p>위 이미지는 MVTec, Vis A 데이터셋으로 구성되어졌으며 Input을 DREAM과 Diffusion AD이 재구성한 이미지 그리고 그리고 비정상 이미지를 재구성 했을 때 어디가 이상 영역인지를 보여주는 그림이다.</p>
+<figure><img src="/assets/notion/diffusionad-norm-guided-one-step-denoising-diffusion-for-anomaly-detection-논무/403d3fdb-f106-4330-a71e-c4742561784b.png" alt="" loading="lazy" width="1551" height="1000" /></figure>
+<p>X축은 속도, Y축은 정확도를 나타냅니다.</p>
+<p>본 논문에서 제한하는 모델은 DREAM보다는 느리지만 높은 정확도를 보이는걸 볼 수 있으며 PatchCore보다 2.5배가량 빠르며 정확도 또한 높은 것을 볼 수 있습니다.</p>
+<h2 id="block-8772c2b2f3ae4ed8b012f8b0c677df45">Preliminary</h2>
+<h3 id="block-7d5552f1fdf044f9af48a52c739e03c3">Diffusion Model 이란?</h3>
+<p>이 모델은 데이터에 점진적으로 노이즈를 추가하는 과정(Forward Process)과, 추가된 노이즈를 제거하여 원본 데이터를 복원하는 과정(Reverse Process)으로 작동합니다.</p>
+<p>Diffusion모델은 이미지를 생성하거나 복원하는데 사용되는 생성 모델(Generative Model)입니다.</p>
+<figure><img src="/assets/notion/diffusionad-norm-guided-one-step-denoising-diffusion-for-anomaly-detection-논무/d324cfb9-5375-4a88-a8cd-813ec27525a6.png" alt="" loading="lazy" width="807" height="142" /></figure>
+<h4 id="block-32f196784de04bcd9393607b2a50ca4c"><strong>1. 노이즈 추가(Forward Process)</strong></h4>
+<p>원본 데이터에 점진적으로 노이즈를 추가하여 데이터를 완전히 노이즈로 뒤덮인 상태로 만듭니다.이 과정에서 데이터는 원래의 형태와 특징(discriminative feature)을 점차적으로 잃어버리고, 최종적으로 완전한 노이즈 이미지가 됩니다.</p>
+<h4 id="block-9da7befc853b4a3f9a568c24e26ed489"><strong>2. 노이즈 제거(Reverse Process)</strong></h4>
+<p>노이즈가 추가된 데이터에서 원래의 데이터를 복원하기 위해, 노이즈를 단계적으로 제거하는 과정을 반복합니다.모델은 각 단계에서 노이즈를 예측하고 이를 제거하여 점차 원본 이미지를 복원해 나갑니다.</p>
+<h4 id="block-5a68f465e931405dbfa0539ac8eb929d"><strong>3. 장점</strong></h4>
+<p>고품질 데이터 생성: 반복적인 노이즈 제거 과정을 통해 매우 세밀하고 고해상도의 데이터를 생성해 낼 수 있습니다.</p>
+<h4 id="block-34a4191c62714735abb8ebd57ad13551"><strong>4. 단점</strong></h4>
+<p>느린 처리 속도: 노이즈를 점진적으로 제거하는 과정이 반복되기 때문에, 데이터 생성과 복원이 느리게 진행됩니다.</p>
+<h2 id="block-27523675f9184da88d51a92d77a71607"><strong>Proposed Method</strong></h2>
+<figure><img src="/assets/notion/diffusionad-norm-guided-one-step-denoising-diffusion-for-anomaly-detection-논무/b083d586-92da-4cfd-bb05-e07555a6cbb4.png" alt="" loading="lazy" width="3800" height="2082" /></figure>
+<p>위 이미지는 논문에서 제안하는 전체 모델의 개요입니다.</p>
+<h3 id="block-d02d8c7c06ce42f1bfb865c57cdb854d"><strong>Reconstruction Sub-network</strong></h3>
+<p>Diffusion모델을 기반으로 작동하며, noise-to-norm(노이즈를 정상 상태로 변환)방법을 사용합니다.</p>
+<p>먼저, Diffusion 모델의 forward process를 통해 원본 이미지(\(x_0\))에 임의의 시간 \(t\)에 대해서 노이즈를 추가합니다. 이렇게 노이즈가 섞인 이미지 \(x_t\)를 만드는 역할을 합니다.</p>
+<figure><img src="/assets/notion/diffusionad-norm-guided-one-step-denoising-diffusion-for-anomaly-detection-논무/bf6d2f84-e4d4-4615-8895-c50491e1918c.png" alt="" loading="lazy" width="2062" height="1048" /></figure>
+<p>위 이미지에서는 Two-scale Diffusion Forward Process를 통해 서로다른 시간 \(t_s, t_b\) 에서의 노이즈를 추가한 이미지를 생성합니다.</p>
+<ul><li><strong>첫 번째 스케일(</strong>\(t_s\)<strong>)</strong>: 작은 노이즈 스케일이 적용된 시간 단계입니다. 이 단계에서 원본 이미지에 상대적으로 적은 노이즈가 추가되며, 이는 미세한 디테일을 더 잘 보존하는 역할을 합니다.</li><li><strong>두 번째 스케일(</strong>\(t_b\)<strong>)</strong>: 큰 노이즈 스케일이 적용된 시간 단계입니다. 이 단계에서는 더 많은 노이즈가 이미지에 추가되며, 이는 더 큰 결함이나 이상을 효과적으로 처리할 수 있도록 합니다.</li></ul>
+<p>시간 \(t\)가 증가함에 따라 \(x_0\)는 점진적으로 원래의 특징을 잃어가며, 결국 노이즈 형태의 이미지로 바뀌게 됩니다.</p>
+<p>특히, 이상 영역이 있는 이미지의 경우, forward process를 통해 이상 픽셀들이 본래의 특징을 잃고 단순한 노이즈로 인식하게 됩니다.</p>
+<p>모델은 이러한 노이즈가 포함된 이미지를 점진적으로 이상이 없는 원본 이미지로 복원하도록 시도합니다.</p>
+<p>이러한 방법을 통해 다양한 이상영역을 전부 노이즈로 취급해 노이즈로 부터 원본이미지를 생성함으로 일반화 능력이 향상되며 복잡한 패턴에 대해서도 높은 퀄리티로 복원이 가능해 집니다.</p>
+<h4 id="block-b635b2cc5caf4112a8e52431056e5e30">One-Step Denosing</h4>
+<p>reconstructive sub-network에서는 Diffusion모델을 활용한다고 언급했습니다. </p>
+<p>Diffusion 모델은 노이즈를 제거하는 과정에서 많은 연산량과 자원을 필요로 합니다.</p>
+<p>학습 단계에서는 반복적인(Iterative) 노이즈 제거 방식을 사용하지만, 추론(Inference) 단계에서는 이 방법이 많은 자원과 시간이 요구됩니다. 이를 해결하기 위해 One-step denoising 방식을 적용합니다.</p>
+<p>One-step denoising을 사용하면 Diffusion 모델의 느린 추론 속도 문제를 해결할 수 있습니다.</p>
+<p>이 과정에서 모든 이미지에 대해 두 가지 다른 노이즈 스케일을 적용합니다. 작은 결함 영역에는 작은 노이즈 스케일을, 큰 결함 영역에는 큰 노이즈 스케일을 사용합니다.</p>
+<p>작은 노이즈를 적용한 시간은 \(t_s\), 큰 노이즈를 적용한 시간은 \(t_b\)로 설정합니다. (\(t_b &gt; t_s)\)</p>
+<figure><img src="/assets/notion/diffusionad-norm-guided-one-step-denoising-diffusion-for-anomaly-detection-논무/d2ba81c4-8d2a-4151-97be-bc3aa62cc8c5.png" alt="" loading="lazy" width="1894" height="1410" /></figure>
+<p>(b) 이미지를 보면, One-step denoising을 적용했을 때, 상대적으로 노이즈가 적게 적용된 \(t_s\)시점에서 생성된 \(\hat{x}_{0s}\)는 (a)에서 반복적으로 denoising한 결과와 유사하게 고품질의 이미지(Fine-grained recosntruction)를 생성한 것을 확인할 수 있습니다.</p>
+<p>반면, 노이즈가 많이 적용된 \(t_b\)시점에서 생성된 이미지는 오히려 반복적으로 denoising 한 결과(a)보다 품질이 떨어지는 것을 볼 수 있습니다. 이는 \(t\)가 증가할수록 이미지 품질이 더 저하된다는 것을 의미합니다.</p>
+<h4 id="block-1bc5a696c88d490e9bbd5bf60c4e1740">작은 결함 영역</h4>
+<ul><li>작은 결함영역에 대해서는 작은 노이즈 스케일을 사용하면 이미지의 정교한 부분의 의미를 잘 보존하면서 세밀한 디테일을 살릴 수 있기 때문입니다. </li><li>그러나 큰 결함영역에 대해서는 작은 노이즈 스케일을 사용하면 노이즈 주입이 충분하지 않아서 이상 영역이 완전히 제거되지 않게 됩니다. 즉, 결함영역이 다 노이즈로 가려지지 못하게 됩니다. 이 때문에 재구성한 이미지에 이상영역이 그대로 나타나게 됩니다.</li></ul>
+<h4 id="block-6a13321cb160413e812466d214632cb6">큰 결함 영역</h4>
+<ul><li>따라서 큰 결함 영역에 대해서 처리하려면 더 큰(많은) 노이즈 스케일링을 사용해야 합니다.</li><li>이는 노이즈가 더 많이 주입되어 큰 결함영역을 잘 가리게되어 효과적으로 이미지를 재구축(Anomaly Regions를 잘 복구) 할 수 있습니다.</li><li>그러나 이렇게 큰 노이즈를 한번에 제거하려고 하면 이미지에 왜곡(coarse-reconstruction)이 발생합니다.</li><li>이는 interative하게 노이즈를 제거하지 않고 한 번(one-step)에 제거 하려고 하기 때문입니다.</li><li>이러한 문제를 해결하기 위해 Norm-guided Denosing 방법을 사용합니다</li></ul>
+<h4 id="block-d5c4fdbfe09e4667afadd0f7120efb76">Norm-guided Denosing</h4>
+<p>이를 설명하기 위해 먼저 기호에 정리하겠습니다.</p>
+<ul><li>\(x_{ts}\): 원본 이미지에 대해 노이즈 스케일을 적게 사용한 이미지</li><li>\(x_{tb}\): 원본 이미지에 대해 노이즈 스케일을 많이 사용한 이미지</li><li>\(\epsilon_{\theta}(x_{ts})\): 이미지를 복원하기 위해 노이즈 스케일이 적게 사용한 이미지의 예측 노이즈</li><li>\(\epsilon_{\theta}(x_{tb})\): 이미지를 복원하기 위해 노이즈 스케일을 많이 사용한 이미지의 예측 노이즈</li><li>\(\hat{x}_{0s}\): 작은 노이즈(\(t_s\)) 스케일이 적용된 이미지를 복원한 이미지</li><li>\(\hat{x}_{0b}\): 큰 노이즈(\(t_b\)) 스케일을 적용한 이미지를 복원한 이미지</li><li>\(\hat{x}_{0g}\): reconstructed-subnetwork에서 최종적으로 복원한 이미지</li></ul>
+<figure><img src="/assets/notion/diffusionad-norm-guided-one-step-denoising-diffusion-for-anomaly-detection-논무/37f9c510-0935-4952-b9de-9194ae9d1c66.png" alt="" loading="lazy" width="1216" height="1562" /></figure>
+<ul><li>\(x_{0b}\)와 예측된 노이즈 \(\epsilon_{\theta}(x_{tb})\)를 사용해 이미지를 복원합니다. 이 복원된 이미지를 \(\hat{x}_{0b}\)라 하고, 이를 간단히 \(n\)이라고 표현합니다.</li><li>생성된 \(n\)은 작은 노이즈 스케일로 복원될 이미지 \(\hat{x}_{0s}\)을 잘 생성하도록 가이드하는 역할을 합니다.</li><li>그 다음, \(n\)에 \(t_s\)에서 예측된 노이즈 \(\epsilon_{\theta}(x_{ts})\)를 추가하여 이미지를 변형합니다. 이를 \(n_{ts}\)라고 표현합니다.</li><li>\(x_{ts}\)와 \(n_{ts}\)두 이미지를 활용하여 최종적으로 고퀄리티의 이미지를 생성합니다.</li><li>\(\epsilon_{\theta}(x_{ts}, n_{ts})\)는 두 이미지 간의 관계(차이)를 고려하여, 이를 바탕으로 노이즈를 예측하기 때문에 더 정교한 노이즈 제거를 가능하게 합니다.</li><li>마지막으로 이렇게 생성된 이미지는 입력 이미지와 채널 단위로 결합되어, 정상과 비정상을 판단하게 됩니다.</li></ul>
+<h3 id="block-2a4746eaeabc4829b27f2b118237093b"><strong>Segmentation Sub-network</strong></h3>
+<ul><li>U-Net 아키텍처 기반를 활용합니다.</li><li>원본 이미지(\(x_0\))와 Reconstruction Sub-network를 통해 얻은(\(\hat{x}_{0g}\))을 가까운 이미지를 채널 단위로 연결(channel-wise concatenation)하여 모델은 두 입력간의 불일치(inconsistencies)와 공통점(commonalities)을 활용해 픽셀 단위(pixel-wise)로 이상 점수(anomaly score)를 예측하도록 학습합니다.</li></ul>
+<h2 id="block-31432a0bdaf54444a481621e7806c3df">Anomaly Synthetic Strategy</h2>
+<p>일반적으로 이상 감지 모델을 훈련할 때, 실제 이상 데이터가 많이 부족하거나 아예 없는 경우가 많습니다.</p>
+<p>이를 해결하기 위해 가짜 이상(pseudo-anomalies)을 학습중에 실시간으로 생성해 활용합니다.</p>
+<figure><img src="/assets/notion/diffusionad-norm-guided-one-step-denoising-diffusion-for-anomaly-detection-논무/8325d27e-d40c-4f1b-ba19-43e0b647cb14.png" alt="" loading="lazy" width="1808" height="1320" /></figure>
+<ul><li>이상 영역의 위치를 지정하기 위해 불규칙하게 생성된 Perlin Noise P와 이미지의 오브젝트(object foreground) F와 element-wise product하여 Noise Mask M을 구합니다.</li><li>Texture Dataset에 대해서는 이미지의 오브젝트가 없음으로 무작위로 영역(Random part)을 F로 설정하여 Noise Mask M을 구합니다.</li><li>이상 영역의 패턴(A)을 주기 위해 self-augmentation과 DTD Dataset에서 뽑은 샘플을 사용한다.</li><li>M과 A 그리고 정상 샘플(N)을 활용해 합성 이상 샘플(S)을 만든다. </li></ul>
+<h2 id="block-3183af89804341428fcc5efa8bca857e">Experiments</h2>
+<figure><img src="/assets/notion/diffusionad-norm-guided-one-step-denoising-diffusion-for-anomaly-detection-논무/2b0b1447-8e0c-43b1-a5f9-3d175b4e9911.png" alt="" loading="lazy" width="3850" height="2504" /></figure>
+<figure><img src="/assets/notion/diffusionad-norm-guided-one-step-denoising-diffusion-for-anomaly-detection-논무/e9d81e93-caef-4164-9d2a-ecacbceaca36.png" alt="" loading="lazy" width="1850" height="1536" /></figure>
+<figure><img src="/assets/notion/diffusionad-norm-guided-one-step-denoising-diffusion-for-anomaly-detection-논무/f931b622-68e9-4eba-934f-f27a9820c81a.png" alt="" loading="lazy" width="1902" height="896" /></figure>
+<p>[ref]</p>
+<p><a href="https://kingnamji.tistory.com/66" target="_blank" rel="noreferrer">https://kingnamji.tistory.com/66</a></p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/post.js?v=13" type="module"></script>
+    <script src="/assets/js/palette.js?v=8" defer></script>
+  </body>
+</html>

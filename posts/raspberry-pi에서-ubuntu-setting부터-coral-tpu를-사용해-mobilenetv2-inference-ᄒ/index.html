@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>Raspberry PI에서 Ubuntu Setting부터 Coral TPU를 사용해 MobileNetV2 Inference 해보기 — Woojae Joo</title>
+    <meta name="post-slug" content="raspberry-pi에서-ubuntu-setting부터-coral-tpu를-사용해-mobilenetv2-inference-ᄒ" />
+    <meta name="description" content="서론 이 장에서는 Raspberry PI에서 MobileNetV2를 Coral Edge TPU를 사용해 inference하는 방법과 필요한 환경셋팅 대해서 설명한다. 목차 1. Requirements 2. Install Ubuntu 방법1. 라즈베리파이에서 제공하는 GUI툴을 이용해 설치 방법2. Ser" />
+    <link rel="canonical" href="https://ursonice.github.io/posts/raspberry-pi%EC%97%90%EC%84%9C-ubuntu-setting%EB%B6%80%ED%84%B0-coral-tpu%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%B4-mobilenetv2-inference-%E1%84%92/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="Raspberry PI에서 Ubuntu Setting부터 Coral TPU를 사용해 MobileNetV2 Inference 해보기" />
+    <meta property="og:description" content="서론 이 장에서는 Raspberry PI에서 MobileNetV2를 Coral Edge TPU를 사용해 inference하는 방법과 필요한 환경셋팅 대해서 설명한다. 목차 1. Requirements 2. Install Ubuntu 방법1. 라즈베리파이에서 제공하는 GUI툴을 이용해 설치 방법2. Ser" />
+    <meta property="og:url" content="https://ursonice.github.io/posts/raspberry-pi%EC%97%90%EC%84%9C-ubuntu-setting%EB%B6%80%ED%84%B0-coral-tpu%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%B4-mobilenetv2-inference-%E1%84%92/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Raspberry%20PI%EC%97%90%EC%84%9C%20Ubuntu%20Setting%EB%B6%80%ED%84%B0%20Coral%20TPU%EB%A5%BC%20%EC%82%AC%EC%9A%A9%ED%95%B4%20MobileNetV2%20Inference%20%ED%95%B4%EB%B3%B4%EA%B8%B0&amp;cat=Application" />
+    <meta property="article:published_time" content="2022-11-12T06:23:00.000Z" />
+    <meta property="article:modified_time" content="2025-07-20T05:15:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Raspberry PI에서 Ubuntu Setting부터 Coral TPU를 사용해 MobileNetV2 Inference 해보기" />
+    <meta name="twitter:description" content="서론 이 장에서는 Raspberry PI에서 MobileNetV2를 Coral Edge TPU를 사용해 inference하는 방법과 필요한 환경셋팅 대해서 설명한다. 목차 1. Requirements 2. Install Ubuntu 방법1. 라즈베리파이에서 제공하는 GUI툴을 이용해 설치 방법2. Ser" />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Raspberry%20PI%EC%97%90%EC%84%9C%20Ubuntu%20Setting%EB%B6%80%ED%84%B0%20Coral%20TPU%EB%A5%BC%20%EC%82%AC%EC%9A%A9%ED%95%B4%20MobileNetV2%20Inference%20%ED%95%B4%EB%B3%B4%EA%B8%B0&amp;cat=Application" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Raspberry PI에서 Ubuntu Setting부터 Coral TPU를 사용해 MobileNetV2 Inference 해보기","description":"서론 이 장에서는 Raspberry PI에서 MobileNetV2를 Coral Edge TPU를 사용해 inference하는 방법과 필요한 환경셋팅 대해서 설명한다. 목차 1. Requirements 2. Install Ubuntu 방법1. 라즈베리파이에서 제공하는 GUI툴을 이용해 설치 방법2. Ser","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Raspberry%20PI%EC%97%90%EC%84%9C%20Ubuntu%20Setting%EB%B6%80%ED%84%B0%20Coral%20TPU%EB%A5%BC%20%EC%82%AC%EC%9A%A9%ED%95%B4%20MobileNetV2%20Inference%20%ED%95%B4%EB%B3%B4%EA%B8%B0&cat=Application","datePublished":"2022-11-12T06:23:00.000Z","dateModified":"2025-07-20T05:15:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/raspberry-pi%EC%97%90%EC%84%9C-ubuntu-setting%EB%B6%80%ED%84%B0-coral-tpu%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%B4-mobilenetv2-inference-%E1%84%92/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Application","item":"https://ursonice.github.io/topics/application/"},{"@type":"ListItem","position":3,"name":"Raspberry PI에서 Ubuntu Setting부터 Coral TPU를 사용해 MobileNetV2 Inference 해보기","item":"https://ursonice.github.io/posts/raspberry-pi%EC%97%90%EC%84%9C-ubuntu-setting%EB%B6%80%ED%84%B0-coral-tpu%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%B4-mobilenetv2-inference-%E1%84%92/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/application/">Application</a>
+    </nav>
+    <h1>Raspberry PI에서 Ubuntu Setting부터 Coral TPU를 사용해 MobileNetV2 Inference 해보기</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2022년 11월 12일</span><span class="dot"></span><span>수정 2025년 7월 20일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h3 id="block-60e5cc3a26664845b32901bfd904eb9f">서론</h3>
+<div class="columns"><div class="column"><figure><img src="/assets/notion/raspberry-pi에서-ubuntu-setting부터-coral-tpu를-사용해-mobilenetv2-inference-ᄒ/7d69438c-4bb2-4bc9-9921-ca79a6107fc1.jpg" alt="" loading="lazy" width="2000" height="1542" /></figure></div><div class="column"><p>이 장에서는 Raspberry PI에서 MobileNetV2를 Coral Edge TPU를 사용해 inference하는 방법과 필요한 환경셋팅 대해서 설명한다.</p></div></div>
+<div class="columns"><div class="column"><figure><img src="/assets/notion/raspberry-pi에서-ubuntu-setting부터-coral-tpu를-사용해-mobilenetv2-inference-ᄒ/3c025723-2de1-42a0-abda-7ad866b0d7f2.jpg" alt="" loading="lazy" width="3024" height="4032" /></figure></div><div class="column"><figure><img src="/assets/notion/raspberry-pi에서-ubuntu-setting부터-coral-tpu를-사용해-mobilenetv2-inference-ᄒ/d8fc0f0d-a3dc-47ef-937a-33ee5cf6126c.jpg" alt="" loading="lazy" width="3024" height="4032" /></figure></div><div class="column"><figure><img src="/assets/notion/raspberry-pi에서-ubuntu-setting부터-coral-tpu를-사용해-mobilenetv2-inference-ᄒ/45c2a89b-0595-4171-9e18-7e5bde1a6300.jpg" alt="" loading="lazy" width="3024" height="4032" /></figure></div></div>
+<h2 id="block-accef1cacab44af08540e6b1e0d7001c">목차</h2>
+<ol><li><a href="#block-3a51ef4b80874bbd970a2986b33d9982">1. Requirements</a> </li><li><a href="#block-abce2025eb9042dab8f09e9c16cebaa8">2. Install Ubuntu</a> <ol><li><a href="#block-c724e0e41a6d48c2aeea7bfb555661ad">방법1. 라즈베리파이에서 제공하는 GUI툴을 이용해 설치</a> </li><li><a href="#block-1c0eaa5552cf415886fbe076cd33044f">방법2. Server이미지를 받아서 직접 설치</a> </li></ol></li><li><a href="#block-59ad975695884221a1dd3283128b36e8">3. Setting Ubuntu</a> <ol><li><a href="#block-ea6c5e48dafd46c3a3d5914217ac26bd">무선 네트워크 설정</a> </li><li><a href="#block-7d2511b24a414db7a792060bece9666d">Ram Swap Setting</a> </li><li><a href="#block-a1ed7e4e217a4dfea1fe97c697bc5c98">Ubuntu 한글 설정</a> </li><li><a href="#block-f9bbb38ded744f1b9402bd4209d7e8c6">Find Architecture</a> </li><li><a href="#block-a816d7c2bff94547814e4b3a92d9b042">Setting root password</a></li></ol></li><li><a href="#block-5520c43884f04dd18c5713c0d26fc1e7">4. Install Package</a> <ol><li><a href="#block-64377e9613494d40bd86784f644d25e7">Check Python Version</a> </li><li><a href="#block-b610d9b340ed4255a3820f69d4c8f714">Install Ananconda </a> </li><li><a href="#block-d2b117b378ad445f9ebbf874eb327b66">추가 기능 설치</a> </li><li><a href="#block-b2d26aa9bc9446de8c1ec6033596d169">Install Coral</a> </li></ol></li><li><a href="#block-8934ea70f5ef40e4a23877f7195d3353">Test MobileNetV2</a> <ol><li><a href="#block-1ff1de2d06c9489ba3b9c3ced199727c">Coral에서 제공하는 MobileNetV2</a> </li><li><a href="#block-2a432a07de86440f84b52793afba8985">Coral MobileNetV2 Inference</a> </li></ol></li><li><a href="#block-ef728fcf49ec4f9e8b9680034ac2b01d">tf.keras.application에서 제공하는 MobileNetV2</a> <ol><li><a href="#block-c1782a3b4a664c48a0c15735a8978ab6">TPU Compile</a> </li><li><a href="#block-fb2305eaa5874bc8954a65d1e245e09e">Keras MobileNetV2 Inference</a> </li></ol></li><li><a href="#block-445f0b2b40ab474386ad0f00d26f80e8">ONNX(Model Zoo)에서 제공하는 MobileNetV2</a> <ol><li><a href="#block-a3bf24b915634844a141595ac22e3b59">TPU Compile</a> </li><li><a href="#block-7b09e1f12e04400a96813f90cd1fe6fe">Compile에 실패하는 이유</a> </li></ol></li><li><a href="#block-c51b13270aa6436f9ef2d906f858787d">TF-Lite Inferece(Without using TPU)</a> </li><li><a href="#block-f5a84f79d9784719bc232429a9829e04">연구 결론</a> </li></ol>
+<h2 id="block-3a51ef4b80874bbd970a2986b33d9982">1. Requirements</h2>
+<p>2022-11-22일 기준</p>
+<ul><li>A computer with one of the following operating systems:<ul><li>Linux Debian 10, or a derivative thereof (such as Ubuntu 18.04), and a system architecture of either x86-64, Armv7 (32-bit), or Armv8 (64-bit) (includes support for <strong>Raspberry Pi 3 Model B+, Raspberry Pi 4, and Raspberry Pi Zero 2</strong>)</li><li>macOS 10.15 (Catalina) or 11 (Big Sur), with either <a href="https://www.macports.org/" target="_blank" rel="noreferrer">MacPorts</a> or <a href="https://brew.sh/" target="_blank" rel="noreferrer">Homebrew</a> installed</li><li>Windows 10</li></ul></li><li>One available USB port (for the <strong>best performance</strong>, use a <strong>USB 3.0 port</strong>)</li><li><strong>Python 3.6 - 3.9</strong></li></ul>
+<p><a href="https://coral.ai/docs/accelerator/get-started/#requirements" target="_blank" rel="noreferrer">https://coral.ai/docs/accelerator/get-started/#requirements</a></p>
+<h2 id="block-abce2025eb9042dab8f09e9c16cebaa8">2. Install Ubuntu</h2>
+<p>우분투를 설치하는 방법 2가지를 소개한다. 원하는 방법을 선택해 설치하자</p>
+<h3 id="block-c724e0e41a6d48c2aeea7bfb555661ad">방법1. 라즈베리파이에서 제공하는 GUI툴을 이용해 설치</h3>
+<p>먼저 첫번째 방법을 통해 설치하는법을 설명한다. 아래 링크에서 라즈베리파이 전용 우분투를 설치할 수 있는 방법을 알려준다. </p>
+<pre data-lang="shell"><code class="language-bash">$ sudo apt install snap
+$ sudo snap install rpi-imager</code></pre>
+<p><a href="https://ubuntu.com/tutorials/how-to-install-ubuntu-on-your-raspberry-pi#1-overview" target="_blank" rel="noreferrer">https://ubuntu.com/tutorials/how-to-install-ubuntu-on-your-raspberry-pi#1-overview</a></p>
+<h3 id="block-1c0eaa5552cf415886fbe076cd33044f">방법2. Server이미지를 받아서 직접 설치</h3>
+<p>아래 링크에서 직접 다운받아 설치도 가능하다. 아래 다운받은것은 Server(CLS)용 64bit Architecture. </p>
+<div class="columns"><div class="column"><p>Server버전을 설치하고 그 다음 명령어로 GUI를 설치할 것이다.</p></div><div class="column"><details class="toggle"><summary><strong>Download</strong></summary><div class="toggle-body"><p><a href="https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/47f279bc-fe08-4af4-bddd-61ae070ce1c9/ubuntu-20.04.5-preinstalled-server-arm64raspi.img?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB466Q5U6JZNT%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164448Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJHMEUCIEL5yMG6KWVNVAx%2FhMzEH2pKU53Nd1JqFncRQoqnsUU9AiEA0ZOIC%2BenpGdvPIAzqzvLUSTBg4VHe%2Bh4r7zJv2rnRIEq%2FwMIRxAAGgw2Mzc0MjMxODM4MDUiDHP8XdT27kHyrcCCZyrcA5xMhlB07HGwu0Zyt6dBVu44ZDSyGdJBE%2FnT4%2FNrWCcvw9WlPI%2FQC4RwmNEDkyr3NFMc%2FzC7dxpGfPn5zh1fSFLfeZOnpgF1IILJJoMTCWJTi3RPrqdZ4dq70C0bqHwxsM2hG%2FDwODq7hacNM1fraXNDyNG2XXFYd6UGyzW6s%2FIH%2F9CZbcKf16sd0yPtI3a4F8ehku3lD%2FOIPBUkiv3f7b6zMrSk4ibyCfnlXJN4ypbuN1fBFoPlbpBhzPpaMKEG2lVobRYTK8COV1OzOmu1TSUOSctLJgUuVZ7l9i6vSEFaiFWbAFWLY8LUpKhjn4flFwI8bb3HBnEhflitS2t9qztr8bcQhMY67zEi29ZlMv8RzagDL6ibXz7IUo%2FEykATvF%2F%2BbzWR%2FpMSrX6%2FHJdtGAaTzHeqZCz4dTfN4buGFrU%2FDI0ufukHOxSwiSR8YCnRk31qB7uFmRguHHTv8GMFGcF6gvb8j%2Bj2xUDCcHZyRbC1feQ7N5E%2Bw%2FQQG6ll%2B57EcWWpac5A0hVj6%2Fr5zZSTob9Pw7DRiG5LRKfKELbyWnKRkgvKtG0XlYYDKli6bo3ceR8NQEnAcMLA8e4xJ1kJ8rql45mYDX0Fl2zVWyGJ0CVVtB5c9UPY9tgyz2hkMJvB49IGOqUBjOLaqetws9p0kzcK6tXD800UQtLDriO4JLfb42stap4zOpzoIM1G8EAJslX499sETPdiXvIZmssYM8r3M72JTAsTCsYea10QHn4IjQVkWlxEiOHNpzcF2T61cQnwpzD%2FBjtB%2BAbM7zd9PHPYP1InjAvuJF730hZzH2pI0934k2Fa2P%2B3F1WI2q5v9GkOQo9XOHPsQO%2BjSK4zo7jW3GKafUcUoFJD&amp;X-Amz-Signature=6dbe119d1770ad112ef146583666cfd226c0364b71781bc309a85d740baf24db&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject" target="_blank" rel="noreferrer">https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/47f279bc-fe08-4af4-bddd-61ae070ce1c9/ubuntu-20.04.5-preinstalled-server-arm64raspi.img?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB466Q5U6JZNT%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164448Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJHMEUCIEL5yMG6KWVNVAx%2FhMzEH2pKU53Nd1JqFncRQoqnsUU9AiEA0ZOIC%2BenpGdvPIAzqzvLUSTBg4VHe%2Bh4r7zJv2rnRIEq%2FwMIRxAAGgw2Mzc0MjMxODM4MDUiDHP8XdT27kHyrcCCZyrcA5xMhlB07HGwu0Zyt6dBVu44ZDSyGdJBE%2FnT4%2FNrWCcvw9WlPI%2FQC4RwmNEDkyr3NFMc%2FzC7dxpGfPn5zh1fSFLfeZOnpgF1IILJJoMTCWJTi3RPrqdZ4dq70C0bqHwxsM2hG%2FDwODq7hacNM1fraXNDyNG2XXFYd6UGyzW6s%2FIH%2F9CZbcKf16sd0yPtI3a4F8ehku3lD%2FOIPBUkiv3f7b6zMrSk4ibyCfnlXJN4ypbuN1fBFoPlbpBhzPpaMKEG2lVobRYTK8COV1OzOmu1TSUOSctLJgUuVZ7l9i6vSEFaiFWbAFWLY8LUpKhjn4flFwI8bb3HBnEhflitS2t9qztr8bcQhMY67zEi29ZlMv8RzagDL6ibXz7IUo%2FEykATvF%2F%2BbzWR%2FpMSrX6%2FHJdtGAaTzHeqZCz4dTfN4buGFrU%2FDI0ufukHOxSwiSR8YCnRk31qB7uFmRguHHTv8GMFGcF6gvb8j%2Bj2xUDCcHZyRbC1feQ7N5E%2Bw%2FQQG6ll%2B57EcWWpac5A0hVj6%2Fr5zZSTob9Pw7DRiG5LRKfKELbyWnKRkgvKtG0XlYYDKli6bo3ceR8NQEnAcMLA8e4xJ1kJ8rql45mYDX0Fl2zVWyGJ0CVVtB5c9UPY9tgyz2hkMJvB49IGOqUBjOLaqetws9p0kzcK6tXD800UQtLDriO4JLfb42stap4zOpzoIM1G8EAJslX499sETPdiXvIZmssYM8r3M72JTAsTCsYea10QHn4IjQVkWlxEiOHNpzcF2T61cQnwpzD%2FBjtB%2BAbM7zd9PHPYP1InjAvuJF730hZzH2pI0934k2Fa2P%2B3F1WI2q5v9GkOQo9XOHPsQO%2BjSK4zo7jW3GKafUcUoFJD&amp;X-Amz-Signature=6dbe119d1770ad112ef146583666cfd226c0364b71781bc309a85d740baf24db&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject</a></p></div></details></div></div>
+<p><a href="https://releases.ubuntu.com/20.04.5/?_ga=2.70319312.1797486237.1670478267-1298739506.1669605918" target="_blank" rel="noreferrer">https://releases.ubuntu.com/20.04.5/?_ga=2.70319312.1797486237.1670478267-1298739506.1669605918</a></p>
+<p>해당 이미지를 아래 프로그램을 사용해서 USB에 fetch 한다.</p>
+<p><a href="https://www.balena.io/etcher/" target="_blank" rel="noreferrer">https://www.balena.io/etcher/</a></p>
+<p>아래 블로그에서 balenaEtcher로 USB에 설치하는 방법을 상세히 올려놓았다. 참고하자</p>
+<p><a href="https://chmodi.tistory.com/115" target="_blank" rel="noreferrer">https://chmodi.tistory.com/115</a></p>
+<h2 id="block-59ad975695884221a1dd3283128b36e8">3. Setting Ubuntu</h2>
+<p>서버버전의 초기 아이디와 비밀번호는 전부 ubuntu이다. 그 후 자동으로 비밀번호를 변경하라고 나온다.</p>
+<h3 id="block-ea6c5e48dafd46c3a3d5914217ac26bd">무선 네트워크 설정</h3>
+<p>로그인하고 비빌면호 변경까지 완료했다면 아래 설정 파일을 열어주자</p>
+<pre data-lang="shell"><code class="language-bash">$ sudo nano /etc/netplan/50-cloud-init.yaml</code></pre>
+<p>들여쓰기 하나당 띄어쓰기 4번이다. {name}에 wifi이름, {password}에 비밀번호를 입력 → Tap을 사용하지 말고 space바를 사용</p>
+<pre data-lang="shell"><code class="language-bash">network:
+		ethernets:
+				eth0:
+						dhcp4: true
+						optinal: true
+		version: 2
+		wifis:
+				wlan0:
+						optional: true
+						access-points:
+								&quot;SSID-NAME-HERE&quot;:
+									  password: &quot;PASSWORD-HERE&quot;
+						dhcp4: true</code></pre>
+<p>설정 파일을 저장한 후에는 아래 코드를 꼭 입력해서 적용시켜야 한다.</p>
+<pre data-lang="shell"><code class="language-bash">$ sudo netplan apply</code></pre>
+<p>에러가 난 경우에는 debug옵션을 붙이면 자세한 이유를 알 수 있다.</p>
+<pre data-lang="shell"><code class="language-bash">$ sudo netplan apply --duebug</code></pre>
+<p><a href="https://velog.io/@gilchris/Ubuntu-20.04-terminal%EC%97%90%EC%84%9C-wifi-%EC%9E%A1%EA%B8%B0" target="_blank" rel="noreferrer">https://velog.io/@gilchris/Ubuntu-20.04-terminal%EC%97%90%EC%84%9C-wifi-%EC%9E%A1%EA%B8%B0</a></p>
+<p><a href="https://linuxconfig.org/ubuntu-20-04-connect-to-wifi-from-command-line" target="_blank" rel="noreferrer">https://linuxconfig.org/ubuntu-20-04-connect-to-wifi-from-command-line</a></p>
+<h3 id="block-2556640f201e46fcb821c9cfc0a0e1a5">Ubuntu Desktop 설치</h3>
+<p>무선네트워크에 연결되면 아래 명령어를 통해 Desktop을 설치하고 재부팅하면 된다.</p>
+<pre data-lang="shell"><code class="language-bash">$ sudo apt update
+$ sudo apt-get install ubuntu-desktop
+$ sudo reboot</code></pre>
+<h3 id="block-7d2511b24a414db7a792060bece9666d">Ram Swap Setting</h3>
+<p>Raspi의 Ram이 적어서 속도가 느리므로 메모리 Swap을 사용해 늘려준다.</p>
+<p>아래 명령어는 swapfile이라는 이름으로 2GB의 Swapfile을 생성한다.</p>
+<pre data-lang="shell"><code class="language-bash">$ sudo fallocate -l 2G /swapfile</code></pre>
+<p>Swapfile의 권한을 수정
+해줍니다. 600은 root 계정만 읽기/쓰기가 가능하다는 의미다.</p>
+<pre data-lang="shell"><code class="language-bash">$ sudo chmod 600 /swapfile</code></pre>
+<p>이제 생성한 Swapfile로 Swap Memory를 활성화한다.</p>
+<pre data-lang="shell"><code class="language-bash">$ sudo mkswap /swapfile
+$ sudo swapon /swapfile</code></pre>
+<p>마지막으로 시스템을 재부팅해도 Swap이 적용되도록 한다.  아래 파일을 열어준다.</p>
+<pre data-lang="shell"><code class="language-bash">$ sudo nano /etc/fstab</code></pre>
+<p>그리고 아래 내용을 추가</p>
+<pre data-lang="shell"><code class="language-bash">/swapfile swap swap defaults 0 0</code></pre>
+<p>잘 되었는지 확인</p>
+<pre data-lang="shell"><code class="language-bash">$ free</code></pre>
+<p><a href="https://facerain.club/swap-memory/" target="_blank" rel="noreferrer">https://facerain.club/swap-memory/</a></p>
+<h3 id="block-a1ed7e4e217a4dfea1fe97c697bc5c98">Ubuntu 한글 설정</h3>
+<p><a href="https://shanepark.tistory.com/231" target="_blank" rel="noreferrer">https://shanepark.tistory.com/231</a></p>
+<h3 id="block-f9bbb38ded744f1b9402bd4209d7e8c6">Find Architecture</h3>
+<pre data-lang="shell"><code class="language-bash">$ uname -m # aarch64</code></pre>
+<h3 id="block-a816d7c2bff94547814e4b3a92d9b042">Setting root password</h3>
+<pre data-lang="shell"><code class="language-bash">$ sudo passwd root</code></pre>
+<h2 id="block-5520c43884f04dd18c5713c0d26fc1e7">4. Install Package</h2>
+<p>사용 가능한 패키지들을 업데이트 한다. 그리고 업그레이드 해준다.</p>
+<pre data-lang="shell"><code class="language-bash">$ sudo apt-get update
+$ sudo apt-get upgrade</code></pre>
+<h4 id="block-64377e9613494d40bd86784f644d25e7">Check Python Version</h4>
+<pre data-lang="shell"><code class="language-bash">$ python3 --version</code></pre>
+<h4 id="block-b610d9b340ed4255a3820f69d4c8f714">Install Ananconda </h4>
+<details class="toggle"><summary><strong>Download Anaconda3-2022.10-Linux-aarch64</strong></summary><div class="toggle-body"><p><a href="https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/8743009f-549e-4a5f-92fd-ddd5c6d2d71d/Miniforge-pypy3-Linux-aarch64.sh?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB4667VUKAH3T%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164449Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJIMEYCIQDXigN1iWL3AYdSHYQgMQzBdGhXHBJH%2BfESHcIFiIAvqAIhAIc%2Blsa%2B6NIajOG8DvYZceXSe%2F%2FWJ4LD%2FA7ViGIYriudKv8DCEcQABoMNjM3NDIzMTgzODA1IgzlHvNYJ7AYn1EKwnYq3AO9fwQ5OlUKKqvCXx6%2FekhYP3U0DqrfeC3TTFSqajfk%2B8so0njZBMIi%2BqGroEbOCxPl4g2duiEJXw4TEjG3TFYvvQR4sPfLKLGE%2B7g2Nj1OhB6fnEXU8BNGlRnjtGZKi%2FR3NBaKKfpAhN1FErOTnhlLkqUdfmaUcb%2F75gEf%2Bcrh1hRunFI9Hu5rUViC9DB%2BCmKujeknl%2B70hvVkOxZsoaATh0iCfvg88cpyWA720sV4IOt3KPtyCpRUH%2BCIeRDYBAglHcsoiAtuVWeVcKougJFGTAEpkfBpSvGzkg2m6cqz6akRxgk31Rgg1FjSXXajlcB8ux%2BCU3Ycd%2FQVGDYXW0ezSfCiZXn4EWrPYn7TkLeKHPBGwRCO4ZdFp38Z3h%2BAwa%2F40Ef2kgck62I93NhITFeweMcltsSPxA31oAqD6iWlsIdnIuydmWprufA7RHAF51XKMDkDQBmcIk0zqIbP8%2BeYRRqAfmNHy8eTCpWGqBB0sp3O4%2BNgPIf%2Balwi2BPpG5d5MZwK%2BT6plKpVDgPg5cY1KSTb3TgHHbqRg8NV%2BryJFeE%2FsS%2F1kUc4p29INwK50JF5wJRGV8PMnlmMPR5tPrzS%2FIH8AzsLNrZ4MAaCCsx9eSMSWTJgjkoMZ3aXTjCEwePSBjqkAY0JwIcEYISiossPAXai1PtIIf2vE2t4vadHqhqzJB3EXURGhUoG9yrv16MR9N7Y5UqRjuRh3w8moc%2BjWajJDxCA%2BPsf8UCErYxD2DOteXuwBSGP%2ByHRBHe0exUMRf3%2FX2qcMBJWT8HnmHDBnF2udloofE5W5fugMo4vOnCL7Qjb%2BAeTy7%2BTr3VybohA322zmHe5OeMYHxhYZZ%2Bn3mRIcjD4odSW&amp;X-Amz-Signature=ea7af478ec917d77b9ec5fc0b1b2dad75465ad1dce1d426593477c7ebc0ae27f&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject" target="_blank" rel="noreferrer">https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/8743009f-549e-4a5f-92fd-ddd5c6d2d71d/Miniforge-pypy3-Linux-aarch64.sh?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB4667VUKAH3T%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164449Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJIMEYCIQDXigN1iWL3AYdSHYQgMQzBdGhXHBJH%2BfESHcIFiIAvqAIhAIc%2Blsa%2B6NIajOG8DvYZceXSe%2F%2FWJ4LD%2FA7ViGIYriudKv8DCEcQABoMNjM3NDIzMTgzODA1IgzlHvNYJ7AYn1EKwnYq3AO9fwQ5OlUKKqvCXx6%2FekhYP3U0DqrfeC3TTFSqajfk%2B8so0njZBMIi%2BqGroEbOCxPl4g2duiEJXw4TEjG3TFYvvQR4sPfLKLGE%2B7g2Nj1OhB6fnEXU8BNGlRnjtGZKi%2FR3NBaKKfpAhN1FErOTnhlLkqUdfmaUcb%2F75gEf%2Bcrh1hRunFI9Hu5rUViC9DB%2BCmKujeknl%2B70hvVkOxZsoaATh0iCfvg88cpyWA720sV4IOt3KPtyCpRUH%2BCIeRDYBAglHcsoiAtuVWeVcKougJFGTAEpkfBpSvGzkg2m6cqz6akRxgk31Rgg1FjSXXajlcB8ux%2BCU3Ycd%2FQVGDYXW0ezSfCiZXn4EWrPYn7TkLeKHPBGwRCO4ZdFp38Z3h%2BAwa%2F40Ef2kgck62I93NhITFeweMcltsSPxA31oAqD6iWlsIdnIuydmWprufA7RHAF51XKMDkDQBmcIk0zqIbP8%2BeYRRqAfmNHy8eTCpWGqBB0sp3O4%2BNgPIf%2Balwi2BPpG5d5MZwK%2BT6plKpVDgPg5cY1KSTb3TgHHbqRg8NV%2BryJFeE%2FsS%2F1kUc4p29INwK50JF5wJRGV8PMnlmMPR5tPrzS%2FIH8AzsLNrZ4MAaCCsx9eSMSWTJgjkoMZ3aXTjCEwePSBjqkAY0JwIcEYISiossPAXai1PtIIf2vE2t4vadHqhqzJB3EXURGhUoG9yrv16MR9N7Y5UqRjuRh3w8moc%2BjWajJDxCA%2BPsf8UCErYxD2DOteXuwBSGP%2ByHRBHe0exUMRf3%2FX2qcMBJWT8HnmHDBnF2udloofE5W5fugMo4vOnCL7Qjb%2BAeTy7%2BTr3VybohA322zmHe5OeMYHxhYZZ%2Bn3mRIcjD4odSW&amp;X-Amz-Signature=ea7af478ec917d77b9ec5fc0b1b2dad75465ad1dce1d426593477c7ebc0ae27f&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject</a></p></div></details>
+<pre data-lang="shell"><code class="language-bash">$ cd Downloads
+$ bash Anaconda3-2022.10-Linux-aarch64.sh\
+$ source ~/.bashrc</code></pre>
+<p><a href="https://github.com/conda-forge/miniforge" target="_blank" rel="noreferrer">https://github.com/conda-forge/miniforge</a></p>
+<h4 id="block-d2b117b378ad445f9ebbf874eb327b66">추가 기능 설치</h4>
+<pre data-lang="shell"><code class="language-bash">$ apt-get install python3-pip
+$ sudo apt install curl</code></pre>
+<h4 id="block-b2d26aa9bc9446de8c1ec6033596d169">Install Coral</h4>
+<p>아래 공식 홈페이지에 나온 Instruction 따라 설치한다.</p>
+<p><a href="https://coral.ai/docs/accelerator/get-started/#1-install-the-edge-tpu-runtime" target="_blank" rel="noreferrer">https://coral.ai/docs/accelerator/get-started/#1-install-the-edge-tpu-runtime</a></p>
+<hr />
+<h2 id="block-8934ea70f5ef40e4a23877f7195d3353">Test MobileNetV2</h2>
+<p>3가지 출처(Coral, Keras application,ONNX)에 대한 MobileNetV2에 대해서 TPU를 사용해 추론하는 방법을 소개한다.</p>
+<h3 id="block-1ff1de2d06c9489ba3b9c3ced199727c">Coral에서 제공하는 MobileNetV2</h3>
+<p>이미 Coral에서 uint8-Quantization과 TPU compiler을 해놔서 추가적인 작업이 필요없다. 토글을 통해 받거나 아래 링크에서 받을 수 있다.</p>
+<p><a href="https://github.com/google-coral/pycoral" target="_blank" rel="noreferrer">https://github.com/google-coral/pycoral</a></p>
+<div class="columns"><div class="column"><details class="toggle"><summary><strong>Download mobilenet_v2_1.0_224_quant.tflite(Not For TPU)</strong></summary><div class="toggle-body"><p><a href="https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/80a07073-c080-468c-8ac2-12177b7439ef/mobilenet_v2_1.0_224_quant.tflite?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB4667XBWYBBS%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164449Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJIMEYCIQCsAEkaJrrr3cwHGhJu1sK2PzvH6fDbtiEmsyVPgEZSaQIhALxXpOD%2Fb1u10LQXGJo4QHtgcehDM35ziHSnzdC8hwK3Kv8DCEcQABoMNjM3NDIzMTgzODA1IgyBr3f%2FzCSK%2FLK%2F19Qq3AMosqw%2FZBbogTjTlDhFoPjz9byG7NoHIlqAhsSA512TceXHcZKtdTTz004%2FfNgbuomIV5pPwhYW4V07D%2BjSttlEleikwljI7VZNDjrf29GlMpQfuGNbaZKpDxGokN3RgP%2BdJQ7Ml7KM5xgJulH7CT5Daf4Bz7R8i5pue88x3cqjkSjUtA0%2FF2f4nYXWJrtICSqxPI9hUTyNAq%2FRIil08G5%2BDkNdikP%2FRSoqmehalGMrMTciG0xClRf6Hmv7X8Ay8Cj%2FX9qR4MwdwU7cdLDHgUW%2FYnYxfTVBXjc0I8S%2F2zL6tG8qQwrLc%2FuPAhptNH29Jb0TEelfuRE51HygYuXEVY1IdfO6QPcSUdM5dEorcpo5cncONq6or40q%2B%2BN7rW77FZfobAUlfFStk8Zkr6A9lNmgj4fJqx9cP%2BXcDNHkAOpRzPlIren36uCGVQ8io4wg%2BkCmG9lyyDE2exkFDNbJeePnbOpQf%2F%2F5BGLdOYRJJ0Zb1MJn76aYTuhHM%2F8zivQdK4nP21QIqMoe6MQsVvsOvAhFflG5mcxlRUsIbJzGO9yLlkLGByJNBnZ%2FHpbLv%2FHhgowHNoakfAw4tf%2FqyFXNtWAH2uEjEu1zM3GquZayeT2cEhfOQXbAZYJ9WA4IfTD3wuPSBjqkASqdnd8ACEncnem5jZ%2BmbAqYVuig5oSa1WsUiG%2BDbdYRo5sk%2FNuDYPydHdSLk0VdPjGYfRtooddSbeU0Fp2fcMpg1nwZ9F%2BRjmbW0ToN0z5IffWzhMNiKpP2bu0ERS8NeaxGhopT%2FPI3xcRV6cGbqPBgI7tTghHjhyr6Y91yimedWy8JQAyMN5jKM%2B0toXcayb1zwMS63wteRH5mXz7uM8oENYM3&amp;X-Amz-Signature=2bb3de9f00f979222b54f7e1a0f0977affe908967b468c63cee54c5db1a85100&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject" target="_blank" rel="noreferrer">https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/80a07073-c080-468c-8ac2-12177b7439ef/mobilenet_v2_1.0_224_quant.tflite?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB4667XBWYBBS%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164449Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJIMEYCIQCsAEkaJrrr3cwHGhJu1sK2PzvH6fDbtiEmsyVPgEZSaQIhALxXpOD%2Fb1u10LQXGJo4QHtgcehDM35ziHSnzdC8hwK3Kv8DCEcQABoMNjM3NDIzMTgzODA1IgyBr3f%2FzCSK%2FLK%2F19Qq3AMosqw%2FZBbogTjTlDhFoPjz9byG7NoHIlqAhsSA512TceXHcZKtdTTz004%2FfNgbuomIV5pPwhYW4V07D%2BjSttlEleikwljI7VZNDjrf29GlMpQfuGNbaZKpDxGokN3RgP%2BdJQ7Ml7KM5xgJulH7CT5Daf4Bz7R8i5pue88x3cqjkSjUtA0%2FF2f4nYXWJrtICSqxPI9hUTyNAq%2FRIil08G5%2BDkNdikP%2FRSoqmehalGMrMTciG0xClRf6Hmv7X8Ay8Cj%2FX9qR4MwdwU7cdLDHgUW%2FYnYxfTVBXjc0I8S%2F2zL6tG8qQwrLc%2FuPAhptNH29Jb0TEelfuRE51HygYuXEVY1IdfO6QPcSUdM5dEorcpo5cncONq6or40q%2B%2BN7rW77FZfobAUlfFStk8Zkr6A9lNmgj4fJqx9cP%2BXcDNHkAOpRzPlIren36uCGVQ8io4wg%2BkCmG9lyyDE2exkFDNbJeePnbOpQf%2F%2F5BGLdOYRJJ0Zb1MJn76aYTuhHM%2F8zivQdK4nP21QIqMoe6MQsVvsOvAhFflG5mcxlRUsIbJzGO9yLlkLGByJNBnZ%2FHpbLv%2FHhgowHNoakfAw4tf%2FqyFXNtWAH2uEjEu1zM3GquZayeT2cEhfOQXbAZYJ9WA4IfTD3wuPSBjqkASqdnd8ACEncnem5jZ%2BmbAqYVuig5oSa1WsUiG%2BDbdYRo5sk%2FNuDYPydHdSLk0VdPjGYfRtooddSbeU0Fp2fcMpg1nwZ9F%2BRjmbW0ToN0z5IffWzhMNiKpP2bu0ERS8NeaxGhopT%2FPI3xcRV6cGbqPBgI7tTghHjhyr6Y91yimedWy8JQAyMN5jKM%2B0toXcayb1zwMS63wteRH5mXz7uM8oENYM3&amp;X-Amz-Signature=2bb3de9f00f979222b54f7e1a0f0977affe908967b468c63cee54c5db1a85100&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject</a></p></div></details></div><div class="column"><details class="toggle"><summary><strong>Download mobilenet_v2_1.0_224_quant_edgetpu.tflite (For TPU)</strong></summary><div class="toggle-body"><p><a href="https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/ed39802f-1544-4bb7-afab-2ae061021a83/mobilenet_v2_1.0_224_quant_edgetpu.tflite?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB4662OP2EWMI%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164450Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJGMEQCIFPRgqiBsMH4Rwvsmrs62VIG267xNOoMtZ6%2Ff3YibvfXAiByDcItHWS0NDvotVmjEC0D0MLrPRSDF%2FedWnK3Zdb0XSr%2FAwhHEAAaDDYzNzQyMzE4MzgwNSIM%2ByImdHVbhgp2g1gCKtwDk7QyJn12UXgR%2Bs0XVY33CLf3qvuHvQSflfxBJg9eMDWrTZNaLV6dtwOnmxeM8szN5vVKkyco3sRwLOhLdiJs4FIoajdEFX9FEZinONeHMQ0cpmQYXshTSW2s5U3P%2BfDuFy3a0NmBveV9Qr9Kujfe9kOUDKBLHY8KtBUlTGyMjljcmUKsQS6FCzAWdT8jkQc2o1dHpVUVcmPPSoCVOv7V2NfNUviAWcPOA64VMEymuYJLHqZcolaVSWEHWM5o%2FqzlqLAxyo7oRctWWQbxXn4thz6WYJxuZCXpdiwtYrNH7lGHeLGloi%2FeyXCPRcM3jCsJd1blB2y%2FprGkyZxLmAvSNZxRji28rRrO1Pvq6Cx4ctr5i8AzzUI7ijnLV7T5KpptFOD28LXFj6Id%2FBidQwgWLcrXLqvqua6zeZ3FPckH2LzFTSNx6PP3k8gXJYpKCAy6EQD%2Btj2MBWgKoIPRkohylvn%2Bli%2BfVZR79L3ngo%2F2FquA3Zxrn3M7h5wRIVsGyyvKQw14Nl0o840DwnC9nz1hLR7WSPxV97ejO8kjl57ToNeENbRoOD6isLY3BE8ZjNOLQVXbSf4yWmBsPdRlgUK2opn5VZ6pQR%2BIsaWAmXVA1A%2FSHMtF6EC1mp7uRS0w2sTj0gY6pgGJukMt1gzdMz4nSfKdsC8Ws0JbkD3nb84SHNptbtbOmYheZyBfNINFcIW6iFrN%2F2Kf%2BG5JVzTvBwrH1sy1LnkiHt9JcrSn%2F8BxINkUnDjhQYVY3XOIJfwhOUHC%2F5FCrDe4TT51gx2dtrmcL5yB%2BT2UlBFv50sHQOPXiFTwTE2%2FTR4ehHqjVaEnVQfqcs5NxSGbSPTy%2BhXuDnZDy4QvjJgJiRlfk0i3&amp;X-Amz-Signature=a46083d206f6de6f6f386b4b3f349df31e13dc70a52ce5637434deffe118da69&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject" target="_blank" rel="noreferrer">https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/ed39802f-1544-4bb7-afab-2ae061021a83/mobilenet_v2_1.0_224_quant_edgetpu.tflite?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB4662OP2EWMI%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164450Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJGMEQCIFPRgqiBsMH4Rwvsmrs62VIG267xNOoMtZ6%2Ff3YibvfXAiByDcItHWS0NDvotVmjEC0D0MLrPRSDF%2FedWnK3Zdb0XSr%2FAwhHEAAaDDYzNzQyMzE4MzgwNSIM%2ByImdHVbhgp2g1gCKtwDk7QyJn12UXgR%2Bs0XVY33CLf3qvuHvQSflfxBJg9eMDWrTZNaLV6dtwOnmxeM8szN5vVKkyco3sRwLOhLdiJs4FIoajdEFX9FEZinONeHMQ0cpmQYXshTSW2s5U3P%2BfDuFy3a0NmBveV9Qr9Kujfe9kOUDKBLHY8KtBUlTGyMjljcmUKsQS6FCzAWdT8jkQc2o1dHpVUVcmPPSoCVOv7V2NfNUviAWcPOA64VMEymuYJLHqZcolaVSWEHWM5o%2FqzlqLAxyo7oRctWWQbxXn4thz6WYJxuZCXpdiwtYrNH7lGHeLGloi%2FeyXCPRcM3jCsJd1blB2y%2FprGkyZxLmAvSNZxRji28rRrO1Pvq6Cx4ctr5i8AzzUI7ijnLV7T5KpptFOD28LXFj6Id%2FBidQwgWLcrXLqvqua6zeZ3FPckH2LzFTSNx6PP3k8gXJYpKCAy6EQD%2Btj2MBWgKoIPRkohylvn%2Bli%2BfVZR79L3ngo%2F2FquA3Zxrn3M7h5wRIVsGyyvKQw14Nl0o840DwnC9nz1hLR7WSPxV97ejO8kjl57ToNeENbRoOD6isLY3BE8ZjNOLQVXbSf4yWmBsPdRlgUK2opn5VZ6pQR%2BIsaWAmXVA1A%2FSHMtF6EC1mp7uRS0w2sTj0gY6pgGJukMt1gzdMz4nSfKdsC8Ws0JbkD3nb84SHNptbtbOmYheZyBfNINFcIW6iFrN%2F2Kf%2BG5JVzTvBwrH1sy1LnkiHt9JcrSn%2F8BxINkUnDjhQYVY3XOIJfwhOUHC%2F5FCrDe4TT51gx2dtrmcL5yB%2BT2UlBFv50sHQOPXiFTwTE2%2FTR4ehHqjVaEnVQfqcs5NxSGbSPTy%2BhXuDnZDy4QvjJgJiRlfk0i3&amp;X-Amz-Signature=a46083d206f6de6f6f386b4b3f349df31e13dc70a52ce5637434deffe118da69&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject</a></p></div></details></div></div>
+<ul><li>mobilenet_v2_1.0_224_quant.tflite Structure<ul><li>Conv2D 와 Relu6가 합쳐져 있는 것을 볼 수 있는데, 이러한 모델의 경우 TPU에서 사용가능하도록 컴파일이 가능하다.</li></ul></li></ul>
+<figure><img src="/assets/notion/raspberry-pi에서-ubuntu-setting부터-coral-tpu를-사용해-mobilenetv2-inference-ᄒ/c20dcf35-a8f7-4136-8b49-bc4cc1b68db9.png" alt="" loading="lazy" width="2262" height="1211" /></figure>
+<p><a href="https://netron.app/" target="_blank" rel="noreferrer">https://netron.app/</a></p>
+<h4 id="block-2a432a07de86440f84b52793afba8985">Coral MobileNetV2<strong> </strong>Inference</h4>
+<p>아래 <strong>classify_image.py</strong>는 TF-Lite모델을 TPU를 사용해 classification해주는 코드다.</p>
+<details class="toggle"><summary>Code(classify_image.py)</summary><div class="toggle-body"><pre data-lang="python"><code class="language-python"># Lint as: python3
+# Copyright 2019 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+r&quot;&quot;&quot;Example using PyCoral to classify a given image using an Edge TPU.
+
+To run this code, you must attach an Edge TPU attached to the host and
+install the Edge TPU runtime (`libedgetpu.so`) and `tflite_runtime`. For
+device setup instructions, see coral.ai/docs/setup.
+
+Example usage:
+```
+bash examples/install_requirements.sh classify_image.py
+
+python3 examples/classify_image.py \
+  --model test_data/mobilenet_v2_1.0_224_inat_bird_quant_edgetpu.tflite  \
+  --labels test_data/inat_bird_labels.txt \
+  --input test_data/parrot.jpg
+```
+&quot;&quot;&quot;
+
+import argparse
+import time
+
+import numpy as np
+from PIL import Image
+from pycoral.adapters import classify
+from pycoral.adapters import common
+from pycoral.utils.dataset import read_label_file
+from pycoral.utils.edgetpu import make_interpreter
+
+
+def main():
+  parser = argparse.ArgumentParser(
+      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+  parser.add_argument(
+      '-m', '--model', required=True, help='File path of .tflite file.')
+  parser.add_argument(
+      '-i', '--input', required=True, help='Image to be classified.')
+  parser.add_argument(
+      '-l', '--labels', help='File path of labels file.')
+  parser.add_argument(
+      '-k', '--top_k', type=int, default=1,
+      help='Max number of classification results')
+  parser.add_argument(
+      '-t', '--threshold', type=float, default=0.0,
+      help='Classification score threshold')
+  parser.add_argument(
+      '-c', '--count', type=int, default=5,
+      help='Number of times to run inference')
+  parser.add_argument(
+      '-a', '--input_mean', type=float, default=128.0,
+      help='Mean value for input normalization')
+  parser.add_argument(
+      '-s', '--input_std', type=float, default=128.0,
+      help='STD value for input normalization')
+  args = parser.parse_args()
+
+  labels = read_label_file(args.labels) if args.labels else {}
+
+  interpreter = make_interpreter(*args.model.split('@'))
+  interpreter.allocate_tensors()
+
+  # Model must be uint8 quantized
+  if common.input_details(interpreter, 'dtype') != np.uint8:
+    raise ValueError('Only support uint8 input type.')
+
+  size = common.input_size(interpreter)
+  image = Image.open(args.input).convert('RGB').resize(size, Image.ANTIALIAS)
+
+  # Image data must go through two transforms before running inference:
+  # 1. normalization: f = (input - mean) / std
+  # 2. quantization: q = f / scale + zero_point
+  # The following code combines the two steps as such:
+  # q = (input - mean) / (std * scale) + zero_point
+  # However, if std * scale equals 1, and mean - zero_point equals 0, the input
+  # does not need any preprocessing (but in practice, even if the results are
+  # very close to 1 and 0, it is probably okay to skip preprocessing for better
+  # efficiency; we use 1e-5 below instead of absolute zero).
+  params = common.input_details(interpreter, 'quantization_parameters')
+  scale = params['scales']
+  zero_point = params['zero_points']
+  mean = args.input_mean
+  std = args.input_std
+  if abs(scale * std - 1) &lt; 1e-5 and abs(mean - zero_point) &lt; 1e-5:
+    # Input data does not require preprocessing.
+    common.set_input(interpreter, image)
+  else:
+    # Input data requires preprocessing
+    normalized_input = (np.asarray(image) - mean) / (std * scale) + zero_point
+    np.clip(normalized_input, 0, 255, out=normalized_input)
+    common.set_input(interpreter, normalized_input.astype(np.uint8))
+
+  # Run inference
+  print('----INFERENCE TIME----')
+  print('Note: The first inference on Edge TPU is slow because it includes',
+        'loading the model into Edge TPU memory.')
+  for _ in range(args.count):
+    start = time.perf_counter()
+    interpreter.invoke()
+    inference_time = time.perf_counter() - start
+    classes = classify.get_classes(interpreter, args.top_k, args.threshold)
+    print('%.1fms' % (inference_time * 1000))
+
+  print('-------RESULTS--------')
+  for c in classes:
+    print('%s: %.5f' % (labels.get(c.id, c.id), c.score))
+
+
+if __name__ == '__main__':
+  main()</code></pre></div></details>
+<p><a href="https://github.com/google-coral/pycoral/tree/master/examples" target="_blank" rel="noreferrer">https://github.com/google-coral/pycoral/tree/master/examples</a></p>
+<p>classify_image.py에 사용되는 라이브러리들(pycoral.utils, pycoral.adapters<strong>)</strong>에 대한 코드들은 아래 링크에 잘 설명돼 있다. 코드를 수정할 때 참고하자.</p>
+<p><a href="https://coral.ai/docs/reference/py/pycoral.utils/" target="_blank" rel="noreferrer">https://coral.ai/docs/reference/py/pycoral.utils/</a></p>
+<p><a href="https://coral.ai/docs/reference/py/pycoral.adapters/#module-pycoral.adapters.common" target="_blank" rel="noreferrer">https://coral.ai/docs/reference/py/pycoral.adapters/#module-pycoral.adapters.common</a></p>
+<p>위 코드는 아래 명령어로 사용 가능하다.</p>
+<pre data-lang="shell"><code class="language-bash">python3 classify_image.py \
+  --model mobilenet_v2_1.0_224_quant_edgetpu.tflite \
+  --labels coral_imagenet_labels.txt \
+  --input parrot.jpg</code></pre>
+<p>결과는 다음과 같이 나온다.</p>
+<figure><img src="/assets/notion/raspberry-pi에서-ubuntu-setting부터-coral-tpu를-사용해-mobilenetv2-inference-ᄒ/8c01fe04-ce56-4831-a098-e51940d62b3b.png" alt="" loading="lazy" width="811" height="393" /></figure>
+<p>classify_image.py를 수정해 classify_custom.py를 만들어113개의 데이터를 출력하고 CSV파일로 저장하게 끔 만들었다.</p>
+<p>Terminal 에서 아래 코드로 실행시킬 수 있다.</p>
+<pre data-lang="shell"><code class="language-bash">python3 classify_custom.py \
+  --model mobilenet_v2_1.0_224_quant_edgetpu.tflite \
+  --labels coral_imagenet_labels.txt \
+  --input 113_data</code></pre>
+<p>수정한 classify_custom.py 결과다.</p>
+<figure><img src="/assets/notion/raspberry-pi에서-ubuntu-setting부터-coral-tpu를-사용해-mobilenetv2-inference-ᄒ/8b4a807d-30e7-4d16-981f-747b340035b6.png" alt="" loading="lazy" width="804" height="440" /></figure>
+<details class="toggle"><summary><strong>Directory 환경</strong></summary><div class="toggle-body"><figure><img src="/assets/notion/raspberry-pi에서-ubuntu-setting부터-coral-tpu를-사용해-mobilenetv2-inference-ᄒ/e58a492b-e669-46e5-b831-7afee749ec26.png" alt="" loading="lazy" width="888" height="546" /></figure></div></details>
+<details class="toggle"><summary><strong>classify_custom.py 코드</strong></summary><div class="toggle-body"><pre data-lang="python"><code class="language-python">import os
+import argparse
+import time
+import numpy as np
+from PIL import Image
+from pycoral.adapters import classify
+from pycoral.adapters import common
+from pycoral.utils.dataset import read_label_file
+from pycoral.utils.edgetpu import make_interpreter
+
+def main() :
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument(
+        '-m', '--model', required=True, help='File path of .tflite file.')
+    parser.add_argument(
+        '-i', '--input',  required=True, help='Image path.') # input test_data/
+    parser.add_argument(
+        '-l', '--labels', help='File path of labels file.')
+    parser.add_argument(
+        '-k', '--top_k', type=int, default=1,
+        help='Max number of classification results')
+    parser.add_argument(
+        '-t', '--threshold', type=float, default=0.0,
+        help='Classification score threshold')
+    parser.add_argument(
+        '-c', '--count', type=int, default=1,
+        help='Number of times to run inference')
+    parser.add_argument(
+        '-a', '--input_mean', type=float, default=128.0,
+        help='Mean value for input normalization')
+    parser.add_argument(
+        '-s', '--input_std', type=float, default=128.0,
+        help='STD value for input normalization')
+    args = parser.parse_args()
+
+    labels = read_label_file(args.labels) if args.labels else {}
+
+    print(args.model)
+    interpreter = make_interpreter(args.model)
+    interpreter.allocate_tensors()
+
+    # Model must be uint8 quantized
+    if common.input_details(interpreter, 'dtype') != np.uint8 :
+        raise ValueError('Only support uint8 input type.')
+
+    size = common.input_size(interpreter)
+    params = common.input_details(interpreter, 'quantization_parameters')
+    scale = params['scales']
+    zero_point = params['zero_points']
+    mean = args.input_mean
+    std = args.input_std
+
+    image_name = os.listdir(args.input)  # image name
+    image_filter = list(filter(lambda x: x.find('.JPEG') != -1, image_name))  # image format filtering
+
+    
+    print(&quot;Note : The first inference on Edge TPU is slow because it includes&quot;)
+    print(&quot;loading the model into Edge TPU memeory.&quot;)
+
+    f = open(&quot;./mobilenet_data.csv&quot;,&quot;w&quot;)
+    f.write(&quot;ImageName,class,score,inference_time\n&quot;)
+    i=1
+    for img in image_name:
+
+        image = Image.open(args.input + img).convert('RGB').resize(size, Image.ANTIALIAS)
+
+        if abs(scale * std - 1) &lt; 1e-5 and abs(mean - zero_point) &lt; 1e-5:
+            # Input data does not require preprocessing.
+            common.set_input(interpreter, image)
+        else:
+            # Input data requires preprocessing
+            normalized_input = (np.asarray(image) - mean) / (std * scale) + zero_point
+            np.clip(normalized_input, 0, 255, out=normalized_input)
+            common.set_input(interpreter, normalized_input.astype(np.uint8))
+
+        print('----INFERENCE TIME AND RESULTS----')
+        start = time.perf_counter()
+        interpreter.invoke()
+        inference_time = time.perf_counter() - start
+        classes = classify.get_classes(interpreter, args.top_k, args.threshold)
+        
+        for c in classes:
+            result = labels.get(c.id, c.id)
+            result = result.replace(&quot;, &quot;,&quot;/&quot;)
+            print(f&quot;{i} {img} {result}, {c.score:.5f}, {inference_time*1000:.1f}ms&quot;)
+            f.write(f&quot;{img}, {result}, {c.score:.5f}, {inference_time*1000:.1f}ms\n&quot;)
+            i += 1
+
+if __name__ == '__main__':
+    main()</code></pre></div></details>
+<details class="toggle"><summary><strong>Download classify_custom.py, coral_imagenet_labels.txt, 113_data.7z, mobilenet_data.csv</strong></summary><div class="toggle-body"><p><a href="https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/287790c1-4076-4bed-a83a-f27d9e0da076/classify_custom.py?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB46657V4PRSB%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164451Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJHMEUCIQCvTB5P%2Brw08k6tnSAzOq%2F6XY9zic8lYNO3vBTfikn96QIgM9A1B6pENcz71OqGlzPm14YiafNwfqRL7gWWW96%2FiLsq%2FwMIRxAAGgw2Mzc0MjMxODM4MDUiDAyttZnF5BTGR%2FaleCrcA%2B3S6MDfOa0LP5lcKJGJmueBiItgd05Jal1XP5dVRwOix50PO3tpqlH4WQdjRMmVUCrhjdr8GrDDDadqalu%2BDt6USrZZHZjCixPSvnFRmf4w671Pm1rX8HhMa1Te7wt1e1%2BOaJfbYHXRiWusTZWbNF9Qm7oYjllROBP7QHdUnLTp%2Fk3bP7vFUX8iPV6NC91%2B9qBchoG5H6aszBa1rUCIJaubl2gpTl%2FfiYbLJ8bcjN6SPu6ze2mnquGWy8%2Bsgrucz4sYwRuZTIGchvmg7fd7UXEbF3q9AIWPFEdIAf7WeQoOJCnVSMYhH%2BYsvI1wpb8jCZwNzzj3VX4fpgGzx%2BdqA%2B1F6xTEbQXjF8cAyHL0eZSPXxAxCupWcIofOqgyn7x8GFVVin%2FZOOnmJQshlfFicNXcq4EcQfLyr4oe2yuEBf69RMYGT58y6j5gB0eU5liGcxtIAecLcUI1TjUskfG0KdbgXnRNDlmk0faBfq9%2By8n8%2BFa2WomQr%2BFEULfO5qjW3g0hezG1Fdne8nelYqdJUxjkL217iU2woXXgO4gbBZsRdpqN9XTdbMduDjE7%2FSHH9xW5W7Jn17MVmqzWzFf%2FsAtG7IPvlE3DfbrSnE3EB0O3MGsS8g0VBnw90zNnMIrE49IGOqUBF0Cl0sqBpDZAextxO7owykVTcs1HLVUGGv%2B1Dizi8mBebFIYumVbn4OeZN9Ut09Mo0R8QLk4n6EWg5gbtxxqjkKKGO1MhNtORZ96zdnhfVT2Xt0vCleZdpFIKuy3IvStZrDxh3IcHofxZqct4Afw9wc9ALeqIy0iRge3hyeU4m1FHNEmlM%2BdO9BtmXsYjSV7%2BZ%2FrjOoqjyjqy0n%2FjxrExuVB2aKj&amp;X-Amz-Signature=39292b48af96447a9ea17b5a69d3deee7da337e444ba441e813409c62f7ff830&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject" target="_blank" rel="noreferrer">https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/287790c1-4076-4bed-a83a-f27d9e0da076/classify_custom.py?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB46657V4PRSB%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164451Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJHMEUCIQCvTB5P%2Brw08k6tnSAzOq%2F6XY9zic8lYNO3vBTfikn96QIgM9A1B6pENcz71OqGlzPm14YiafNwfqRL7gWWW96%2FiLsq%2FwMIRxAAGgw2Mzc0MjMxODM4MDUiDAyttZnF5BTGR%2FaleCrcA%2B3S6MDfOa0LP5lcKJGJmueBiItgd05Jal1XP5dVRwOix50PO3tpqlH4WQdjRMmVUCrhjdr8GrDDDadqalu%2BDt6USrZZHZjCixPSvnFRmf4w671Pm1rX8HhMa1Te7wt1e1%2BOaJfbYHXRiWusTZWbNF9Qm7oYjllROBP7QHdUnLTp%2Fk3bP7vFUX8iPV6NC91%2B9qBchoG5H6aszBa1rUCIJaubl2gpTl%2FfiYbLJ8bcjN6SPu6ze2mnquGWy8%2Bsgrucz4sYwRuZTIGchvmg7fd7UXEbF3q9AIWPFEdIAf7WeQoOJCnVSMYhH%2BYsvI1wpb8jCZwNzzj3VX4fpgGzx%2BdqA%2B1F6xTEbQXjF8cAyHL0eZSPXxAxCupWcIofOqgyn7x8GFVVin%2FZOOnmJQshlfFicNXcq4EcQfLyr4oe2yuEBf69RMYGT58y6j5gB0eU5liGcxtIAecLcUI1TjUskfG0KdbgXnRNDlmk0faBfq9%2By8n8%2BFa2WomQr%2BFEULfO5qjW3g0hezG1Fdne8nelYqdJUxjkL217iU2woXXgO4gbBZsRdpqN9XTdbMduDjE7%2FSHH9xW5W7Jn17MVmqzWzFf%2FsAtG7IPvlE3DfbrSnE3EB0O3MGsS8g0VBnw90zNnMIrE49IGOqUBF0Cl0sqBpDZAextxO7owykVTcs1HLVUGGv%2B1Dizi8mBebFIYumVbn4OeZN9Ut09Mo0R8QLk4n6EWg5gbtxxqjkKKGO1MhNtORZ96zdnhfVT2Xt0vCleZdpFIKuy3IvStZrDxh3IcHofxZqct4Afw9wc9ALeqIy0iRge3hyeU4m1FHNEmlM%2BdO9BtmXsYjSV7%2BZ%2FrjOoqjyjqy0n%2FjxrExuVB2aKj&amp;X-Amz-Signature=39292b48af96447a9ea17b5a69d3deee7da337e444ba441e813409c62f7ff830&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject</a></p>
+<p><a href="https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/bc85901e-38c4-4ec5-a548-1770338e2c61/coral_imagenet_labels.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB46657V4PRSB%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164451Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJHMEUCIQCvTB5P%2Brw08k6tnSAzOq%2F6XY9zic8lYNO3vBTfikn96QIgM9A1B6pENcz71OqGlzPm14YiafNwfqRL7gWWW96%2FiLsq%2FwMIRxAAGgw2Mzc0MjMxODM4MDUiDAyttZnF5BTGR%2FaleCrcA%2B3S6MDfOa0LP5lcKJGJmueBiItgd05Jal1XP5dVRwOix50PO3tpqlH4WQdjRMmVUCrhjdr8GrDDDadqalu%2BDt6USrZZHZjCixPSvnFRmf4w671Pm1rX8HhMa1Te7wt1e1%2BOaJfbYHXRiWusTZWbNF9Qm7oYjllROBP7QHdUnLTp%2Fk3bP7vFUX8iPV6NC91%2B9qBchoG5H6aszBa1rUCIJaubl2gpTl%2FfiYbLJ8bcjN6SPu6ze2mnquGWy8%2Bsgrucz4sYwRuZTIGchvmg7fd7UXEbF3q9AIWPFEdIAf7WeQoOJCnVSMYhH%2BYsvI1wpb8jCZwNzzj3VX4fpgGzx%2BdqA%2B1F6xTEbQXjF8cAyHL0eZSPXxAxCupWcIofOqgyn7x8GFVVin%2FZOOnmJQshlfFicNXcq4EcQfLyr4oe2yuEBf69RMYGT58y6j5gB0eU5liGcxtIAecLcUI1TjUskfG0KdbgXnRNDlmk0faBfq9%2By8n8%2BFa2WomQr%2BFEULfO5qjW3g0hezG1Fdne8nelYqdJUxjkL217iU2woXXgO4gbBZsRdpqN9XTdbMduDjE7%2FSHH9xW5W7Jn17MVmqzWzFf%2FsAtG7IPvlE3DfbrSnE3EB0O3MGsS8g0VBnw90zNnMIrE49IGOqUBF0Cl0sqBpDZAextxO7owykVTcs1HLVUGGv%2B1Dizi8mBebFIYumVbn4OeZN9Ut09Mo0R8QLk4n6EWg5gbtxxqjkKKGO1MhNtORZ96zdnhfVT2Xt0vCleZdpFIKuy3IvStZrDxh3IcHofxZqct4Afw9wc9ALeqIy0iRge3hyeU4m1FHNEmlM%2BdO9BtmXsYjSV7%2BZ%2FrjOoqjyjqy0n%2FjxrExuVB2aKj&amp;X-Amz-Signature=1604c00e939f0ced753f0d24090e60bb75d04c6a234ada8b2612c7c3af66632e&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject" target="_blank" rel="noreferrer">https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/bc85901e-38c4-4ec5-a548-1770338e2c61/coral_imagenet_labels.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB46657V4PRSB%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164451Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJHMEUCIQCvTB5P%2Brw08k6tnSAzOq%2F6XY9zic8lYNO3vBTfikn96QIgM9A1B6pENcz71OqGlzPm14YiafNwfqRL7gWWW96%2FiLsq%2FwMIRxAAGgw2Mzc0MjMxODM4MDUiDAyttZnF5BTGR%2FaleCrcA%2B3S6MDfOa0LP5lcKJGJmueBiItgd05Jal1XP5dVRwOix50PO3tpqlH4WQdjRMmVUCrhjdr8GrDDDadqalu%2BDt6USrZZHZjCixPSvnFRmf4w671Pm1rX8HhMa1Te7wt1e1%2BOaJfbYHXRiWusTZWbNF9Qm7oYjllROBP7QHdUnLTp%2Fk3bP7vFUX8iPV6NC91%2B9qBchoG5H6aszBa1rUCIJaubl2gpTl%2FfiYbLJ8bcjN6SPu6ze2mnquGWy8%2Bsgrucz4sYwRuZTIGchvmg7fd7UXEbF3q9AIWPFEdIAf7WeQoOJCnVSMYhH%2BYsvI1wpb8jCZwNzzj3VX4fpgGzx%2BdqA%2B1F6xTEbQXjF8cAyHL0eZSPXxAxCupWcIofOqgyn7x8GFVVin%2FZOOnmJQshlfFicNXcq4EcQfLyr4oe2yuEBf69RMYGT58y6j5gB0eU5liGcxtIAecLcUI1TjUskfG0KdbgXnRNDlmk0faBfq9%2By8n8%2BFa2WomQr%2BFEULfO5qjW3g0hezG1Fdne8nelYqdJUxjkL217iU2woXXgO4gbBZsRdpqN9XTdbMduDjE7%2FSHH9xW5W7Jn17MVmqzWzFf%2FsAtG7IPvlE3DfbrSnE3EB0O3MGsS8g0VBnw90zNnMIrE49IGOqUBF0Cl0sqBpDZAextxO7owykVTcs1HLVUGGv%2B1Dizi8mBebFIYumVbn4OeZN9Ut09Mo0R8QLk4n6EWg5gbtxxqjkKKGO1MhNtORZ96zdnhfVT2Xt0vCleZdpFIKuy3IvStZrDxh3IcHofxZqct4Afw9wc9ALeqIy0iRge3hyeU4m1FHNEmlM%2BdO9BtmXsYjSV7%2BZ%2FrjOoqjyjqy0n%2FjxrExuVB2aKj&amp;X-Amz-Signature=1604c00e939f0ced753f0d24090e60bb75d04c6a234ada8b2612c7c3af66632e&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject</a></p>
+<p><a href="https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/596aebfc-470b-4775-9c04-adf513470816/113_data.7z?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB46657V4PRSB%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164451Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJHMEUCIQCvTB5P%2Brw08k6tnSAzOq%2F6XY9zic8lYNO3vBTfikn96QIgM9A1B6pENcz71OqGlzPm14YiafNwfqRL7gWWW96%2FiLsq%2FwMIRxAAGgw2Mzc0MjMxODM4MDUiDAyttZnF5BTGR%2FaleCrcA%2B3S6MDfOa0LP5lcKJGJmueBiItgd05Jal1XP5dVRwOix50PO3tpqlH4WQdjRMmVUCrhjdr8GrDDDadqalu%2BDt6USrZZHZjCixPSvnFRmf4w671Pm1rX8HhMa1Te7wt1e1%2BOaJfbYHXRiWusTZWbNF9Qm7oYjllROBP7QHdUnLTp%2Fk3bP7vFUX8iPV6NC91%2B9qBchoG5H6aszBa1rUCIJaubl2gpTl%2FfiYbLJ8bcjN6SPu6ze2mnquGWy8%2Bsgrucz4sYwRuZTIGchvmg7fd7UXEbF3q9AIWPFEdIAf7WeQoOJCnVSMYhH%2BYsvI1wpb8jCZwNzzj3VX4fpgGzx%2BdqA%2B1F6xTEbQXjF8cAyHL0eZSPXxAxCupWcIofOqgyn7x8GFVVin%2FZOOnmJQshlfFicNXcq4EcQfLyr4oe2yuEBf69RMYGT58y6j5gB0eU5liGcxtIAecLcUI1TjUskfG0KdbgXnRNDlmk0faBfq9%2By8n8%2BFa2WomQr%2BFEULfO5qjW3g0hezG1Fdne8nelYqdJUxjkL217iU2woXXgO4gbBZsRdpqN9XTdbMduDjE7%2FSHH9xW5W7Jn17MVmqzWzFf%2FsAtG7IPvlE3DfbrSnE3EB0O3MGsS8g0VBnw90zNnMIrE49IGOqUBF0Cl0sqBpDZAextxO7owykVTcs1HLVUGGv%2B1Dizi8mBebFIYumVbn4OeZN9Ut09Mo0R8QLk4n6EWg5gbtxxqjkKKGO1MhNtORZ96zdnhfVT2Xt0vCleZdpFIKuy3IvStZrDxh3IcHofxZqct4Afw9wc9ALeqIy0iRge3hyeU4m1FHNEmlM%2BdO9BtmXsYjSV7%2BZ%2FrjOoqjyjqy0n%2FjxrExuVB2aKj&amp;X-Amz-Signature=564a7adb89eefbc3a2eb991113e9cda46dd62ecb1f141c4e175112a0032d45ca&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject" target="_blank" rel="noreferrer">https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/596aebfc-470b-4775-9c04-adf513470816/113_data.7z?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB46657V4PRSB%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164451Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJHMEUCIQCvTB5P%2Brw08k6tnSAzOq%2F6XY9zic8lYNO3vBTfikn96QIgM9A1B6pENcz71OqGlzPm14YiafNwfqRL7gWWW96%2FiLsq%2FwMIRxAAGgw2Mzc0MjMxODM4MDUiDAyttZnF5BTGR%2FaleCrcA%2B3S6MDfOa0LP5lcKJGJmueBiItgd05Jal1XP5dVRwOix50PO3tpqlH4WQdjRMmVUCrhjdr8GrDDDadqalu%2BDt6USrZZHZjCixPSvnFRmf4w671Pm1rX8HhMa1Te7wt1e1%2BOaJfbYHXRiWusTZWbNF9Qm7oYjllROBP7QHdUnLTp%2Fk3bP7vFUX8iPV6NC91%2B9qBchoG5H6aszBa1rUCIJaubl2gpTl%2FfiYbLJ8bcjN6SPu6ze2mnquGWy8%2Bsgrucz4sYwRuZTIGchvmg7fd7UXEbF3q9AIWPFEdIAf7WeQoOJCnVSMYhH%2BYsvI1wpb8jCZwNzzj3VX4fpgGzx%2BdqA%2B1F6xTEbQXjF8cAyHL0eZSPXxAxCupWcIofOqgyn7x8GFVVin%2FZOOnmJQshlfFicNXcq4EcQfLyr4oe2yuEBf69RMYGT58y6j5gB0eU5liGcxtIAecLcUI1TjUskfG0KdbgXnRNDlmk0faBfq9%2By8n8%2BFa2WomQr%2BFEULfO5qjW3g0hezG1Fdne8nelYqdJUxjkL217iU2woXXgO4gbBZsRdpqN9XTdbMduDjE7%2FSHH9xW5W7Jn17MVmqzWzFf%2FsAtG7IPvlE3DfbrSnE3EB0O3MGsS8g0VBnw90zNnMIrE49IGOqUBF0Cl0sqBpDZAextxO7owykVTcs1HLVUGGv%2B1Dizi8mBebFIYumVbn4OeZN9Ut09Mo0R8QLk4n6EWg5gbtxxqjkKKGO1MhNtORZ96zdnhfVT2Xt0vCleZdpFIKuy3IvStZrDxh3IcHofxZqct4Afw9wc9ALeqIy0iRge3hyeU4m1FHNEmlM%2BdO9BtmXsYjSV7%2BZ%2FrjOoqjyjqy0n%2FjxrExuVB2aKj&amp;X-Amz-Signature=564a7adb89eefbc3a2eb991113e9cda46dd62ecb1f141c4e175112a0032d45ca&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject</a></p>
+<p><a href="https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/0e50eb19-e69e-468c-8e6a-bd44f6b7e123/mobilenet_data.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB46657V4PRSB%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164451Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJHMEUCIQCvTB5P%2Brw08k6tnSAzOq%2F6XY9zic8lYNO3vBTfikn96QIgM9A1B6pENcz71OqGlzPm14YiafNwfqRL7gWWW96%2FiLsq%2FwMIRxAAGgw2Mzc0MjMxODM4MDUiDAyttZnF5BTGR%2FaleCrcA%2B3S6MDfOa0LP5lcKJGJmueBiItgd05Jal1XP5dVRwOix50PO3tpqlH4WQdjRMmVUCrhjdr8GrDDDadqalu%2BDt6USrZZHZjCixPSvnFRmf4w671Pm1rX8HhMa1Te7wt1e1%2BOaJfbYHXRiWusTZWbNF9Qm7oYjllROBP7QHdUnLTp%2Fk3bP7vFUX8iPV6NC91%2B9qBchoG5H6aszBa1rUCIJaubl2gpTl%2FfiYbLJ8bcjN6SPu6ze2mnquGWy8%2Bsgrucz4sYwRuZTIGchvmg7fd7UXEbF3q9AIWPFEdIAf7WeQoOJCnVSMYhH%2BYsvI1wpb8jCZwNzzj3VX4fpgGzx%2BdqA%2B1F6xTEbQXjF8cAyHL0eZSPXxAxCupWcIofOqgyn7x8GFVVin%2FZOOnmJQshlfFicNXcq4EcQfLyr4oe2yuEBf69RMYGT58y6j5gB0eU5liGcxtIAecLcUI1TjUskfG0KdbgXnRNDlmk0faBfq9%2By8n8%2BFa2WomQr%2BFEULfO5qjW3g0hezG1Fdne8nelYqdJUxjkL217iU2woXXgO4gbBZsRdpqN9XTdbMduDjE7%2FSHH9xW5W7Jn17MVmqzWzFf%2FsAtG7IPvlE3DfbrSnE3EB0O3MGsS8g0VBnw90zNnMIrE49IGOqUBF0Cl0sqBpDZAextxO7owykVTcs1HLVUGGv%2B1Dizi8mBebFIYumVbn4OeZN9Ut09Mo0R8QLk4n6EWg5gbtxxqjkKKGO1MhNtORZ96zdnhfVT2Xt0vCleZdpFIKuy3IvStZrDxh3IcHofxZqct4Afw9wc9ALeqIy0iRge3hyeU4m1FHNEmlM%2BdO9BtmXsYjSV7%2BZ%2FrjOoqjyjqy0n%2FjxrExuVB2aKj&amp;X-Amz-Signature=6bb7d0baeb51f36eff0bf841421f4d636f83422a34c64ea5d795e3f66a989c1d&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject" target="_blank" rel="noreferrer">https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/0e50eb19-e69e-468c-8e6a-bd44f6b7e123/mobilenet_data.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB46657V4PRSB%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164451Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJHMEUCIQCvTB5P%2Brw08k6tnSAzOq%2F6XY9zic8lYNO3vBTfikn96QIgM9A1B6pENcz71OqGlzPm14YiafNwfqRL7gWWW96%2FiLsq%2FwMIRxAAGgw2Mzc0MjMxODM4MDUiDAyttZnF5BTGR%2FaleCrcA%2B3S6MDfOa0LP5lcKJGJmueBiItgd05Jal1XP5dVRwOix50PO3tpqlH4WQdjRMmVUCrhjdr8GrDDDadqalu%2BDt6USrZZHZjCixPSvnFRmf4w671Pm1rX8HhMa1Te7wt1e1%2BOaJfbYHXRiWusTZWbNF9Qm7oYjllROBP7QHdUnLTp%2Fk3bP7vFUX8iPV6NC91%2B9qBchoG5H6aszBa1rUCIJaubl2gpTl%2FfiYbLJ8bcjN6SPu6ze2mnquGWy8%2Bsgrucz4sYwRuZTIGchvmg7fd7UXEbF3q9AIWPFEdIAf7WeQoOJCnVSMYhH%2BYsvI1wpb8jCZwNzzj3VX4fpgGzx%2BdqA%2B1F6xTEbQXjF8cAyHL0eZSPXxAxCupWcIofOqgyn7x8GFVVin%2FZOOnmJQshlfFicNXcq4EcQfLyr4oe2yuEBf69RMYGT58y6j5gB0eU5liGcxtIAecLcUI1TjUskfG0KdbgXnRNDlmk0faBfq9%2By8n8%2BFa2WomQr%2BFEULfO5qjW3g0hezG1Fdne8nelYqdJUxjkL217iU2woXXgO4gbBZsRdpqN9XTdbMduDjE7%2FSHH9xW5W7Jn17MVmqzWzFf%2FsAtG7IPvlE3DfbrSnE3EB0O3MGsS8g0VBnw90zNnMIrE49IGOqUBF0Cl0sqBpDZAextxO7owykVTcs1HLVUGGv%2B1Dizi8mBebFIYumVbn4OeZN9Ut09Mo0R8QLk4n6EWg5gbtxxqjkKKGO1MhNtORZ96zdnhfVT2Xt0vCleZdpFIKuy3IvStZrDxh3IcHofxZqct4Afw9wc9ALeqIy0iRge3hyeU4m1FHNEmlM%2BdO9BtmXsYjSV7%2BZ%2FrjOoqjyjqy0n%2FjxrExuVB2aKj&amp;X-Amz-Signature=6bb7d0baeb51f36eff0bf841421f4d636f83422a34c64ea5d795e3f66a989c1d&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject</a></p></div></details>
+<hr />
+<h3 id="block-ef728fcf49ec4f9e8b9680034ac2b01d">tf.keras.application에서 제공하는 MobileNetV2</h3>
+<p>mobileNetV2 <em>— convert </em>—<em>&gt; </em>TFLite(uint8)</p>
+<p>Keras에서 제공하는 Application을 통해 다운받고 TF-Lite로 변환하자. TPU는 uint8만 호한이 가능함으로 변환 할 때 uint8로 바꿔줘야 하며 이때 Calibration Dataset을 이용한다.</p>
+<ul><li>Get MoibleNetV2<pre data-lang="python"><code class="language-python">model = tf.keras.applications.mobilenet_v2.MobileNetV2(
+    input_shape=(224, 224, 3),
+    alpha=1.0,
+    include_top=True,
+    weights='imagenet',
+    input_tensor=None,
+    pooling=None,
+    classes=1000,
+    classifier_activation='softmax'
+)</code></pre></li><li>TF → TF-Lite(Calibration Dataset → Uint8 Quantization)<pre data-lang="python"><code class="language-python"># for keras model
+# A generator that provides a representative dataset
+def representative_data_gen():
+    image_path = get_image(&quot;ImageNet-1000samples&quot;)
+        yield [image_data]
+
+converter = tf.lite.TFLiteConverter.from_keras_model(model)
+# This enables quantization
+converter.optimizations = [tf.lite.Optimize.DEFAULT]
+# This sets the representative dataset for quantization
+converter.representative_dataset = representative_data_gen
+# This ensures that if any ops can't be quantized, the converter throws an error
+converter.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS_INT8]
+# For full integer quantization, though supported types defaults to int8 only, we explicitly declare it for clarity.
+converter.target_spec.supported_types = [tf.int8]
+# These set the input and output tensors to uint8 (added in r2.3)
+converter.inference_input_type = tf.uint8
+converter.inference_output_type = tf.uint8
+tflite_model = converter.convert()
+
+with open('mobilenet_v2_quant_uint8.tflite', 'wb') as f:
+  f.write(tflite_model)</code></pre></li></ul>
+<details class="toggle"><summary><strong>Download keras_mobilenet_v2_quant_uint8.tflite</strong></summary><div class="toggle-body"><p><a href="https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/b7881994-2811-4eb5-b895-a6eda647172c/mobilenet_v2_quant_uint8.tflite?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB466RVPQQV4A%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164451Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJGMEQCIFjkoPLH1UklC%2BFWNEizjjuA4ara4vuzcjBwZEbaYkCVAiA%2FsSfD2i5i55VgUVUK0eP6SKIqQnjO3DB%2FpGTp0Pnx%2Fyr%2FAwhHEAAaDDYzNzQyMzE4MzgwNSIM%2FGw7neCpOUb%2FSNaRKtwDwA0eoar0GfBFmOY%2FiGsOJyNNy8ljRWI9gpusrIrL%2BwBYbUgRXhXl5dwjng%2FdubpCiLrE%2BLuIabcfdUIdd09GVdiUTQ0zMqUj1uDhlc3scAyFg%2FmzB8gkZg%2FLYCMOqyehyPRe1C2GLp6ZnBDkm%2FVVCLZ5sXecsGF6LZzwg4AVSwQEEH4YGSVvvMpryXUj0lkxIpjdYFEQBEw3SuEC2F0Qd7CWOHbmt2ubW5LyU1dIyVuzXHFVKaC7fTaGavpqEkV2OAXcCPlbiK0OEd3B1Npb%2Bg8SGcreKTxYVZYnZ%2FPK%2BwtcaG%2BI4Kv2lxBwbVtN9%2BeacToL2jlsARyhaRq5xLBVx1osmrLyakAn%2BgrLYjwXFUR3yXi7ub7Mzo0RTVVflU8AwvyWE6LSDGqW92Ybehev9jSC3%2FGqZblJknDBl%2BI%2BY0zkYSBWXqZsr5lDbIUmbIArbzQuTebfSmiv5QP6Ba7w6ChDOsQUOSM%2Bbi%2F22%2F2Hwhf7uZuN8kdGpBAXHpKTro2dtsyWiEEtSt1o%2B6SUfN%2BDwfhp%2BDPpvxZBl6fG0CKpZUrCodplPeb6fka9qwA6drNwilyiuWdq%2FZtYcQXVo%2BUC01x99X6z%2B8EazPzDzpeZJTP0LKhrGixez%2B10Mc0w5MLj0gY6pgFszL0x7eqOKB7oW31eFoa5X9s3fJSvD6aApq4dcNRxNtt9x309yEap%2BH0P3LjoDvR2iD8GmoMpnYBZx988CFcgzYQ8hCpPkUCv5z1eOPwFoiI%2FfMU5Ro%2F%2BoUrYwIUAmQR%2BJX8wGj7y2CU%2BK7gcoDUeI4wTMBxaRtCWMuTOHfLUMqLMg3afQyPCVf%2FjLl3clxwh1VWZY0MNEGnTuzGrpr3rO5bmn2FQ&amp;X-Amz-Signature=c1f5083fd3ae75bfd3ff566937ee2db8edd15b8a5314df3eff056ad03195174e&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject" target="_blank" rel="noreferrer">https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/b7881994-2811-4eb5-b895-a6eda647172c/mobilenet_v2_quant_uint8.tflite?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB466RVPQQV4A%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164451Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJGMEQCIFjkoPLH1UklC%2BFWNEizjjuA4ara4vuzcjBwZEbaYkCVAiA%2FsSfD2i5i55VgUVUK0eP6SKIqQnjO3DB%2FpGTp0Pnx%2Fyr%2FAwhHEAAaDDYzNzQyMzE4MzgwNSIM%2FGw7neCpOUb%2FSNaRKtwDwA0eoar0GfBFmOY%2FiGsOJyNNy8ljRWI9gpusrIrL%2BwBYbUgRXhXl5dwjng%2FdubpCiLrE%2BLuIabcfdUIdd09GVdiUTQ0zMqUj1uDhlc3scAyFg%2FmzB8gkZg%2FLYCMOqyehyPRe1C2GLp6ZnBDkm%2FVVCLZ5sXecsGF6LZzwg4AVSwQEEH4YGSVvvMpryXUj0lkxIpjdYFEQBEw3SuEC2F0Qd7CWOHbmt2ubW5LyU1dIyVuzXHFVKaC7fTaGavpqEkV2OAXcCPlbiK0OEd3B1Npb%2Bg8SGcreKTxYVZYnZ%2FPK%2BwtcaG%2BI4Kv2lxBwbVtN9%2BeacToL2jlsARyhaRq5xLBVx1osmrLyakAn%2BgrLYjwXFUR3yXi7ub7Mzo0RTVVflU8AwvyWE6LSDGqW92Ybehev9jSC3%2FGqZblJknDBl%2BI%2BY0zkYSBWXqZsr5lDbIUmbIArbzQuTebfSmiv5QP6Ba7w6ChDOsQUOSM%2Bbi%2F22%2F2Hwhf7uZuN8kdGpBAXHpKTro2dtsyWiEEtSt1o%2B6SUfN%2BDwfhp%2BDPpvxZBl6fG0CKpZUrCodplPeb6fka9qwA6drNwilyiuWdq%2FZtYcQXVo%2BUC01x99X6z%2B8EazPzDzpeZJTP0LKhrGixez%2B10Mc0w5MLj0gY6pgFszL0x7eqOKB7oW31eFoa5X9s3fJSvD6aApq4dcNRxNtt9x309yEap%2BH0P3LjoDvR2iD8GmoMpnYBZx988CFcgzYQ8hCpPkUCv5z1eOPwFoiI%2FfMU5Ro%2F%2BoUrYwIUAmQR%2BJX8wGj7y2CU%2BK7gcoDUeI4wTMBxaRtCWMuTOHfLUMqLMg3afQyPCVf%2FjLl3clxwh1VWZY0MNEGnTuzGrpr3rO5bmn2FQ&amp;X-Amz-Signature=c1f5083fd3ae75bfd3ff566937ee2db8edd15b8a5314df3eff056ad03195174e&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject</a></p></div></details>
+<details class="toggle"><summary><strong>Download ImageNet-1000samples</strong></summary><div class="toggle-body"><p><a href="https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/32d2454c-0e44-4dde-b1db-802b04a60a25/ImageNet-1000samples.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB466RDHGHR3L%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164452Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJIMEYCIQDtl2uFVDsy2rczmBfSopxRB4WyAmuoc%2F30Hks9c4rgagIhAKdaTpziNINxEZWz5Y7Sp0MhwoMgGqaAFSahAhGPRza9Kv8DCEcQABoMNjM3NDIzMTgzODA1IgyQ%2BbzygTGNi%2FPsMuwq3APhzpRqTj63peJKVlUxufdImPRZbfV4e%2BTqs7UIN0Mlnq9EpU4NfktACI1b7Tq8TA9liRc8w3V19jeYsaB9iIE4c3F5IV1XMCyS6SkokdQUUcoX3cwuWDTsihXSJK6QEs8VZec%2BzWY5rBIgsfVkhrG16HFwahHSIcDlVTec8A82Jje1j26bqeyjuBhKg8b3ny%2BiExw9MDO%2B4%2B6Kv7ILVz6IeLMPoZXXRYo4Ug1fNzyG5Adg9Siy72A0jEsd7GsGLXYUU3Nysr6MmBPH1xJRO1QLlfs6S4uXaRF5AGfeZ%2FDS1%2BabWue9LhF44zXbEhZWSFvXIpqXPBp3Uh4Te16qyxrXywP%2FKU7nO28I2Y6PxY2t57GfYXRQefC8GLEKKlJascoUukAzlOUvtWIZKVJc6aenRj7fyE5zIRCJwwIm6Hi%2BB44A1W7l68RgUj1yMfxOrHYJ2j%2B1oV4frX0lTR7FOc1%2Fbg8kYoyp19a4S9mOeN%2FHGHtMLMKlvi4cakuSgZbXiLuN8Y7Pm5jH4BN2XOkJE1JJ8zdApN4iy9h6xth5uwAqE%2BplmIEqG5bsjEGDCfLaeYuzsKr0qXv5F5OuNM06xNaS4IlYP5RKjyTvIxcco3BU1aIJmVQF366zZvssvjCewePSBjqkAUckx1du93WZtGXSzAIsG5hy4hJzyyO%2BZieEc1GxRd2j6enUErK1N39smE1Fp783WsTLm%2Ffn48LsccrgYdZWf0BvqIh9V6A%2Ff%2BBnTtnCVzhjTvy%2BlOcBEsJudcU%2BxbTb9QDdrfXZ4GgifIO6jPp7O97faq4sKdFZgEs1JTLQB%2F1nC9XqJr0Wf6iniYRuC72e7JkH4IQzYrfmQoYMI4Jk2VARtnh6&amp;X-Amz-Signature=8a7aef2350a68eef4ba26286d3af855ed985c5fd436a17cceac2a2db7a1fddc2&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject" target="_blank" rel="noreferrer">https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/32d2454c-0e44-4dde-b1db-802b04a60a25/ImageNet-1000samples.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB466RDHGHR3L%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164452Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJIMEYCIQDtl2uFVDsy2rczmBfSopxRB4WyAmuoc%2F30Hks9c4rgagIhAKdaTpziNINxEZWz5Y7Sp0MhwoMgGqaAFSahAhGPRza9Kv8DCEcQABoMNjM3NDIzMTgzODA1IgyQ%2BbzygTGNi%2FPsMuwq3APhzpRqTj63peJKVlUxufdImPRZbfV4e%2BTqs7UIN0Mlnq9EpU4NfktACI1b7Tq8TA9liRc8w3V19jeYsaB9iIE4c3F5IV1XMCyS6SkokdQUUcoX3cwuWDTsihXSJK6QEs8VZec%2BzWY5rBIgsfVkhrG16HFwahHSIcDlVTec8A82Jje1j26bqeyjuBhKg8b3ny%2BiExw9MDO%2B4%2B6Kv7ILVz6IeLMPoZXXRYo4Ug1fNzyG5Adg9Siy72A0jEsd7GsGLXYUU3Nysr6MmBPH1xJRO1QLlfs6S4uXaRF5AGfeZ%2FDS1%2BabWue9LhF44zXbEhZWSFvXIpqXPBp3Uh4Te16qyxrXywP%2FKU7nO28I2Y6PxY2t57GfYXRQefC8GLEKKlJascoUukAzlOUvtWIZKVJc6aenRj7fyE5zIRCJwwIm6Hi%2BB44A1W7l68RgUj1yMfxOrHYJ2j%2B1oV4frX0lTR7FOc1%2Fbg8kYoyp19a4S9mOeN%2FHGHtMLMKlvi4cakuSgZbXiLuN8Y7Pm5jH4BN2XOkJE1JJ8zdApN4iy9h6xth5uwAqE%2BplmIEqG5bsjEGDCfLaeYuzsKr0qXv5F5OuNM06xNaS4IlYP5RKjyTvIxcco3BU1aIJmVQF366zZvssvjCewePSBjqkAUckx1du93WZtGXSzAIsG5hy4hJzyyO%2BZieEc1GxRd2j6enUErK1N39smE1Fp783WsTLm%2Ffn48LsccrgYdZWf0BvqIh9V6A%2Ff%2BBnTtnCVzhjTvy%2BlOcBEsJudcU%2BxbTb9QDdrfXZ4GgifIO6jPp7O97faq4sKdFZgEs1JTLQB%2F1nC9XqJr0Wf6iniYRuC72e7JkH4IQzYrfmQoYMI4Jk2VARtnh6&amp;X-Amz-Signature=8a7aef2350a68eef4ba26286d3af855ed985c5fd436a17cceac2a2db7a1fddc2&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject</a></p></div></details>
+<p>전체 코드</p>
+<details class="toggle"><summary><strong>Code</strong></summary><div class="toggle-body"><pre data-lang="python"><code class="language-python">import tensorflow as tf # 2.10.0
+import numpy as np # 1.23.2
+from PIL import Image # 9.3.0
+import os
+
+def get_image(image_dirs) :
+    image_list = []
+    for roots, dirs, files in os.walk(image_dirs) :
+        for file in files :
+            image_dir = os.path.join(roots, file)
+            if image_dir.endswith(&quot;png&quot;) or image_dir.endswith(&quot;jpg&quot;) or image_dir.endswith(&quot;JPEG&quot;) :
+                image_list.append(image_dir)
+
+    return image_list
+
+# for keras model
+# A generator that provides a representative dataset
+def representative_data_gen():
+    image_path = get_image(&quot;ImageNet-1000samples&quot;)
+   
+    for image in image_path :
+        image = Image.open(image).convert('RGB').resize((256, 256), Image.ANTIALIAS)
+        image = np.array(image).astype(np.float32) # H, W, C
+       
+        image_data = image[16:240, 16:240, :].copy() #center crop
+
+        mean = np.array([0.079, 0.05, 0]) + 0.406 # 0.485, 0.456, 0.406
+        std = np.array([0.005, 0, 0.001]) + 0.224 # 0.229, 0.224, 0.225
+
+        for channel in range(image_data.shape[2]):
+            image_data[:, :, channel] = (image_data[:, :, channel] / 255 - mean[channel]) / std[channel] #RGB
+       
+        image_data = np.expand_dims(image_data, axis=0) # (1, 224, 224, 3)
+
+        yield [image_data]
+
+# Download Model
+model = tf.keras.applications.mobilenet_v2.MobileNetV2(
+    input_shape=(224, 224, 3),
+    alpha=1.0,
+    include_top=True,
+    weights='imagenet',
+    input_tensor=None,
+    pooling=None,
+    classes=1000,
+    classifier_activation='softmax'
+)
+
+# convert
+converter = tf.lite.TFLiteConverter.from_keras_model(model)
+# This enables quantization
+converter.optimizations = [tf.lite.Optimize.DEFAULT]
+# This sets the representative dataset for quantization
+converter.representative_dataset = representative_data_gen
+# This ensures that if any ops can't be quantized, the converter throws an error
+converter.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS_INT8]
+# For full integer quantization, though supported types defaults to int8 only, we explicitly declare it for clarity.
+converter.target_spec.supported_types = [tf.int8]
+# These set the input and output tensors to uint8 (added in r2.3)
+converter.inference_input_type = tf.uint8
+converter.inference_output_type = tf.uint8
+tflite_model = converter.convert()
+
+with open('mobilenet_v2_quant_uint8.tflite', 'wb') as f:
+  f.write(tflite_model)
+</code></pre></div></details>
+<p>이 경우 역시 Coral에서 제공된 TF-Lite모델의 구조와 유사한 것을 볼 수 있다. </p>
+<figure><img src="/assets/notion/raspberry-pi에서-ubuntu-setting부터-coral-tpu를-사용해-mobilenetv2-inference-ᄒ/df958b6f-4fe2-4b03-bbc5-ee48854f0c7b.png" alt="&lt; mobilenet_v2_quant_uint8.tflite Structure &gt;" loading="lazy" width="2758" height="1703" /><figcaption>&lt; mobilenet_v2_quant_uint8.tflite Structure &gt;</figcaption></figure>
+<p><a href="https://netron.app/" target="_blank" rel="noreferrer">https://netron.app/</a></p>
+<h4 id="block-c1782a3b4a664c48a0c15735a8978ab6">TPU Compile</h4>
+<p>TFlite(uint8 quantization)이 끝났다면 이제 TPU에서 사용할 수 있도록 컴파일해야 한다.</p>
+<p><strong>Requirements (22.11.23 기준)</strong></p>
+<ul><li>The Edge TPU Compiler can be run on any modern Debian-based Linux system. Specifically, you must have the following:<ul><li>64-bit version of Debian 6.0 or higher, or any derivative thereof (such as Ubuntu 10.0+)</li><li>x86-64 system architecture</li></ul></li><li>If your system does not meet these requirements, try our <strong><a href="https://colab.research.google.com/github/google-coral/tutorials/blob/master/compile_for_edgetpu.ipynb" target="_blank" rel="noreferrer">web-based compiler using Google Colab</a></strong><strong>.</strong></li></ul>
+<p><a href="https://coral.ai/docs/edgetpu/compiler/#system-requirements" target="_blank" rel="noreferrer">https://coral.ai/docs/edgetpu/compiler/#system-requirements</a></p>
+<p>요구사항이 충족되면 아래 링크의 명령어를 이용해 컴파일 할 수 있다. 나는 코랩을 추천한다. <strong><a href="https://colab.research.google.com/github/google-coral/tutorials/blob/master/compile_for_edgetpu.ipynb#scrollTo=joxrIB0I3cdi" target="_blank" rel="noreferrer">(코랩에서 사용하기)</a></strong></p>
+<p><a href="https://coral.ai/docs/edgetpu/compiler/#download" target="_blank" rel="noreferrer">https://coral.ai/docs/edgetpu/compiler/#download</a></p>
+<p>또는 Pretrained된 모델을 Custom하고 싶다면 아래 코드를 참고하자</p>
+<p><a href="https://colab.research.google.com/github/google-coral/tutorials/blob/master/retrain_classification_ptq_tf1.ipynb?hl=ko" target="_blank" rel="noreferrer">https://colab.research.google.com/github/google-coral/tutorials/blob/master/retrain_classification_ptq_tf1.ipynb?hl=ko</a></p>
+<p>컴파일에 성공하면 아래처럼 뜨며 컴파일된 모델 구조는 다음과 같이 확인된다.</p>
+<div class="columns"><div class="column"><figure><img src="/assets/notion/raspberry-pi에서-ubuntu-setting부터-coral-tpu를-사용해-mobilenetv2-inference-ᄒ/21ff3759-73f2-42e9-96b0-ed9250e89860.png" alt="" loading="lazy" width="1152" height="887" /></figure></div><div class="column"><figure><img src="/assets/notion/raspberry-pi에서-ubuntu-setting부터-coral-tpu를-사용해-mobilenetv2-inference-ᄒ/7438253b-3e89-4bae-9c12-b46444941f78.png" alt="           &lt; mobilenet_v2_quant_uint8_edgetpu.tflite Structure &gt;" loading="lazy" width="431" height="532" /><figcaption>           &lt; mobilenet_v2_quant_uint8_edgetpu.tflite Structure &gt;</figcaption></figure></div></div>
+<p><a href="https://coral.ai/docs/edgetpu/models-intro/#supported-operations" target="_blank" rel="noreferrer">https://coral.ai/docs/edgetpu/models-intro/#supported-operations</a></p>
+<details class="toggle"><summary><strong>Download keras_mobilenet_v2_quant_uint8_edgetpu.tflite</strong></summary><div class="toggle-body"><p><a href="https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/6004cf0e-fdc3-481a-ad9e-f9da1f20eecc/mobilenet_v2_quant_uint8_edgetpu.tflite?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB466RM7IY3KN%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164453Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJHMEUCIFcrt5uq2B7oR6TTWvfKFTIGNEhgaTWvd5szugL%2BKC1BAiEAg8Ae6xtxEfcr15dUVWyeXTTfJaVvWro%2Fv0M3FwtRA34q%2FwMIRxAAGgw2Mzc0MjMxODM4MDUiDMvsniZI6EY10DI%2BNSrcA%2BqeGocX7vjdl41Jixv%2FaW3WDVsR4Sz2twfXitEfmEQrbfAcniXhHX485am%2BhjYqd3QaJJze%2FFMABwBrM1MJ%2FZ6DethUzwrMoj8UIoS0Qy7xWF0PgJ5XjZdjLn154sfga%2F4novI5QfPPvVlydy5ptR8aDUdC4ixLZabrtXSTDFEtJSvhfBmr5jF90p3YKZCRoOCtVob097iuoF9kHOaUvHT6Ex4iKLZC1jNMDlvvePjPwdEc1AKpERTYNlaqev1r0AmCF2TCa4%2Bb%2BzhZSgYRCc8klSZrfXUOVhKNXXyNs4gvkOUt8%2FbBaqoPyokmA%2FWmEgKkvzXhNPj2v7mKxtjHcdBI4yFuksDn7dI5VJgqyftfV4KUUszo3FNVcB083y0fuoDHy6%2FAe1Tqa2%2FCe4hOJI%2B%2FSOXmiF10e%2FORB%2BiztQdTLycJBNrdZMLPOoJPBLVfceXOS65YKXXrQsixnSxC3aKgZpJuokzz2%2Br1eK0KFLozMFRSQxjqOsVylvLh61oS3pJPX%2FjMy13PYcC6B95sRbG1y2DxUAv80aRjh5Pr%2BmKmxOHMQkVF5weNWpQNca4ScSDY09r23PwIHEXl5YeFmryhC8OyGlGEGKY4inPx3QCSyf9oswvY2bGf3YLZMM%2FD49IGOqUBHgMmU2fcQBjDt7KVPTWIXalfatdtc6UZVk2w8QCPilZQWcBeA9tdFQUHWyOV6JHVTLEvNrRUs%2FUSd34DpON4B3NdpSOQOdKv7B6DNp%2Bgov61WWqey%2F%2B7%2F7fGmm5gp8HZqSuOig8cjUZWSG3bbYp%2BisQS66%2BtrmANNG2%2Byp4Mq%2BQuiN5SE%2Fe9bcdT2PfzSCIjolW5eAKeCQ1EPp3vMzh64fycrFqT&amp;X-Amz-Signature=9228a6047417157c1a6af51bd2a9272860063e16f50c9212ab32e46641187e11&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject" target="_blank" rel="noreferrer">https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/6004cf0e-fdc3-481a-ad9e-f9da1f20eecc/mobilenet_v2_quant_uint8_edgetpu.tflite?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB466RM7IY3KN%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164453Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJHMEUCIFcrt5uq2B7oR6TTWvfKFTIGNEhgaTWvd5szugL%2BKC1BAiEAg8Ae6xtxEfcr15dUVWyeXTTfJaVvWro%2Fv0M3FwtRA34q%2FwMIRxAAGgw2Mzc0MjMxODM4MDUiDMvsniZI6EY10DI%2BNSrcA%2BqeGocX7vjdl41Jixv%2FaW3WDVsR4Sz2twfXitEfmEQrbfAcniXhHX485am%2BhjYqd3QaJJze%2FFMABwBrM1MJ%2FZ6DethUzwrMoj8UIoS0Qy7xWF0PgJ5XjZdjLn154sfga%2F4novI5QfPPvVlydy5ptR8aDUdC4ixLZabrtXSTDFEtJSvhfBmr5jF90p3YKZCRoOCtVob097iuoF9kHOaUvHT6Ex4iKLZC1jNMDlvvePjPwdEc1AKpERTYNlaqev1r0AmCF2TCa4%2Bb%2BzhZSgYRCc8klSZrfXUOVhKNXXyNs4gvkOUt8%2FbBaqoPyokmA%2FWmEgKkvzXhNPj2v7mKxtjHcdBI4yFuksDn7dI5VJgqyftfV4KUUszo3FNVcB083y0fuoDHy6%2FAe1Tqa2%2FCe4hOJI%2B%2FSOXmiF10e%2FORB%2BiztQdTLycJBNrdZMLPOoJPBLVfceXOS65YKXXrQsixnSxC3aKgZpJuokzz2%2Br1eK0KFLozMFRSQxjqOsVylvLh61oS3pJPX%2FjMy13PYcC6B95sRbG1y2DxUAv80aRjh5Pr%2BmKmxOHMQkVF5weNWpQNca4ScSDY09r23PwIHEXl5YeFmryhC8OyGlGEGKY4inPx3QCSyf9oswvY2bGf3YLZMM%2FD49IGOqUBHgMmU2fcQBjDt7KVPTWIXalfatdtc6UZVk2w8QCPilZQWcBeA9tdFQUHWyOV6JHVTLEvNrRUs%2FUSd34DpON4B3NdpSOQOdKv7B6DNp%2Bgov61WWqey%2F%2B7%2F7fGmm5gp8HZqSuOig8cjUZWSG3bbYp%2BisQS66%2BtrmANNG2%2Byp4Mq%2BQuiN5SE%2Fe9bcdT2PfzSCIjolW5eAKeCQ1EPp3vMzh64fycrFqT&amp;X-Amz-Signature=9228a6047417157c1a6af51bd2a9272860063e16f50c9212ab32e46641187e11&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject</a></p></div></details>
+<h4 id="block-fb2305eaa5874bc8954a65d1e245e09e">Keras MobileNetV2 Inference</h4>
+<pre data-lang="shell"><code class="language-bash">python3 classify_custom.py \
+  --model keras_mobilenet_v2_quant_uint8_edgetpu.tflite \
+  --labels keras_imagenet_classes.txt \
+  --input 113_data</code></pre>
+<figure><img src="/assets/notion/raspberry-pi에서-ubuntu-setting부터-coral-tpu를-사용해-mobilenetv2-inference-ᄒ/caf46fac-e79d-4086-8d34-9ca680866b1b.png" alt="" loading="lazy" width="868" height="426" /></figure>
+<details class="toggle"><summary><strong>Directory 환경</strong></summary><div class="toggle-body"><figure><img src="/assets/notion/raspberry-pi에서-ubuntu-setting부터-coral-tpu를-사용해-mobilenetv2-inference-ᄒ/f2200304-43be-48b2-87d4-2089e3fbe7a6.png" alt="" loading="lazy" width="888" height="546" /></figure></div></details>
+<details class="toggle"><summary><strong>classify_custom.py 코드</strong></summary><div class="toggle-body"><pre data-lang="python"><code class="language-python">import os
+import argparse
+import time
+import numpy as np
+from PIL import Image
+from pycoral.adapters import classify
+from pycoral.adapters import common
+from pycoral.utils.dataset import read_label_file
+from pycoral.utils.edgetpu import make_interpreter
+
+def main() :
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument(
+        '-m', '--model', required=True, help='File path of .tflite file.')
+    parser.add_argument(
+        '-i', '--input',  required=True, help='Image path.') # input test_data/
+    parser.add_argument(
+        '-l', '--labels', help='File path of labels file.')
+    parser.add_argument(
+        '-k', '--top_k', type=int, default=1,
+        help='Max number of classification results')
+    parser.add_argument(
+        '-t', '--threshold', type=float, default=0.0,
+        help='Classification score threshold')
+    parser.add_argument(
+        '-c', '--count', type=int, default=1,
+        help='Number of times to run inference')
+    parser.add_argument(
+        '-a', '--input_mean', type=float, default=128.0,
+        help='Mean value for input normalization')
+    parser.add_argument(
+        '-s', '--input_std', type=float, default=128.0,
+        help='STD value for input normalization')
+    args = parser.parse_args()
+
+    labels = read_label_file(args.labels) if args.labels else {}
+
+    print(args.model)
+    interpreter = make_interpreter(args.model)
+    interpreter.allocate_tensors()
+
+    # Model must be uint8 quantized
+    if common.input_details(interpreter, 'dtype') != np.uint8 :
+        raise ValueError('Only support uint8 input type.')
+
+    size = common.input_size(interpreter)
+    params = common.input_details(interpreter, 'quantization_parameters')
+    scale = params['scales']
+    zero_point = params['zero_points']
+    mean = args.input_mean
+    std = args.input_std
+
+    image_name = os.listdir(args.input)  # image name
+    image_filter = list(filter(lambda x: x.find('.JPEG') != -1, image_name))  # image format filtering
+
+    
+    print(&quot;Note : The first inference on Edge TPU is slow because it includes&quot;)
+    print(&quot;loading the model into Edge TPU memeory.&quot;)
+
+    f = open(&quot;./keras_mobilenet_data.csv&quot;,&quot;w&quot;)
+    f.write(&quot;ImageName,class,score,inference_time\n&quot;)
+    i=1
+    for img in image_name:
+
+        image = Image.open(args.input + img).convert('RGB').resize(size, Image.ANTIALIAS)
+
+        if abs(scale * std - 1) &lt; 1e-5 and abs(mean - zero_point) &lt; 1e-5:
+            # Input data does not require preprocessing.
+            common.set_input(interpreter, image)
+        else:
+            # Input data requires preprocessing
+            normalized_input = (np.asarray(image) - mean) / (std * scale) + zero_point
+            np.clip(normalized_input, 0, 255, out=normalized_input)
+            common.set_input(interpreter, normalized_input.astype(np.uint8))
+
+        print('----INFERENCE TIME AND RESULTS----')
+        start = time.perf_counter()
+        interpreter.invoke()
+        inference_time = time.perf_counter() - start
+        classes = classify.get_classes(interpreter, args.top_k, args.threshold)
+        
+        for c in classes:
+            result = labels.get(c.id, c.id)
+            result = result.replace(&quot;, &quot;,&quot;/&quot;)
+            print(f&quot;{i} {img} {result}, {c.score:.5f}, {inference_time*1000:.1f}ms&quot;)
+            f.write(f&quot;{img}, {result}, {c.score:.5f}, {inference_time*1000:.1f}ms\n&quot;)
+            i += 1
+
+if __name__ == '__main__':
+    main()</code></pre></div></details>
+<details class="toggle"><summary><strong>Download classify_custom.py, keras_imagenet_classes.txt, 113_data.7z, keras_mobilenet_data.csv</strong></summary><div class="toggle-body"><p><a href="https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/287790c1-4076-4bed-a83a-f27d9e0da076/classify_custom.py?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB4667KDLDHIE%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164454Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJIMEYCIQCrSujgUH4UEzKOCqUMyjEpa%2FnBiVIZ129IyGUDLcqL9AIhAKdfY6IVQsbtC23ABo7jZj9Sz7ae7NJ1TlNIL%2BOv%2BC1MKv8DCEcQABoMNjM3NDIzMTgzODA1Igz6t3b9OXu67Pho3CIq3ANJfjs3a1rMsr372NwwOt8loy%2BVqepsFyZziRgHtt%2FsUJEDsfsQ8FLpAoSLjMs91OggyWkTZIvedd6gNRDT7Rd95HJ40ReDdgN7J%2BkzlAqPzyD1jLI85QyIZP0MgfbdcgPXDXwDkt1u6VqKxhP5lCbAvug%2FAx7jOoggcduYbR%2FU68Yadf2GmQg7NFpi9m1MDvrNgIVfz%2F1yNfC9jbQn%2B%2BWTQC4T6RA%2FzkrMOKUQq%2Fpa61Oc0QY5zp69QbM160yVulUfcoaDnVMTXSuZ2HaDkgsC%2F10YpY6BVSSSciDrpq6fRxWdijBvrtLs04snYFpLvthbtY5Lp0jJAJbnUsVbNlJcCwc4ofQR1pA2CDEeYWhJbkuaSSSi3THB14iOwCBqf3ljlsVhVQC4%2BVwZEQWFyCEh2E9l0HvlGRepNPLMVP%2BznoMJ1SyI5nDYDF4VnVPQgq3ylZdamLPuxvdozW%2F%2FxeqRooQ5Or6MzgVEtSH4sM%2FqGDEM4tRQe64nVCNJ0IXQZSicDVyYz8Slf%2B7Janemma8cXJ4R6tEZ4i9vxnNb91XQwnPflyy%2FAD88IZxN7Xj1X9GABctdehTNGpbJd4ql%2BezE7Kn1q1DLyMSSuEeHdWqsI%2FPxtTZsKyIH%2FxAy9zCxxOPSBjqkAWB%2F5P2Hz1C4YhKIDAMWLkVXiWJWM8tilxSXtF8lpUuMUe2yP7m3MG743m1j3bZDnRThG4clq0RTJa5jmfNVXgdslsx20GizEsAz6BoAsJaDG0RGxblZJNWMXslOVZ1x3aH5YKa3HiLeoXvZ4%2FLYOd37HhjJchTGx0uJhCYquIAs34z7R%2BRgDyLENNkvlUDfdph4nyBQUA3tJ9rPY02a8KqfbBYn&amp;X-Amz-Signature=067780a235306f321baf0640acaadfc917d14c90afadfcbb09a1e617dc1e7718&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject" target="_blank" rel="noreferrer">https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/287790c1-4076-4bed-a83a-f27d9e0da076/classify_custom.py?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB4667KDLDHIE%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164454Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJIMEYCIQCrSujgUH4UEzKOCqUMyjEpa%2FnBiVIZ129IyGUDLcqL9AIhAKdfY6IVQsbtC23ABo7jZj9Sz7ae7NJ1TlNIL%2BOv%2BC1MKv8DCEcQABoMNjM3NDIzMTgzODA1Igz6t3b9OXu67Pho3CIq3ANJfjs3a1rMsr372NwwOt8loy%2BVqepsFyZziRgHtt%2FsUJEDsfsQ8FLpAoSLjMs91OggyWkTZIvedd6gNRDT7Rd95HJ40ReDdgN7J%2BkzlAqPzyD1jLI85QyIZP0MgfbdcgPXDXwDkt1u6VqKxhP5lCbAvug%2FAx7jOoggcduYbR%2FU68Yadf2GmQg7NFpi9m1MDvrNgIVfz%2F1yNfC9jbQn%2B%2BWTQC4T6RA%2FzkrMOKUQq%2Fpa61Oc0QY5zp69QbM160yVulUfcoaDnVMTXSuZ2HaDkgsC%2F10YpY6BVSSSciDrpq6fRxWdijBvrtLs04snYFpLvthbtY5Lp0jJAJbnUsVbNlJcCwc4ofQR1pA2CDEeYWhJbkuaSSSi3THB14iOwCBqf3ljlsVhVQC4%2BVwZEQWFyCEh2E9l0HvlGRepNPLMVP%2BznoMJ1SyI5nDYDF4VnVPQgq3ylZdamLPuxvdozW%2F%2FxeqRooQ5Or6MzgVEtSH4sM%2FqGDEM4tRQe64nVCNJ0IXQZSicDVyYz8Slf%2B7Janemma8cXJ4R6tEZ4i9vxnNb91XQwnPflyy%2FAD88IZxN7Xj1X9GABctdehTNGpbJd4ql%2BezE7Kn1q1DLyMSSuEeHdWqsI%2FPxtTZsKyIH%2FxAy9zCxxOPSBjqkAWB%2F5P2Hz1C4YhKIDAMWLkVXiWJWM8tilxSXtF8lpUuMUe2yP7m3MG743m1j3bZDnRThG4clq0RTJa5jmfNVXgdslsx20GizEsAz6BoAsJaDG0RGxblZJNWMXslOVZ1x3aH5YKa3HiLeoXvZ4%2FLYOd37HhjJchTGx0uJhCYquIAs34z7R%2BRgDyLENNkvlUDfdph4nyBQUA3tJ9rPY02a8KqfbBYn&amp;X-Amz-Signature=067780a235306f321baf0640acaadfc917d14c90afadfcbb09a1e617dc1e7718&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject</a></p>
+<p><a href="https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/79a37565-c413-4569-8ff4-e6594e475fdf/keras_imagenet_classes.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB4667KDLDHIE%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164454Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJIMEYCIQCrSujgUH4UEzKOCqUMyjEpa%2FnBiVIZ129IyGUDLcqL9AIhAKdfY6IVQsbtC23ABo7jZj9Sz7ae7NJ1TlNIL%2BOv%2BC1MKv8DCEcQABoMNjM3NDIzMTgzODA1Igz6t3b9OXu67Pho3CIq3ANJfjs3a1rMsr372NwwOt8loy%2BVqepsFyZziRgHtt%2FsUJEDsfsQ8FLpAoSLjMs91OggyWkTZIvedd6gNRDT7Rd95HJ40ReDdgN7J%2BkzlAqPzyD1jLI85QyIZP0MgfbdcgPXDXwDkt1u6VqKxhP5lCbAvug%2FAx7jOoggcduYbR%2FU68Yadf2GmQg7NFpi9m1MDvrNgIVfz%2F1yNfC9jbQn%2B%2BWTQC4T6RA%2FzkrMOKUQq%2Fpa61Oc0QY5zp69QbM160yVulUfcoaDnVMTXSuZ2HaDkgsC%2F10YpY6BVSSSciDrpq6fRxWdijBvrtLs04snYFpLvthbtY5Lp0jJAJbnUsVbNlJcCwc4ofQR1pA2CDEeYWhJbkuaSSSi3THB14iOwCBqf3ljlsVhVQC4%2BVwZEQWFyCEh2E9l0HvlGRepNPLMVP%2BznoMJ1SyI5nDYDF4VnVPQgq3ylZdamLPuxvdozW%2F%2FxeqRooQ5Or6MzgVEtSH4sM%2FqGDEM4tRQe64nVCNJ0IXQZSicDVyYz8Slf%2B7Janemma8cXJ4R6tEZ4i9vxnNb91XQwnPflyy%2FAD88IZxN7Xj1X9GABctdehTNGpbJd4ql%2BezE7Kn1q1DLyMSSuEeHdWqsI%2FPxtTZsKyIH%2FxAy9zCxxOPSBjqkAWB%2F5P2Hz1C4YhKIDAMWLkVXiWJWM8tilxSXtF8lpUuMUe2yP7m3MG743m1j3bZDnRThG4clq0RTJa5jmfNVXgdslsx20GizEsAz6BoAsJaDG0RGxblZJNWMXslOVZ1x3aH5YKa3HiLeoXvZ4%2FLYOd37HhjJchTGx0uJhCYquIAs34z7R%2BRgDyLENNkvlUDfdph4nyBQUA3tJ9rPY02a8KqfbBYn&amp;X-Amz-Signature=fd88a9cea9a4fe87a79375d6420c4ac7dd73b96c011b93128773bbddac5e8638&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject" target="_blank" rel="noreferrer">https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/79a37565-c413-4569-8ff4-e6594e475fdf/keras_imagenet_classes.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB4667KDLDHIE%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164454Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJIMEYCIQCrSujgUH4UEzKOCqUMyjEpa%2FnBiVIZ129IyGUDLcqL9AIhAKdfY6IVQsbtC23ABo7jZj9Sz7ae7NJ1TlNIL%2BOv%2BC1MKv8DCEcQABoMNjM3NDIzMTgzODA1Igz6t3b9OXu67Pho3CIq3ANJfjs3a1rMsr372NwwOt8loy%2BVqepsFyZziRgHtt%2FsUJEDsfsQ8FLpAoSLjMs91OggyWkTZIvedd6gNRDT7Rd95HJ40ReDdgN7J%2BkzlAqPzyD1jLI85QyIZP0MgfbdcgPXDXwDkt1u6VqKxhP5lCbAvug%2FAx7jOoggcduYbR%2FU68Yadf2GmQg7NFpi9m1MDvrNgIVfz%2F1yNfC9jbQn%2B%2BWTQC4T6RA%2FzkrMOKUQq%2Fpa61Oc0QY5zp69QbM160yVulUfcoaDnVMTXSuZ2HaDkgsC%2F10YpY6BVSSSciDrpq6fRxWdijBvrtLs04snYFpLvthbtY5Lp0jJAJbnUsVbNlJcCwc4ofQR1pA2CDEeYWhJbkuaSSSi3THB14iOwCBqf3ljlsVhVQC4%2BVwZEQWFyCEh2E9l0HvlGRepNPLMVP%2BznoMJ1SyI5nDYDF4VnVPQgq3ylZdamLPuxvdozW%2F%2FxeqRooQ5Or6MzgVEtSH4sM%2FqGDEM4tRQe64nVCNJ0IXQZSicDVyYz8Slf%2B7Janemma8cXJ4R6tEZ4i9vxnNb91XQwnPflyy%2FAD88IZxN7Xj1X9GABctdehTNGpbJd4ql%2BezE7Kn1q1DLyMSSuEeHdWqsI%2FPxtTZsKyIH%2FxAy9zCxxOPSBjqkAWB%2F5P2Hz1C4YhKIDAMWLkVXiWJWM8tilxSXtF8lpUuMUe2yP7m3MG743m1j3bZDnRThG4clq0RTJa5jmfNVXgdslsx20GizEsAz6BoAsJaDG0RGxblZJNWMXslOVZ1x3aH5YKa3HiLeoXvZ4%2FLYOd37HhjJchTGx0uJhCYquIAs34z7R%2BRgDyLENNkvlUDfdph4nyBQUA3tJ9rPY02a8KqfbBYn&amp;X-Amz-Signature=fd88a9cea9a4fe87a79375d6420c4ac7dd73b96c011b93128773bbddac5e8638&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject</a></p>
+<p><a href="https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/bcacec85-d4bb-4a36-96f5-2dc5da594bb7/113_data.7z?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB4667KDLDHIE%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164454Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJIMEYCIQCrSujgUH4UEzKOCqUMyjEpa%2FnBiVIZ129IyGUDLcqL9AIhAKdfY6IVQsbtC23ABo7jZj9Sz7ae7NJ1TlNIL%2BOv%2BC1MKv8DCEcQABoMNjM3NDIzMTgzODA1Igz6t3b9OXu67Pho3CIq3ANJfjs3a1rMsr372NwwOt8loy%2BVqepsFyZziRgHtt%2FsUJEDsfsQ8FLpAoSLjMs91OggyWkTZIvedd6gNRDT7Rd95HJ40ReDdgN7J%2BkzlAqPzyD1jLI85QyIZP0MgfbdcgPXDXwDkt1u6VqKxhP5lCbAvug%2FAx7jOoggcduYbR%2FU68Yadf2GmQg7NFpi9m1MDvrNgIVfz%2F1yNfC9jbQn%2B%2BWTQC4T6RA%2FzkrMOKUQq%2Fpa61Oc0QY5zp69QbM160yVulUfcoaDnVMTXSuZ2HaDkgsC%2F10YpY6BVSSSciDrpq6fRxWdijBvrtLs04snYFpLvthbtY5Lp0jJAJbnUsVbNlJcCwc4ofQR1pA2CDEeYWhJbkuaSSSi3THB14iOwCBqf3ljlsVhVQC4%2BVwZEQWFyCEh2E9l0HvlGRepNPLMVP%2BznoMJ1SyI5nDYDF4VnVPQgq3ylZdamLPuxvdozW%2F%2FxeqRooQ5Or6MzgVEtSH4sM%2FqGDEM4tRQe64nVCNJ0IXQZSicDVyYz8Slf%2B7Janemma8cXJ4R6tEZ4i9vxnNb91XQwnPflyy%2FAD88IZxN7Xj1X9GABctdehTNGpbJd4ql%2BezE7Kn1q1DLyMSSuEeHdWqsI%2FPxtTZsKyIH%2FxAy9zCxxOPSBjqkAWB%2F5P2Hz1C4YhKIDAMWLkVXiWJWM8tilxSXtF8lpUuMUe2yP7m3MG743m1j3bZDnRThG4clq0RTJa5jmfNVXgdslsx20GizEsAz6BoAsJaDG0RGxblZJNWMXslOVZ1x3aH5YKa3HiLeoXvZ4%2FLYOd37HhjJchTGx0uJhCYquIAs34z7R%2BRgDyLENNkvlUDfdph4nyBQUA3tJ9rPY02a8KqfbBYn&amp;X-Amz-Signature=cd7348bea8adf329f72adbd337e4cd5d0ee21e5a51c3f2d302ad6429266f7109&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject" target="_blank" rel="noreferrer">https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/bcacec85-d4bb-4a36-96f5-2dc5da594bb7/113_data.7z?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB4667KDLDHIE%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164454Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJIMEYCIQCrSujgUH4UEzKOCqUMyjEpa%2FnBiVIZ129IyGUDLcqL9AIhAKdfY6IVQsbtC23ABo7jZj9Sz7ae7NJ1TlNIL%2BOv%2BC1MKv8DCEcQABoMNjM3NDIzMTgzODA1Igz6t3b9OXu67Pho3CIq3ANJfjs3a1rMsr372NwwOt8loy%2BVqepsFyZziRgHtt%2FsUJEDsfsQ8FLpAoSLjMs91OggyWkTZIvedd6gNRDT7Rd95HJ40ReDdgN7J%2BkzlAqPzyD1jLI85QyIZP0MgfbdcgPXDXwDkt1u6VqKxhP5lCbAvug%2FAx7jOoggcduYbR%2FU68Yadf2GmQg7NFpi9m1MDvrNgIVfz%2F1yNfC9jbQn%2B%2BWTQC4T6RA%2FzkrMOKUQq%2Fpa61Oc0QY5zp69QbM160yVulUfcoaDnVMTXSuZ2HaDkgsC%2F10YpY6BVSSSciDrpq6fRxWdijBvrtLs04snYFpLvthbtY5Lp0jJAJbnUsVbNlJcCwc4ofQR1pA2CDEeYWhJbkuaSSSi3THB14iOwCBqf3ljlsVhVQC4%2BVwZEQWFyCEh2E9l0HvlGRepNPLMVP%2BznoMJ1SyI5nDYDF4VnVPQgq3ylZdamLPuxvdozW%2F%2FxeqRooQ5Or6MzgVEtSH4sM%2FqGDEM4tRQe64nVCNJ0IXQZSicDVyYz8Slf%2B7Janemma8cXJ4R6tEZ4i9vxnNb91XQwnPflyy%2FAD88IZxN7Xj1X9GABctdehTNGpbJd4ql%2BezE7Kn1q1DLyMSSuEeHdWqsI%2FPxtTZsKyIH%2FxAy9zCxxOPSBjqkAWB%2F5P2Hz1C4YhKIDAMWLkVXiWJWM8tilxSXtF8lpUuMUe2yP7m3MG743m1j3bZDnRThG4clq0RTJa5jmfNVXgdslsx20GizEsAz6BoAsJaDG0RGxblZJNWMXslOVZ1x3aH5YKa3HiLeoXvZ4%2FLYOd37HhjJchTGx0uJhCYquIAs34z7R%2BRgDyLENNkvlUDfdph4nyBQUA3tJ9rPY02a8KqfbBYn&amp;X-Amz-Signature=cd7348bea8adf329f72adbd337e4cd5d0ee21e5a51c3f2d302ad6429266f7109&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject</a></p>
+<p><a href="https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/be9bf6b4-24e1-493e-b7eb-a40716a16d9f/keras_mobilenet_data.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB4667KDLDHIE%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164454Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJIMEYCIQCrSujgUH4UEzKOCqUMyjEpa%2FnBiVIZ129IyGUDLcqL9AIhAKdfY6IVQsbtC23ABo7jZj9Sz7ae7NJ1TlNIL%2BOv%2BC1MKv8DCEcQABoMNjM3NDIzMTgzODA1Igz6t3b9OXu67Pho3CIq3ANJfjs3a1rMsr372NwwOt8loy%2BVqepsFyZziRgHtt%2FsUJEDsfsQ8FLpAoSLjMs91OggyWkTZIvedd6gNRDT7Rd95HJ40ReDdgN7J%2BkzlAqPzyD1jLI85QyIZP0MgfbdcgPXDXwDkt1u6VqKxhP5lCbAvug%2FAx7jOoggcduYbR%2FU68Yadf2GmQg7NFpi9m1MDvrNgIVfz%2F1yNfC9jbQn%2B%2BWTQC4T6RA%2FzkrMOKUQq%2Fpa61Oc0QY5zp69QbM160yVulUfcoaDnVMTXSuZ2HaDkgsC%2F10YpY6BVSSSciDrpq6fRxWdijBvrtLs04snYFpLvthbtY5Lp0jJAJbnUsVbNlJcCwc4ofQR1pA2CDEeYWhJbkuaSSSi3THB14iOwCBqf3ljlsVhVQC4%2BVwZEQWFyCEh2E9l0HvlGRepNPLMVP%2BznoMJ1SyI5nDYDF4VnVPQgq3ylZdamLPuxvdozW%2F%2FxeqRooQ5Or6MzgVEtSH4sM%2FqGDEM4tRQe64nVCNJ0IXQZSicDVyYz8Slf%2B7Janemma8cXJ4R6tEZ4i9vxnNb91XQwnPflyy%2FAD88IZxN7Xj1X9GABctdehTNGpbJd4ql%2BezE7Kn1q1DLyMSSuEeHdWqsI%2FPxtTZsKyIH%2FxAy9zCxxOPSBjqkAWB%2F5P2Hz1C4YhKIDAMWLkVXiWJWM8tilxSXtF8lpUuMUe2yP7m3MG743m1j3bZDnRThG4clq0RTJa5jmfNVXgdslsx20GizEsAz6BoAsJaDG0RGxblZJNWMXslOVZ1x3aH5YKa3HiLeoXvZ4%2FLYOd37HhjJchTGx0uJhCYquIAs34z7R%2BRgDyLENNkvlUDfdph4nyBQUA3tJ9rPY02a8KqfbBYn&amp;X-Amz-Signature=1828e6286e6078857f6148d90dd4386a7b48d86c2f6397d3c344f58f9ad708d1&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject" target="_blank" rel="noreferrer">https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/be9bf6b4-24e1-493e-b7eb-a40716a16d9f/keras_mobilenet_data.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB4667KDLDHIE%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164454Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJIMEYCIQCrSujgUH4UEzKOCqUMyjEpa%2FnBiVIZ129IyGUDLcqL9AIhAKdfY6IVQsbtC23ABo7jZj9Sz7ae7NJ1TlNIL%2BOv%2BC1MKv8DCEcQABoMNjM3NDIzMTgzODA1Igz6t3b9OXu67Pho3CIq3ANJfjs3a1rMsr372NwwOt8loy%2BVqepsFyZziRgHtt%2FsUJEDsfsQ8FLpAoSLjMs91OggyWkTZIvedd6gNRDT7Rd95HJ40ReDdgN7J%2BkzlAqPzyD1jLI85QyIZP0MgfbdcgPXDXwDkt1u6VqKxhP5lCbAvug%2FAx7jOoggcduYbR%2FU68Yadf2GmQg7NFpi9m1MDvrNgIVfz%2F1yNfC9jbQn%2B%2BWTQC4T6RA%2FzkrMOKUQq%2Fpa61Oc0QY5zp69QbM160yVulUfcoaDnVMTXSuZ2HaDkgsC%2F10YpY6BVSSSciDrpq6fRxWdijBvrtLs04snYFpLvthbtY5Lp0jJAJbnUsVbNlJcCwc4ofQR1pA2CDEeYWhJbkuaSSSi3THB14iOwCBqf3ljlsVhVQC4%2BVwZEQWFyCEh2E9l0HvlGRepNPLMVP%2BznoMJ1SyI5nDYDF4VnVPQgq3ylZdamLPuxvdozW%2F%2FxeqRooQ5Or6MzgVEtSH4sM%2FqGDEM4tRQe64nVCNJ0IXQZSicDVyYz8Slf%2B7Janemma8cXJ4R6tEZ4i9vxnNb91XQwnPflyy%2FAD88IZxN7Xj1X9GABctdehTNGpbJd4ql%2BezE7Kn1q1DLyMSSuEeHdWqsI%2FPxtTZsKyIH%2FxAy9zCxxOPSBjqkAWB%2F5P2Hz1C4YhKIDAMWLkVXiWJWM8tilxSXtF8lpUuMUe2yP7m3MG743m1j3bZDnRThG4clq0RTJa5jmfNVXgdslsx20GizEsAz6BoAsJaDG0RGxblZJNWMXslOVZ1x3aH5YKa3HiLeoXvZ4%2FLYOd37HhjJchTGx0uJhCYquIAs34z7R%2BRgDyLENNkvlUDfdph4nyBQUA3tJ9rPY02a8KqfbBYn&amp;X-Amz-Signature=1828e6286e6078857f6148d90dd4386a7b48d86c2f6397d3c344f58f9ad708d1&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject</a></p></div></details>
+<hr />
+<h3 id="block-445f0b2b40ab474386ad0f00d26f80e8">ONNX(Model Zoo)에서 제공하는 MobileNetV2</h3>
+<p>mobileNetV2-12.onnx <em>— convert </em>—<em>&gt; </em>TF(saved_model)<em> —convert—&gt; </em>TFLite(uint8)</p>
+<p>mobileNetV2-12.onnx는 아래 링크에서 받을 수 있다.</p>
+<p><a href="https://github.com/onnx/models/tree/main/vision/classification/mobilenet/model" target="_blank" rel="noreferrer">https://github.com/onnx/models/tree/main/vision/classification/mobilenet/model</a></p>
+<details class="toggle"><summary><strong>Download mobileNetV2-12.onnx</strong></summary><div class="toggle-body"><p><a href="https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/36c5c598-3bae-4763-8969-b7d16fe8c5e4/mobilenetv2-12.onnx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB466RAHZQRH2%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164454Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJGMEQCIGWWCyARoviG3qSXcr3FhZTfZydh7o5T9v%2B%2BQSNVPRVwAiAKs01wsGfmJQXbp4zrZGgTTs7qhh4Lncw6BxZ9UtJTuir%2FAwhHEAAaDDYzNzQyMzE4MzgwNSIMrzmZqJ6PDEDQ3XX5KtwD4fwSO22yJbv%2BaL%2BGSbs0HIAFakT669utHImYc7tt4j8UtHEGtraKH%2Bo7teGFKk4cIP%2Fzy7rdFil%2Be8MNtI0dStXF3A7gOBBo%2Bxg3XRe4SLmS%2BVgW3IB8ostHV19S2pvhz1mRVbrdnxGirEVWLWXzr41NHQWmJU24tskaiQGQuhGW5iUhimfS%2BDYM0OgOCmBwb8ZvJx0Xx2njXIT5pSU60T6ApVvTrfYwZq4bqVSU6f%2BaudXfv6ZcT%2FnJvB7gYhGRnCtOutfwgjxVcqejG7KWpVypzRuWAFrg%2BMy8o7fWsX%2Bc5CRJ9St4c1V0i93LUxk%2FKWd268YkTCAjkVHzy3%2FKJVXWaNIa66RjtkPrPe%2Bkwwn7gu5334MNsLsh5QXB03mO8aniPEakP7ntCzWPyvuR0J7dC%2BuPxHjKb6CvpJpwiFjceGOPd1pUVTR8Y5jG2a9IlI%2FMOrwaGP%2BZV9U3pg8kFzvMNA8YkslA%2Ff9MEf1IBjO4YANC4ZGY19xeNRsbNGNnz49plnfJaFfqlj3hdpFlgTe%2B7%2F14%2BdCUmzjaZbeYymhJWpN4eXrOyKfzcSPemWnrA%2F7tae1WXOeHKewQt%2F65s91DwD3yM2YNYHMe%2FveRIieT4IWi93NKDlelDwkwvsHj0gY6pgFGFIlshnZHOrzalBVS3lTlpDzQcEyzpObO6ZA%2BdvMvq4ttQntWC7iPeMTCHZRyzaDqR%2B%2BnCn6ambCt1LHj9clykCqES4bChEQz7HoXAN1%2FPXuX%2FUHgFAyd5rmWpkv%2Bi1e3ZLPyBPpsBtrVmv7Mn36r7JMJ%2FAcmMzyYuJPolsSdhKmoA327j0e6EU8O8vNVsMfsEhGhL48tfZjsCd6TSOqs3dzQfPIE&amp;X-Amz-Signature=a39a243789fd477c21fa7a74e093645382f5f59a5cdccf030848629de3e192f5&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject" target="_blank" rel="noreferrer">https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/36c5c598-3bae-4763-8969-b7d16fe8c5e4/mobilenetv2-12.onnx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB466RAHZQRH2%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164454Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJGMEQCIGWWCyARoviG3qSXcr3FhZTfZydh7o5T9v%2B%2BQSNVPRVwAiAKs01wsGfmJQXbp4zrZGgTTs7qhh4Lncw6BxZ9UtJTuir%2FAwhHEAAaDDYzNzQyMzE4MzgwNSIMrzmZqJ6PDEDQ3XX5KtwD4fwSO22yJbv%2BaL%2BGSbs0HIAFakT669utHImYc7tt4j8UtHEGtraKH%2Bo7teGFKk4cIP%2Fzy7rdFil%2Be8MNtI0dStXF3A7gOBBo%2Bxg3XRe4SLmS%2BVgW3IB8ostHV19S2pvhz1mRVbrdnxGirEVWLWXzr41NHQWmJU24tskaiQGQuhGW5iUhimfS%2BDYM0OgOCmBwb8ZvJx0Xx2njXIT5pSU60T6ApVvTrfYwZq4bqVSU6f%2BaudXfv6ZcT%2FnJvB7gYhGRnCtOutfwgjxVcqejG7KWpVypzRuWAFrg%2BMy8o7fWsX%2Bc5CRJ9St4c1V0i93LUxk%2FKWd268YkTCAjkVHzy3%2FKJVXWaNIa66RjtkPrPe%2Bkwwn7gu5334MNsLsh5QXB03mO8aniPEakP7ntCzWPyvuR0J7dC%2BuPxHjKb6CvpJpwiFjceGOPd1pUVTR8Y5jG2a9IlI%2FMOrwaGP%2BZV9U3pg8kFzvMNA8YkslA%2Ff9MEf1IBjO4YANC4ZGY19xeNRsbNGNnz49plnfJaFfqlj3hdpFlgTe%2B7%2F14%2BdCUmzjaZbeYymhJWpN4eXrOyKfzcSPemWnrA%2F7tae1WXOeHKewQt%2F65s91DwD3yM2YNYHMe%2FveRIieT4IWi93NKDlelDwkwvsHj0gY6pgFGFIlshnZHOrzalBVS3lTlpDzQcEyzpObO6ZA%2BdvMvq4ttQntWC7iPeMTCHZRyzaDqR%2B%2BnCn6ambCt1LHj9clykCqES4bChEQz7HoXAN1%2FPXuX%2FUHgFAyd5rmWpkv%2Bi1e3ZLPyBPpsBtrVmv7Mn36r7JMJ%2FAcmMzyYuJPolsSdhKmoA327j0e6EU8O8vNVsMfsEhGhL48tfZjsCd6TSOqs3dzQfPIE&amp;X-Amz-Signature=a39a243789fd477c21fa7a74e093645382f5f59a5cdccf030848629de3e192f5&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject</a></p></div></details>
+<p>mobileNetV2-12.onnx 구조를 살펴보면 이전의 모델과는 좀 달리 Relu대신 Clip이라는 layer가 들어와 있는 것을 볼 수 있다.</p>
+<figure><img src="/assets/notion/raspberry-pi에서-ubuntu-setting부터-coral-tpu를-사용해-mobilenetv2-inference-ᄒ/ead44cc2-a90d-49dd-8554-f6b60bcbc977.png" alt="" loading="lazy" width="2664" height="1827" /></figure>
+<ul><li>mobileNetV2-12.onnx → TF(saved_model.pb) 변환<pre data-lang="python"><code class="language-python">import onnx # 1.12.0
+from onnx_tf.backend import prepare # onnx-tf 1.12.0
+# tensorflow-probability 0.18.0
+
+onnx_model_path = &quot;./model.onnx&quot; # your onnx model
+
+onnx_model = onnx.load(onnx_model_path)
+tf_rep = prepare(onnx_model)
+tf_rep.export_graph(&quot;./onnx2tf&quot;) # get saved_model.pb</code></pre></li><li>TF(saved_model.pb) → TF-Lite(Calibration Dataset → Uint8 Quantization)<pre data-lang="python"><code class="language-python"># for saved model
+def representative_data_gen():
+    image_path = get_image(&quot;ImageNet-1000samples&quot;)
+   
+    for image in image_path :
+        image = Image.open(image).convert('RGB').resize((256, 256), Image.ANTIALIAS)
+        image = np.array(image).astype(np.float32)
+        image_data = image[16:240, 16:240, :].copy() # center crop
+       
+        image_data = image_data.transpose([2, 0, 1]) # C, H, W
+        mean = np.array([0.079, 0.05, 0]) + 0.406 # 0.485, 0.456, 0.406
+        std = np.array([0.005, 0, 0.001]) + 0.224 # 0.229, 0.224, 0.225
+
+        for channel in range(image_data.shape[0]):
+            image_data[channel, :, :] = (image_data[channel, :, :] / 255 - mean[channel]) / std[channel] #RGB
+       
+        image_data = np.expand_dims(image_data, axis=0) # 1, 3, 224, 224 
+        print(image_data.shape)
+       
+        yield [image_data]
+
+
+converter = tf.lite.TFLiteConverter.from_saved_model(model)
+# This enables quantization
+converter.optimizations = [tf.lite.Optimize.DEFAULT]
+# This sets the representative dataset for quantization
+converter.representative_dataset = representative_data_gen
+# This ensures that if any ops can't be quantized, the converter throws an error
+converter.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS_INT8]
+# For full integer quantization, though supported types defaults to int8 only, we explicitly declare it for clarity.
+converter.target_spec.supported_types = [tf.int8]
+# These set the input and output tensors to uint8 (added in r2.3)
+converter.inference_input_type = tf.uint8
+converter.inference_output_type = tf.uint8
+converter.allow_custom_op = True
+tflite_model = converter.convert()
+
+with open('from_onnx_mobilenet_v2_quant_uint8.tflite', 'wb') as f:
+  f.write(tflite_model)</code></pre></li></ul>
+<details class="toggle"><summary><strong>Download from_onnx_mobilenet_v2_quant_uint8.tflite</strong></summary><div class="toggle-body"><p><a href="https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/c9c60a2d-1676-4c5f-8049-cad5037063bc/from_mobilenet_v2_quant_uint8.tflite?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB466Q7KNMEPD%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164454Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJHMEUCIFElqwmsOBhXP3sechDDtDLOhndNdVz6TUy%2Fql8zXucPAiEA6p4Y%2F3A2iEKk1y8bbATuUeqJqeGT3V6WDEKEMl0YyXMq%2FwMIRxAAGgw2Mzc0MjMxODM4MDUiDKI3tKoXiQcroF7n7yrcA6qQ91XGTqe0AL87FGz4A01doHOXY%2BuvEHHTmESXFGvsPPiKD8LDtUk1ctrDbkuAI36EjVc5QestMhWqOtTQbFJyRNzWz%2BpD4D0oImmnDu%2BIcnKQsb9vRFMhpNKn64b%2BzUR%2FwCxrbcs1jrOo2oQqEz%2B9MMUYdIqLjdgUy687R%2FnEDfPxVsF6P3DXIRC1ANpwc%2FOmSj5DIoQPM53sx%2B2blQOR0QOx7iMPZVqAptdSfSsYWptOcGQPzJBAnYxGr1Kf7GQriATUiajg8m7iAZFX6AXPg5XK7Q8qoFGOzDzvVcro4kJ62Jd2aOcywmsOAszcMfKuGkuCQ9xAUOBKQYZdmE3PVmQS631OFX5EOZ8Ti0FVe6FKbDRXjMZEIgsrvbe3vNOkOLMrZXXwyRrrFXBgfeZXizhFAymLK%2FkDcLZghVhhe318FsiEiwlsFP3Nsmt9H%2FlqpIR7K4mwOFaD5aGPnFqzBmFnHR89hsosNtKWGqbZFHPoEvfw01z5%2B3UQKOd9efAy03gi9nwM74Rt1mL6bloPUtw40PY%2F6Lfg3uj0XEpfzQGhHc65cpuQC5d%2BHG7I3BoGxlzmujC0yafDphpyBDpp7zLZoyOPHTVhlAKeMessHhiKEOy27vycCeeUMLHE49IGOqUBqNYt9mdLU8i%2FyWL9raM0VBiGIEgLVYnvKdlztMb9iLa%2Bcn%2FbPhy3mH1vItmAlyDVc09rTnB2XEldqO3RXhNV%2FeXQvxi9T0ULEB7w6sZJiwLBXbcv50ULra2kobpWnMWU%2FRsN%2BfFgjWDYE2YbCTYfEbbNqQs5KmBWiAVqySD5yNy4bJC9KX%2F4fR8XUsXu0eLjZ68bDNmTUGdYInq0aF3Ir1aeT0BT&amp;X-Amz-Signature=a50f71246214162f852db4310e245c1abd8b9d06b05081d3d79ae08a25d89534&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject" target="_blank" rel="noreferrer">https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/c9c60a2d-1676-4c5f-8049-cad5037063bc/from_mobilenet_v2_quant_uint8.tflite?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB466Q7KNMEPD%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164454Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJHMEUCIFElqwmsOBhXP3sechDDtDLOhndNdVz6TUy%2Fql8zXucPAiEA6p4Y%2F3A2iEKk1y8bbATuUeqJqeGT3V6WDEKEMl0YyXMq%2FwMIRxAAGgw2Mzc0MjMxODM4MDUiDKI3tKoXiQcroF7n7yrcA6qQ91XGTqe0AL87FGz4A01doHOXY%2BuvEHHTmESXFGvsPPiKD8LDtUk1ctrDbkuAI36EjVc5QestMhWqOtTQbFJyRNzWz%2BpD4D0oImmnDu%2BIcnKQsb9vRFMhpNKn64b%2BzUR%2FwCxrbcs1jrOo2oQqEz%2B9MMUYdIqLjdgUy687R%2FnEDfPxVsF6P3DXIRC1ANpwc%2FOmSj5DIoQPM53sx%2B2blQOR0QOx7iMPZVqAptdSfSsYWptOcGQPzJBAnYxGr1Kf7GQriATUiajg8m7iAZFX6AXPg5XK7Q8qoFGOzDzvVcro4kJ62Jd2aOcywmsOAszcMfKuGkuCQ9xAUOBKQYZdmE3PVmQS631OFX5EOZ8Ti0FVe6FKbDRXjMZEIgsrvbe3vNOkOLMrZXXwyRrrFXBgfeZXizhFAymLK%2FkDcLZghVhhe318FsiEiwlsFP3Nsmt9H%2FlqpIR7K4mwOFaD5aGPnFqzBmFnHR89hsosNtKWGqbZFHPoEvfw01z5%2B3UQKOd9efAy03gi9nwM74Rt1mL6bloPUtw40PY%2F6Lfg3uj0XEpfzQGhHc65cpuQC5d%2BHG7I3BoGxlzmujC0yafDphpyBDpp7zLZoyOPHTVhlAKeMessHhiKEOy27vycCeeUMLHE49IGOqUBqNYt9mdLU8i%2FyWL9raM0VBiGIEgLVYnvKdlztMb9iLa%2Bcn%2FbPhy3mH1vItmAlyDVc09rTnB2XEldqO3RXhNV%2FeXQvxi9T0ULEB7w6sZJiwLBXbcv50ULra2kobpWnMWU%2FRsN%2BfFgjWDYE2YbCTYfEbbNqQs5KmBWiAVqySD5yNy4bJC9KX%2F4fR8XUsXu0eLjZ68bDNmTUGdYInq0aF3Ir1aeT0BT&amp;X-Amz-Signature=a50f71246214162f852db4310e245c1abd8b9d06b05081d3d79ae08a25d89534&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject</a></p></div></details>
+<p>전체 코드</p>
+<details class="toggle"><summary><strong>Code</strong></summary><div class="toggle-body"><pre data-lang="python"><code class="language-python">import tensorflow as tf # 2.10.0
+import numpy as np # 1.23.2
+from PIL import Image # 9.3.0
+import os
+
+def get_image(image_dirs) :
+    image_list = []
+    for roots, dirs, files in os.walk(image_dirs) :
+        for file in files :
+            image_dir = os.path.join(roots, file)
+            if image_dir.endswith(&quot;png&quot;) or image_dir.endswith(&quot;jpg&quot;) or image_dir.endswith(&quot;JPEG&quot;) :
+                image_list.append(image_dir)
+
+    return image_list
+
+# for saved model
+def representative_data_gen():
+    image_path = get_image(&quot;ImageNet-1000samples&quot;)
+   
+    for image in image_path :
+        image = Image.open(image).convert('RGB').resize((256, 256), Image.ANTIALIAS)
+        image = np.array(image).astype(np.float32)
+        image_data = image[16:240, 16:240, :].copy() # center crop
+       
+        image_data = image_data.transpose([2, 0, 1]) # C, H, W
+        mean = np.array([0.079, 0.05, 0]) + 0.406 # 0.485, 0.456, 0.406
+        std = np.array([0.005, 0, 0.001]) + 0.224 # 0.229, 0.224, 0.225
+
+        for channel in range(image_data.shape[0]):
+            image_data[channel, :, :] = (image_data[channel, :, :] / 255 - mean[channel]) / std[channel] #RGB
+       
+        image_data = np.expand_dims(image_data, axis=0) # 1, 3, 224, 224 
+        print(image_data.shape)
+       
+        yield [image_data]
+
+model = &quot;./onnx2tf&quot;
+
+converter = tf.lite.TFLiteConverter.from_saved_model(model)
+# This enables quantization
+converter.optimizations = [tf.lite.Optimize.DEFAULT]
+# This sets the representative dataset for quantization
+converter.representative_dataset = representative_data_gen
+# This ensures that if any ops can't be quantized, the converter throws an error
+converter.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS_INT8]
+# For full integer quantization, though supported types defaults to int8 only, we explicitly declare it for clarity.
+converter.target_spec.supported_types = [tf.int8]
+# These set the input and output tensors to uint8 (added in r2.3)
+converter.inference_input_type = tf.uint8
+converter.inference_output_type = tf.uint8
+converter.allow_custom_op = True
+tflite_model = converter.convert()
+
+with open('from_onnx_mobilenet_v2_quant_uint8.tflite', 'wb') as f:
+  f.write(tflite_model)</code></pre></div></details>
+<p>위에 Coral과 Keras에서 제공했던 TF-Lite구조가 많이 다른데,  개인적인 생각으로는 Clip layer때문에 ONNX → TF로 Convert된 Saved_model.pb이 Clip 기능을 아래와 같은 구조를 갖는 layer로 만들기 때문이 아닐까 생각이 든다.</p>
+<figure><img src="/assets/notion/raspberry-pi에서-ubuntu-setting부터-coral-tpu를-사용해-mobilenetv2-inference-ᄒ/a2175804-0bf2-44a3-8b2e-b7522f21f2f8.png" alt="&lt; from_onnx_mobilenet_v2_quant_uint8.tflite Structure &gt;" loading="lazy" width="2748" height="1855" /><figcaption>&lt; from_onnx_mobilenet_v2_quant_uint8.tflite Structure &gt;</figcaption></figure>
+<p><a href="https://netron.app/" target="_blank" rel="noreferrer">https://netron.app/</a></p>
+<h4 id="block-a3bf24b915634844a141595ac22e3b59">TPU Compile</h4>
+<p>TFlite(uint8 quantization)이 끝났다면 이제 TPU에서 사용할 수 있도록 컴파일해야 한다.</p>
+<p><strong>Requirements (22.11.23 기준)</strong></p>
+<ul><li>The Edge TPU Compiler can be run on any modern Debian-based Linux system. Specifically, you must have the following:<ul><li>64-bit version of Debian 6.0 or higher, or any derivative thereof (such as Ubuntu 10.0+)</li><li>x86-64 system architecture</li></ul></li><li>If your system does not meet these requirements, try our <strong><a href="https://colab.research.google.com/github/google-coral/tutorials/blob/master/compile_for_edgetpu.ipynb" target="_blank" rel="noreferrer">web-based compiler using Google Colab</a></strong><strong>.</strong></li></ul>
+<p><a href="https://coral.ai/docs/edgetpu/compiler/#system-requirements" target="_blank" rel="noreferrer">https://coral.ai/docs/edgetpu/compiler/#system-requirements</a></p>
+<p>요구사항이 충족되면 아래 링크의 명령어를 이용해 컴파일 할 수 있다.  나는 코랩을 추천한다. <strong><a href="https://colab.research.google.com/github/google-coral/tutorials/blob/master/compile_for_edgetpu.ipynb#scrollTo=joxrIB0I3cdi" target="_blank" rel="noreferrer">(코랩에서 사용하기)</a></strong></p>
+
+<p>컴파일을 시도하면 실패하는 것을 볼 수 있다.</p>
+<p>ERROR: Attempting to use a delegate that only supports static-sized tensors with a graph that has dynamic-sized tensors.</p>
+<figure><img src="/assets/notion/raspberry-pi에서-ubuntu-setting부터-coral-tpu를-사용해-mobilenetv2-inference-ᄒ/9ef9f11d-e06a-46bd-84d4-73cae1e3556f.png" alt="" loading="lazy" width="1867" height="382" /></figure>
+<h4 id="block-7b09e1f12e04400a96813f90cd1fe6fe">Compile에 실패하는 이유</h4>
+<p>예상되는 실패의 이유는 컴파일 되려는 모델의</p>
+<ul><li>Operation이 TPU에서 지원하지 않는다.</li><li>Layer가 dynamic shape을 가지고 있다.</li></ul>
+<p>나의 경우는 전자이다, ONNX 모델의 layer중 Coral TPU에서 지원하지 않는 Operator가 있기 때문이다. </p>
+<p><a href="https://coral.ai/docs/edgetpu/models-intro/#supported-operations" target="_blank" rel="noreferrer">https://coral.ai/docs/edgetpu/models-intro/#supported-operations</a></p>
+<p>지원 Operator은 위에 링크에서 볼 수 있다.</p>
+<p>Model.ONNX에서 출력부분에서 Coral에서 TPU사용에 지원되지 않는 Operator(Shape, Gather, Unsqueeze, Gemm)가 존재 했기 때문에 당연히 변환된 TF-Lite파일도 지원되지 않는 Operator가 있기 마련이다.</p>
+<p><strong>아래 파일은 Coral(TF-Lite), ONNX(onnx), Keras(TF-Lite)에서 지원하는  MobileNet의 모델을 분석한 결과이다. </strong></p>
+<p><a href="https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/060cca45-561d-4d14-849c-3e192e217ae5/model_%EB%B6%84%EC%84%9D.pptx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB466YRTEPOFR%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164444Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJHMEUCIQDr8tN%2BLhcvIg%2FOdnaooFL73GtkF%2FTIpB0CGlqBmupK7wIgFegVN8berG%2BwL3br65Yi2utIdS53WQ1ENle5HA%2BPVm8q%2FwMIRxAAGgw2Mzc0MjMxODM4MDUiDC7tySlFJBry%2FcNBFCrcAxI%2BjayZ4Z3I77VtgrqLWATFfo13gzzDO%2B%2BqewnGzjwPKm3GVesMmiIGJae2nQOJ%2BTS3cZvrm2ZG%2BmuJlYAYwjtD9PqK8tQ5PuY%2BXTIGFfz4rkmxR%2B1zjQCLeMD170gcDQpWqONPxuHRkNemeTlnmcMNvcqTkl8S5VaiWoaPOvU2tf1yybYYJMc8A4zpsH8O0BvKbTa5RMpkXYJlFvUR7KVcqry7t1m1GcHckd76Ely1J2KXFS8LWDt7gVvV6N4tBJMoYx5VYkbdWMSNXdERhOleiJN4cJyY4IkqhMS%2FyiYFFfeY1g2313WjvLFFSFRPibicZYV2OR5dB%2FYmgMITn0nYKZE8imYjqUhWr1kV75jPQxbKRywojFVXUWi0VCVUxU%2FEImS2JrQk90zpFZ45l9sW4rKW2HDJcn5pK7exP0P2fDNDmS4xdGWRvKOMzpCly0XoK6iMvqyz0GLsuKcxx3AUnnu2sPc%2Fk3bIwmziTgfO7gqD8FOaELpOXRU9mniV7XdwJtYHWlAI8pG0AhkRUT1%2BWMhpMPzmBPpmDercKRyP48sotsAt%2BEuO0NOaqtOg%2BN0HPcRQqitZuhVPuokCBmifE6PeBGEiZvb%2FcwoLKGaJC6Fj%2FlFJQF3SQkrPMLvD49IGOqUBGxCGaBnVeEIco7m74fJ7cau3G0cBzG3mgnui5hr0jnTlF7GSdKzaO6mbuSbLAUpVrwZYt6ZLj5t7dQwpzihQzzCFxz2Adz6PuZhLkUPEfRAUH8vWmlJbOjKrDRGTR1uMe%2FO39c6rmkVpf1frCP0RWnMPnnlDC7SpQ0WTzcmT9M%2F6GseMaHAUUAdZdLMDGh7K3N8370K%2BB%2FNf2faLspdrbxO%2BZIvt&amp;X-Amz-Signature=daaced7727c5c6677f67c9d25c5629eabca6c2e105ad648383a0743b675edf99&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject" target="_blank" rel="noreferrer">https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/060cca45-561d-4d14-849c-3e192e217ae5/model_%EB%B6%84%EC%84%9D.pptx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB466YRTEPOFR%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164444Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJHMEUCIQDr8tN%2BLhcvIg%2FOdnaooFL73GtkF%2FTIpB0CGlqBmupK7wIgFegVN8berG%2BwL3br65Yi2utIdS53WQ1ENle5HA%2BPVm8q%2FwMIRxAAGgw2Mzc0MjMxODM4MDUiDC7tySlFJBry%2FcNBFCrcAxI%2BjayZ4Z3I77VtgrqLWATFfo13gzzDO%2B%2BqewnGzjwPKm3GVesMmiIGJae2nQOJ%2BTS3cZvrm2ZG%2BmuJlYAYwjtD9PqK8tQ5PuY%2BXTIGFfz4rkmxR%2B1zjQCLeMD170gcDQpWqONPxuHRkNemeTlnmcMNvcqTkl8S5VaiWoaPOvU2tf1yybYYJMc8A4zpsH8O0BvKbTa5RMpkXYJlFvUR7KVcqry7t1m1GcHckd76Ely1J2KXFS8LWDt7gVvV6N4tBJMoYx5VYkbdWMSNXdERhOleiJN4cJyY4IkqhMS%2FyiYFFfeY1g2313WjvLFFSFRPibicZYV2OR5dB%2FYmgMITn0nYKZE8imYjqUhWr1kV75jPQxbKRywojFVXUWi0VCVUxU%2FEImS2JrQk90zpFZ45l9sW4rKW2HDJcn5pK7exP0P2fDNDmS4xdGWRvKOMzpCly0XoK6iMvqyz0GLsuKcxx3AUnnu2sPc%2Fk3bIwmziTgfO7gqD8FOaELpOXRU9mniV7XdwJtYHWlAI8pG0AhkRUT1%2BWMhpMPzmBPpmDercKRyP48sotsAt%2BEuO0NOaqtOg%2BN0HPcRQqitZuhVPuokCBmifE6PeBGEiZvb%2FcwoLKGaJC6Fj%2FlFJQF3SQkrPMLvD49IGOqUBGxCGaBnVeEIco7m74fJ7cau3G0cBzG3mgnui5hr0jnTlF7GSdKzaO6mbuSbLAUpVrwZYt6ZLj5t7dQwpzihQzzCFxz2Adz6PuZhLkUPEfRAUH8vWmlJbOjKrDRGTR1uMe%2FO39c6rmkVpf1frCP0RWnMPnnlDC7SpQ0WTzcmT9M%2F6GseMaHAUUAdZdLMDGh7K3N8370K%2BB%2FNf2faLspdrbxO%2BZIvt&amp;X-Amz-Signature=daaced7727c5c6677f67c9d25c5629eabca6c2e105ad648383a0743b675edf99&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject</a></p>
+<p>간략히 설명하면 각 모델의 출력부분인데 Coral, Keras는 해당 Operator를 Coral에서 전부 지원하는 반면, Model.ONNX는 지원되지 않는 Operator가 있다.</p>
+<p><strong>(2022년 11월 23일 기준으로는 지원 안 함 → 추후엔 지원해줄 수도 있음)</strong></p>
+<figure><img src="/assets/notion/raspberry-pi에서-ubuntu-setting부터-coral-tpu를-사용해-mobilenetv2-inference-ᄒ/11a4f71d-c73c-462b-9857-7fa9cd5f0ad9.png" alt="" loading="lazy" width="1986" height="1120" /></figure>
+<p>혹시나 하여 모델이 잘못 변형될 수도 있겠다는 생각이 들어 TPU Compile하지 않고 TF-Lite로만 Raspi에서 돌렸을 때 잘 작동한다.</p>
+<p>아래 코드는 Coral에서 제공한 classify_image.py를 참고해 수정했다. (TF 버전이 맞지 않으면 에러가 날 수도 있다.)</p>
+<ul><li>PC에서 시도해보니(tf 2.5.0) 다음과 같은 에러가 난다.(<strong>Raspi에서는 잘 작동하니 TF버전에 유의하자</strong>)<pre data-lang="xml"><code class="language-xml">ValueError: Didn't find op for builtin opcode 'ADD' version '4'. An older version of this builtin might be supported. Are you using an old TFLite binary with a newer model?
+Registration failed.</code></pre></li></ul>
+<h4 id="block-c51b13270aa6436f9ef2d906f858787d">TF-Lite Inferece(Without using TPU)</h4>
+<details class="toggle"><summary><strong>Code</strong></summary><div class="toggle-body"><pre data-lang="python"><code class="language-python"># has been run by Raspi - python 3.7.12
+import os
+import numpy as np
+from PIL import Image
+import tensorflow as tf # 2.10.0
+import time
+
+
+def softmax(x):
+    e_x = np.exp(x - np.max(x))
+    return e_x / e_x.sum()
+
+def preprocess_image(image_path) :
+    image_path = image_path
+    image = Image.open(image_path).convert('RGB').resize((256, 256), Image.ANTIALIAS)
+    image_data = np.array(image)
+    image_data = image_data[16:240, 16:240, :].copy()
+    image_data = image_data.transpose([2, 0, 1]) # C, H, W
+    
+    return image_data
+
+
+with open(&quot;imagenet_classes.txt&quot;, &quot;r&quot;) as f:
+    categories = [s.strip() for s in f.readlines()]
+
+
+interpreter = tf.lite.Interpreter('from_onnx_mobilenet_v2_quant_uint8.tflite')
+
+interpreter.allocate_tensors()
+
+img_path = &quot;parrot.jpg&quot;
+data = preprocess_image(img_path)
+
+input_details = interpreter.get_input_details()
+output_details = interpreter.get_output_details()
+
+params = input_details[0]['quantization_parameters']
+scale = params['scales']
+zero_point = params['zero_points']
+
+mean = 128.0
+std = 128.0
+data = np.expand_dims(data, axis=0)
+
+if abs(scale * std - 1) &lt; 1e-5 and abs(mean - zero_point) &lt; 1e-5:
+    interpreter.set_tensor(input_details[0]['index'], data)
+    print(&quot;No_Scaling&quot;)
+else:
+    normalized_input = (np.asarray(data) - mean) / (std * scale) + zero_point
+    np.clip(normalized_input, 0, 255, out=normalized_input)
+    interpreter.set_tensor(input_details[0]['index'], normalized_input.astype(np.uint8))
+    print(&quot;Scaling&quot;)
+
+start = time.perf_counter()
+interpreter.invoke()
+end = time.perf_counter()
+
+inference_time = (end-start)*1000
+
+output_data = interpreter.get_tensor(output_details[0]['index'])
+
+scale, zero_point = output_details[0]['quantization']
+output_data = scale * (output_data.astype(np.int64) - zero_point)
+max_idx = np.argmax(output_data[0])
+confidence = softmax(output_data[0])
+
+print(f&quot;{img_path}, {categories[max_idx]}, {confidence[max_idx]*100:.2f}, {inference_time:.4f}ms&quot;)</code></pre></div></details>
+<details class="toggle"><summary><strong>Download uint8_tflite_inference (For mobilenetV2)</strong></summary><div class="toggle-body"><p><a href="https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/94c81484-3cb2-43eb-820e-45b694019a1e/uint8_tflite_inference.py?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB466U4EB6KTV%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164456Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJHMEUCIQDiXjlVJ03S9IUjTGCU5L2PCqU8DJ7ncqIMi9PLLYHPMwIgO2Lm9gFOdIJ41iEtKlIeqFKBW9ePvVOWd7mZvAgcicQq%2FwMIRxAAGgw2Mzc0MjMxODM4MDUiDP0Zanv3wwMUULlyHyrcA1uFc39BfDdrSItvKE3aBzr4mdC120HrWnYM0LnWWQufdRa0bCZrHpVoqwKM%2BgTdRfdwwvzcNHCiEuDnwHGtyQbut9t8K%2F11%2BIbTvvfD8adcnTcYZJShLj5YmKKTgMrABnaDr5LRz6sJheybojPTGk07%2BbDyK8PwgWraeStXTDI8o%2FDL571bQoACTl4FoApOlJHmYmOGREwIdfW3nlROmtHO7eW6%2F%2BqNKSJAJXXRQRQGbgaQ4SZy6F48F7f%2BBQLyPTy1%2BCqYhvSVodj9HmYmvttcr%2FbJSgvqx8agJBlicgIcyqr6zjf3Z1X2Rtr0tTzwp3Zl2S9eDhSFariWoI0SNednGIS9XSrWvRnfRVA5YT07dZfjJXTdx%2B1n7MVSKNYGYKwONPWa0rIXXCmRTQEl1%2Feu9IeLLnivQFmqc65ucmJqv6wOptlXQLMU1zNZSYvD5DSp2bdz4SEXg%2F%2FDZq0O5iTgVQjqtIunKsLc4VeT8vTwB%2FhcR2zRvJbtnLT4q7WW6EVtXRVuPaVBz538VCmSeIaIoJJuoSBWC%2BaBOz%2Ft0C4BGrn3N5hf8uGKlrjWPCuGtt8z0z54I4IB2VO1XYhSeGOVllA4RuBxqMOybdL73Z5K5r6v0oquDCH4mRP2MPzC49IGOqUBt%2BZWUeouHwxmxwe37pJoK5zMUtdQaM5jT1ObPVdMgHojm9GIrnOeK8B2EgB%2FFLH4wgxpGDF3bv5TCs0cQ9tdyeToPJ77iOirXTTTzT%2B1yyr2Xzt8zrEk7KutrQQca%2FhZ3BVBlP%2BFeSXBKujiEpt0SaWC5T%2B%2BW2%2BobIQGo4AcjUOAjf0tuBivSJ%2B58aHdyiFlcbKb14G458zwUkwmrI4z10ZvyJVB&amp;X-Amz-Signature=82914993249ae0c74380a88cdb89c87b0752f30bac1fb210833dc81fa64212ff&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject" target="_blank" rel="noreferrer">https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/94c81484-3cb2-43eb-820e-45b694019a1e/uint8_tflite_inference.py?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB466U4EB6KTV%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164456Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJHMEUCIQDiXjlVJ03S9IUjTGCU5L2PCqU8DJ7ncqIMi9PLLYHPMwIgO2Lm9gFOdIJ41iEtKlIeqFKBW9ePvVOWd7mZvAgcicQq%2FwMIRxAAGgw2Mzc0MjMxODM4MDUiDP0Zanv3wwMUULlyHyrcA1uFc39BfDdrSItvKE3aBzr4mdC120HrWnYM0LnWWQufdRa0bCZrHpVoqwKM%2BgTdRfdwwvzcNHCiEuDnwHGtyQbut9t8K%2F11%2BIbTvvfD8adcnTcYZJShLj5YmKKTgMrABnaDr5LRz6sJheybojPTGk07%2BbDyK8PwgWraeStXTDI8o%2FDL571bQoACTl4FoApOlJHmYmOGREwIdfW3nlROmtHO7eW6%2F%2BqNKSJAJXXRQRQGbgaQ4SZy6F48F7f%2BBQLyPTy1%2BCqYhvSVodj9HmYmvttcr%2FbJSgvqx8agJBlicgIcyqr6zjf3Z1X2Rtr0tTzwp3Zl2S9eDhSFariWoI0SNednGIS9XSrWvRnfRVA5YT07dZfjJXTdx%2B1n7MVSKNYGYKwONPWa0rIXXCmRTQEl1%2Feu9IeLLnivQFmqc65ucmJqv6wOptlXQLMU1zNZSYvD5DSp2bdz4SEXg%2F%2FDZq0O5iTgVQjqtIunKsLc4VeT8vTwB%2FhcR2zRvJbtnLT4q7WW6EVtXRVuPaVBz538VCmSeIaIoJJuoSBWC%2BaBOz%2Ft0C4BGrn3N5hf8uGKlrjWPCuGtt8z0z54I4IB2VO1XYhSeGOVllA4RuBxqMOybdL73Z5K5r6v0oquDCH4mRP2MPzC49IGOqUBt%2BZWUeouHwxmxwe37pJoK5zMUtdQaM5jT1ObPVdMgHojm9GIrnOeK8B2EgB%2FFLH4wgxpGDF3bv5TCs0cQ9tdyeToPJ77iOirXTTTzT%2B1yyr2Xzt8zrEk7KutrQQca%2FhZ3BVBlP%2BFeSXBKujiEpt0SaWC5T%2B%2BW2%2BobIQGo4AcjUOAjf0tuBivSJ%2B58aHdyiFlcbKb14G458zwUkwmrI4z10ZvyJVB&amp;X-Amz-Signature=82914993249ae0c74380a88cdb89c87b0752f30bac1fb210833dc81fa64212ff&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject</a></p></div></details>
+<p>아래는 Raspiberry에서 구동한 결과이다.</p>
+<figure><img src="/assets/notion/raspberry-pi에서-ubuntu-setting부터-coral-tpu를-사용해-mobilenetv2-inference-ᄒ/bf89c63a-ca85-45ff-9943-131f24278cea.png" alt="" loading="lazy" width="820" height="399" /></figure>
+<h4 id="block-f5a84f79d9784719bc232429a9829e04">연구 결론</h4>
+<p>Coral-TPU는 모델의 Operator를 전부 TPU에서 작업을 처리하려 하기 때문에 지원하지 않는 Operator가 있으면 해당 모델은 TPU를 사용할 수조차 없다.</p>
+<p>다양한 모델을 사용해야 한다면 지원하지 않는 Operator들은 CPU가 처리하고 지원하는 Operator는 TPU가 처리하면 좋을 것 같다.</p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/post.js?v=13" type="module"></script>
+    <script src="/assets/js/palette.js?v=8" defer></script>
+  </body>
+</html>

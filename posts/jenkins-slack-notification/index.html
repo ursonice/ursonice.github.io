@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>Jenkins Slack Notification — Woojae Joo</title>
+    <meta name="post-slug" content="jenkins-slack-notification" />
+    <meta name="description" content="서론 이 장은 Jenkins에서 빌드가 완료된 후 Slack에 빌드가 완료되었다는 메시지를 보낼 수 있도록 연동하는 작업에 대해서 설명한다. Step 1. Slack의 Channel에 Jenkins를 추가 메시지를 받고싶은 채널에 젠킨스를 추가한다. 3단계에 있는 팀 하위 도메인, 통합 토큰 자격 증명 " />
+    <link rel="canonical" href="https://ursonice.github.io/posts/jenkins-slack-notification/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="Jenkins Slack Notification" />
+    <meta property="og:description" content="서론 이 장은 Jenkins에서 빌드가 완료된 후 Slack에 빌드가 완료되었다는 메시지를 보낼 수 있도록 연동하는 작업에 대해서 설명한다. Step 1. Slack의 Channel에 Jenkins를 추가 메시지를 받고싶은 채널에 젠킨스를 추가한다. 3단계에 있는 팀 하위 도메인, 통합 토큰 자격 증명 " />
+    <meta property="og:url" content="https://ursonice.github.io/posts/jenkins-slack-notification/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Jenkins%20Slack%20Notification&amp;cat=Application" />
+    <meta property="article:published_time" content="2024-06-14T06:20:00.000Z" />
+    <meta property="article:modified_time" content="2024-11-04T08:24:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Jenkins Slack Notification" />
+    <meta name="twitter:description" content="서론 이 장은 Jenkins에서 빌드가 완료된 후 Slack에 빌드가 완료되었다는 메시지를 보낼 수 있도록 연동하는 작업에 대해서 설명한다. Step 1. Slack의 Channel에 Jenkins를 추가 메시지를 받고싶은 채널에 젠킨스를 추가한다. 3단계에 있는 팀 하위 도메인, 통합 토큰 자격 증명 " />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Jenkins%20Slack%20Notification&amp;cat=Application" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Jenkins Slack Notification","description":"서론 이 장은 Jenkins에서 빌드가 완료된 후 Slack에 빌드가 완료되었다는 메시지를 보낼 수 있도록 연동하는 작업에 대해서 설명한다. Step 1. Slack의 Channel에 Jenkins를 추가 메시지를 받고싶은 채널에 젠킨스를 추가한다. 3단계에 있는 팀 하위 도메인, 통합 토큰 자격 증명 ","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Jenkins%20Slack%20Notification&cat=Application","datePublished":"2024-06-14T06:20:00.000Z","dateModified":"2024-11-04T08:24:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/jenkins-slack-notification/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Application","item":"https://ursonice.github.io/topics/application/"},{"@type":"ListItem","position":3,"name":"Jenkins Slack Notification","item":"https://ursonice.github.io/posts/jenkins-slack-notification/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/application/">Application</a>
+    </nav>
+    <h1>Jenkins Slack Notification</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2024년 6월 14일</span><span class="dot"></span><span>수정 2024년 11월 4일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-100e15f02a2046008f418de41f5bc9dd">서론</h2>
+<p>이 장은 Jenkins에서 빌드가 완료된 후 Slack에 빌드가 완료되었다는 메시지를 보낼 수 있도록 연동하는 작업에 대해서 설명한다.</p>
+<h2 id="block-6ddc13ac59ff4d7095cb78856a104406">Step 1. Slack의 Channel에 Jenkins를 추가</h2>
+<p>메시지를 받고싶은 채널에 젠킨스를 추가한다.</p>
+<figure><img src="/assets/notion/jenkins-slack-notification/5b5ec3f0-e267-4038-bfac-ad0caec70743.png" alt="" loading="lazy" width="3844" height="1752" /></figure>
+<figure><img src="/assets/notion/jenkins-slack-notification/22acb4ce-804a-4d64-b7bb-800e25263df2.png" alt="" loading="lazy" width="3834" height="1756" /></figure>
+<figure><img src="/assets/notion/jenkins-slack-notification/c4da59e8-91fa-47b4-ba79-ed004cac149e.png" alt="" loading="lazy" width="3858" height="1766" /></figure>
+<figure><img src="/assets/notion/jenkins-slack-notification/d7e970de-9046-400c-a750-f7cab19c9131.png" alt="" loading="lazy" width="3802" height="1438" /></figure>
+<h4 id="block-8f95c5f7c90b49d3afe2534df11f1084">3단계에 있는 팀 하위 도메인, 통합 토큰 자격 증명 ID를 따로 적어둔다.</h4>
+<ul><li>팀하위 도메인은 Jenkins의 시스템 설정에서 Workspace란에 넣어준다.</li><li>통합 토큰 자격증명 ID는 Credential을 생성할 때 필요하다.</li></ul>
+<figure><img src="/assets/notion/jenkins-slack-notification/5517c419-7caa-4adb-a6c8-624e95930ce7.png" alt="" loading="lazy" width="3786" height="2498" /></figure>
+<p>스크롤을 내리면 내가 추가했던 채널 이름이 뜬다. 확인만 해두자.</p>
+<figure><img src="/assets/notion/jenkins-slack-notification/bb27f22e-7725-4753-9b95-caecef7e9ff7.png" alt="" loading="lazy" width="3800" height="2320" /></figure>
+<h2 id="block-4470743557594d16a5725d308d10a9ee">Step 2. Jenkins에 Slack Plug-in 설치</h2>
+<p>Jenkins에서 Slack Plug-in을 설치한다.</p>
+<figure><img src="/assets/notion/jenkins-slack-notification/04193bb0-b43f-4e00-9d1d-6535bb865721.png" alt="" loading="lazy" width="3822" height="1002" /></figure>
+<p>또는 아래 명령어로 설치 가능하다</p>
+<pre data-lang="bash"><code class="language-bash">java -jar jenkins-cli.jar -s http://127.0.0.1:8080 -auth admin:&lt;Toekn&gt; install-plugin Slack Notification</code></pre>
+<h4 id="block-b804b0aa6be94d82a0c5a924b8290747">Slack채널 ID 확인하기</h4>
+<figure><img src="/assets/notion/jenkins-slack-notification/3515c09f-4894-496e-b552-e1fadb45450c.png" alt="" loading="lazy" width="2528" height="1738" /></figure>
+<ul><li><strong>채널ID는 슬랙에서 알림을 보내고자하는 채널아이디를 설정하면 된다</strong></li></ul>
+<figure><img src="/assets/notion/jenkins-slack-notification/15aac4dd-6318-4318-9cf3-fe1c3b51e228.png" alt="" loading="lazy" width="3824" height="634" /></figure>
+<figure><img src="/assets/notion/jenkins-slack-notification/00732476-ca10-4d15-acab-c0b0778999bd.png" alt="" loading="lazy" width="3482" height="1228" /></figure>
+<ul><li>Credential은 add버튼을 눌러 알맞게 작성해주고 add버튼을 눌러준다.</li></ul>
+<figure><img src="/assets/notion/jenkins-slack-notification/1007d182-bc6e-432e-a61d-181729dd1043.png" alt="" loading="lazy" width="3834" height="1936" /></figure>
+<h2 id="block-e0d8845e9e6a463d9625b44a708ac92e">Step 3. Pipeline에 알림 추가하기</h2>
+<p>맨 아래 빌드가 끝난 후 동작할 작업을 추가해주면 된다.</p>
+<figure><img src="/assets/notion/jenkins-slack-notification/1a9948e4-440b-4714-b368-81147bd77fae.png" alt="" loading="lazy" width="2978" height="1710" /></figure>
+<pre data-lang="bash"><code class="language-bash">
+post {
+        always {
+            slackSend (channel: 'D05TNBPJRHP', color: 'good', message: &quot;Build STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+        }
+        success {
+            slackSend (channel: 'D05TNBPJRHP', color: 'good', message: &quot;Build SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+        }
+        failure {
+            slackSend (channel: 'D05TNBPJRHP', color: 'danger', message: &quot;Build FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+        }
+        aborted {
+            slackSend (channel: 'D05TNBPJRHP', color: 'warning', message: &quot;Build ABORTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+        }
+        notBuilt {
+            slackSend (channel: 'D05TNBPJRHP', color: 'warning', message: &quot;Build NOT BUILT: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+        }
+        unstable {
+            slackSend (channel: 'D05TNBPJRHP', color: 'warning', message: &quot;Build UNSTABLE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+        }
+        fixed {
+            slackSend (channel: 'D05TNBPJRHP', color: 'good', message: &quot;Build BACK TO NORMAL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+        }
+    }</code></pre>
+<h4 id="block-5e4368f524dc442982f5c2b64dd65889">빌드 상태 설명</h4>
+<ol><li><strong>SUCCESS</strong>: 빌드가 성공적으로 완료되었음을 의미. 모든 단계가 정상적으로 실행되고 종료되었다.</li><li><strong>FAILURE</strong>: 빌드가 실패했음을 의미. 하나 이상의 단계에서 오류가 발생하여 빌드가 중단되었다.</li><li><strong>ABORTED</strong>: 빌드가 중단되었음을 의미. 사용자가 빌드를 강제로 중단했거나 시스템에 의해 빌드가 중단되었다.<ul><li>e.g.) 사용자가 수동으로 빌드를 중단했거나 Jenkins가 시스템 자원의 문제로 빌드를 중단했을 때 발생</li></ul></li><li><strong>NOT_BUILT</strong>: 빌드가 수행되지 않았음을 의미. 예를 들어, 조건에 따라 특정 빌드가 실행되지 않는 경우가 있다.<ul><li>e.g.) 조건에 따라 특정 빌드를 실행하지 않았을 때 발생. 예를 들어, 특정 분기에 대한 빌드만 실행하도록 설정된 경우</li></ul></li><li><strong>UNSTABLE</strong>: 빌드가 완료되었지만 일부 경고나 테스트 실패가 있었음을 의미한다. 이는 코드가 성공적으로 빌드되었으나 모든 테스트가 통과되지 않았거나 경고가 발생했을 때 나타난다.<ul><li>e.g.) 빌드가 성공적으로 완료되었으나, Unit Test에서 일부 실패가 발생한 경우입니다. 즉, 컴파일 및 패키징은 성공했지만 테스트 단계에서 일부 문제가 발견되었 경우.</li></ul></li><li><strong>BACK TO NORMAL</strong>: 이전 빌드가 실패하거나 불안정했지만, 현재 빌드가 성공적으로 완료되어 정상 상태로 돌아왔음을 의미한다.<ul><li>e.g.) 이전 빌드가 실패하거나 불안정한 상태였으나 또는 실패, 현재 빌드가 성공적으로 완료되어 상태가 정상으로 돌아온 경우</li></ul></li></ol>
+<h2 id="block-4e014a76c11c41849a6dda2d9b1d7b26">Step 4. 결과 확인</h2>
+<p>정상적으로 메시지가 온다.</p>
+<p>그러나 보통 빌드는 시작할 때 와야한다고 생각하기 때문에 파이프라인 스크립트를 빌드 시작시에 먼저 알람이오고 그 후에 대한 결과를 슬랙으로 전송하도록 조정하겠다.</p>
+<figure><img src="/assets/notion/jenkins-slack-notification/f266344b-9823-4424-a68f-7d974d0a09e4.png" alt="" loading="lazy" width="3340" height="484" /></figure>
+<h2 id="block-f965fd36fc274343895bfbf1f17b697c">ETC.</h2>
+<p>post부분의 always 딕셔너리 부분을 제거하고 아래처럼 스테이지 맨 앞에 넣어준다.</p>
+<figure><img src="/assets/notion/jenkins-slack-notification/2ea5da68-7972-49cb-8aff-4cd548e94f7b.png" alt="" loading="lazy" width="2998" height="1320" /></figure>
+<details class="toggle"><summary><strong>최종 스크립트</strong></summary><div class="toggle-body"><pre data-lang="bash"><code class="language-bash">pipeline {
+    agent any
+    environment {
+        SERVER_IP = &quot;192.168.1.8&quot;
+        SERVER_USER = &quot;groupai&quot;
+        REPO_URL = 'ssh://git@192.168.1.22/git/hmlf/ai_client.git'
+        COMMON_LIB_REPO = 'ssh://git@192.168.1.22/git/hmlf/ai_fw_utility.git'
+        AUTHENTICATION_REPO = 'ssh://git@192.168.1.22/git/hmlf/ai_sw.git'
+        STARTKIT_REPO = 'ssh://git@192.168.1.22/git/hmlf/ai_starterkit.git'
+    }
+    stages {
+        stage('Notify Build Start') {
+            steps {
+                script {
+                    slackSend (channel: 'D05TNBPJRHP', color: 'good', message: &quot;Build STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+                }
+            }
+        }
+        // stage('Checkout') {
+        //     steps {
+        //         checkout scm: [ 
+        //             $class: 'GitSCM', 
+        //             branches: [[name: '*/master']],
+        //             userRemoteConfigs: [[credentialsId: 'service_to_git_key', url: REPO_URL]]
+        //         ]
+        //     }
+        // }
+        stage('Prepare Environment') {
+            steps {
+                script {
+                    sshagent(['jenkins_to_service_key']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                        set -e
+                        HOME_DIR=\$(echo ~${SERVER_USER})
+                        WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+                        REPO_NAME=\$(basename -s .git ${REPO_URL})
+                        VENV_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}_venv&quot;
+
+                        if [ ! -d &quot;\${WORKSPACE_DIR}&quot; ]; then
+                            echo &quot;Directory does not exist. Creating workspace directory...&quot;
+                            mkdir -p \${WORKSPACE_DIR}
+                            echo &quot;\${WORKSPACE_DIR} successfully created&quot;
+                        fi
+
+                        if [ ! -d &quot;\${VENV_DIR}&quot; ]; then
+                            echo &quot;Creating virtual environment...&quot;
+                            /usr/bin/python3.11 -m venv --system-site-packages \${VENV_DIR}
+                        fi
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        slackSend (channel: 'D05TNBPJRHP', color: 'danger', message: &quot;Build FAILED in stage '${env.STAGE_NAME}': Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+                    }
+                }
+            }
+        }
+        stage('Install Project') {
+            steps {
+                script {
+                    sshagent(['jenkins_to_service_key']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                        set -e
+                        HOME_DIR=\$(echo ~${SERVER_USER})
+                        WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+                        REPO_NAME=\$(basename -s .git ${REPO_URL})
+                        PROJECT_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}&quot;
+                        VENV_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}_venv&quot;
+
+                        source \${VENV_DIR}/bin/activate
+                        pip3 install setuptools wheel
+
+                        if [ ! -d &quot;\${PROJECT_DIR}&quot; ]; then
+                            echo &quot;Project directory does not exist. Cloning repository...&quot;
+                            cd \${WORKSPACE_DIR}
+                            git clone ${REPO_URL}
+                            cd \${PROJECT_DIR}
+                            pip3 install ./
+                        else
+                            echo &quot;Project directory exists. Pulling latest changes...&quot;
+                            cd \${PROJECT_DIR}
+                            git pull
+                            pip3 uninstall \${REPO_NAME} -y || true
+                            pip3 install ./
+                        fi
+                        deactivate
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        slackSend (channel: 'D05TNBPJRHP', color: 'danger', message: &quot;Build FAILED in stage '${env.STAGE_NAME}': Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+                    }
+                }
+            }
+        }
+        stage('Install Dependency') {
+            steps {
+                script {
+                    sshagent(['jenkins_to_service_key']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                        set -e
+                        HOME_DIR=\$(echo ~${SERVER_USER})
+                        WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+                        REPO_NAME=\$(basename -s .git ${REPO_URL})
+                        VENV_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}_venv&quot;
+                        
+                        source \${VENV_DIR}/bin/activate
+                        pip3 install git+${COMMON_LIB_REPO}
+                        deactivate
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        slackSend (channel: 'D05TNBPJRHP', color: 'danger', message: &quot;Build FAILED in stage '${env.STAGE_NAME}': Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+                    }
+                }
+            }
+        }
+        stage('Install Authentication') {
+            steps {
+                script {
+                    sshagent(['jenkins_to_service_key']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                        set -e
+                        HOME_DIR=\$(echo ~${SERVER_USER})
+                        WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+                        REPO_NAME=\$(basename -s .git ${REPO_URL})
+                        VENV_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}_venv&quot;
+                        
+                        source \${VENV_DIR}/bin/activate
+                        pip3 install git+${AUTHENTICATION_REPO}
+                        deactivate
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        slackSend (channel: 'D05TNBPJRHP', color: 'danger', message: &quot;Build FAILED in stage '${env.STAGE_NAME}': Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+                    }
+                }
+            }
+        }
+        stage('Unit Test') {
+            steps {
+                script {
+                    sshagent(['jenkins_to_service_key']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                        set -e
+                        HOME_DIR=\$(echo ~${SERVER_USER})
+                        WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+                        REPO_NAME=\$(basename -s .git ${REPO_URL})
+                        VENV_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}_venv&quot;
+                        PROJECT_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}&quot;
+                        source \${VENV_DIR}/bin/activate
+                        cd \${PROJECT_DIR}
+                        echo &quot;Pytest&quot;
+                        deactivate
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        slackSend (channel: 'D05TNBPJRHP', color: 'danger', message: &quot;Build FAILED in stage '${env.STAGE_NAME}': Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+                    }
+                }
+            }
+        }
+        stage('Clone StartKit') {
+            steps {
+                script {
+                    sshagent(['jenkins_to_service_key']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                        set -e
+                        HOME_DIR=\$(echo ~${SERVER_USER})
+                        WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+                        STARTERKIT_REPO_NAME=\$(basename -s .git ${STARTKIT_REPO})
+                        STARTERKIT_DIR=&quot;\${WORKSPACE_DIR}/\${STARTERKIT_REPO_NAME}&quot;
+
+                        if [ ! -d &quot;\${STARTERKIT_DIR}&quot; ]; then
+                            echo &quot;Starter Kit does not exist. Cloning repository ...&quot;
+                            cd \${WORKSPACE_DIR}
+                            git clone ${STARTKIT_REPO}
+                        else
+                            echo &quot;Starter Kit exists. Pulling latest changes...&quot;
+                            cd \${STARTERKIT_DIR}
+                            git pull
+                        fi
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        slackSend (channel: 'D05TNBPJRHP', color: 'danger', message: &quot;Build FAILED in stage '${env.STAGE_NAME}': Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+                    }
+                }
+            }
+        }
+        stage('Install Nuitka') {
+            steps {
+                script {
+                    sshagent(['jenkins_to_service_key']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                        set -e
+                        HOME_DIR=\$(echo ~${SERVER_USER})
+                        WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+                        REPO_NAME=\$(basename -s .git ${REPO_URL})
+                        VENV_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}_venv&quot;
+
+                        source \${VENV_DIR}/bin/activate
+                        pip3 install nuitka==2.3.2
+                        deactivate
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        slackSend (channel: 'D05TNBPJRHP', color: 'danger', message: &quot;Build FAILED in stage '${env.STAGE_NAME}': Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+                    }
+                }
+            }
+        }
+        // stage('Run Nuitka Script') {
+        //     steps {
+        //         script {
+        //             sshagent(['jenkins_to_service_key']) {
+        //                 sh &quot;&quot;&quot;
+        //                 ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+        //                 set -e
+        //                 HOME_DIR=\$(echo ~${SERVER_USER})
+        //                 WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+        //                 REPO_NAME=\$(basename -s .git ${REPO_URL})
+        //                 VENV_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}_venv&quot;
+        //                 PROJECT_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}&quot;
+        //                 STARTERKIT_REPO_NAME=\$(basename -s .git ${STARTKIT_REPO})
+
+        //                 source \${VENV_DIR}/bin/activate
+                        
+        //                 NUITKA_SCRIPT=&quot;\${WORKSPACE_DIR}/\${STARTERKIT_REPO_NAME}/packaging/nuitka/\${REPO_NAME}.sh&quot;
+                        
+        //                 cd \${PROJECT_DIR}
+        //                 bash \${NUITKA_SCRIPT}
+
+        //                 echo &quot;\${REPO_NAME} Packing Finished!&quot;
+        //                 deactivate
+        //                 '
+        //                 &quot;&quot;&quot;
+        //             }
+        //         }
+        //     }
+        //     post {
+        //         failure {
+        //             script {
+        //                 slackSend (channel: 'D05TNBPJRHP', color: 'danger', message: &quot;Build FAILED in stage '${env.STAGE_NAME}': Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+        //             }
+        //         }
+        //     }
+        // }
+    }
+    post {
+        success {
+            slackSend (channel: 'D05TNBPJRHP', color: 'good', message: &quot;Build SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+        }
+        fixed {
+            slackSend (channel: 'D05TNBPJRHP', color: 'good', message: &quot;Build BACK TO NORMAL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+        }
+    }
+}
+</code></pre></div></details>
+<h2 id="block-1c67b13aeb634968b03475d1592c3b1a">WorkFlow</h2>
+<p>전체 워크 플로우이다.</p>
+<figure><img src="/assets/notion/jenkins-slack-notification/e98fb94b-9d3a-4cc1-af4e-a4d3230bf76c.png" alt="" loading="lazy" width="2078" height="616" /></figure>
+<h2 id="block-a07787bc3fe240ce9aa94e95e64d4207">Pipeline</h2>
+<p>위 워크플로우의 pipeline 상세 흐름도이다.</p>
+<figure><img src="/assets/notion/jenkins-slack-notification/beda373a-3e92-4eae-a359-c0450c623a5d.png" alt="" loading="lazy" width="3074" height="540" /></figure>
+<ul><li>Prepare Environment<ol><li>Workspace Directory가 있는지 확인하고 없으면 생성</li><li>Workspace/VENV 가 있는 경우 스킵, 없으면 3.11 버전의 파이썬 가상환경 생성</li></ol></li><li>Install Project<ol><li>가상환경을 Activate</li><li>이미 git clone을 한 프로젝트 디렉토리가 있는 경우 git pull, 없는경우 git clone.</li><li>프로젝트 디렉토리로 들어가 설치한다.</li></ol></li><li>Install Dependency<ol><li>가상환경을 Activate</li><li>pip3로 ai_fw_utility를 설치</li></ol></li><li>Install Authentication<ol><li>pip3로 인증관련 ai_sw를 설치</li></ol></li><li>Starter Kit<ol><li>Startker Kit이 설치되어 있지 않으면 git clone, 해당 디렉토리가 있으면 git pull</li></ol></li><li>Install Nuitka<ol><li>Starterkit에서 스크립트 경로를 프로젝트 디렉토리에서 패키징 시작</li></ol></li><li>Notify Build Finish<ol><li>빌드 결과를 Slack으로 전송</li></ol></li></ul>
+<p>실패는 일부러 만들어서 테스트해봤으며 결과 메시지는 아래 처럼 된다.</p>
+<figure><img src="/assets/notion/jenkins-slack-notification/d2483d35-2a0d-49fe-a28a-9df5177f3e22.png" alt="" loading="lazy" width="1058" height="366" /></figure>
+<h2 id="block-c9058d32c860481f92ac3383fe5a5149">FileUpload</h2>
+<p>만약 파일을 전송하려 한다면 위에서 설치한 방법과는 다른식으로 진행해야 한다.</p>
+<p>아래 앱추가 → 앱 디렉터리를 누른다.</p>
+<figure><img src="/assets/notion/jenkins-slack-notification/d9060abc-b86e-4ee5-9dbe-6c708a5c61bd.png" alt="" loading="lazy" width="3810" height="616" /></figure>
+<figure><img src="/assets/notion/jenkins-slack-notification/c886d12c-3296-4e37-832d-0418f9ae93b4.png" alt="" loading="lazy" width="3868" height="526" /></figure>
+<p>그럼 아래처럼 홈페이지가 뜬다. 구축을 누르자.</p>
+<figure><img src="/assets/notion/jenkins-slack-notification/f45bcfdc-a508-46c1-b25f-27db74f6ae15.png" alt="" loading="lazy" width="3780" height="998" /></figure>
+<figure><img src="/assets/notion/jenkins-slack-notification/509ae15c-d571-4b71-a6fe-65d39b211877.png" alt="" loading="lazy" width="2148" height="1344" /></figure>
+<figure><img src="/assets/notion/jenkins-slack-notification/6f59801e-ef5b-46ac-af41-cd6f10b5703b.png" alt="" loading="lazy" width="2256" height="1274" /></figure>
+<figure><img src="/assets/notion/jenkins-slack-notification/6039a474-ef6a-4bf3-9575-f9333fba34bb.png" alt="" loading="lazy" width="2320" height="1428" /></figure>
+<p><code>YAML</code>을 선택하고 아래 내용으로 채워주자.</p>
+<pre data-lang="bash"><code class="language-bash">display_information:
+  name: Jenkins
+features:
+  bot_user:
+    display_name: Jenkins
+    always_online: true
+oauth_config:
+  scopes:
+    bot:
+      - channels:read
+      - chat:write
+      - chat:write.customize
+      - files:write
+      - reactions:write
+      - users:read
+      - users:read.email
+      - groups:read
+settings:
+  org_deploy_enabled: false
+  socket_mode_enabled: false
+  token_rotation_enabled: false</code></pre>
+<figure><img src="/assets/notion/jenkins-slack-notification/96cd546b-82b5-4162-a9eb-1773244e8b20.png" alt="" loading="lazy" width="2424" height="1632" /></figure>
+<p>[reference]</p>
+<p><a href="https://github.com/jenkinsci/slack-plugin/blob/master/README.md" target="_blank" rel="noreferrer">https://github.com/jenkinsci/slack-plugin/blob/master/README.md</a></p>
+<figure><img src="/assets/notion/jenkins-slack-notification/e4fdab24-60ea-4872-933e-432c03b4e65e.png" alt="" loading="lazy" width="2244" height="1390" /></figure>
+<figure><img src="/assets/notion/jenkins-slack-notification/e5e6aea0-8a99-4bfa-a44a-80f4e6605307.png" alt="" loading="lazy" width="2066" height="1344" /></figure>
+<p>아래 토큰은 Jenkins의 Credential을 등록할 때 써야한다. 복사해두자.</p>
+<figure><img src="/assets/notion/jenkins-slack-notification/04289411-87be-4948-9eae-30f7fb96c82b.png" alt="" loading="lazy" width="1934" height="1206" /></figure>
+<p>먼저 생성한 채널에 봇을 초대해줘야 한다. 아래 명령어로 봇을 초대해준다.</p>
+<figure><img src="/assets/notion/jenkins-slack-notification/7794a0a9-0448-4455-a357-c9f9bcd8c0d1.png" alt="" loading="lazy" width="3328" height="238" /></figure>
+<p>아래 처럼작성해주자.</p>
+<p>마찬가지로 +add 버튼을누른다. 저 채널아이디는 맴버에게는 보낼 수 없는거 같고 슬랙의 채널아이디를 넣어줘야한다.</p>
+<figure><img src="/assets/notion/jenkins-slack-notification/7c8e057d-64ea-446d-9de6-97f391fc0126.png" alt="" loading="lazy" width="2814" height="1770" /></figure>
+<figure><img src="/assets/notion/jenkins-slack-notification/21989599-1c8d-4e45-ac46-7c694769d17c.png" alt="" loading="lazy" width="3890" height="1670" /></figure>
+<p>아래 처럼 버튼을 눌러 테스트 해보자. <code>success</code> 라 뜨면 된다.</p>
+<figure><img src="/assets/notion/jenkins-slack-notification/83dc61e7-48ee-407a-9a57-9a44003c27af.png" alt="" loading="lazy" width="4140" height="1244" /></figure>
+<h4 id="block-abc3fa1a20f64c7aaba8c5af9ce41075">스크립트</h4>
+<p>주의 해야할점은 <code>slackUploadFile</code>에 스크립트에서 filePath가 있는데 env.WORKSPACE를 제외한 파일 이름을 넣어줘야 한다.</p>
+<p>파일업로드 최종 스크립트.</p>
+<details class="toggle"><summary><strong>최종 스크립트</strong></summary><div class="toggle-body"><pre data-lang="bash"><code class="language-bash">pipeline {
+    agent any
+    environment {
+        SERVER_IP = &quot;192.168.1.8&quot;
+        SERVER_USER = &quot;groupai&quot;
+        REPO_URL = 'ssh://git@192.168.1.22/git/hmlf/ai_client.git'
+        COMMON_LIB_REPO = 'ssh://git@192.168.1.22/git/hmlf/ai_fw_utility.git'
+        AUTHENTICATION_REPO = 'ssh://git@192.168.1.22/git/hmlf/ai_sw.git'
+        STARTKIT_REPO = 'ssh://git@192.168.1.22/git/hmlf/ai_starterkit.git'
+    }
+    stages {
+        stage('Notify Build Start') {
+            steps {
+                script {
+                    slackSend (channel: 'C078T1XJE57', color: 'good', message: &quot;Build STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+                }
+            }
+        }
+        // stage('Checkout') {
+        //     steps {
+        //         checkout scm: [ 
+        //             $class: 'GitSCM', 
+        //             branches: [[name: '*/master']],
+        //             userRemoteConfigs: [[credentialsId: 'service_to_git_key', url: REPO_URL]]
+        //         ]
+        //     }
+        // }
+        stage('Prepare Environment') {
+            steps {
+                script {
+                    sshagent(['jenkins_to_service_key']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                        set -e
+                        HOME_DIR=\$(echo ~${SERVER_USER})
+                        WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+                        REPO_NAME=\$(basename -s .git ${REPO_URL})
+                        VENV_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}_venv&quot;
+
+                        if [ ! -d &quot;\${WORKSPACE_DIR}&quot; ]; then
+                            echo &quot;Directory does not exist. Creating workspace directory...&quot;
+                            mkdir -p \${WORKSPACE_DIR}
+                            echo &quot;\${WORKSPACE_DIR} successfully created&quot;
+                        fi
+
+                        if [ ! -d &quot;\${VENV_DIR}&quot; ]; then
+                            echo &quot;Creating virtual environment...&quot;
+                            /usr/bin/python3.11 -m venv --system-site-packages \${VENV_DIR}
+                        fi
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        slackSend (channel: 'C078T1XJE57', color: 'danger', message: &quot;Build FAILED in stage '${env.STAGE_NAME}': Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+                    }
+                }
+            }
+        }
+        stage('Install Project') {
+            steps {
+                script {
+                    sshagent(['jenkins_to_service_key']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                        set -e
+                        HOME_DIR=\$(echo ~${SERVER_USER})
+                        WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+                        REPO_NAME=\$(basename -s .git ${REPO_URL})
+                        PROJECT_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}&quot;
+                        VENV_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}_venv&quot;
+
+                        source \${VENV_DIR}/bin/activate
+                        pip3 install setuptools wheel
+
+                        if [ ! -d &quot;\${PROJECT_DIR}&quot; ]; then
+                            echo &quot;Project directory does not exist. Cloning repository...&quot;
+                            cd \${WORKSPACE_DIR}
+                            git clone ${REPO_URL}
+                            cd \${PROJECT_DIR}
+                            pip3 install ./
+                        else
+                            echo &quot;Project directory exists. Pulling latest changes...&quot;
+                            cd \${PROJECT_DIR}
+                            git pull
+                            pip3 uninstall \${REPO_NAME} -y || true
+                            pip3 install ./
+                        fi
+                        deactivate
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        slackSend (channel: 'C078T1XJE57', color: 'danger', message: &quot;Build FAILED in stage '${env.STAGE_NAME}': Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+                    }
+                }
+            }
+        }
+        stage('Install Dependency') {
+            steps {
+                script {
+                    sshagent(['jenkins_to_service_key']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                        set -e
+                        HOME_DIR=\$(echo ~${SERVER_USER})
+                        WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+                        REPO_NAME=\$(basename -s .git ${REPO_URL})
+                        VENV_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}_venv&quot;
+                        
+                        source \${VENV_DIR}/bin/activate
+                        pip3 install git+${COMMON_LIB_REPO}
+                        deactivate
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        slackSend (channel: 'C078T1XJE57', color: 'danger', message: &quot;Build FAILED in stage '${env.STAGE_NAME}': Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+                    }
+                }
+            }
+        }
+        stage('Install Authentication') {
+            steps {
+                script {
+                    sshagent(['jenkins_to_service_key']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                        set -e
+                        HOME_DIR=\$(echo ~${SERVER_USER})
+                        WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+                        REPO_NAME=\$(basename -s .git ${REPO_URL})
+                        VENV_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}_venv&quot;
+                        
+                        source \${VENV_DIR}/bin/activate
+                        pip3 install git+${AUTHENTICATION_REPO}
+                        deactivate
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        slackSend (channel: 'C078T1XJE57', color: 'danger', message: &quot;Build FAILED in stage '${env.STAGE_NAME}': Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+                    }
+                }
+            }
+        }
+        stage('Unit Test') {
+            steps {
+                script {
+                    sshagent(['jenkins_to_service_key']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                        set -e
+                        HOME_DIR=\$(echo ~${SERVER_USER})
+                        WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+                        REPO_NAME=\$(basename -s .git ${REPO_URL})
+                        VENV_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}_venv&quot;
+                        PROJECT_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}&quot;
+                        source \${VENV_DIR}/bin/activate
+                        cd \${PROJECT_DIR}
+                        pip3 install pytest
+                        pip3 install pytest-mock
+                        pip3 install pytest-html
+                        pytest --html=\${REPO_NAME}_report.html --self-contained-html
+                        deactivate
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+            post {
+                always {
+                    sshagent(['jenkins_to_service_key']) {
+                        script {
+                            def HOME_DIR = sh(script: &quot;ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} 'echo ~${SERVER_USER}'&quot;, returnStdout: true).trim()
+                            def WORKSPACE_DIR = &quot;${HOME_DIR}/workspace&quot;
+                            def REPO_NAME = sh(script: &quot;basename -s .git ${REPO_URL}&quot;, returnStdout: true).trim()
+                            def REMOTE_FILE_PATH = &quot;${WORKSPACE_DIR}/${REPO_NAME}/${REPO_NAME}_report.html&quot;
+                            def LOCAL_FILE_PATH = &quot;${env.WORKSPACE}/${REPO_NAME}_report.html&quot;
+
+                            echo &quot;HOME_DIR: ${HOME_DIR}&quot;
+                            echo &quot;WORKSPACE_DIR: ${WORKSPACE_DIR}&quot;
+                            echo &quot;REPO_NAME: ${REPO_NAME}&quot;
+                            echo &quot;REMOTE_FILE_PATH: ${REMOTE_FILE_PATH}&quot;
+                            echo &quot;LOCAL_FILE_PATH: ${LOCAL_FILE_PATH}&quot;
+                            
+                            sh &quot;scp -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP}:${REMOTE_FILE_PATH} ${LOCAL_FILE_PATH}&quot;
+
+                            slackUploadFile (channel: 'C078T1XJE57',
+                                            filePath: &quot;${REPO_NAME}_report.html&quot;,
+                                            initialComment: &quot;Unit Test Report for Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+                        }
+                    }
+                }
+            }
+        }
+        stage('Clone StartKit') {
+            steps {
+                script {
+                    sshagent(['jenkins_to_service_key']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                        set -e
+                        HOME_DIR=\$(echo ~${SERVER_USER})
+                        WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+                        STARTERKIT_REPO_NAME=\$(basename -s .git ${STARTKIT_REPO})
+                        STARTERKIT_DIR=&quot;\${WORKSPACE_DIR}/\${STARTERKIT_REPO_NAME}&quot;
+
+                        if [ ! -d &quot;\${STARTERKIT_DIR}&quot; ]; then
+                            echo &quot;Starter Kit does not exist. Cloning repository ...&quot;
+                            cd \${WORKSPACE_DIR}
+                            git clone ${STARTKIT_REPO}
+                        else
+                            echo &quot;Starter Kit exists. Pulling latest changes...&quot;
+                            cd \${STARTERKIT_DIR}
+                            git pull
+                        fi
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        slackSend (channel: 'C078T1XJE57', color: 'danger', message: &quot;Build FAILED in stage '${env.STAGE_NAME}': Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+                    }
+                }
+            }
+        }
+        stage('Install Nuitka') {
+            steps {
+                script {
+                    sshagent(['jenkins_to_service_key']) {
+                        sh &quot;&quot;&quot;
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                        set -e
+                        HOME_DIR=\$(echo ~${SERVER_USER})
+                        WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+                        REPO_NAME=\$(basename -s .git ${REPO_URL})
+                        VENV_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}_venv&quot;
+
+                        source \${VENV_DIR}/bin/activate
+                        pip3 install nuitka==2.3.2
+                        deactivate
+                        '
+                        &quot;&quot;&quot;
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        slackSend (channel: 'C078T1XJE57', color: 'danger', message: &quot;Build FAILED in stage '${env.STAGE_NAME}': Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+                    }
+                }
+            }
+        }
+    //     stage('Run Nuitka Script') {
+    //         steps {
+    //             script {
+    //                 sshagent(['jenkins_to_service_key']) {
+    //                     sh &quot;&quot;&quot;
+    //                     ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+    //                     set -e
+    //                     HOME_DIR=\$(echo ~${SERVER_USER})
+    //                     WORKSPACE_DIR=&quot;\${HOME_DIR}/workspace&quot;
+    //                     REPO_NAME=\$(basename -s .git ${REPO_URL})
+    //                     VENV_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}_venv&quot;
+    //                     PROJECT_DIR=&quot;\${WORKSPACE_DIR}/\${REPO_NAME}&quot;
+    //                     STARTERKIT_REPO_NAME=\$(basename -s .git ${STARTKIT_REPO})
+
+    //                     source \${VENV_DIR}/bin/activate
+                        
+    //                     NUITKA_SCRIPT=&quot;\${WORKSPACE_DIR}/\${STARTERKIT_REPO_NAME}/packaging/nuitka/\${REPO_NAME}.sh&quot;
+                        
+    //                     cd \${PROJECT_DIR}
+    //                     bash \${NUITKA_SCRIPT}
+
+    //                     echo &quot;\${REPO_NAME} Packing Finished!&quot;
+    //                     deactivate
+    //                     '
+    //                     &quot;&quot;&quot;
+    //                 }
+    //             }
+    //         }
+    //         post {
+    //             failure {
+    //                 script {
+    //                     slackSend (channel: 'C078T1XJE57', color: 'danger', message: &quot;Build FAILED in stage '${env.STAGE_NAME}': Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+    //                 }
+    //             }
+    //         }
+    //     }
+    }
+    post {
+        success {
+            slackSend (channel: 'C078T1XJE57', color: 'good', message: &quot;Build SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+        }
+        fixed {
+            slackSend (channel: 'C078T1XJE57', color: 'good', message: &quot;Build BACK TO NORMAL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})&quot;)
+        }
+    }
+}
+</code></pre></div></details></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/post.js?v=13" type="module"></script>
+    <script src="/assets/js/palette.js?v=8" defer></script>
+  </body>
+</html>

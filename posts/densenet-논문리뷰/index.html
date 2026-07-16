@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>DenseNet 논문리뷰 — Woojae Joo</title>
+    <meta name="post-slug" content="densenet-논문리뷰" />
+    <meta name="description" content="서론 Gao Huang, Zhuang Liu, Laurens van der Maaten, Kilian Q. Weinberger; Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2017, pp. 47" />
+    <link rel="canonical" href="https://ursonice.github.io/posts/densenet-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="DenseNet 논문리뷰" />
+    <meta property="og:description" content="서론 Gao Huang, Zhuang Liu, Laurens van der Maaten, Kilian Q. Weinberger; Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2017, pp. 47" />
+    <meta property="og:url" content="https://ursonice.github.io/posts/densenet-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=DenseNet%20%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0&amp;cat=AI%2F%20Deep%20Learning" />
+    <meta property="article:published_time" content="2023-06-22T06:39:00.000Z" />
+    <meta property="article:modified_time" content="2024-11-21T03:55:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="DenseNet 논문리뷰" />
+    <meta name="twitter:description" content="서론 Gao Huang, Zhuang Liu, Laurens van der Maaten, Kilian Q. Weinberger; Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2017, pp. 47" />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=DenseNet%20%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0&amp;cat=AI%2F%20Deep%20Learning" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"DenseNet 논문리뷰","description":"서론 Gao Huang, Zhuang Liu, Laurens van der Maaten, Kilian Q. Weinberger; Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2017, pp. 47","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=DenseNet%20%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0&cat=AI%2F%20Deep%20Learning","datePublished":"2023-06-22T06:39:00.000Z","dateModified":"2024-11-21T03:55:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/densenet-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Deep Learning","item":"https://ursonice.github.io/topics/ai-deep-learning/"},{"@type":"ListItem","position":3,"name":"DenseNet 논문리뷰","item":"https://ursonice.github.io/posts/densenet-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/ai-deep-learning/">AI/ Deep Learning</a>
+    </nav>
+    <h1>DenseNet 논문리뷰</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2023년 6월 22일</span><span class="dot"></span><span>수정 2024년 11월 21일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-118ffe4bf9034f2d981af8fc36c92f84">서론</h2>
+<ul><li>Gao Huang, Zhuang Liu, Laurens van der Maaten, Kilian Q. Weinberger; Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2017, pp. 4700-4708 <code>Densely Connected Convolutional Networks</code></li><li>논문에서 제안하는 <code>Dense connection(concatenating)</code>을 중심으로 살펴본다.</li></ul>
+<h2 id="block-8fae9d3bd70449528eec22015e207422">목차</h2>
+<ol><li><a href="#block-c3199a9c0f1a48fcb28d41f527453ffa">Abstract</a> </li><li><a href="#block-829d3d767e284d12a31e30e9e5faea3e">Introduction</a> <ol><li><a href="#block-503858b3d8024e8b87f1f7dfea6410f1">background Research</a> </li><li><a href="#block-08fdf22e20d545d4aaf593a4fb5bfe2e">Recent Research</a> </li><li><a href="#block-3362116d03bb4642980deaf258eb3aa6">Propose</a> </li><li><a href="#block-c4b9a09189d24de9a7d8da072c773d77">Related Paper</a> </li></ol></li><li><a href="#block-636c3f5027144f2a8ac4af73887f9cc8">Related Work</a> </li><li><a href="#block-cb9b80455a8d4dcbade30d225b8e4416">DenseNet</a> <ol><li><a href="#block-f71940da75364ca7a7aace646337a9d3">ResNets.</a> </li><li><a href="#block-a7dd1a27e01f48beb4d945f1e0079ace">Dense connectivity.</a> </li><li><a href="#block-58263a74718d4b3e9c4d39a2c6b1e505">Composite function.</a> </li><li><a href="#block-a27616c1c499458381a05a38cab038d2">Pooling layers.</a> </li><li><a href="#block-18b68021c82a4fd380d2fbd2ee03a02f">Growth rate.</a> </li><li><a href="#block-697f774e469640a78a363b057fbc22b7">Bottleneck layers.</a> </li><li><a href="#block-8d6e9119566e4779b9f1d3b79bb2ed6f">Compression.</a> </li><li><a href="#block-cca64d02891e44a89317efee1eaf9213">Implementatoin Details.</a> </li></ol></li><li><a href="#block-11a1541a0913462da31f99d793c223df">Experiments</a> <ol><li><a href="#block-5e901067d8304c61b3dda201f3bcf533">Datasets</a> <ol><li><a href="#block-56c0e7606ae84e8a890c7c4a0ac17614">CIFAR.</a> </li><li><a href="#block-5bd72207b2404b8687c15a7d1be63784">SVHN. </a> </li><li><a href="#block-7949236d23f241ba83c6a10782f166f3">ImageNet.</a> </li></ol></li><li><a href="#block-027a2e2a549a4a5c8484e2242711aa1f">Training</a> </li><li><a href="#block-72095e03a23b4b9b9249b1723d763192">Classification Results on CIFAR and SVHN</a> <ol><li><a href="#block-fb781897a65f404d947e1e17d86d9f74">Accuracy.</a> </li><li><a href="#block-665cf410688d4395a73a6b48f02f00b9">Capacity</a> </li><li><a href="#block-2c26f09f6055402ba6ffe8f9397e7677">Parameter Efficiency.</a> </li><li><a href="#block-37d5231c738b476696cb657be2ce760e">Overfitting.</a> </li></ol></li><li><a href="#block-75342b5c46374adc9f97d176fd6adc99">Classification Results on ImageNet</a> </li></ol></li><li><a href="#block-39576580b42f48c29eedab93bb3c62ea">Discussion</a> <ol><li><a href="#block-a1816cbb322541d0871945ef86fe192e">Model compactness. </a> </li><li><a href="#block-e859175b059e4cf88cbd3cdad6da68de">Implicit Deep Supervision.</a> </li><li><a href="#block-ba4f8e6167fc4d38b8560aff1c1968ee">Stochastic vs. deterministic connection. </a> </li><li><a href="#block-b1c839a3d146440e92267b21df18885b">Feature Reuse.</a> </li></ol></li><li><a href="#block-de40de631a984657bbc71db7305ab01d">Conclusion</a> </li></ol>
+<h2 id="block-c3199a9c0f1a48fcb28d41f527453ffa">Abstract</h2>
+<ul><li>Recent work has shown that convolutional networks can be substantially deeper, more accurate, and efficient to train if they contain shorter connections between layers close to the input and those close to the output.</li><li>최근 연구에 따르면 Input, output layer에  short connection을 Convolution Networks에 사용하면 상당히 깊고, 정확하며 훈련하기 효율적이다. </li><li>In this paper, we embrace this observation and introduce the Dense Convolutional Network (DenseNet), which connects each layer to every other layer in a feed-forward fashion.</li><li>본 논문에서는 최근 연구에 따라 feedforward 방식에서 각 layer들이 모든 다른 layer와 connection를 두는 DenseNet을 소개한다.</li><li>Whereas traditional convolutional networks with L layers have L connections—one between each layer and its subsequent layer-our network has L(L+1)2 direct connections.</li><li>이제까지는 layer가 그 다음 하위 레이어와의 연결 구조를 갖는 CNN과는 달리 DenseNet은 \(\frac{L(L+1)}{2}\) 의 direct connection을 갖는 새로운 구조다.</li><li>For each layer, the feature-maps of all preceding layers are used as inputs, and its own feature-maps are used as inputs into all subsequent layers.</li><li>앞 layer에서 얻은 모든 feature map은 계속해서 뒤 layer의 입력으로 입력되는 구조다.</li><li>DenseNets have several compelling advantages: they alleviate the vanishing-gradient problem, strengthen feature propagation, encourage feature reuse, and substantially reduce the number of parameters.</li><li>DenseNet은 몇 가지 강력한 이점이 있다.<ol><li>vanishing gradient를 방지</li><li>feature propagation을 강화.</li><li>feature의 재사용성.</li><li>파라미터 수 감소.</li></ol></li><li>We evaluate our proposed architecture on four highly competitive object recognition benchmark tasks (CIFAR-10, CIFAR-100, SVHN, and ImageNet). DenseNets obtain significant improvements over the state-of-the-art on most of them, whilst requiring less computation to achieve high performance.</li><li>4개의 대표적인 Dataset(cifar-10, cifar-100, SVHN, ImageNet)에서 모두 좋은 성능을 거두었으며, 당시 state-of-the-art의 성능이면서도 엄청난 계산 복잡도를 낮추었다.</li></ul>
+<h2 id="block-829d3d767e284d12a31e30e9e5faea3e">Introduction</h2>
+<h4 id="block-503858b3d8024e8b87f1f7dfea6410f1">background Research</h4>
+<ul><li>As CNNs become increasingly deep, a new research problem emerges: as information about the input or gradient passes through many layers, it can vanish and “wash out” by the time it reaches the end (or beginning) of the network.</li><li>CNN이 점점 더 깊어짐에 따라 Input 또는 gradient가 layer를 거칠수록 정보를 잃어버리는 문제가 발생한다.</li></ul>
+<h4 id="block-08fdf22e20d545d4aaf593a4fb5bfe2e">Recent Research</h4>
+<ul><li>Many recent publications address this or related problems. ResNets and Highway Networks bypass signal from one layer to the next via identity connections.</li><li>이러한 문제를 해결하기 위해 ResNet과 Highway Networks는 Residual connecntion을 사용한다.</li><li>Stochastic depth shortens ResNets by randomly dropping layers during training to allow better information and gradient flow.</li><li>Stochastic depth를 ResNet의 깊이를 줄이는 방식으로 layer를 무작위로 생략함으로써 Input 정보와 gradient 흐름을 개선한다.</li><li>FractalNets repeatedly combine several parallel layer sequences with different number of convolutional blocks to obtain a large nominal depth, while maintaining many short paths in the network. Although these different approaches vary in network topology and training procedure, they all share a key characteristic: they create short paths from early layers to later layers.</li><li>FractalNets은 Network의 깊이를 늘리기 위해 여러 short connection을 추가하며 layer들이 병렬로 구성된 convolution block을 사용한다. 이러한 접근 방식은 앞 단의 layer정보를 잘 보존할 수 있다.</li></ul>
+<h4 id="block-3362116d03bb4642980deaf258eb3aa6">Propose</h4>
+<ul><li>In this paper, we propose an architecture that distills this insight into a simple connectivity pattern: to ensure maximum information flow between layers in the network, we connect all layers (with matching feature-map sizes) directly with each other.</li><li>이 논문에서는, 네트워크 내의 layer들에 대한 정보를 최대한 보존하기 위해, 모든 layer들을 서로 간단하게 연결 시키는 구조를 갖는 아키텍처를 제안한다.</li></ul>
+<h4 id="block-c4b9a09189d24de9a7d8da072c773d77">Related Paper</h4>
+<ul><li>Kaiming He, et al., <code>&quot;Deep Residual Learning for Image Recognition&quot;</code></li></ul>
+<h2 id="block-636c3f5027144f2a8ac4af73887f9cc8">Related Work</h2>
+<ul><li>DenseNet과 비슷한 구조를 갖는 Highway Network, GoogleNet, ResNet, FractalNet 등이 네트워크 구조가 갖는 특징을 가지고 성능을 향상시켰는지에 대해서 설명한다.</li><li>위 부분은 생략하고 넘어가며 아래는 DeseNet위주로 정리하였다.</li><li>Instead of drawing representational power from extremely deep or wide architectures, DenseNets exploit the potential of the network through feature reuse, yielding condensed models that are easy to train and highly parameter efficient. </li><li>DenseNets는 앞에서 설명한 깊거나 넓은 구조를 이용해 성능을 높이는 모델들과는 달리 feature 재사용을 통해 parameter의 효율성을 높이고 훈련하기 쉬운 모델을 생성한다.</li><li>Concatenating feature-maps learned by different layers increases variation in the input of subsequent layers and improves efficiency. </li><li>서로 다른 layer들에 의해 학습된 feature map들을 concat함으로써, layer들의 Input에 변화가 증가하고, 효율성 또한 향상된다.</li><li>This constitutes a major difference between DenseNets and ResNets. Compared to Inception networks, which also concatenate features from different layers, DenseNets are simpler and more efficient.</li><li>ResNet뿐만 아니라, 다른 Layer들을 concatenate하는 Inception Network의 경우와 비교했을 때에도 DenseNet은 더 단순하고 효율적인 구조를 갖는다.</li></ul>
+<h2 id="block-cb9b80455a8d4dcbade30d225b8e4416">DenseNet</h2>
+<ul><li>Consider a single image \(x_0\) that is passed through a convolutional network. </li><li>단일 이미지 \(x_0\)가 convolution network를 통과한다고 하자</li><li>The network comprises L layers, each of which implements a non-linear transformation \(H_l(\cdot)\), where indexes the layer. </li><li>Network는 L개의 layer로 구성되어있고 각 Layer에서는 non-linear transformation인  \(H_l(\cdot)\)를 수행한다(\(l\)은 layer의 index를 의미)</li><li> \(H_l(\cdot)\) can be a composite function of operations such as Batch Normalization (BN), rectified linear units (ReLU), Pooling, or Convolution (Conv). </li><li> \(H_l(\cdot)\)은 BN, ReLU, Pooling, Convolution 등과 같은 함수로 이뤄져있다.</li><li>We denote the output of the \(l^{th}\) layer as \(x_l\).</li><li>\(l\)번째 Layer의 결과를 \(x_l\) 이라 하자.</li></ul>
+<h3 id="block-f71940da75364ca7a7aace646337a9d3">ResNets.</h3>
+<ul><li>Traditional convolutional feed-forward networks connect the output of the \(l^{th}\)layer as input to the\((l+1)^{th}\), which gives rise to the following layer transition: \(x_l =H_l(x_{l-1}).\) </li><li>기존의 Convolutional feed-forward network는 \(l\)번째 Layer의 output을 그 다음 Layer인 \((l+1)\)번째 Layer의 Input으로 연결한다. 식으로 나타내면 다음과 같다: \(x_l =H_l(x_{l-1}).\) </li><li>ResNets add a skip-connection that bypasses the non-linear transformations with an identity function:</li><li>ResNet은 identity function을 통해 non-linear transformation을 건너뛰는 skip connection을 추가한다 :</li></ul>
+<div class="math-block">\[\begin{equation} x_l = H_l(x_{l-1})+x_{l-1} \end{equation} \]</div>
+<ul><li>An advantage of ResNets is that the gradient can flow directly through the identity function from later layers to the earlier layers.</li><li>ResNet의 장점은 identity function을 통해 이후의 Layer에서 이전의 Layer로 gradient가 직접적으로 흐를 수 있다는 점이다.</li><li>However, the identity function and the output of \(H_l\) are combined by summation, which may impede the information flow in the network.</li><li> 하지만 identity function과 \(H_l\)의 output이 summation을 통해 결합되면서 네트워크의 information flow를 방해할 수도 있다.</li></ul>
+<h3 id="block-a7dd1a27e01f48beb4d945f1e0079ace">Dense connectivity.</h3>
+<ul><li>To further improve the information flow between layers we propose a different connectivity pattern: we introduce direct connections from any layer to all subsequent layers.</li><li>Layer들 간의 information flow를 향상시키기 위해, 본 논문에서는 다른 connectivity pattern을 제안했다: 모든 Layer를 연결하는 방식이다.</li><li>Figure 1 illustrates the layout of the resulting DenseNet schematically.</li><li>Figure 1은 Densenet의 구조를 보여준다.</li></ul>
+<figure><img src="/assets/notion/densenet-논문리뷰/b707eca9-ed95-4919-9dfb-8a8b757b846f.png" alt="" loading="lazy" width="1027" height="837" /></figure>
+<ul><li>Consequently, the \(l^{th}\) layer receives the feature-maps of all preceding layers, \(x_0, ..., x_{l-1}\) as input:</li><li>결과적으로, \(l\)번째 Layer는 이전의 모든 Layer들의 feature map(\(x_0, ..., x_{l-1}\))을 input으로 받게 된다 :</li></ul>
+<div class="math-block">\[\begin{equation} x_l = H_l([x_0, x_1,..., x_{l-1}]) \end{equation}\]</div>
+<ul><li>where \([x_0, x_1, ... , x_{l-1}]\) refers to the concatenation of the feature-maps produced in layers 0, \(0, ...\;,l-1\). </li><li>위 식에서 \([x_0, x_1, ... , x_{l-1}]\)은 각 Layer에서 만들어진 feature map들의 concatenation이다.</li><li>Because of its dense connectivity we refer to this network architecture as Dense Convolutional Network (DenseNet).</li><li>이러한 dense connectivity 때문에, 이러한 구조를 DenseNet이라 명명했다.</li><li>For ease of implementation, we concatenate the multiple inputs of \(H_l(\cdot)\) in eq. (2) into a single tensor.</li><li>구현의 용의성을 위해, 여러 inputs을 \(H_l(\cdot)\) 통해 단일 tensor로 concatenate 한다.</li></ul>
+<h3 id="block-58263a74718d4b3e9c4d39a2c6b1e505">Composite function.</h3>
+<ul><li>Motivated by [12], we define \(H_l(\cdot)\) as a composite function of three consecutive operations:
+batch normalization (BN) [14], followed by a rectified linear unit (ReLU) [6] and a 3 × 3 convolution (Conv).</li><li>다른 연구에서 영감을 받아, \(H_l(\cdot)\)을 다음 3가지 operation의 합성함수로 정의했다: BN, ReLU, 3 x 3Convolution.</li></ul>
+<h3 id="block-a27616c1c499458381a05a38cab038d2">Pooling layers.</h3>
+<ul><li>The concatenation operation used in Eq. (2) is not viable when the size of feature-maps changes.</li><li>위의 식(2)에서 사용된 concatenation 연산은<strong> </strong>feature map의 사이즈가 바뀌면 사용할 수 없다. </li><li>However, an essential part of convolutional networks is down-sampling layers that change the size of feature-maps.</li><li>하지만, Convolutional network의 down-sampling Layer를 통해 feature map의 사이즈를 바꿀 수 있다.</li><li>To facilitate down-sampling in our architecture we divide the network into multiple densely connected <em>dense blocks</em>; see Figure 2. </li><li>down-sampling을 용이하게 하기 위해, 네트워크를 서로 밀집하게 연결된 여러개의 <em>dense block</em>으로 나누었다. Figure 2를 봐보자.</li><li>We refer to layers between blocks as <em>transition layers</em>, which do convolution and pooling.</li><li>각 Block 사이에서 Convolution과 Pooling을 수행하는 Layer를 <em>Transition Layer</em>라고 한다.</li></ul>
+<figure><img src="/assets/notion/densenet-논문리뷰/0578dc1d-7b2f-49e5-86c8-b8b4fb6c1d30.png" alt="" loading="lazy" width="2027" height="436" /></figure>
+<ul><li>The transition layers used in our experiments consist of a batch normalization layer and an 1×1 convolutional layer followed by a 2×2 average pooling layer.</li><li>Transition Layer는 Batch Normalization Layer, 1 x 1 Convolutional Layer, 그리고 2 x 2 Pooling Layer로 구성되어있다.</li></ul>
+<h3 id="block-18b68021c82a4fd380d2fbd2ee03a02f">Growth rate.</h3>
+<ul><li>If each function \(H_l\) produces \(k\) featuremaps, it follows that the \(l^{th}\) layer has \(k_0 + k\times(l-1)\) input feature-maps, where \(k_0\) is the number of channels in the input layer.</li><li>만약 각각의 함수 \(H_l\)이 \(k\)개의 feature map을 만든다고 하면, \(l\)번째 Layer의 feature map의 개수는 \(k_0 + k\times(l-1)\) 개가 될 것이다. (\(k_0\)는 Input layer의 채널 수)<ul><li>Input layer인 \(H_1\)에서 \(k_0\)개의 feature map이 생긴다</li><li>\(H_1\)에서 \(k_0\)개와 \(H_2\)에서 \(k\)개의 feature map이 생김으로 총 \(k_0+k\)개가 된다.  </li><li>\(H_3\)에서는 \(k\)개와 \(H_1\)와 \(H_2\)에서 만들어진 \(k_0+k\)개의 feature map이 생김으로 총 \(k_0+2k\)개가 된다.  </li><li>즉,  \(H_l\) 에서는 \(k_0+(l-1)k\)개 feature map을 생성한다.</li></ul></li><li>An important difference between DenseNet and existing network architectures is that DenseNet can have very narrow layers, \(e.g., k=12.\)</li><li>DenseNet과 기존 네트워크 구조들 간의 차이점은, DenseNet이 비교적 좁은 Layer를 가졌다는 것이다. \((k=12)\)</li><li>We refer to the hyperparameter k as the growth rate of the network. </li><li>여기서 이 \(k\)를 네트워크의<strong> </strong><em>Growth Rate</em>라고 한다.<ul><li>Growth Rate: 각 Layer에서 몇 개의 feature map을 생성하는 피처 맵의 수를 의미</li></ul></li><li>We show in Section 4 that a relatively small growth rate is sufficient to obtain state-of-the-art results on the datasets that we tested on.</li><li>비교적 작은 growth rate로 아래 table2는 각 dataset에 대해 SOTA를 달성하기에 충분하다는 것을 보여준다.</li></ul>
+<figure><img src="/assets/notion/densenet-논문리뷰/da451b52-be35-4373-8fee-d1d78019c8b6.png" alt="" loading="lazy" width="1478" height="979" /></figure>
+<ul><li>One explanation for this is that each layer has access to all the preceding feature-maps in its block and, therefore, to the network’s “collective knowledge”.</li><li>SOTA인 이유에 대해서 설명하면 각 layer들이 이전 block들에 대해 feature-maps에 접근이 가능함으로 이를 네트워크의 “collective knowledge”라고 한다.</li><li>One can view the feature-maps as the global state of the network.</li><li>feature-map을 통해 network가 어떻게 학습되고 있는지를 볼 수 있다.</li><li>Each layer adds k feature-maps of its own to this state.</li><li>각 layer들은 k개의 feature-map들을 현재 state에 추가한다.</li><li>각 레이어가 k(growth rate)만큼의 자체 피처 맵을 현재 상태(이전 레이어들의 출력)에 추가한다는 의미다</li><li>쉽게 말하면 각 레이어가 출력하는 피처 맵이 이전 레이어의 출력과 결합(concatenated)되어 다음 레이어의 입력으로 사용된다는 것을 나타낸다.</li><li>The growth rate regulates how much new information each layer contributes to the global state.</li><li>global state(모든 층에서 공유되는 정보 상태=feature map)에 기여하는 새로운 정보의 양(feature map)은 growth rate가 조절한다.</li><li>The global state, once written, can be accessed from everywhere within the network and, unlike in traditional network architectures, there is no need to replicate it from layer to layer.</li><li>한번 global state에 입력된 정보는 네트워크의 어디에서나 접근이 가능하며, 전통적인 네트워크 구조와 달리 각 층에서 그 정보를 복제할 필요가 없다.</li></ul>
+<h3 id="block-697f774e469640a78a363b057fbc22b7">Bottleneck layers.</h3>
+<ul><li>Although each layer only produces \(k\) output feature-maps, it typically has many more inputs.</li><li>각 Layer들은 k개의 output feature map을 생성하지만, 일반적으로 그에 비해 더 많은 input이 필요하다.</li><li>It has been noted in ResNet, Inception Net that a 1×1 convolution can be introduced as bottleneck layer before each 3×3 convolution to reduce the number of input feature-maps, and thus to improve computational efficiency.</li><li>ResNet, Incepction Net에서 언급했듯이 bottleneck 구조는 1x1convoltion을 통해<strong> </strong>3x3convolution에서의 input을 줄임으로서 computational efficiency를 높일 수 있다.</li><li>We find this design especially effective for DenseNet and we refer to our network with such a bottleneck layer, i.e., to the BN-ReLU-Conv(1×1)-BN-ReLU-Conv(3×3) version of \(H_l\), as DenseNet-B.</li><li>우리는 이러한 설계가 DesNet에서도 효과적인 것을 발견했고 DenseNet에 이러한 Bottleneck 구조를 사용했다.</li><li>In our experiments, we let each 1×1 convolution produce 4\(k\) feature-maps.</li><li>실험에서 우리는 각 1x1convolution에서 4k의 featuremap을 생성한다.</li></ul>
+<h3 id="block-8d6e9119566e4779b9f1d3b79bb2ed6f">Compression.</h3>
+<ul><li>To further improve model compactness, we can reduce the number of feature-maps at transition layers.</li><li>모델의 compactness(간결함?)을 향상시키기 위해, <a href="#block-63611a2f350c416b87d49f1e4c4d2e74">transition Layer</a>에서 feature map의 개수를 줄일 수 있다.</li><li>If a dense block contains \(m\) feature-maps, we let the following transition layer generate \([\theta m]\)  output featuremaps, where \(0&lt;\theta \leq 1\) is referred to as the compression factor. </li><li>만약 dense block이 m개의 feature map을 가지고 있다면, 그 뒤의 transition Layer는 θm개의 output feature map을 반환할 것이다. 여기서, θ가 바로 <em>compression factor</em>이다. (단, 0 &lt; θ &lt;= 1)</li><li>We refer the DenseNet with \(\theta &lt;1\) as DenseNet-C, and we set \(\theta = 0.5\) in our experiment.</li><li>만약 θ &lt; 1 인 경우, 이러한 DenseNet은 DenseNet-C라고 하며, 본 논문에서는 θ = 0.5 로 설정했다.</li><li>When both the bottleneck and transition layers with \(\theta &lt;1\) are used, we refer to our model as DenseNet-BC.</li><li>bottleneck, transition Layer 모두 θ &lt; 1 인 경우, DenseNet-BC라고 명명했다.</li></ul>
+<h3 id="block-cca64d02891e44a89317efee1eaf9213">Implementatoin Details.</h3>
+<ul><li>On all datasets except ImageNet, the DenseNet used in our experiments has three dense blocks that each has an equal number of layers.</li><li>ImageNet dataset을 제외한 dataset으로 학습된 DenseNet은 모두 동일한 개수의 Layer를 가진 3개의 Dense Block으로 구성된다.</li><li>Before entering the first dense block, a convolution with 16 (or twice the growth rate for DenseNet-BC) output channels is performed on the input images. </li><li>첫 번째 Dense Block을 들어가기 전, input image에 대해 convolution으로 16개의 output channel을 갖도록 수행했다.(또는 DenseNet-BC의 경우 growth rate를 2배로 한다)</li><li>For convolutional layers with kernel size 3×3, each side of the inputs is zero-padded by one pixel to keep the feature-map size fixed. </li><li>feature map size를 유지하기 위해서, kernel_size가 3x3인 convolution에서의 input에 zero-padding을 1로 설정 했다.</li><li>We use 1×1convolution followed by 2×2 average pooling as transition layers between two contiguous dense blocks. </li><li>인접한 두 Dense Block 사이의 Transition Layer로는 1x1 Convolution, 2x2 average pooling을 사용했다.</li><li>At the end of the last dense block, a global average pooling is performed and then a softmax classifier is attached.</li><li>마지막 Dense Block의 끝에는 global average pooling, softmax classifier가 실행된다.</li><li>The feature-map sizes in the three dense blocks are 32x32, 16x6, and 8x8, respectively.</li><li>3개의 Dense Block의 feature map size는 각각 32x32, 16x16, 8x8이다.</li><li>We experiment with the basic DenseNet structure with configurations {L = 40, k = 12}, {L =100, k = 12} and {L = 100, k = 24}. </li><li>DenseNet 구조의 총 층 수가 40, 100, 100이고 growth rate가 각각 12, 12, 24인 세 가지 설정으로 실험했다.</li><li>For DenseNetBC, the networks with configurations {L = 100, k = 12}, {L= 250, k= 24} and {L= 190, k= 40} are evaluated.</li><li>DenseNetBC 구조의 총 층 수가 100, 250, 190이고 growth rate가 각각 12, 24, 40인 세 가지 설정으로 평가했다.</li><li>In our experiments on ImageNet, we use a DenseNet-BC structure with 4 dense blocks on 224×224 input images.</li><li>ImageNet dataset에 대한 DenseNet은 DenseNet-BC를 사용했고 224x224 image를 input으로 하며, Dense Block의 개수는 4개이다.</li><li>The initial convolution layer comprises convolutions of size 7×7 with stride 2; the number of feature-maps in all other layers also follow from setting k.</li><li>초기 convolution layer는 2k개의 featuremap과 7x7의 kernel_size를 갖고 stride=2로 설정한다 그리고 다른 모든 layer의 feature map또한 k로 설정한다.</li><li>The exact network configurations we used on ImageNet are shown in Table 1.</li><li>자세한 네트워크 구성은 아래 Table1을 참고한다.</li></ul>
+<h2 id="block-11a1541a0913462da31f99d793c223df">Experiments</h2>
+<ul><li>We empirically demonstrate DenseNet’s effectiveness on several benchmark datasets and compare with state-of-theart architectures, especially with ResNet and its variants.</li><li>DenseNet의 효과를 입증하기 위해 여러 데이터셋에 대해 실험을 진행했으며, ResNet과 같은 최신 성능을 갖는 모델과 비교했다.</li></ul>
+<h3 id="block-5e901067d8304c61b3dda201f3bcf533">Datasets</h3>
+<h4 id="block-56c0e7606ae84e8a890c7c4a0ac17614">CIFAR.</h4>
+<p>The two CIFAR datasets consist of colored natural images with 32×32 pixels. </p>
+<ul><li>두 개의 CIFAR dataset(32 x 32 pixel의 color 이미지)을 사용했다. </li></ul>
+<p>CIFAR-10 (C10) consists of images drawn from 10 and CIFAR-100 (C100) from 100 classes.</p>
+<ul><li>CIFAR-10(C10)은 10개의 class로 구성되어 있으며 CIFAR-100(C100)은 100개로 구성되어있다.</li></ul>
+<p>The training and test sets contain 50,000 and 10,000 images respectively, and we hold out 5,000 training images as a validation set.</p>
+<ul><li>training, test set은 각각 50,000, 10,000개이며, training set 중 5,000개는 validation에 사용했다.</li></ul>
+<p>We adopt a standard data augmentation scheme (mirroring/shifting) that is widely used for these two datasets. </p>
+<ul><li>두 Dataset에서 Data augmentation방식으로는 가장 표준적인 mirroring/shifting 을 사용했다.</li></ul>
+<p>We denote this data augmentation scheme by a “+” mark at the end of the dataset name (e.g., C10+).</p>
+<ul><li>data augmentation을 거친 dataset의 이름에는 &quot;+&quot; 기호를 붙였다.(ex) C10+)</li></ul>
+<p>For preprocessing, we normalize the data using the channel means and standard deviations.</p>
+<ul><li>전처리로는 channel의 평균과 표준편차를 이용하여 데이터를 정규화했으며,</li></ul>
+<p>For the final run we use all 50,000 training images and report the final test error at the end of training.</p>
+<ul><li>최종 실행 시 50,000개의 data를 모두 사용하고 training이 끝나면 최종 test error를 report 했다.</li></ul>
+<h4 id="block-5bd72207b2404b8687c15a7d1be63784">SVHN. </h4>
+<p>The Street View House Numbers (SVHN) dataset [24] contains 32×32 colored digit images.</p>
+<ul><li>Street View House Numbers (SVHN) dataset(32 x 32 pixel의 color 이미지)을 사용했다.</li></ul>
+<p>There are 73,257 images in the training set, 26,032 images in the test set, and 531,131 images for additional training.</p>
+<ul><li>training은 73,257, test set는 26,032개이며, 추가적인 training을 위해 531,131개의 이미지를 사용했다.</li></ul>
+<p>Following common practice we use all the training data without any data augmentation, and a validation set with 6,000 images is split from the training set.</p>
+<ul><li>Data augmentation없이 training을 진행했으며, training set 중 6,000개는 validation에 이용했다.</li></ul>
+<p>We select the model with the lowest validation error during training and report the test error.</p>
+<ul><li>training 중 가장 낮은 validation error를 보인 모델을 선택하고 test error를 report 했다.</li></ul>
+<p>We follow [42] and divide the pixel values by 255 so they are in the [0, 1] range.</p>
+<ul><li>추가적으로, 픽셀값이 [0, 1] 범위 내에 있도록 255로 나눠주었다.</li></ul>
+<h4 id="block-7949236d23f241ba83c6a10782f166f3">ImageNet.</h4>
+<p>The ILSVRC 2012 classification dataset consists 1.2 million images for training, and 50,000 for validation, from 1,000 classes.</p>
+<ul><li>ILSVRC 2012 classification dataset을 사용했으며, training은 1.2million validation set은 50,000개이며, 1,000개의 class로 나뉜다.</li></ul>
+<p>We adopt the same data augmentation scheme for training images as in [8, 11, 12], and apply a single-crop or 10-crop with size 224×224 at test time.</p>
+<ul><li>모든 training image에 대해 동일한 data augmentation을 적용했으며, test시 single-crop 또는 10-crop(with size 224 x 224) 를 적용했다.</li></ul>
+<p>Following [11, 12, 13], we report classification errors on the validation set.</p>
+<ul><li>classification error는 validation set의 결과를 바탕으로 했다.</li></ul>
+<h3 id="block-027a2e2a549a4a5c8484e2242711aa1f">Training</h3>
+<p><em><strong>Optimization </strong></em>: SGD</p>
+<p><em><strong>Batch size </strong></em>: 64(CIFAR &amp; SVHN), 256(ImageNet)</p>
+<p><em><strong>Epoch </strong></em>: 300(CIFAR), 40(SVHN), 90(ImageNet)</p>
+<p><em><strong>Learning rate </strong></em>: 0.1</p>
+<p>(CIFAR &amp; SVHN : divided by 10 at 50% and 75% of the total number of training epochs)</p>
+<p>(ImageNet : lowered by 10 times at epoch 30 and 60)</p>
+<p><em><strong>Wight Decay </strong></em>: 0.0001 (Nesterov Momentum of 0.9)</p>
+<p><em><strong>Dropout </strong></em>: 0.2 (C10, C100, SVHN)</p>
+<h3 id="block-72095e03a23b4b9b9249b1723d763192">Classification Results on CIFAR and SVHN</h3>
+<p>We train DenseNets with different depths, L, and growth rates, k.</p>
+<ul><li>서로 다른 깊이(L)및 growth rate(k)로 DenseNet 훈련을 진행했다.</li></ul>
+<p>The main results on CIFAR and SVHN are shown in Table 2.</p>
+<ul><li>CIFAR, SVHN에 대한 결과는 Table2. 를 참고하자.</li></ul>
+<p>To highlight general trends, we mark all results that outperform the existing state-of-the-art in boldface and the overall best result in blue.</p>
+<ul><li>general trends를 나타내기 위해 기존 기술보다 높은 성능을 보인 결과는 굵은 글씨로 표기하였으며, 전체적으로 최상의 결과를 보인 네트워크는 파란색으로 표기했다.</li></ul>
+<figure><img src="/assets/notion/densenet-논문리뷰/ee99e4bd-c80c-4e17-9bf2-8d98e6d54c07.png" alt="" loading="lazy" width="1877" height="1187" /></figure>
+<h4 id="block-fb781897a65f404d947e1e17d86d9f74">Accuracy.</h4>
+<p>Possibly the most noticeable trend may originate from the bottom row of Table 2, which shows that
+DenseNet-BC with L = 190 and k = 40 outperforms the existing state-of-the-art consistently on all the CIFAR datasets. </p>
+<ul><li>가장 주목할만한 trend는 Table 2.의 가장 아래줄에서 확인할 수 있다, DenseNet-BC, 그 중에서도 특히 Layer가 190개, k(growth rate)가 40개의 경우 CIFAR dataset에 대해 기존보다 훨씬 높은 성능을 보였다.</li></ul>
+<p>Its error rates of 3.46% on C10+ and 17.18% on C100+ are significantly lower than the error rates achieved by wide ResNet architecture [42].</p>
+<ul><li>C10+, C100+에서 각각 3.46, 17.18%의 error rate를 보였으며, 이는 wide ResNet 구조에서 달성한 error rate보다 훨씬 낮은 수치이다.</li></ul>
+<p>Our best results on C10 and C100 (without data augmentation) are even more encouraging: both are close to 30% lower than FractalNet with drop-path regularization [17]. </p>
+<ul><li>C10과 C100(without data augmentation)에 대한 결과는 더욱 놀랍다. 두 경우에 대한 결과 모두 drop-path regularization을 사용한 Fractal Net보다 30% 가까이 낮았다.</li></ul>
+<p>On SVHN, with dropout, the DenseNet with L = 100 and k = 24 also surpasses the current best result achieved by wide ResNet.</p>
+<ul><li>dropout을 사용한 SVHN dataset에서는 layer의 갯수가 100개, k(growth rate)가 24개인 DenseNet이 가장 좋은 결과를 보였다.</li></ul>
+<p>However, the 250-layer DenseNet-BC doesn’t further improve the performance over its shorter counterpart.</p>
+<p>- 하지만, 250-Layer DenseNet-BC는 shortcut counterpart에 비해 더 좋은 성능을 내지 못했다.</p>
+<p>This may be explained by that SVHN is a relatively easy task, and extremely deep models may overfit to the training set.</p>
+<ul><li>SVHN이 비교적 쉬운 dataset에 속하며, 너무 깊은 모델의 경우 training set에 overfit되기 쉽기 때문에</li></ul>
+<p>이러한 현상이 발생한 것으로 보고 있다.</p>
+<h4 id="block-665cf410688d4395a73a6b48f02f00b9">Capacity</h4>
+<p>Without compression or bottleneck layers, there is a general trend that DenseNets perform better as L and k increase.</p>
+<ul><li>compression이나 bottleneck layer가 없는 DenseNet의 경우, L과 k가 증가할수록 높은 성능을 보였다.</li></ul>
+<p>We attribute this primarily to the corresponding growth in model capacity.</p>
+<ul><li>이러한 주된 결과는 model capacity의 growth와 주로 일치하는 것으로 보인다.</li></ul>
+<p>This is best demonstrated by the column of C10+ and C100+.</p>
+<ul><li>C10+와 C100+에서 이를 확인할 수 있다.</li></ul>
+<p>On C10+, the error drops from 5.24% to 4.10% and finally to 3.74% as the number of parameters increases from 1.0M, over 7.0M to 27.2M. On C100+, we observe a similar trend.</p>
+<ul><li>C10+의 경우, 5.24%에서 4.10%로 에러가 줄었고 최종적으로 3.74%까지 줄으며 parameter의 개수가 증가할수록, error가 점차 줄어들었다. C100+ 또한 비슷한 양상을 보였다.</li></ul>
+<p>This suggests that DenseNets can utilize the increased representational power of bigger and deeper models.</p>
+<ul><li>이를 통해 DenseNet이 크고 깊은 모델의 representational power를 이용할 수 있다.</li></ul>
+<p>It also indicates that they do not suffer from overfitting or the optimization difficulties of residual networks [11].</p>
+<ul><li><strong>r</strong>esidual network에서 발생하는 overfitting이나 optimization문제가 발생하지 않음을 알 수 있다.</li></ul>
+<h4 id="block-2c26f09f6055402ba6ffe8f9397e7677">Parameter Efficiency.</h4>
+<p>The results in Table 2 indicate that DenseNets utilize parameters more efficiently than alternative architectures (in particular, ResNets).</p>
+<ul><li>Table 2. 에서, DenseNet이 다른 구조들에 비해 parameter를 더 효과적으로 사용할 수 있음을 알 수 있다.</li></ul>
+<p>The DenseNetBC with bottleneck structure and dimension reduction at transition layers is particularly parameter-efficient.</p>
+<ul><li>bottleneck구조와 transition layer에서의 dimension reduction을 수행한 DenseNet-BC가 특히 그렇다.</li></ul>
+<p>For example, our 250-layer model only has 15.3M parameters, but it consistently outperforms other models such as FractalNet and Wide ResNets that have more than 30M parameters.</p>
+<ul><li>예를 들어, 15.3M개의 parameter를 가진 250-Layer 모델이 다른 30M개 이상의 parameter를 갖는 여러 모델들(FractalNet, Wide ResNet)보다 높은 성능을 보였다.</li></ul>
+<p>We also highlight that DenseNet-BC with L = 100 and k = 12 achieves comparable performance (e.g., 4.51% vs 4.62% error on C10+, 22.27% vs 22.71% error on C100+) as the 1001-layer pre-activation ResNet using 90% fewer parameters.</p>
+<ul><li>또한, 1001-Layer의 ResNet 모델과 비교했을때, DenseNet-BC(L=100, k=12)가 90% 정도 적은 parameter를 가졌음에도 비슷한 성능을 보였다.</li></ul>
+<p>Figure 4 (right panel) shows the training loss and test errors of these two networks on C10+.</p>
+<ul><li>Figure 4은 C10+의 2개의 네트워크에 대한 training loss와 test error를 보여준다.</li></ul>
+<figure><img src="/assets/notion/densenet-논문리뷰/b77dffab-bfbc-42fd-8cf8-d98f9eca08a2.png" alt="" loading="lazy" width="1399" height="472" /></figure>
+<p>The 1001-layer deep ResNet converges to a lower training loss value but a similar
+test error. </p>
+<ul><li>1001-Layer의 깊은 ResNet의 training loss값은 낮게 수렴하지만, test error는 비슷하다.</li></ul>
+<p>We analyze this effect in more detail below.</p>
+<ul><li>이에 대해서는 차후 자세히 분석 예정이다.</li></ul>
+<h4 id="block-37d5231c738b476696cb657be2ce760e">Overfitting.</h4>
+<p>One positive side-effect of the more efficient use of parameters is a tendency of DenseNets to be less prone to overfitting.</p>
+<ul><li>parameter를 더 효율적으로 사용함에 따라 발생하는 긍정적인 부작용 중 하나는 DenseNet이 overfitting 되는 경향이 적다는 것이다.</li></ul>
+<p>We observe that on the datasets without data augmentation, the improvements of DenseNet architectures over prior work are particularly pronounced.</p>
+<ul><li>우리는 데이터 확대가 없는 데이터 세트에서 이전 작업보다 DenseNet 아키텍처의 개선이 특히 두드러진다는 것을 관찰합니다.</li></ul>
+<p>On C10, the improvement denotes a 29% relative reduction in error from 7.33% to 5.19%.</p>
+<ul><li>C10에서 error rate가 7.33%에서 5.19%로 상대적으로 29%가량 감소했다.</li></ul>
+<p>On C100, the reduction is about 30% from 28.20% to 19.64%. </p>
+<ul><li>C100에서는 28.20%에서 19.64%로 30% 감소했다.</li></ul>
+<p>In our experiments, we observed potential overfitting in a single setting: on C10, a 4x growth
+of parameters produced by increasing k = 12 to k = 24 lead to a modest increase in error from 5.77% to 5.83%.</p>
+<ul><li>실험에 따르면,  single setting에서의 잠재적인 과적합을 확인했다: C10에서 parameter를 4배, k =12에서 k=24로 증가시킴으로써 5.77%에서 5.83%로 약간 증가 했다.</li></ul>
+<p>The DenseNet-BC bottleneck and compression layers appear to be an effective way to counter this trend.</p>
+<ul><li>이를 해결하기 위해서는 DenseNet-BC의 bottleneck과 compression layer가 효과적일 것으로 보인다.</li></ul>
+<h3 id="block-75342b5c46374adc9f97d176fd6adc99">Classification Results on ImageNet</h3>
+<p>We evaluate DenseNet-BC with different depths and growth rates on the ImageNet classification task, and compare it with state-of-the-art ResNet architectures.</p>
+<ul><li>DenseNet-BC를 네트워크의 깊이와, growth rate를 바꿔가며 ImageNet classification task에서 평가했으며 SOTA인 ResNet과 비교한다. </li></ul>
+<p>To ensure a fair comparison between the two architectures, we eliminate all other factors such as differences in data preprocessing and optimization settings by adopting the publicly available Torch implementation for ResNet by [8].</p>
+<ul><li>두 모델간의 공정한 비교를 위해, Torch implementation된 ResNet을 사용함으로서 데이터 전처리나 최적화 세팅 같이 다를 수 있는 요소들을 모두 제거했다.</li></ul>
+<p>We simply replace the ResNet model with the DenseNetBC network, and keep all the experiment settings exactly the same as those used for ResNet.</p>
+<ul><li>단순히 ResNet 모델을 DenseNet-BC 네트워크로 바꿨으며, 실험 환경은 ResNet과 동일하게 설정했다.</li></ul>
+<p>We report the single-crop and 10-crop validation errors of DenseNets on ImageNet in Table 3.</p>
+<ul><li>ImageNet에 DenseNet을 적용한 single-crop과 10-crop validation error 결과는 Table 3와 같다.</li></ul>
+<p>Figure 3 shows the single-crop top-1 validation errors of DenseNets and ResNets as a function of the number of parameters (left) and FLOPs (right). </p>
+<ul><li>Figure 3. DenseNet과  ResNets의 single-crop top1 validation error값과의 비교를 위한 그림으로, 왼쪽은 Parameter, 오른쪽은 FLOP에 대한 결과이다.</li></ul>
+<figure><img src="/assets/notion/densenet-논문리뷰/630b8f96-5a70-497d-97dd-224ce6337043.png" alt="" loading="lazy" width="1712" height="538" /></figure>
+<p>The results presented in the figure reveal that DenseNets perform on par with the state-of-the-art ResNets, whilst requiring significantly fewer parameters and computation to achieve comparable performance.</p>
+<ul><li>결과를 보면 알 수 있듯, DenseNet의 parameter 수와 computation이 훨씬 적음에도 불구하고, ResNet과 비슷한 성능을 내는 것을 확인할 수 있다.</li></ul>
+<p>It is worth noting that our experimental setup implies that we use hyperparameter settings that are optimized for ResNets but not for DenseNets.</p>
+<ul><li>본 논문에서, 실험 설정이 ResNet에는 최적화되었지만, DenseNet에는 최적화되어 있지 않다는 점 또한 주목할 필요가 있다.</li></ul>
+<p>It is conceivable that more extensive hyper-parameter searches may further improve the performance of DenseNet on ImageNet.</p>
+<ul><li>ImageNet에 맞는 DenseNet의 parameter를 보다 최적화한다면, 더 높은 성능을 낼 수 있을 것으로 기대된다.</li></ul>
+<h2 id="block-39576580b42f48c29eedab93bb3c62ea">Discussion</h2>
+<p>Superficially, DenseNets are quite similar to ResNets: Eq. (2) differs from Eq. (1) only in that the inputs to \(H_l(\cdot)\) are concatenated instead of summed.</p>
+<ul><li>Eq(2)(DenseNet)는 Eq(1)(ResNet)와 다른데, 채널이 더 해지는 것 대신에 concat된다는 점 빼고고는 표면적으로 보았을 때, DenseNet의 구조는 ResNet과 상당히 유사하다.</li></ul>
+<p>However, the implications of this seemingly small modification lead to substantially different behaviors of the two network architectures.</p>
+<ul><li>하지만, 두 구조간의 작은 차이는 실질적으로 두 네트워크 구조 간의 아주 큰 차이로 이어진다.</li></ul>
+<h4 id="block-a1816cbb322541d0871945ef86fe192e">Model compactness. </h4>
+<p>As a direct consequence of the input concatenation, the feature-maps learned by any of the DenseNet layers can be accessed by all subsequent layers.</p>
+<ul><li>input concatenation의 직접적인 결과로, DenseNet에서 학습된 feature map들은 모든 subsequent Layer(그 이후의 layer)에 접근 가능하다.</li></ul>
+<p>This encourages feature reuse throughout the network, and leads to more compact models.</p>
+<ul><li>이는 네트워크 전체의 feature 재사용성을 높이고, 보다 compact한 모델이 되도록 한다.</li></ul>
+<p>The left two plots in Figure 4 show the result of an experiment that aims to compare the parameter efficiency of all variants of DenseNets (left) and also a comparable ResNet architecture (middle).</p>
+<p>왼쪽 그래프는 DenseNet의 parameter efficiency를 비교하는 그래프, 가운데 그래프는 ResNet 구조와 DenseNet을 비교하는 그래프이다.</p>
+<figure><img src="/assets/notion/densenet-논문리뷰/3cbf0702-c9ee-4523-bf98-1db62c086cd6.png" alt="" loading="lazy" width="2165" height="732" /></figure>
+<p>We train multiple small networks with varying depths on C10+ and plot their test accuracies as a function of network parameters.</p>
+<p>C10+에서 다양한 깊이의 여러 소규모 네트워크들을 train하고, network parameter들의 function으로 test 정확도를 점으로 나타냈다.</p>
+<p>In comparison with other popular network architectures, such as AlexNet [16] or VGG-net [29], ResNets with pre-activation use fewer parameters while typically achieving better results [12].</p>
+<p>AlexNet이나 VGG-net과 같은 여러 유명한 네트워크 구조와 비교했을 때, pre-activation된 ResNet은 적은 parameter에도 일반적으로 더 나은 결과를 냈다.</p>
+<p>Hence, we compare DenseNet (k = 12) against this architecture.</p>
+<ul><li>따라서 DenseNet(k=12)를 이 아키텍처와 비교한다.</li></ul>
+<p>The training setting for DenseNet is kept the same as in the previous section.</p>
+<ul><li>DenseNet에 대한 training setting은 이전 섹션과 동일하게 유지된다.</li></ul>
+<p>The graph shows that DenseNet-BC is consistently the most parameter efficient variant of DenseNet.</p>
+<ul><li>그래프는 상에서 DenseNet-BC가 가장 효율적으로 paramter가 구성되어있다.</li></ul>
+<p>Further, to achieve the same level of accuracy, DenseNet-BC only requires around 1/3 of the parameters of ResNets (middle plot).</p>
+<ul><li>더욱이 동일한 수준의 정확도를 달성하는데 DenseNet-BC는 ResNet의 약 1/3 정도의 parameter만 이용했다.(가운데 표)</li></ul>
+<p>This result is in line with the results on ImageNet we presented in Figure 3.</p>
+<ul><li>Figure 3에 ImageNet에 대한 결과를 타나낸다.</li></ul>
+<p>The right plot in Figure 4 shows that a DenseNet-BC with only 0.8M trainable parameters is able to achieve comparable accuracy as the 1001-layer (pre-activation) ResNet [12] with 10.2M parameters.</p>
+<ul><li>Figure 4의 오른쪽 도표에서 보여주듯이 0.8M개의 parameter를 사용하는 DenseNet-BC가 10.2M의 parameter를 사용하는 1001-layer ResNet과 유사한 성능을 보여준다.</li></ul>
+<h4 id="block-e859175b059e4cf88cbd3cdad6da68de">Implicit Deep Supervision.</h4>
+<p>One explanation for the improved accuracy of dense convolutional networks may be that individual layers receive additional supervision from the loss function through the shorter connections. </p>
+<p>dense convolutional network의 accuracy가 향상되는 이유는 각각의 Layer들이 short connection을 통해 loss function의 추가적인 supervision(backpropagation시 직접적으로 영향)을 받기 때문이다.</p>
+<p>One can interpret DenseNets to perform a kind of “deep supervision”.</p>
+<p>DenseNet을 이용해 일종의 &quot;Deep supervision&quot;을 수행할 수 있다.</p>
+<p>The benefits of deep supervision have previously been shown in deeply-supervised nets (DSN; [20]), which have classifiers attached to every hidden layer, enforcing the intermediate layers to learn discriminative features.</p>
+<ul><li>Deep supervision의 이점은 이미 deeply-supervised nets(DSN)에서 증명된 바 있다, 모든 hidden Layer에 classifier가 더해지며, intermediate Layer들이 보다 차별적인 특징을 학습하도록 한다.</li></ul>
+<p>DenseNets perform a similar deep supervision in an implicit fashion: a single classifier on top of the network provides direct supervision to all layers through at most two or three transition layers.</p>
+<ul><li>DenseNet은 implicit(암묵적)한 방식으로 위와 유사한 Deep supervision을 수행한다 :  네트워크 상단의 single classifier는 최대 2~3개의 transition Layer를 통해 모든 Layer를 직접적으로 supervision한다.</li></ul>
+<p>However, the loss function and gradient of DenseNets are substantially less complicated, as the
+same loss function is shared between all layers.</p>
+<ul><li>하지만 DenseNet의 loss function과 gradient의 경우, 모든 Layer에서 같은 loss function을 공유하기 때문에 훨씬 덜 복잡하다.</li></ul>
+<h4 id="block-ba4f8e6167fc4d38b8560aff1c1968ee">Stochastic vs. deterministic connection. </h4>
+<p>There is an interesting connection between dense convolutional networks and stochastic depth regularization of residual networks [13].</p>
+<ul><li>dense convolutional network와 residual network의 stochastic depth regularization사이에는</li></ul>
+<p>흥미로운 connection이 하나 있다.</p>
+<p>In stochastic depth, layers in residual networks are randomly dropped, which creates direct connections be-tween the surrounding layers.</p>
+<ul><li>stochastic depth에서, residual network의 Layer들은 랜덤하게 drop되어 주변 Layer들 간의 direct connection이 생성된다.</li></ul>
+<p>As the pooling layers are never dropped, the network results in a similar connectivity pattern as DenseNet.</p>
+<ul><li>pooling Layer는 drop하지 않기 때문에 네트워크는 DenseNet과 유사한 connectivity pattern을 갖는다.</li></ul>
+<p>Although the methods are ultimately quite different, the DenseNet interpretation of stochastic depth may provide insights into the success of this regularizer.</p>
+<ul><li>방법은 궁극적으로 다를지 몰라도, stochastic depth에 대한 DenseNet interpretation은 정규화의 성공에 대한 통찰력을 제공한다.</li></ul>
+<h4 id="block-b1c839a3d146440e92267b21df18885b">Feature Reuse.</h4>
+<p>By design, DenseNets allow layers access to feature-maps from all of its preceding layers (although sometimes through transition layers).</p>
+<ul><li>DenseNet은 현재 Layer가 이전의 모든 Layer들의 feature map에 접근할 수 있도록 설계되었다.</li></ul>
+<p>We conduct an experiment to investigate if a trained network takes advantage of this opportunity. </p>
+<ul><li>본 논문에서는 train된 네트워크가 이러한 기회를 잘 활용하는지 조사하기 위해 다음과 같은 실험을 수행했다. </li></ul>
+<p>We first train a DenseNet on C10+ with L = 40 and k = 12. </p>
+<ul><li>먼저, C10+, k = 12, L = 40인 DenseNet을 훈련시켰다.</li></ul>
+<p>For each convolutional layer \(l\) within a block, we compute the average (absolute) weight assigned to connections with layer \(s\). </p>
+<ul><li>각 블록 내의 convolutional Layer 'l'에 대해, Layer 's'와의 연결에 할당된 average weight를 계산했다.</li></ul>
+<p>Figure 5 shows a heat-map for all three dense blocks.</p>
+<ul><li>Figure 5. 는 모든 3개의 dense block에 대한 heat-map을 나타낸 그림이다.</li></ul>
+<figure><img src="/assets/notion/densenet-논문리뷰/6b1391e1-ed32-45e6-baff-d39dba9fa4de.png" alt="" loading="lazy" width="1064" height="440" /></figure>
+<p>The average absolute weight serves as a surrogate for the dependency of a convolutional layer on its preceding layers.</p>
+<ul><li>average absolute weight란, 이전 Layer에서 Convolution Layer에 대한 의존성에 대한 정도이다.</li></ul>
+<p>A red dot in position \((l,s)\) indicates that the layer \(l\) makes, on average, strong use
+of feature-maps produced s-layers before. </p>
+<ul><li>위 그림에서 빨간색 점\((l,s)\)은 Layer '\(l\)'이 이전 Layer '\(s\)'에서 생성된 feature-map을 많이 사용한다는 것을 나타낸다.</li></ul>
+<h2 id="block-de40de631a984657bbc71db7305ab01d">Conclusion</h2>
+<p>We proposed a new convolutional network architecture, which we refer to as Dense Convolutional Network(DenseNet).</p>
+<ul><li>본 논문에서는 Dense Convolutional Network, 일명 <em>DenseNet</em>이라고 불리는 새로운 Convolutional Network 구조에 대해 소개했다.</li></ul>
+<p>It introduces direct connections between any two layers with the same feature-map size.</p>
+<ul><li>같은 feature map size를 가진 어떤 2개의 Layer들에 대한 direct connection에 대해 소개했다.</li></ul>
+<p>We showed that DenseNets scale naturally to hundreds of layers, while exhibiting no optimization difficulties.</p>
+<ul><li>optimization 어려움없이 Layer의 규모를 많이 늘려나갈 수 있다는 것 또한 증명했다.</li></ul>
+<p>In our experiments, DenseNets tend to yield consistent improvement in accuracy with growing number of parameters, without any signs of performance degradation or overfitting.</p>
+<ul><li>본 논문의 실험에서, DenseNet은 성능저하나 overfitting없이 parameter의 개수가 증가할수록 정확도가 향상되는 모습을 보였다.</li></ul>
+<p>Under multiple settings, it achieved state-of-the-art results across several highly competitive datasets.</p>
+<ul><li>다양한 설정에서도 다른 기존 결과들에 비해 놀라운 성과를 보여줬다.</li></ul>
+<p>Moreover, DenseNets require substantially fewer parameters and less computation to achieve state-of-the-art performances.</p>
+<ul><li>심지어는 다른 구조들에 비해 상당히 적은 parameter 개수와 연산량으로 더 좋은 결과를 냈다.</li></ul>
+<p>Because we adopted hyperparameter settings optimized for residual networks in our study, we
+believe that further gains in accuracy of DenseNets may be obtained by more detailed tuning of
+hyperparameters and learning rate schedules.</p>
+<ul><li>본 논문에서 DenseNet의 parameter들은 ResNet환경에 맞게 setting되었는데, hyper parameter tunning과 learning rate 스케줄을 개선하면 더 좋은 결과가 나올 것으로 예상하고 있다.</li></ul>
+<p>Whilst following a simple connectivity rule, DenseNets naturally integrate the properties of identity mappings, deep supervision, and diversified depth.</p>
+<ul><li>DenseNet은 모든 Layer들을 연결한다는 간단한 connectivity rule을 따르면서도, identity mapping, deep supervision, diversified depth 등의 특징을 모두 실현시켰다.</li></ul>
+<p>They allow feature reuse throughout the networks and can consequently learn more compact and, according to our experiments, more accurate models.</p>
+<ul><li>DenseNet 구조는 네트워크 전체에서 feature 재사용을 더 용이하게 하고, model을 더 compact하게 만들었다.</li></ul>
+<p>Because of their compact internal representations and reduced feature redundancy, DenseNets may be good feature extractors for various computer vision tasks that build on convolutional features, e.g., [4, 5].</p>
+<ul><li>DenseNet은 compact한 internal representations, 중복 feature 감소라는 장점을 통해 다양한 컴퓨터 비전 분야에서 훌륭한 feature extractor로 자리잡을 것이다.</li></ul>
+<p>We plan to study such feature transfer with DenseNets in future work.</p>
+<ul><li>DenseNets를 사용하여 향후 feature transfer를 연구할 계획이다.</li></ul>
+<p>[reference]</p>
+<p><a href="https://arxiv.org/pdf/1608.06993.pdf" target="_blank" rel="noreferrer">https://arxiv.org/pdf/1608.06993.pdf</a></p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/post.js?v=13" type="module"></script>
+    <script src="/assets/js/palette.js?v=8" defer></script>
+  </body>
+</html>

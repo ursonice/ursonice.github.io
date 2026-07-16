@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>PEP8 Code Style(구글의 코딩스타일) — Woojae Joo</title>
+    <meta name="post-slug" content="pep8-code-style-구글의-코딩스타일" />
+    <meta name="description" content="서론 이 장은 PEP8에 따른 파이썬 코드 스타일을 어떻게 작성하면 좋은지에 대해 설명한다. 목차 유사 Debugging PEP8 format으로 변경하기 타입 표기 구글 파이썬 스타일 가이드 함수의 객체 생성 True, False 표기 Example 1. Good Bad Example 2. Good B" />
+    <link rel="canonical" href="https://ursonice.github.io/posts/pep8-code-style-%EA%B5%AC%EA%B8%80%EC%9D%98-%EC%BD%94%EB%94%A9%EC%8A%A4%ED%83%80%EC%9D%BC/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="PEP8 Code Style(구글의 코딩스타일)" />
+    <meta property="og:description" content="서론 이 장은 PEP8에 따른 파이썬 코드 스타일을 어떻게 작성하면 좋은지에 대해 설명한다. 목차 유사 Debugging PEP8 format으로 변경하기 타입 표기 구글 파이썬 스타일 가이드 함수의 객체 생성 True, False 표기 Example 1. Good Bad Example 2. Good B" />
+    <meta property="og:url" content="https://ursonice.github.io/posts/pep8-code-style-%EA%B5%AC%EA%B8%80%EC%9D%98-%EC%BD%94%EB%94%A9%EC%8A%A4%ED%83%80%EC%9D%BC/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=PEP8%20Code%20Style(%EA%B5%AC%EA%B8%80%EC%9D%98%20%EC%BD%94%EB%94%A9%EC%8A%A4%ED%83%80%EC%9D%BC)&amp;cat=Python" />
+    <meta property="article:published_time" content="2023-04-05T22:27:00.000Z" />
+    <meta property="article:modified_time" content="2023-06-14T07:46:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="PEP8 Code Style(구글의 코딩스타일)" />
+    <meta name="twitter:description" content="서론 이 장은 PEP8에 따른 파이썬 코드 스타일을 어떻게 작성하면 좋은지에 대해 설명한다. 목차 유사 Debugging PEP8 format으로 변경하기 타입 표기 구글 파이썬 스타일 가이드 함수의 객체 생성 True, False 표기 Example 1. Good Bad Example 2. Good B" />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=PEP8%20Code%20Style(%EA%B5%AC%EA%B8%80%EC%9D%98%20%EC%BD%94%EB%94%A9%EC%8A%A4%ED%83%80%EC%9D%BC)&amp;cat=Python" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"PEP8 Code Style(구글의 코딩스타일)","description":"서론 이 장은 PEP8에 따른 파이썬 코드 스타일을 어떻게 작성하면 좋은지에 대해 설명한다. 목차 유사 Debugging PEP8 format으로 변경하기 타입 표기 구글 파이썬 스타일 가이드 함수의 객체 생성 True, False 표기 Example 1. Good Bad Example 2. Good B","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=PEP8%20Code%20Style(%EA%B5%AC%EA%B8%80%EC%9D%98%20%EC%BD%94%EB%94%A9%EC%8A%A4%ED%83%80%EC%9D%BC)&cat=Python","datePublished":"2023-04-05T22:27:00.000Z","dateModified":"2023-06-14T07:46:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/pep8-code-style-%EA%B5%AC%EA%B8%80%EC%9D%98-%EC%BD%94%EB%94%A9%EC%8A%A4%ED%83%80%EC%9D%BC/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Python","item":"https://ursonice.github.io/topics/python/"},{"@type":"ListItem","position":3,"name":"PEP8 Code Style(구글의 코딩스타일)","item":"https://ursonice.github.io/posts/pep8-code-style-%EA%B5%AC%EA%B8%80%EC%9D%98-%EC%BD%94%EB%94%A9%EC%8A%A4%ED%83%80%EC%9D%BC/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/python/">Python</a>
+    </nav>
+    <h1>PEP8 Code Style(구글의 코딩스타일)</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2023년 4월 5일</span><span class="dot"></span><span>수정 2023년 6월 14일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-0159a1fa2e454c24a8b8cae58dcd61a6">서론</h2>
+<p>이 장은 PEP8에 따른 파이썬 코드 스타일을 어떻게 작성하면 좋은지에 대해 설명한다.</p>
+<h2 id="block-cc2ff1689b99408abf228044d700e91c">목차</h2>
+<ol><li><a href="#block-d0766252d0aa413a96b7932e0ac4cc99">유사 Debugging</a> </li><li><a href="#block-861e5826c13049fbbf7249a324b077dd">PEP8 format으로 변경하기</a> </li><li><a href="#block-fd9737bef7834fb39ff03e205aeeea3d">타입 표기</a> </li><li><a href="#block-33046dba611f43cdb39ed5053102e6da">구글 파이썬 스타일 가이드</a> <ol><li><a href="#block-da723cc9e8aa4ec7b552cb73dc547e6b">함수의 객체 생성</a> </li><li><a href="#block-7dc0578f5e524e6997b901b5de1e0bdf">True, False 표기</a> <ol><li><a href="#block-523cd12598974fe0bf486f56c6ac0f7c">Example 1.</a> <ol><li><a href="#block-a53d288f02814702bd95507f9b593a9c">Good</a> </li><li><a href="#block-f3baa925e9514c3195ab581a980cfb5a">Bad</a> </li></ol></li><li><a href="#block-f159bba9cf4a4719bb6e590ff74d442d">Example 2.</a> <ol><li><a href="#block-ee72dc766d49435ca7672b00bbac90a6">Good</a> </li><li><a href="#block-167f2cbeb6294a379aa9a6bd53f42896">Bad</a> </li></ol></li><li><a href="#block-fa09f385e18c4886a12e92792a3cd26a">Example 3.</a> <ol><li><a href="#block-1829c15c9e1642098559b1d53f3e63d0">Good</a> </li><li><a href="#block-52ffec02edb348928e644add220db671">Bad</a> </li></ol></li></ol></li></ol></li><li><a href="#block-e9f5092017ed40c78daf06ed3370e998">기타</a> </li></ol>
+<h2 id="block-d0766252d0aa413a96b7932e0ac4cc99">유사 Debugging</h2>
+<pre data-lang="python"><code class="language-python">import pprint
+
+nums = [2, 7, 11, 15]
+str1 = &quot;hello&quot;
+#모든 local 변수를 출력해준다.
+pprint.pprint(locals())</code></pre>
+<p>출력 결과 :</p>
+<figure><img src="/assets/notion/pep8-code-style-구글의-코딩스타일/4740c5d1-75ba-4e92-9bad-4c175d00ab85.png" alt="" loading="lazy" width="2528" height="421" /></figure>
+<h2 id="block-861e5826c13049fbbf7249a324b077dd">PEP8 format으로 변경하기</h2>
+<p>파이참IDE를 사용하면 윈도우 기준으로 <code>Crtl + Alt + shift + L</code> 로 가능하다.</p>
+<p>다른 개발툴을 사용하면 아래의 명령어로 설치하자.</p>
+<pre data-lang="bash"><code class="language-bash">$ pip install --upgrade autopep8</code></pre>
+<p>아래와 같은 코드가 주어졌을 때 PEP8 format 자동변경을 사용할 수 있다. </p>
+<details class="toggle"><summary><strong>Code</strong></summary><div class="toggle-body"><pre data-lang="python"><code class="language-python">import math, sys;
+
+def example1():
+    ####This is a long comment. This should be wrapped to fit within 72 characters.
+    some_tuple=(   1,2, 3,'a'  );
+    some_variable={'long':'Long code lines should be wrapped within 79 characters.',
+    'other':[math.pi, 100,200,300,9876543210,'This is a long string that goes on'],
+    'more':{'inner':'This whole logical line should be wrapped.',some_tuple:[1,
+    20,300,40000,500000000,60000000000000000]}}
+    return (some_tuple, some_variable)
+def example2(): return {'has_key() is deprecated':True}.has_key({'f':2}.has_key(''));
+class Example3(   object ):
+    def __init__    ( self, bar ):
+     #Comments should have a space after the hash.
+     if bar : bar+=1;  bar=bar* bar   ; return bar
+     else:
+                    some_string = &quot;&quot;&quot;
+                       Indentation in multiline strings should not be touched.
+Only actual code should be reindented.
+&quot;&quot;&quot;
+                    return (sys.path, some_string)</code></pre></div></details>
+<figure><img src="/assets/notion/pep8-code-style-구글의-코딩스타일/56bc8b54-c710-4a3c-a2d3-92f4f93bce3c.png" alt="" loading="lazy" width="1610" height="1031" /></figure>
+<p>아래 명령어를 사용하면  PEP8 format으로 바뀐다.</p>
+<pre data-lang="bash"><code class="language-bash">$ autopep8 --in-place --aggressive &lt;filename&gt;</code></pre>
+<p>결과는 아래와 같다.</p>
+<figure><img src="/assets/notion/pep8-code-style-구글의-코딩스타일/f0521da9-39e6-40b9-b6fe-fa235649b691.png" alt="" loading="lazy" width="2489" height="1452" /></figure>
+<h2 id="block-fd9737bef7834fb39ff03e205aeeea3d">타입 표기</h2>
+<p>변수명 지정 등 각 변수에 대한 타입을 아래 처럼 표기해준다.</p>
+<figure><img src="/assets/notion/pep8-code-style-구글의-코딩스타일/119f101f-cf54-4da6-a593-a50c76c9988a.png" alt="" loading="lazy" width="1118" height="773" /></figure>
+<h2 id="block-33046dba611f43cdb39ed5053102e6da">구글 파이썬 스타일 가이드</h2>
+<h3 id="block-da723cc9e8aa4ec7b552cb73dc547e6b">함수의 객체 생성</h3>
+<p>함수의 기본 값으로 가변 객체를 사용하면 안 된다.</p>
+<p>함수가 객체를 수정하면 기본값이 변경되기 때문이다.</p>
+<pre data-lang="python"><code class="language-python">def foo(a, b=[]):
+	...
+def foo(a, b: Mapping={}) :
+	...</code></pre>
+<p>기본값을 변경하지 않기 위해 불변객체 또는 새로운 객체를 만들어 사용한다.</p>
+<pre data-lang="python"><code class="language-python">def foo(a, b=None) :
+	if b is None :
+			b = []
+
+def foo(a, b:Optional[Sequence] = None) :
+	if b is None :
+		b = []</code></pre>
+<h3 id="block-7dc0578f5e524e6997b901b5de1e0bdf">True, False 표기</h3>
+<h3 id="block-523cd12598974fe0bf486f56c6ac0f7c">Example 1.</h3>
+<p>users는 정수가 아니라는 것을 가정하면 보통 len(users)는 길이가 없다는 의미로 not users가 더 적합하다.</p>
+<h4 id="block-a53d288f02814702bd95507f9b593a9c">Good</h4>
+<pre data-lang="python"><code class="language-python">if not users :
+    print(&quot;no user&quot;)</code></pre>
+<h4 id="block-f3baa925e9514c3195ab581a980cfb5a">Bad</h4>
+<pre data-lang="python"><code class="language-python">if len(users)==0 :
+    print(&quot;no user&quot;)</code></pre>
+<h3 id="block-f159bba9cf4a4719bb6e590ff74d442d">Example 2.</h3>
+<p>정수를 처리할 때는 거짓 여부를 판별하기 보다는 비교 대상이 되는 정수값을 직접 비교하는 편이 좋다.</p>
+<h4 id="block-ee72dc766d49435ca7672b00bbac90a6">Good</h4>
+<pre data-lang="python"><code class="language-python">if foo == 0 :
+    self.handle_zero()</code></pre>
+<h4 id="block-167f2cbeb6294a379aa9a6bd53f42896">Bad</h4>
+<pre data-lang="python"><code class="language-python">if foo is not None and not foo :
+    self.handle_zero()</code></pre>
+<h3 id="block-fa09f385e18c4886a12e92792a3cd26a">Example 3.</h3>
+<p>아래 코드도 명시적(Explicitly)으로 값을 비교하는 편이 좋다.</p>
+<h4 id="block-1829c15c9e1642098559b1d53f3e63d0">Good</h4>
+<pre data-lang="python"><code class="language-python">if i % 10 == 0 :
+    self.handle_multiple_of_ten()</code></pre>
+<h4 id="block-52ffec02edb348928e644add220db671">Bad</h4>
+<pre data-lang="python"><code class="language-python">if not i % 10 :
+    self.handle_multiple_of_ten()</code></pre>
+<h2 id="block-e9f5092017ed40c78daf06ed3370e998">기타</h2>
+<ul><li>최대 줄 길이는 80자 이내로 한다.</li></ul></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/post.js?v=13" type="module"></script>
+    <script src="/assets/js/palette.js?v=8" defer></script>
+  </body>
+</html>
