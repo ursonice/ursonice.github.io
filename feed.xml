@@ -6,7 +6,15 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Fri, 17 Jul 2026 09:17:29 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 17 Jul 2026 11:06:58 GMT</lastBuildDate>
+    <item>
+      <title>[2차시] Average Reward</title>
+      <link>https://ursonice.github.io/posts/2%EC%B0%A8%EC%8B%9C-average-reward/</link>
+      <guid isPermaLink="false">39db12c0-115c-800c-94f0-f3884a3a2f4d</guid>
+      <pubDate>Tue, 14 Jul 2026 08:56:00 GMT</pubDate>
+      <category>Reinforcement Learning</category>
+      <description>서론 지금까지는 정책이 만들어내는 마르코프 체인을 장기적인 관점에서 분석하기 위한 이론적 기반을 살펴보았다. 정상분포와 에르고딕 성질을 통해, 정책을 충분히 오래 수행하면 각 상태를 얼마나 자주 방문하는지를 하나의 확률분포로 표현할 수 있음을 확인하였다. 그러나 상태를 얼마나 자주 방문하는지만으로는 정책</description>
+    </item>
     <item>
       <title>[1차시] Markov process</title>
       <link>https://ursonice.github.io/posts/1%EC%B0%A8%EC%8B%9C-markov-process/</link>
@@ -22,14 +30,6 @@
       <pubDate>Tue, 14 Jul 2026 08:10:00 GMT</pubDate>
       <category>Reinforcement Learning</category>
       <description>서론 평균보상에는 한계가 있었다. 에르고딕성이라는 강한 조건이 필요하고, 종료 상태가 존재하는 문제에서는 종료 이전의에 받은 보상이 무한한 시간 속에서 영향력이 점차 사라진다. 결국 보상을 &apos;얼마나&apos; 받았는지뿐 아니라 &apos;언제&apos; 받았는지까지 반영하는 새로운 평가 방식이 필요하다. 이번 시간에는 이 요구를 </description>
-    </item>
-    <item>
-      <title>[2차시] Average Reward</title>
-      <link>https://ursonice.github.io/posts/2%EC%B0%A8%EC%8B%9C-average-reward/</link>
-      <guid isPermaLink="false">39db12c0-115c-800c-94f0-f3884a3a2f4d</guid>
-      <pubDate>Tue, 14 Jul 2026 08:56:00 GMT</pubDate>
-      <category>Reinforcement Learning</category>
-      <description>서론 지금까지는 정책이 만들어내는 마르코프 체인을 장기적인 관점에서 분석하기 위한 이론적 기반을 살펴보았다. 정상분포와 에르고딕 성질을 통해, 정책을 충분히 오래 수행하면 각 상태를 얼마나 자주 방문하는지를 하나의 확률분포로 표현할 수 있음을 확인하였다. 그러나 상태를 얼마나 자주 방문하는지만으로는 정책</description>
     </item>
     <item>
       <title>Z-transform</title>

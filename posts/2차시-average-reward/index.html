@@ -29,13 +29,13 @@
     <meta property="og:url" content="https://ursonice.github.io/posts/2%EC%B0%A8%EC%8B%9C-average-reward/" />
     <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5B2%EC%B0%A8%EC%8B%9C%5D%20Average%20Reward&amp;cat=Reinforcement%20Learning" />
     <meta property="article:published_time" content="2026-07-14T08:56:00.000Z" />
-    <meta property="article:modified_time" content="2026-07-15T13:40:00.000Z" />
+    <meta property="article:modified_time" content="2026-07-17T11:01:00.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="[2차시] Average Reward" />
     <meta name="twitter:description" content="서론 지금까지는 정책이 만들어내는 마르코프 체인을 장기적인 관점에서 분석하기 위한 이론적 기반을 살펴보았다. 정상분포와 에르고딕 성질을 통해, 정책을 충분히 오래 수행하면 각 상태를 얼마나 자주 방문하는지를 하나의 확률분포로 표현할 수 있음을 확인하였다. 그러나 상태를 얼마나 자주 방문하는지만으로는 정책" />
     <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5B2%EC%B0%A8%EC%8B%9C%5D%20Average%20Reward&amp;cat=Reinforcement%20Learning" />
 
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"[2차시] Average Reward","description":"서론 지금까지는 정책이 만들어내는 마르코프 체인을 장기적인 관점에서 분석하기 위한 이론적 기반을 살펴보았다. 정상분포와 에르고딕 성질을 통해, 정책을 충분히 오래 수행하면 각 상태를 얼마나 자주 방문하는지를 하나의 확률분포로 표현할 수 있음을 확인하였다. 그러나 상태를 얼마나 자주 방문하는지만으로는 정책","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5B2%EC%B0%A8%EC%8B%9C%5D%20Average%20Reward&cat=Reinforcement%20Learning","datePublished":"2026-07-14T08:56:00.000Z","dateModified":"2026-07-15T13:40:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/2%EC%B0%A8%EC%8B%9C-average-reward/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"[2차시] Average Reward","description":"서론 지금까지는 정책이 만들어내는 마르코프 체인을 장기적인 관점에서 분석하기 위한 이론적 기반을 살펴보았다. 정상분포와 에르고딕 성질을 통해, 정책을 충분히 오래 수행하면 각 상태를 얼마나 자주 방문하는지를 하나의 확률분포로 표현할 수 있음을 확인하였다. 그러나 상태를 얼마나 자주 방문하는지만으로는 정책","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5B2%EC%B0%A8%EC%8B%9C%5D%20Average%20Reward&cat=Reinforcement%20Learning","datePublished":"2026-07-14T08:56:00.000Z","dateModified":"2026-07-17T11:01:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/2%EC%B0%A8%EC%8B%9C-average-reward/"}}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Reinforcement Learning","item":"https://ursonice.github.io/topics/reinforcement-learning/"},{"@type":"ListItem","position":3,"name":"[2차시] Average Reward","item":"https://ursonice.github.io/posts/2%EC%B0%A8%EC%8B%9C-average-reward/"}]}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -86,7 +86,7 @@
     <div class="article-meta">
       
       
-      <span>작성 2026년 7월 14일</span><span class="dot"></span><span>수정 2026년 7월 15일</span>
+      <span>작성 2026년 7월 14일</span><span class="dot"></span><span>수정 2026년 7월 17일</span>
       <span class="reading-size" role="group" aria-label="글자 크기">
         <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
         <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
@@ -100,8 +100,8 @@
 <p>이를 위해 강화학습에서는 각 상태(또는 상태-행동)에 보상(Reward) 을 부여하여 상태의 가치를 수치로 표현한다. 그리고 에르고딕 성질에 의해 얻은 장기 방문 비율과 이 보상을 결합하면, 정책이 장기간 수행되었을 때 평균적으로 얼마나 좋은 성과를 내는지를 하나의 값으로 나타낼 수 있다. 이러한 정책의 장기 성능 지표를 평균보상(Average Reward) 이라 한다.</p>
 <h2 id="block-39db12c0115c8094ba16e23f65c82f54">목차</h2>
 <ul><li>Observation Reward: 실제로 관측되는 보상</li><li>State-wise Expected Reward: 상태별 기대보상</li><li>Long-run State Visitation Distribution: 장기 상태 방문 비율</li><li>Finite-time Average Reward: 유한 시간의 평균보상</li><li>Average Reward: 정책의 장기 평균보상<ul><li>Example: Sunny–Cloudy Average Reward</li></ul></li></ul>
-<h2 id="block-39db12c0115c80118d9ced4f5841b326">실제로 관측되는 보상: \(R_{t+1}\)</h2>
-<p>정책을 평가하려면, 그 정책을 따랐을 때 에이전트가 장기적으로 얼마나 좋은 결과를 얻는지를 하나의 값으로 나타내야 한다. 이를 위해 먼저 정책 \(\pi\)가 각 상태에서 한 스텝 동안 평균적으로 얼마나 좋은 결과를 만드는지를 정의하고, 그다음 에이전트가 장기적으로 각 상태를 얼마나 자주 방문하는지를 함께 고려한다.</p>
+<h2 id="block-39db12c0115c80118d9ced4f5841b326">상태별 즉시 보상: \(R_{t+1}\)</h2>
+<p>정책을 평가하려면, 그 정책을 따랐을 때 에이전트가 장기적으로 얼마나 좋은 결과를 얻는지를 하나의 값으로 나타내야 한다. 이를 위해 먼저 정책 \(\pi\)가 각 상태에서 한 스텝 동안 평균적으로 얼마나 좋은 결과를 만드는지를 정의하고, 그 다음 에이전트가 장기적으로 각 상태를 얼마나 자주 방문하는지를 함께 고려한다.</p>
 <div class="math-block">\[S_t \rightarrow A_t \rightarrow R_{t+1}, S_{t+1}\]</div>
 <p>같은 상태에서 같은 정책을 사용하더라도 다음 상태가 다르게 결정될 수 있기 때문에, 항상 같은 보상을 받는 것은 아니다.</p>
 <h2 id="block-39eb12c0115c80f3bb88e503552710c9">상태별 기대보상: \(r_{\pi}(s)\)</h2>
