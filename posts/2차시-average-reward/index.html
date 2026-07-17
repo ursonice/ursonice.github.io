@@ -29,13 +29,13 @@
     <meta property="og:url" content="https://ursonice.github.io/posts/2%EC%B0%A8%EC%8B%9C-average-reward/" />
     <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5B2%EC%B0%A8%EC%8B%9C%5D%20Average%20Reward&amp;cat=Reinforcement%20Learning" />
     <meta property="article:published_time" content="2026-07-14T08:56:00.000Z" />
-    <meta property="article:modified_time" content="2026-07-17T12:04:00.000Z" />
+    <meta property="article:modified_time" content="2026-07-17T15:57:00.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="[2차시] Average Reward" />
     <meta name="twitter:description" content="서론 지금까지는 정책이 만들어내는 마르코프 체인을 장기적인 관점에서 분석하기 위한 이론적 기반을 살펴보았다. 정상분포와 에르고딕 성질을 통해, 정책을 충분히 오래 수행하면 각 상태를 얼마나 자주 방문하는지를 하나의 확률분포로 표현할 수 있음을 확인하였다. 그러나 상태를 얼마나 자주 방문하는지만으로는 정책" />
     <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5B2%EC%B0%A8%EC%8B%9C%5D%20Average%20Reward&amp;cat=Reinforcement%20Learning" />
 
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"[2차시] Average Reward","description":"서론 지금까지는 정책이 만들어내는 마르코프 체인을 장기적인 관점에서 분석하기 위한 이론적 기반을 살펴보았다. 정상분포와 에르고딕 성질을 통해, 정책을 충분히 오래 수행하면 각 상태를 얼마나 자주 방문하는지를 하나의 확률분포로 표현할 수 있음을 확인하였다. 그러나 상태를 얼마나 자주 방문하는지만으로는 정책","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5B2%EC%B0%A8%EC%8B%9C%5D%20Average%20Reward&cat=Reinforcement%20Learning","datePublished":"2026-07-14T08:56:00.000Z","dateModified":"2026-07-17T12:04:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/2%EC%B0%A8%EC%8B%9C-average-reward/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"[2차시] Average Reward","description":"서론 지금까지는 정책이 만들어내는 마르코프 체인을 장기적인 관점에서 분석하기 위한 이론적 기반을 살펴보았다. 정상분포와 에르고딕 성질을 통해, 정책을 충분히 오래 수행하면 각 상태를 얼마나 자주 방문하는지를 하나의 확률분포로 표현할 수 있음을 확인하였다. 그러나 상태를 얼마나 자주 방문하는지만으로는 정책","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5B2%EC%B0%A8%EC%8B%9C%5D%20Average%20Reward&cat=Reinforcement%20Learning","datePublished":"2026-07-14T08:56:00.000Z","dateModified":"2026-07-17T15:57:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/2%EC%B0%A8%EC%8B%9C-average-reward/"}}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Reinforcement Learning","item":"https://ursonice.github.io/topics/reinforcement-learning/"},{"@type":"ListItem","position":3,"name":"[2차시] Average Reward","item":"https://ursonice.github.io/posts/2%EC%B0%A8%EC%8B%9C-average-reward/"}]}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -128,7 +128,7 @@
 <p>수식으로는</p>
 <div class="math-block">\[P_{\pi}(S_t = s) \longrightarrow d_{\pi}(s)\\[10pt]\frac{N_T(s)}{T} \longrightarrow d_{\pi}(s)\]</div>
 <p>\(N_T(s)\)는 \(T\)스텝 동안 상태 s를 방문한 횟수이다.</p>
-<h2 id="block-39eb12c0115c80a481a5fcef6b052f32">유한한 시간의 평균보상: \(\bar{R}_T\)</h2>
+<h2 id="block-39eb12c0115c80a481a5fcef6b052f32">유한한 시간의 즉시 평균보상: \(\bar{R}_T\)</h2>
 <p>정책을 \(T\)스텝 동안 수행하여 보상</p>
 <div class="math-block">\[R_1 + R_2 + \cdots + R_T\]</div>
 <p>을 받았다면 실제로 관측한 보상의 평균은</p>
@@ -139,7 +139,40 @@
 <figure><img src="/assets/notion/2차시-average-reward/3a0b12c0-115c-8095-8d08-f552efe2a96e.png" alt="" loading="lazy" /></figure>
 <ul><li><strong>실행했을 때의 관점</strong><ul><li>실제 에이전트의 Trajectory가 \(A \rightarrow B \rightarrow A\) 로 발생했다면 \(R_1 =-1,\; R_2 = +1\) </li></ul>
 <div class="math-block">\[\begin{aligned}\bar{R}_2 &amp;= \frac{1}{2}(R_1 + R_2) \\&amp;= \frac{1}{2}(-1 + 1)=0\end{aligned}\]</div></li></ul>
-<h2 id="block-3a0b12c0115c8085aa71e8ae853740c9">유한한 시간의 평균보상 기댓값</h2>
+<h2 id="block-3a0b12c0115c8085aa71e8ae853740c9">유한한 시간의 기대 평균보상: \(g_{T}^{\pi}\)</h2>
+<p>앞에서 정의한 유한한 시간의 즉시 평균보상: \(\bar{R}_T\)는 한 번 수행하여 실제로 얻은 평균보상임으로, 실행 경로에 따라 값이 달라질 수 있다. 따라서 가능한 모든 경로에서 얻을 수 있는 \(\bar{R}_T\)를 발생할 확률에 따라 평균낸 값을 유한 시간의 기대보상이라고 한다.</p>
+<div class="math-block">\[g_T^{\pi} = \mathbb{E}_{\pi}[\bar{R}_T] = \mathbb{E}_{\pi} \left[ \frac{1}{T} \sum_{t=0}^{T-1} R_{t+1} \right] = \frac{1}{T} \sum_{t=0}^{T-1} \mathbb{E}_{\pi}[R_{t+1}]\]</div>
+<p>아래처럼 쓸 수 있음으로</p>
+<div class="math-block">\[\mathbb{E}_{\pi}[R_{t+1}] = \sum_{s \in \mathcal{S}} P_{\pi}(S_t = s) \mathbb{E}_{\pi}[R_{t+1} \mid S_t = s]\]</div>
+<p>그리고 조건부 기댓값을 다음과 같이 정의했으므로</p>
+<div class="math-block">\[r_{\pi}(s) = \mathbb{E}_{\pi}[R_{t+1} \mid S_t = s]\]</div>
+<p>이렇게 기댓값을 풀면 상태에 있을 확률(가중치)와 각 상태의 보상 \(r_{\pi}(s)\)가 곱해진다.</p>
+<div class="math-block">\[\mathbb{E}_{\pi}[R_{t+1}] = \sum_{s} P_{\pi}(S_t = s) r_{\pi}(s)\]</div>
+<p>이를 다시 전체 식에 대입하면</p>
+<div class="math-block">\[g^{\pi}_T = \frac{1}{T} \sum_{t=0}^{T-1} \sum_{s} P_{\pi}(S_t = s) r_{\pi}(s)\]</div>
+<ul><li>\(\bar{R}_T\): 한 번의 실제 경로에서 관측한 평균보상</li><li>\(g_{T}^{\pi}\): 정책 \(\pi\)에 의해 만들어진 가능한 모든 경로를 고려한 평균보상의 기댓값</li><li>T: 정책을 수행한 유한한 스텝 수</li></ul>
+<h3 id="block-3a0b12c0115c80a6be0af2511a112b72">Example</h3>
+<figure><img src="/assets/notion/2차시-average-reward/3a0b12c0-115c-8095-8f15-c5621c99cd53.png" alt="" loading="lazy" /></figure>
+<ul><li><strong>실행 전 기대해보는 관점</strong></li></ul>
+<p>\(S_0 = A\)에서 \(T=2\) step까지의 유한한 기대 평균보상</p>
+<div class="math-block">\[\begin{aligned}g_2^{\pi} = \frac{1}{2} \Big[ &amp;P_{\pi}(S_0 = A)r_{\pi}(A) + P_{\pi}(S_0 = B)r_{\pi}(B) \\&amp;+ P_{\pi}(S_1 = A)r_{\pi}(A) + P_{\pi}(S_1 = B)r_{\pi}(B) \Big]\end{aligned}\]</div>
+<p>임으로 \(P(S_0=A) =1,\; P(S_0=B) =0\) 이고</p>
+<p>\(P(S_1=A)\)와 \(r_{\pi}(A)\)를 구하면</p>
+<div class="math-block">\[\begin{aligned}
+P(S_1 = A \mid S_0 = A) &amp;= 0.8 \\
+
+r_{\pi}(A)&amp;=0.6
+\end{aligned}\]</div>
+<p>\(P(S_2=B)\)와 \(r_{\pi}(B)\)를 구하면</p>
+<div class="math-block">\[\begin{aligned}
+P(S_1 = B \mid S_0 = A) &amp;= 0.2 \\
+
+r_{\pi}(B)&amp;=0.2
+\end{aligned}\]</div>
+<p>따라서</p>
+<div class="math-block">\[\begin{aligned}g_2^{\pi} = \frac{1}{2} \Big[ &amp;1 \cdot 0.6 + 0 \cdot 0.2 \\&amp;+ 0.8 \cdot 0.6 + 0.2 \cdot 0.2 \Big] = 0.56\end{aligned}\]</div>
+<p>이다.</p>
+<p>정책 \(\pi\)를 따를 때 각 시점에서 기대되는 보상을 구해서(\(\mathbb{E}[R_{t+1}]\))  T-1 스텝까지 전부다 더 한뒤( \(\sum_{t=0}^{T-1} \mathbb{E}[R_{t+1}]\)) T로 나누어( \(\frac{1}{T}\sum_{t=0}^{T-1} \mathbb{E}[R_{t+1}])\) 정책이 한 스텝당 평균적으로 얻을 것으로 기대되는 보상을 나타낸다.</p>
 <h2 id="block-39eb12c0115c80598f9fdcb80eceda7a">정책의 Average reward: \(g_{\pi}\)</h2>
 <p>정책 \(\pi\)의 평균보상은 정책을 무한히 오랫동안 수행했을 때 한 스텝당 평균적으로 얻는 보상이다.</p>
 <div class="math-block">\[g_{\pi} = \lim_{T \to \infty} \mathbb{E}_{\pi} \left[ \bar{R}_T \right]\]</div>
