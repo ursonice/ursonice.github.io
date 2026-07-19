@@ -13,6 +13,8 @@
   <url><loc>https://ursonice.github.io/topics/kubernetes/</loc></url>
   <url><loc>https://ursonice.github.io/topics/python/</loc></url>
   <url><loc>https://ursonice.github.io/topics/coding-test/</loc></url>
+  <url><loc>https://ursonice.github.io/posts/3a2b12c0-115c-8044-8f18-fa8d0560f1bb/</loc><lastmod>2026-07-19</lastmod></url>
+  <url><loc>https://ursonice.github.io/posts/ppo/</loc><lastmod>2026-07-19</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/3%EC%B0%A8%EC%8B%9C-markov-decision-process/</loc><lastmod>2026-07-18</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/2%EC%B0%A8%EC%8B%9C-average-reward/</loc><lastmod>2026-07-18</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/1%EC%B0%A8%EC%8B%9C-markov-process/</loc><lastmod>2026-07-17</lastmod></url>
@@ -39,7 +41,6 @@
   <url><loc>https://ursonice.github.io/posts/learning-vision-based-omnidirectional-navigation-a-teacher-student-approach-usin/</loc><lastmod>2026-05-24</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/rl-dqn%EC%9D%98-action-space-%ED%95%9C%EA%B3%84/</loc><lastmod>2026-05-24</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/trpo-trust-region-policy-optimizer/</loc><lastmod>2026-05-24</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/ppo/</loc><lastmod>2026-05-24</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/vla-navila-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2026-05-22</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/resnet-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2026-05-20</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/how-to-do-internal-camera-calibration/</loc><lastmod>2026-04-27</lastmod></url>

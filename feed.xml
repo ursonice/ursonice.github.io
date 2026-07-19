@@ -6,7 +6,23 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 19 Jul 2026 06:38:49 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 19 Jul 2026 08:57:54 GMT</lastBuildDate>
+    <item>
+      <title></title>
+      <link>https://ursonice.github.io/posts/3a2b12c0-115c-8044-8f18-fa8d0560f1bb/</link>
+      <guid isPermaLink="false">3a2b12c0-115c-8044-8f18-fa8d0560f1bb</guid>
+      <pubDate>Sun, 19 Jul 2026 06:47:00 GMT</pubDate>
+      <category>Reinforcement Learning</category>
+      <description>우리는 각 데이터가 어떤 군집에 속하는지 알 수가 없는 상황에서 비슷한 데이터끼리 여러 그룹으로 나누고 싶다. 이렇게 데이터의 라벨을 모르는 상태에서 어떻게 각 비슷한 데이터끼리 그룹으로 구분할 수 있을까? 여기서 우리가 관측한 데이터는 X, 각 데이터가 어느 군집에 속해있는지 나타내는 잠재변수를 Z라고</description>
+    </item>
+    <item>
+      <title>PPO</title>
+      <link>https://ursonice.github.io/posts/ppo/</link>
+      <guid isPermaLink="false">35db12c0-115c-80d1-8eee-c368710fb683</guid>
+      <pubDate>Mon, 11 May 2026 04:04:00 GMT</pubDate>
+      <category>Reinforcement Learning</category>
+      <description>목표: PPO(Proximal Policy Optimization)를 논문(academic paper) 흐름(문제정의 → 방법 → 분석/실험 → 결론)으로 정리한다. 서론 이전에 배운 TPRO는 정책의 단조 향상(Monotonic Improvement)을 이론적으로 보장한다는 강한 장점을 얻는 대가로 T</description>
+    </item>
     <item>
       <title>[3차시] Markov Decision Process</title>
       <link>https://ursonice.github.io/posts/3%EC%B0%A8%EC%8B%9C-markov-decision-process/</link>
@@ -216,14 +232,6 @@
       <description>서론 기존 DDPG는 성능의 단조개선(Monotonic Improvement)가 이론적으로 보장되지 않았다.(목적함수 J(\theta))가 매 iteration마다 증가한다는 보장이 없다.) 왜냐하면 Actor( \mu )가 Ciritic(Q 함수)의 gradient를 따라가도록 학습하는데 critic </description>
     </item>
     <item>
-      <title>PPO</title>
-      <link>https://ursonice.github.io/posts/ppo/</link>
-      <guid isPermaLink="false">35db12c0-115c-80d1-8eee-c368710fb683</guid>
-      <pubDate>Mon, 11 May 2026 04:04:00 GMT</pubDate>
-      <category>Reinforcement Learning</category>
-      <description>목표: PPO(Proximal Policy Optimization)를 논문(academic paper) 흐름(문제정의 → 방법 → 분석/실험 → 결론)으로 정리한다. 서론 이전에 배운 TPRO는 정책의 단조 향상(Monotonic Improvement)을 이론적으로 보장한다는 강한 장점을 얻는 대가로 T</description>
-    </item>
-    <item>
       <title>(VLA) NaVILA 논문리뷰</title>
       <link>https://ursonice.github.io/posts/vla-navila-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</link>
       <guid isPermaLink="false">2afb12c0-115c-805f-a2dc-c2bda949f787</guid>
@@ -238,14 +246,6 @@
       <pubDate>Wed, 14 Jun 2023 23:17:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
       <description>서론 Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun; &quot;Deep Residual Learning for Image Recognition&quot;, Proceedings of the IEEE Conference on Computer Vision and Pattern Re</description>
-    </item>
-    <item>
-      <title>How to do Internal Camera Calibration</title>
-      <link>https://ursonice.github.io/posts/how-to-do-internal-camera-calibration/</link>
-      <guid isPermaLink="false">2fdb12c0-115c-80b6-a95f-fd82d92af82a</guid>
-      <pubDate>Wed, 04 Feb 2026 05:23:00 GMT</pubDate>
-      <category>Application</category>
-      <description>서론 ROS2를 사용해서 카메라 내부 캘리브레이션 하는 방법에 대해 설명한다. Dependencies 카메라 렌즈와 센서의 특성 때문에 발생하는 영상 왜곡을 수학적으로 계산하여 보정값을 찾아내는 프로그램으로 실시간으로 ROS 토픽(image_raw)을 구독(Subscribe)하여 화면을 보면서, 그 위에</description>
     </item>
   </channel>
 </rss>
