@@ -6,14 +6,14 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 27 Jul 2026 05:26:37 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 27 Jul 2026 08:56:43 GMT</lastBuildDate>
     <item>
-      <title></title>
-      <link>https://ursonice.github.io/posts/3aab12c0-115c-8060-af74-dbcaf3484407/</link>
+      <title>IsaacSim/Lab architecture</title>
+      <link>https://ursonice.github.io/posts/isaacsim-lab-architecture/</link>
       <guid isPermaLink="false">3aab12c0-115c-8060-af74-dbcaf3484407</guid>
       <pubDate>Mon, 27 Jul 2026 04:29:00 GMT</pubDate>
       <category>Reinforcement Learning</category>
-      <description> Isaac Sim 역할 로봇과 주변 물체가 존재하는 물리적 시뮬레이션 세계를 만들고, 그 세계에서 발생하는 물리현상을 계산하는 시뮬레이터이다. Sim에서 제공하거나 처리하는 요소는 다음과 같다. 로봇 모델 평면 또는 울퉁불퉁한 지형 벽, 나무, 장애물 카메라와 각종 센서 중력과 마찰 충돌과 접촉력 관절</description>
+      <description>서론 이 페이지는 실제 RSL_RL을 이용해 강화학습을 하고자 할 때 환경, 에이전트, 정책 등에 대해 어떻게 구성해야하는지 에대한 아키텍처?를 이해기위해 설명한다 Isaac Sim 역할 로봇과 주변 물체가 존재하는 물리적 시뮬레이션 세계를 만들고, 그 세계에서 발생하는 물리현상을 계산하는 시뮬레이터이다</description>
     </item>
     <item>
       <title>[1차시] Markov process</title>
