@@ -6,7 +6,15 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 27 Jul 2026 01:22:29 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 27 Jul 2026 05:26:37 GMT</lastBuildDate>
+    <item>
+      <title></title>
+      <link>https://ursonice.github.io/posts/3aab12c0-115c-8060-af74-dbcaf3484407/</link>
+      <guid isPermaLink="false">3aab12c0-115c-8060-af74-dbcaf3484407</guid>
+      <pubDate>Mon, 27 Jul 2026 04:29:00 GMT</pubDate>
+      <category>Reinforcement Learning</category>
+      <description> Isaac Sim 역할 로봇과 주변 물체가 존재하는 물리적 시뮬레이션 세계를 만들고, 그 세계에서 발생하는 물리현상을 계산하는 시뮬레이터이다. Sim에서 제공하거나 처리하는 요소는 다음과 같다. 로봇 모델 평면 또는 울퉁불퉁한 지형 벽, 나무, 장애물 카메라와 각종 센서 중력과 마찰 충돌과 접촉력 관절</description>
+    </item>
     <item>
       <title>[1차시] Markov process</title>
       <link>https://ursonice.github.io/posts/1%EC%B0%A8%EC%8B%9C-markov-process/</link>
@@ -238,14 +246,6 @@
       <pubDate>Tue, 18 Nov 2025 00:58:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
       <description>Cite Anthony Brohan, Noah Brown, Justice Carbajal, Chelsea Finn, Sergey Levine, et al.; arXiv preprint arXiv:2307.15818 [cs.RO] https://navila-bot.github.io/static/navila</description>
-    </item>
-    <item>
-      <title>ResNet 논문리뷰</title>
-      <link>https://ursonice.github.io/posts/resnet-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</link>
-      <guid isPermaLink="false">d4583caf-3da1-4e11-8701-f895316a92ad</guid>
-      <pubDate>Wed, 14 Jun 2023 23:17:00 GMT</pubDate>
-      <category>AI/ Deep Learning</category>
-      <description>서론 Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun; &quot;Deep Residual Learning for Image Recognition&quot;, Proceedings of the IEEE Conference on Computer Vision and Pattern Re</description>
     </item>
   </channel>
 </rss>
