@@ -6,7 +6,7 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 24 Aug 2026 17:35:07 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 24 Aug 2026 18:13:32 GMT</lastBuildDate>
     <item>
       <title>Variation Inference(VI, ELBO)</title>
       <link>https://ursonice.github.io/posts/variation-inference-vi-elbo/</link>
