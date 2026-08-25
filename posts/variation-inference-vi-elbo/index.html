@@ -29,13 +29,13 @@
     <meta property="og:url" content="https://ursonice.github.io/posts/variation-inference-vi-elbo/" />
     <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Variation%20Inference(VI%2C%20ELBO)&amp;cat=Reinforcement%20Learning" />
     <meta property="article:published_time" content="2026-07-01T07:19:00.000Z" />
-    <meta property="article:modified_time" content="2026-08-25T10:15:00.000Z" />
+    <meta property="article:modified_time" content="2026-08-25T10:53:00.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Variation Inference(VI, ELBO)" />
     <meta name="twitter:description" content="Variation Inference(VI, ELBO) 개요 복잡한 데이터를 이해하고싶어서 어떤 요인들이 데이터에 영향을 주는지 알고 싶다. 즉 우리가 보는 데이터가 왜 그렇게 나왔는지 숨은 원인을 알고 싶은 것. (데이터 x가 주어졌을때 숨은 요인 z가 어떻게 나오는지를 알고싶은 것이다. p(z|x)) " />
     <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Variation%20Inference(VI%2C%20ELBO)&amp;cat=Reinforcement%20Learning" />
 
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Variation Inference(VI, ELBO)","description":"Variation Inference(VI, ELBO) 개요 복잡한 데이터를 이해하고싶어서 어떤 요인들이 데이터에 영향을 주는지 알고 싶다. 즉 우리가 보는 데이터가 왜 그렇게 나왔는지 숨은 원인을 알고 싶은 것. (데이터 x가 주어졌을때 숨은 요인 z가 어떻게 나오는지를 알고싶은 것이다. p(z|x)) ","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Variation%20Inference(VI%2C%20ELBO)&cat=Reinforcement%20Learning","datePublished":"2026-07-01T07:19:00.000Z","dateModified":"2026-08-25T10:15:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/variation-inference-vi-elbo/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Variation Inference(VI, ELBO)","description":"Variation Inference(VI, ELBO) 개요 복잡한 데이터를 이해하고싶어서 어떤 요인들이 데이터에 영향을 주는지 알고 싶다. 즉 우리가 보는 데이터가 왜 그렇게 나왔는지 숨은 원인을 알고 싶은 것. (데이터 x가 주어졌을때 숨은 요인 z가 어떻게 나오는지를 알고싶은 것이다. p(z|x)) ","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Variation%20Inference(VI%2C%20ELBO)&cat=Reinforcement%20Learning","datePublished":"2026-07-01T07:19:00.000Z","dateModified":"2026-08-25T10:53:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/variation-inference-vi-elbo/"}}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Reinforcement Learning","item":"https://ursonice.github.io/topics/reinforcement-learning/"},{"@type":"ListItem","position":3,"name":"Variation Inference(VI, ELBO)","item":"https://ursonice.github.io/posts/variation-inference-vi-elbo/"}]}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -121,18 +121,23 @@
 <p>P(X)를 latent variable z를 이용해 표현하는 이유는, z라는 숨은 원인으로부터 x가 생성된다고 생성 과정을 모델링했기 때문이다.</p>
 <p>따라서 베이지안 정리로 부터 p(z|x)를 계산하기가 어렵다.</p>
 <h3 id="block-3c7b12c0115c80268143eb078d418937">Variation Inference</h3>
-<p>정확한</p>
-<p>여기서 변분 추론의 핵심 아이디어가 등장한다. 이러한 사후분포를 직접 계산하는 대신, 실제로 다룰 수 있는 더 단순한 분포 q(Z)로 근사합니다. (예를들면 q(Z)는 가우시안, 지수분포, 감마분포 처럼 단순한 분포라고 가정한다)</p>
-<p>이러한 분포를 우리가 선택하면 사후분포에 최대한 가까운 Q분포의 파라미터를 찾아야한다. 그러기 위해서는 먼저 어떤 분포인지 선택해야 한다. 예를들어 X가 이미지이고 Z가 촬영각도(우리가 정함)라면 [-무한대, 무한대]의 범위를 설정하면됨으로 정규분포로 선택한다. 즉, z의 서포트를 기준을 기준으로 q분포를 설정한다.</p>
-<p>이러한 파라미터를 찾기위해 정답 사후분포와 Q 확률분포가 얼마나 유사한지를 측정하기 위해 KL divergence를 사용한다. (그리고 그 분포에서의 파라미터를 건들여서 정답 사후분포의 모양과 최대한 유사하게 만드는 것)</p>
+<p>정확한 p(z|x)를 계산할 수 없다면 계산하기 쉬운 다른 분포를 하나 만들어서 p(z|x)와 비슷하게 만들자.
+라는 변분 추론의 핵심 아이디어가 등장한다.</p>
+<p>바로 p(z|x) 사후분포를 직접 계산하는 대신, 실제로 다룰 수 있는 더 단순한 분포 q(Z)로 근사합니다. (예를들면 q(Z)는 가우시안, 지수분포, 감마분포 처럼 단순한 분포라고 가정한다.)</p>
+<p>이러한 분포를 우리가 선택하면 사후분포에 최대한 가까운 Q분포의 파라미터를 찾아야한다. 
+그러기 위해서는 먼저 어떤 분포인지 선택해야 한다. 예를들어 X가 이미지이고 Z가 촬영각도(우리가 정함)라면 [-무한대, 무한대]의 범위를 설정하면됨으로 정규분포로 선택한다. 즉, z의 서포트를 바탕으로  q분포의 family를 선택하면 된다.</p>
+<p>Q 분포가 선택되면 파라미터(ex. \(\mu, \sigma\)) 를 바꿔가면서 정답 사후분포 모양과 최대한 유사하게 만든다.</p>
+<p>이를 수학적으로 formulation 하면 Q 확률분포와 정답 사후 분포가 얼마나 가까운지 측정가능한 KL divergence를 사용하고 이 값을 최소화하면 된다.</p>
 <div class="math-block">\[D_{KL}(Q(Z)||P(Z|X))\]</div>
-<p>KL divergence를 계산하기 위해선 구하기 어려운 정답 사후분포인 P(Z|X)가 필요하다.</p>
-<p>이를 베이지안 룰을 사용하면 다음과 같이 바꿀 수 있고</p>
-<div class="math-block">\[D_{KL}(q(z)||p(z|x)) = \mathbb{E}_{z\sim q} \left[ \log \frac{q(z)}{p(z|x)} \right] \\
+<p>그러면 KL divergence를 직접 계산해서 최소화해보자.</p>
+<div class="math-block">\[D_{KL}(q(z)||p(z|x)) = \mathbb{E}_{z\sim q} \left[ \log \frac{q(z)}{p(z|x)} \right]\]</div>
+<p>계산하려 봤더니 여저닣 구하기 어려운 정답 사후분포인 P(Z|X)가 필요하다.</p>
+<p>이를 베이지안 룰을 사용하면</p>
+<div class="math-block">\[ \\
 P(z|x) = \frac{p(x,z)}{p(x)} = \frac{p(x|z)p(z)}{p(x)} \text{를 대입하면}\\
 \]</div>
 <div class="math-block">\[\begin{aligned}
-D_{KL}(q||p) = \int q(z) \log \frac{q(z)}{p(z|x)} dz 
+D_{KL}(q(z)||p(z|x)) = \int q(z) \log \frac{q(z)}{p(z|x)} dz 
 &amp;= \int q(z) \log \frac{q(z) \cdot p(x)}{p(x|z) \cdot p(z)} dz \\
 &amp;= \int q(z) \log \left( \frac{q(z)}{p(z)} \times \frac{p(x)}{p(x|z)} \right) dz \\
 &amp;= \int q(z) \log \frac{q(z)}{p(z)} dz + \int q(z) \log \frac{p(x)}{p(x|z)} dz \\
@@ -141,9 +146,15 @@ D_{KL}(q||p) = \int q(z) \log \frac{q(z)}{p(z|x)} dz
 \therefore D_{KL}(q(z)||p(z|x)) 
 &amp;= D_{KL}(q(z) \parallel p(z)) + \log p(x) - \mathbb{E}_{z \sim q} [\log p(x|z)]
 \end{aligned}\]</div>
-<p>다음과 같이 L(q)함수를 정의하자. 이를 ELBO라고 한다.</p>
-<p>q분포를 바꿔가며 정답 사후 분포에 근사해야함으로 </p>
+<div class="math-block">\[\begin{align}
+D_{KL}(q(z)||p(z|x)) 
+&amp;= \log p(x) - [\mathbb{E}_{z \sim q} \left[\log p(x|z)] -D_{KL}(q(z) \parallel p(z))\right]
+\end{align}\]</div>
+<p>여기서 대괄호 부분을 아래와 같이 정의하고 이것을 ELBO라고 한다.</p>
 <div class="math-block">\[L(q) =  \mathbb{E}_{z \sim q} [ \log p(x|z) ] - D_{KL}(q(z) \parallel p(z))\]</div>
+<p>따라서</p>
+<p>q분포를 바꿔가며 정답 사후 분포에 근사해야함으로 </p>
+<p>따ㄹ</p>
 <p>또는 아래와 같이 풀이하는 것도 가능하다.</p>
 <div class="math-block">\[\begin{aligned}D_{KL}(q(z) \parallel p(z|x)) &amp;= \mathbb{E}_q \left[ \log \frac{q(z)}{p(z|x)} \right] \\&amp;= \mathbb{E}_q \left[ \log \frac{q(z) \cdot p(x)}{p(x,z)} \right] \\&amp;= \mathbb{E}_q [ \log q(z) + \log p(x) - \log p(x,z) ] \\&amp;= \mathbb{E}_q [ \log q(z) ] + \mathbb{E}_q [ \log p(x) ] - \mathbb{E}_q [ \log p(x,z) ]\end{aligned}\]</div>
 <div class="math-block">\[\log p(x) = D_{KL}(q(z) \parallel p(z|x)) + \underbrace{\left[ \mathbb{E}_q[\log p(x, z)] - \mathbb{E}_q[\log q(z)] \right]}_{\mathcal{L}(q) = \text{ELBO}} \\\mathcal{L}(q) = \mathbb{E}_q[\log p(x, z)] - \mathbb{E}_q[\log q(z)]\]</div>
