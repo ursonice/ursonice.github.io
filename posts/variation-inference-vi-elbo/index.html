@@ -16,7 +16,7 @@
 
     <title>Variation Inference(VI, ELBO) — Woojae Joo</title>
     <meta name="post-slug" content="variation-inference-vi-elbo" />
-    <meta name="description" content="Variation Inference(VI, ELBO) 복잡한 데이터를 이해하고싶어서 어떤 요인들이 관측값(데이터)들에 영향을 주는지 알고 싶다. 즉 우리가 보는 데이터가 왜 그렇게 나왔는지 숨은 원인을 알고 싶은 것. (데이터 x가 주어졌을때 숨은 요인 z가 어떻게 나오는지를 알고싶음 p(z|x)) 그런" />
+    <meta name="description" content="Variation Inference(VI, ELBO) 개요 복잡한 데이터를 이해하고싶어서 어떤 요인들이 데이터에 영향을 주는지 알고 싶다. 즉 우리가 보는 데이터가 왜 그렇게 나왔는지 숨은 원인을 알고 싶은 것. (데이터 x가 주어졌을때 숨은 요인 z가 어떻게 나오는지를 알고싶은 것이다. p(z|x)) " />
     <link rel="canonical" href="https://ursonice.github.io/posts/variation-inference-vi-elbo/" />
     <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="/manifest.json" />
@@ -25,17 +25,17 @@
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Woojae Joo — Developer Note" />
     <meta property="og:title" content="Variation Inference(VI, ELBO)" />
-    <meta property="og:description" content="Variation Inference(VI, ELBO) 복잡한 데이터를 이해하고싶어서 어떤 요인들이 관측값(데이터)들에 영향을 주는지 알고 싶다. 즉 우리가 보는 데이터가 왜 그렇게 나왔는지 숨은 원인을 알고 싶은 것. (데이터 x가 주어졌을때 숨은 요인 z가 어떻게 나오는지를 알고싶음 p(z|x)) 그런" />
+    <meta property="og:description" content="Variation Inference(VI, ELBO) 개요 복잡한 데이터를 이해하고싶어서 어떤 요인들이 데이터에 영향을 주는지 알고 싶다. 즉 우리가 보는 데이터가 왜 그렇게 나왔는지 숨은 원인을 알고 싶은 것. (데이터 x가 주어졌을때 숨은 요인 z가 어떻게 나오는지를 알고싶은 것이다. p(z|x)) " />
     <meta property="og:url" content="https://ursonice.github.io/posts/variation-inference-vi-elbo/" />
     <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Variation%20Inference(VI%2C%20ELBO)&amp;cat=Reinforcement%20Learning" />
     <meta property="article:published_time" content="2026-07-01T07:19:00.000Z" />
-    <meta property="article:modified_time" content="2026-07-27T13:42:00.000Z" />
+    <meta property="article:modified_time" content="2026-08-25T10:15:00.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Variation Inference(VI, ELBO)" />
-    <meta name="twitter:description" content="Variation Inference(VI, ELBO) 복잡한 데이터를 이해하고싶어서 어떤 요인들이 관측값(데이터)들에 영향을 주는지 알고 싶다. 즉 우리가 보는 데이터가 왜 그렇게 나왔는지 숨은 원인을 알고 싶은 것. (데이터 x가 주어졌을때 숨은 요인 z가 어떻게 나오는지를 알고싶음 p(z|x)) 그런" />
+    <meta name="twitter:description" content="Variation Inference(VI, ELBO) 개요 복잡한 데이터를 이해하고싶어서 어떤 요인들이 데이터에 영향을 주는지 알고 싶다. 즉 우리가 보는 데이터가 왜 그렇게 나왔는지 숨은 원인을 알고 싶은 것. (데이터 x가 주어졌을때 숨은 요인 z가 어떻게 나오는지를 알고싶은 것이다. p(z|x)) " />
     <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Variation%20Inference(VI%2C%20ELBO)&amp;cat=Reinforcement%20Learning" />
 
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Variation Inference(VI, ELBO)","description":"Variation Inference(VI, ELBO) 복잡한 데이터를 이해하고싶어서 어떤 요인들이 관측값(데이터)들에 영향을 주는지 알고 싶다. 즉 우리가 보는 데이터가 왜 그렇게 나왔는지 숨은 원인을 알고 싶은 것. (데이터 x가 주어졌을때 숨은 요인 z가 어떻게 나오는지를 알고싶음 p(z|x)) 그런","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Variation%20Inference(VI%2C%20ELBO)&cat=Reinforcement%20Learning","datePublished":"2026-07-01T07:19:00.000Z","dateModified":"2026-07-27T13:42:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/variation-inference-vi-elbo/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Variation Inference(VI, ELBO)","description":"Variation Inference(VI, ELBO) 개요 복잡한 데이터를 이해하고싶어서 어떤 요인들이 데이터에 영향을 주는지 알고 싶다. 즉 우리가 보는 데이터가 왜 그렇게 나왔는지 숨은 원인을 알고 싶은 것. (데이터 x가 주어졌을때 숨은 요인 z가 어떻게 나오는지를 알고싶은 것이다. p(z|x)) ","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Variation%20Inference(VI%2C%20ELBO)&cat=Reinforcement%20Learning","datePublished":"2026-07-01T07:19:00.000Z","dateModified":"2026-08-25T10:15:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/variation-inference-vi-elbo/"}}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Reinforcement Learning","item":"https://ursonice.github.io/topics/reinforcement-learning/"},{"@type":"ListItem","position":3,"name":"Variation Inference(VI, ELBO)","item":"https://ursonice.github.io/posts/variation-inference-vi-elbo/"}]}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -86,7 +86,7 @@
     <div class="article-meta">
       
       
-      <span>작성 2026년 7월 1일</span><span class="dot"></span><span>수정 2026년 7월 27일</span>
+      <span>작성 2026년 7월 1일</span><span class="dot"></span><span>수정 2026년 8월 25일</span>
       <span class="reading-size" role="group" aria-label="글자 크기">
         <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
         <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
@@ -95,7 +95,8 @@
     </div>
     <hr class="article-divider" />
     <div class="article-content"><h2 id="block-390b12c0115c80a2ab6ce57a19ea669c">Variation Inference(VI, ELBO)</h2>
-<p>복잡한 데이터를 이해하고싶어서 어떤 요인들이 관측값(데이터)들에 영향을 주는지 알고 싶다. 즉 우리가 보는 데이터가 왜 그렇게 나왔는지 숨은 원인을 알고 싶은 것. (데이터 x가 주어졌을때 숨은 요인 z가 어떻게 나오는지를 알고싶음 p(z|x))</p>
+<h3 id="block-3c7b12c0115c8057b44bd47e7391d663">개요</h3>
+<p>복잡한 데이터를 이해하고싶어서 어떤 요인들이 데이터에 영향을 주는지 알고 싶다. 즉 우리가 보는 데이터가 왜 그렇게 나왔는지 숨은 원인을 알고 싶은 것. (데이터 x가 주어졌을때 숨은 요인 z가 어떻게 나오는지를 알고싶은 것이다. p(z|x))</p>
 <p>그런데 p(z|x)의 실제 정답은 복잡한 다봉분포처럼 생겼다.</p>
 <figure><img src="/assets/notion/variation-inference-vi-elbo/390b12c0-115c-8038-94c8-d6ff4c778e30.png" alt="" loading="lazy" width="2050" height="952" /></figure>
 <p>그래서 정확한 분포를 그대로 계산하려면 너무 복잡하다.</p>
@@ -103,20 +104,24 @@
 <figure><img src="/assets/notion/variation-inference-vi-elbo/390b12c0-115c-802b-bad5-ccd4129a3b9b.png" alt="" loading="lazy" width="2102" height="974" /></figure>
 <p>이것이 바로 변분추론(Variational inference)이다.</p>
 <p>따라서 핵심은 가능한 가장 좋은 근사분포를 어떻게 찾을 것인가?</p>
-<p>이것이 왜 필요한가?</p>
+<h3 id="block-390b12c0115c805e8595fc7773843929">이것이 왜 필요한가?</h3>
 <p>머신러닝과 통계에서는 이미지나 측정값처럼 직접 관측한 데이터를 자주 다루며, 이를 X라고하자</p>
 <p>그리고 직접 관측할 수는 없지만 데이터에 영향을 주는 어떤 잠재변수가 있으며, 이를 Z라고 하자</p>
 <p>예를 들어 이미지(X)가 데이터라면 잠재 변수는 사진이 찍힌 각도(Z) 등이 있다.</p>
 <p>우리의 목표는 사후분포 P(Z|X)를 구하는 것 입니다. </p>
 <p>이는 관측된 X가 주어졌을 때 어떤 Z 값들이 그럴듯한지를 알려준다.</p>
 <p>즉, 데이터를 보고 그 데이터를 만든 숨은 원인이 무엇일지 추정하는 것이다.</p>
+<h3 id="block-3c7b12c0115c80258103d99e45f76ddb">Bayes rule을 써보자</h3>
 <p>P(Z|X)를 구하기 위해 베이즈 정리에 따르면 다음과 같이 쓸 수 있다.</p>
 <div class="math-block">\[P(Z|X) = \frac{P(X|Z)\times P(Z)}{P(X)}\]</div>
 <p>사후분포 = 우도 × 사전분포 ÷ 증거로 계산된다.</p>
-<p>수식은 간단해 보이지만 계산이 쉽지 않다</p>
-<p>왜냐하면 분모 P(X)를 구하려면 잠재변수 Z가 가질 수 있는 모든 값에 대해 적분해야 하기 때문입니다.</p>
+<p>문제는 분모 P(X)이다. 이를 구하려면 잠재변수 Z가 가질 수 있는 모든 차원에 대해 적분해야 하는데</p>
 <div class="math-block">\[P(X) = \int P(X|Z)P(Z)dZ\]</div>
-<p>가능한 모든 숨은 원인을 다 고려해서 더해야하고 차원이 많아지면 이 적분은 계산적으로 거의 불가능해진다.(Z값이 너무 많아서)</p>
+<p>가능한 모든 숨은 원인을 다 고려했더니 z의 차원이 많아지면 이 적분은 현실적으로 계산이 어려워진다.</p>
+<p>P(X)를 latent variable z를 이용해 표현하는 이유는, z라는 숨은 원인으로부터 x가 생성된다고 생성 과정을 모델링했기 때문이다.</p>
+<p>따라서 베이지안 정리로 부터 p(z|x)를 계산하기가 어렵다.</p>
+<h3 id="block-3c7b12c0115c80268143eb078d418937">Variation Inference</h3>
+<p>정확한</p>
 <p>여기서 변분 추론의 핵심 아이디어가 등장한다. 이러한 사후분포를 직접 계산하는 대신, 실제로 다룰 수 있는 더 단순한 분포 q(Z)로 근사합니다. (예를들면 q(Z)는 가우시안, 지수분포, 감마분포 처럼 단순한 분포라고 가정한다)</p>
 <p>이러한 분포를 우리가 선택하면 사후분포에 최대한 가까운 Q분포의 파라미터를 찾아야한다. 그러기 위해서는 먼저 어떤 분포인지 선택해야 한다. 예를들어 X가 이미지이고 Z가 촬영각도(우리가 정함)라면 [-무한대, 무한대]의 범위를 설정하면됨으로 정규분포로 선택한다. 즉, z의 서포트를 기준을 기준으로 q분포를 설정한다.</p>
 <p>이러한 파라미터를 찾기위해 정답 사후분포와 Q 확률분포가 얼마나 유사한지를 측정하기 위해 KL divergence를 사용한다. (그리고 그 분포에서의 파라미터를 건들여서 정답 사후분포의 모양과 최대한 유사하게 만드는 것)</p>
