@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>Output Data Normalization — Woojae Joo</title>
+    <meta name="post-slug" content="output-data-normalization" />
+    <meta name="description" content="상황 로봇의 여러 물리량을 하나의 신경망에서 예측하려고 한다. 정답 데이터가 모두 존재하며, 각 출력에 대해 MSE loss를 사용한다. 데이터는 크게 세 종류이다. 관절 action: 총 12차원이며 각 관절은 서로 다른 평균과 분산을 가진다. 정책은 각 상태에서 Gaussian distribution" />
+    <link rel="canonical" href="https://ursonice.github.io/posts/output-data-normalization/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="Output Data Normalization" />
+    <meta property="og:description" content="상황 로봇의 여러 물리량을 하나의 신경망에서 예측하려고 한다. 정답 데이터가 모두 존재하며, 각 출력에 대해 MSE loss를 사용한다. 데이터는 크게 세 종류이다. 관절 action: 총 12차원이며 각 관절은 서로 다른 평균과 분산을 가진다. 정책은 각 상태에서 Gaussian distribution" />
+    <meta property="og:url" content="https://ursonice.github.io/posts/output-data-normalization/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Output%20Data%20Normalization&amp;cat=AI%2F%20Deep%20Learning" />
+    <meta property="article:published_time" content="2026-09-04T09:31:00.000Z" />
+    <meta property="article:modified_time" content="2026-09-04T10:17:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Output Data Normalization" />
+    <meta name="twitter:description" content="상황 로봇의 여러 물리량을 하나의 신경망에서 예측하려고 한다. 정답 데이터가 모두 존재하며, 각 출력에 대해 MSE loss를 사용한다. 데이터는 크게 세 종류이다. 관절 action: 총 12차원이며 각 관절은 서로 다른 평균과 분산을 가진다. 정책은 각 상태에서 Gaussian distribution" />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Output%20Data%20Normalization&amp;cat=AI%2F%20Deep%20Learning" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Output Data Normalization","description":"상황 로봇의 여러 물리량을 하나의 신경망에서 예측하려고 한다. 정답 데이터가 모두 존재하며, 각 출력에 대해 MSE loss를 사용한다. 데이터는 크게 세 종류이다. 관절 action: 총 12차원이며 각 관절은 서로 다른 평균과 분산을 가진다. 정책은 각 상태에서 Gaussian distribution","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Output%20Data%20Normalization&cat=AI%2F%20Deep%20Learning","datePublished":"2026-09-04T09:31:00.000Z","dateModified":"2026-09-04T10:17:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/output-data-normalization/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Deep Learning","item":"https://ursonice.github.io/topics/ai-deep-learning/"},{"@type":"ListItem","position":3,"name":"Output Data Normalization","item":"https://ursonice.github.io/posts/output-data-normalization/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/ai-deep-learning/">AI/ Deep Learning</a>
+    </nav>
+    <h1>Output Data Normalization</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2026년 9월 4일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h4 id="block-3d1b12c0115c804bb6c1c6a2be339678">상황</h4>
+<p>로봇의 여러 물리량을 하나의 신경망에서 예측하려고 한다.</p>
+<p>정답 데이터가 모두 존재하며, 각 출력에 대해 MSE loss를 사용한다.</p>
+<p>데이터는 크게 세 종류이다.</p>
+<ul><li><strong>관절 action</strong>: 총 12차원이며 각 관절은 서로 다른 평균과 분산을 가진다. 정책은 각 상태에서 Gaussian distribution으로 action을 sampling한 값이다.</li><li><strong>로봇의 선형 속도</strong>: 3차원 \((v_x,v_y,v_z)\) 이며 단위는 m/s이다.</li><li><strong>막대 길이</strong>: 1차원이며 단위는 m이고, 값의 범위는 [0.33 ~ 0.45m]이다.</li></ul>
+<p>신경망이 이 세 종류의 값을 동시에 예측하고 각각에 대해 </p>
+<div class="math-block">\[L = \lambda_a L_{\text{action}}
++
+\lambda_v L_{\text{velocity}}
++
+\lambda_l L_{\text{length}}
+\]</div>
+<p>MSE loss를 계산하고 이를 바탕으로 backpropagation을 진행한다.</p>
+<h4 id="block-3d1b12c0115c80e3a363fd03c523440f">문제정의 </h4>
+<p>각 데이터의 단위와 numerical scale이 다름으로 서로 다른 물리량의 MSE numerical scale을 맞춰야 학습 불균형이 일어나지 않는다.</p>
+<p>예를 들어 </p>
+<p>실제 데이터 통계가 대략</p>
+<div class="math-block">\[\begin{align*}
+\mu_v &amp;= [0.51,\, 0.00,\, -0.01] \\[0.5em]
+\sigma_x = 0.27,\quad &amp;\sigma_y = 0.15,\quad \sigma_z = 0.068
+\end{align*}\]</div>
+<p>라고 하자.</p>
+<p>특정 t시점에서 실세 속도와 예측값이 다음과 같았다.</p>
+<div class="math-block">\[\begin{align*}v_t &amp;= [0.61,\, 0.10,\, 0.09] \\\hat{v}_t &amp;= [0.51,\, 0.00,\, -0.01]\end{align*}\]</div>
+<p>세 축 모두 실제 오차는 똑같이 </p>
+<div class="math-block">\[e = [0.10,\, 0.10,\, 0.10] \text{ m/s}\]</div>
+<p>틀린 것이다. 그런데 각 축을 자신의 std로 독립적으로 나누면</p>
+<div class="math-block">\[\begin{align*}e_x^{norm} &amp;= \frac{0.10}{0.27} \approx 0.37 \\[1.5em]e_y^{norm} &amp;= \frac{0.10}{0.15} \approx 0.67 \\[1.5em]e_z^{norm} &amp;= \frac{0.10}{0.068} \approx 1.47\end{align*}\]</div>
+<p>가 된다. MSE에 들어가는 제곱오차는</p>
+<div class="math-block">\[\begin{align*}x &amp;: 0.37^2 \approx 0.14 \\y &amp;: 0.67^2 \approx 0.44 \\z &amp;: 1.47^2 \approx 2.16\end{align*}\]</div>
+<p>이다.</p>
+<p>실제로는 세 축 모드 0.10m/s로 정확히 똑같은 크기의 오차인데 </p>
+<div class="math-block">\[x:y:z \approx1:4:36\]</div>
+<p>으로 취급된다. 이것이 바로 축바다 서로 다른 가중치를 주는 효과이다.</p>
+<p>우리는 축별 다른 가중치를 주는 것이 아니라 속도, 막대, 액션의 numerical scale을 해결하고싶은 것이다.</p>
+<h4 id="block-3d1b12c0115c8060b813c0809950b84c">축별 다른 가중치</h4>
+<p>축별 다른 가중치를 주는 효과가 왜 생기는지 알아보자</p>
+<p>축별 normalization 후 MSE는</p>
+<div class="math-block">\[L_v = \frac{1}{3} \left[ \left( \frac{e_x}{\sigma_x} \right)^2 + \left( \frac{e_y}{\sigma_y} \right)^2 + \left( \frac{e_z}{\sigma_z} \right)^2 \right]\]</div>
+<p>다시 쓰면</p>
+<div class="math-block">\[L_v = \frac{1}{3} \left[ \frac{1}{\sigma_x^2} e_x^2 + \frac{1}{\sigma_y^2} e_y^2 + \frac{1}{\sigma_z^2} e_z^2 \right]\]</div>
+<p>이고 사실상 loss weight가</p>
+<div class="math-block">\[w_x = \frac{1}{\sigma_x^2}, \quad w_y = \frac{1}{\sigma_y^2}, \quad w_z = \frac{1}{\sigma_z^2}\]</div>
+<p>로 설정된 것과 같다. </p>
+<h4 id="block-3d1b12c0115c805dbcfee2db976b2b20">방법</h4>
+<p>방법은 pooled std를 쓰는 것이다.</p>
+<p>pooled std는</p>
+<div class="math-block">\[\sigma_p = \sqrt{\frac{\sigma_x^2 + \sigma_y^2 + \sigma_z^2}{3}}\]</div>
+<p>이다. 각 축의 분산을 구하고 평균낸다음에 루트를 씌운다.</p>
+<p>그래서 세 축의 분산을 합쳐</p>
+<div class="math-block">\[\sigma_{pool} = \sqrt{\frac{0.27^2 + 0.15^2 + 0.068^2}{3}} \approx 0.183\]</div>
+<p>라는 공통 std하나를 만든다.</p>
+<p>그러면 같은 오차 0.10 m/s에 대해 0.183으로 나눠짐으로 </p>
+<div class="math-block">\[\frac{0.10}{0.183} \approx 0.546\]</div>
+<p>세 축 모두 똑같은 loss를 같은다.</p>
+<p>이것을 일반화해서 보면</p>
+<div class="math-block">\[\begin{align*}L_v &amp;= \frac{1}{3} \left[ \left( \frac{e_x}{\sigma_p} \right)^2 + \left( \frac{e_y}{\sigma_p} \right)^2 + \left( \frac{e_z}{\sigma_p} \right)^2 \right] \\[1.5em]&amp;= \frac{1}{3\sigma_p^2} \left( e_x^2 + e_y^2 + e_z^2 \right)\end{align*}\]</div>
+<p>세 축 동일하게 </p>
+<div class="math-block">\[\frac{1}{\sigma_p^2}
+\]</div>
+<p>라는 weight를 받는다.</p>
+<p>따라서 실제로</p>
+<div class="math-block">\[e_x = e_y = e_z = 0.1 \text{ m/s}\]</div>
+<p>이면 세 축의 loss contribution도 똑같다. 따라서 적절한 numerical scale 상수를 구한 것이다.</p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/post.js?v=13" type="module"></script>
+    <script src="/assets/js/palette.js?v=8" defer></script>
+  </body>
+</html>

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-04T06:29:21.231Z",
+  "generatedAt": "2026-09-04T11:44:31.022Z",
   "site": {
     "title": "Woojae Joo — Developer Note",
     "description": "AI, Robotics, Systems 공부 기록"
@@ -66,6 +66,19 @@
     "github": "https://github.com/ursonice"
   },
   "posts": [
+    {
+      "id": "3d1b12c0-115c-80f2-a47c-ef1362edbbef",
+      "title": "Output Data Normalization",
+      "slug": "output-data-normalization",
+      "category": "AI/ Deep Learning",
+      "tags": [],
+      "created": "2026-09-04T09:31:00.000Z",
+      "updated": "2026-09-04T10:17:00.000Z",
+      "readingTime": 2,
+      "summary": "상황 로봇의 여러 물리량을 하나의 신경망에서 예측하려고 한다. 정답 데이터가 모두 존재하며, 각 출력에 대해 MSE loss를 사용한다. 데이터는 크게 세 종류이다. 관절 action: 총 12차원이며 각 관절은 서로 다른 평균과 분산을 가진다. 정책은 각 상태에서 Gaussian distribution",
+      "sourceUrl": "https://app.notion.com/p/Output-Data-Normalization-3d1b12c0115c80f2a47cef1362edbbef",
+      "html": "<h4 id=\"block-3d1b12c0115c804bb6c1c6a2be339678\">상황</h4>\n<p>로봇의 여러 물리량을 하나의 신경망에서 예측하려고 한다.</p>\n<p>정답 데이터가 모두 존재하며, 각 출력에 대해 MSE loss를 사용한다.</p>\n<p>데이터는 크게 세 종류이다.</p>\n<ul><li><strong>관절 action</strong>: 총 12차원이며 각 관절은 서로 다른 평균과 분산을 가진다. 정책은 각 상태에서 Gaussian distribution으로 action을 sampling한 값이다.</li><li><strong>로봇의 선형 속도</strong>: 3차원 \\((v_x,v_y,v_z)\\) 이며 단위는 m/s이다.</li><li><strong>막대 길이</strong>: 1차원이며 단위는 m이고, 값의 범위는 [0.33 ~ 0.45m]이다.</li></ul>\n<p>신경망이 이 세 종류의 값을 동시에 예측하고 각각에 대해 </p>\n<div class=\"math-block\">\\[L = \\lambda_a L_{\\text{action}}\n+\n\\lambda_v L_{\\text{velocity}}\n+\n\\lambda_l L_{\\text{length}}\n\\]</div>\n<p>MSE loss를 계산하고 이를 바탕으로 backpropagation을 진행한다.</p>\n<h4 id=\"block-3d1b12c0115c80e3a363fd03c523440f\">문제정의 </h4>\n<p>각 데이터의 단위와 numerical scale이 다름으로 서로 다른 물리량의 MSE numerical scale을 맞춰야 학습 불균형이 일어나지 않는다.</p>\n<p>예를 들어 </p>\n<p>실제 데이터 통계가 대략</p>\n<div class=\"math-block\">\\[\\begin{align*}\n\\mu_v &amp;= [0.51,\\, 0.00,\\, -0.01] \\\\[0.5em]\n\\sigma_x = 0.27,\\quad &amp;\\sigma_y = 0.15,\\quad \\sigma_z = 0.068\n\\end{align*}\\]</div>\n<p>라고 하자.</p>\n<p>특정 t시점에서 실세 속도와 예측값이 다음과 같았다.</p>\n<div class=\"math-block\">\\[\\begin{align*}v_t &amp;= [0.61,\\, 0.10,\\, 0.09] \\\\\\hat{v}_t &amp;= [0.51,\\, 0.00,\\, -0.01]\\end{align*}\\]</div>\n<p>세 축 모두 실제 오차는 똑같이 </p>\n<div class=\"math-block\">\\[e = [0.10,\\, 0.10,\\, 0.10] \\text{ m/s}\\]</div>\n<p>틀린 것이다. 그런데 각 축을 자신의 std로 독립적으로 나누면</p>\n<div class=\"math-block\">\\[\\begin{align*}e_x^{norm} &amp;= \\frac{0.10}{0.27} \\approx 0.37 \\\\[1.5em]e_y^{norm} &amp;= \\frac{0.10}{0.15} \\approx 0.67 \\\\[1.5em]e_z^{norm} &amp;= \\frac{0.10}{0.068} \\approx 1.47\\end{align*}\\]</div>\n<p>가 된다. MSE에 들어가는 제곱오차는</p>\n<div class=\"math-block\">\\[\\begin{align*}x &amp;: 0.37^2 \\approx 0.14 \\\\y &amp;: 0.67^2 \\approx 0.44 \\\\z &amp;: 1.47^2 \\approx 2.16\\end{align*}\\]</div>\n<p>이다.</p>\n<p>실제로는 세 축 모드 0.10m/s로 정확히 똑같은 크기의 오차인데 </p>\n<div class=\"math-block\">\\[x:y:z \\approx1:4:36\\]</div>\n<p>으로 취급된다. 이것이 바로 축바다 서로 다른 가중치를 주는 효과이다.</p>\n<p>우리는 축별 다른 가중치를 주는 것이 아니라 속도, 막대, 액션의 numerical scale을 해결하고싶은 것이다.</p>\n<h4 id=\"block-3d1b12c0115c8060b813c0809950b84c\">축별 다른 가중치</h4>\n<p>축별 다른 가중치를 주는 효과가 왜 생기는지 알아보자</p>\n<p>축별 normalization 후 MSE는</p>\n<div class=\"math-block\">\\[L_v = \\frac{1}{3} \\left[ \\left( \\frac{e_x}{\\sigma_x} \\right)^2 + \\left( \\frac{e_y}{\\sigma_y} \\right)^2 + \\left( \\frac{e_z}{\\sigma_z} \\right)^2 \\right]\\]</div>\n<p>다시 쓰면</p>\n<div class=\"math-block\">\\[L_v = \\frac{1}{3} \\left[ \\frac{1}{\\sigma_x^2} e_x^2 + \\frac{1}{\\sigma_y^2} e_y^2 + \\frac{1}{\\sigma_z^2} e_z^2 \\right]\\]</div>\n<p>이고 사실상 loss weight가</p>\n<div class=\"math-block\">\\[w_x = \\frac{1}{\\sigma_x^2}, \\quad w_y = \\frac{1}{\\sigma_y^2}, \\quad w_z = \\frac{1}{\\sigma_z^2}\\]</div>\n<p>로 설정된 것과 같다. </p>\n<h4 id=\"block-3d1b12c0115c805dbcfee2db976b2b20\">방법</h4>\n<p>방법은 pooled std를 쓰는 것이다.</p>\n<p>pooled std는</p>\n<div class=\"math-block\">\\[\\sigma_p = \\sqrt{\\frac{\\sigma_x^2 + \\sigma_y^2 + \\sigma_z^2}{3}}\\]</div>\n<p>이다. 각 축의 분산을 구하고 평균낸다음에 루트를 씌운다.</p>\n<p>그래서 세 축의 분산을 합쳐</p>\n<div class=\"math-block\">\\[\\sigma_{pool} = \\sqrt{\\frac{0.27^2 + 0.15^2 + 0.068^2}{3}} \\approx 0.183\\]</div>\n<p>라는 공통 std하나를 만든다.</p>\n<p>그러면 같은 오차 0.10 m/s에 대해 0.183으로 나눠짐으로 </p>\n<div class=\"math-block\">\\[\\frac{0.10}{0.183} \\approx 0.546\\]</div>\n<p>세 축 모두 똑같은 loss를 같은다.</p>\n<p>이것을 일반화해서 보면</p>\n<div class=\"math-block\">\\[\\begin{align*}L_v &amp;= \\frac{1}{3} \\left[ \\left( \\frac{e_x}{\\sigma_p} \\right)^2 + \\left( \\frac{e_y}{\\sigma_p} \\right)^2 + \\left( \\frac{e_z}{\\sigma_p} \\right)^2 \\right] \\\\[1.5em]&amp;= \\frac{1}{3\\sigma_p^2} \\left( e_x^2 + e_y^2 + e_z^2 \\right)\\end{align*}\\]</div>\n<p>세 축 동일하게 </p>\n<div class=\"math-block\">\\[\\frac{1}{\\sigma_p^2}\n\\]</div>\n<p>라는 weight를 받는다.</p>\n<p>따라서 실제로</p>\n<div class=\"math-block\">\\[e_x = e_y = e_z = 0.1 \\text{ m/s}\\]</div>\n<p>이면 세 축의 loss contribution도 똑같다. 따라서 적절한 numerical scale 상수를 구한 것이다.</p>"
+    },
     {
       "id": "390b12c0-115c-805b-962c-c637a21344c5",
       "title": "Variation Inference(VI, ELBO)",
