@@ -29,13 +29,13 @@
     <meta property="og:url" content="https://ursonice.github.io/posts/output-data-normalization/" />
     <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Output%20Data%20Normalization&amp;cat=AI%2F%20Deep%20Learning" />
     <meta property="article:published_time" content="2026-09-04T09:31:00.000Z" />
-    <meta property="article:modified_time" content="2026-09-05T04:07:00.000Z" />
+    <meta property="article:modified_time" content="2026-09-05T06:27:00.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Output Data Normalization" />
     <meta name="twitter:description" content="서론 로봇의 여러 물리량을 하나의 신경망에서 예측하려고 한다. 정답 데이터가 모두 존재하며, 각 출력에 대해 MSE loss를 사용한다. 데이터는 크게 세 종류이다. 관절 action: 총 12차원이며 각 관절은 서로 다른 평균과 분산을 가진다. 정책은 각 상태에서 Gaussian distribution" />
     <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Output%20Data%20Normalization&amp;cat=AI%2F%20Deep%20Learning" />
 
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Output Data Normalization","description":"서론 로봇의 여러 물리량을 하나의 신경망에서 예측하려고 한다. 정답 데이터가 모두 존재하며, 각 출력에 대해 MSE loss를 사용한다. 데이터는 크게 세 종류이다. 관절 action: 총 12차원이며 각 관절은 서로 다른 평균과 분산을 가진다. 정책은 각 상태에서 Gaussian distribution","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Output%20Data%20Normalization&cat=AI%2F%20Deep%20Learning","datePublished":"2026-09-04T09:31:00.000Z","dateModified":"2026-09-05T04:07:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/output-data-normalization/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Output Data Normalization","description":"서론 로봇의 여러 물리량을 하나의 신경망에서 예측하려고 한다. 정답 데이터가 모두 존재하며, 각 출력에 대해 MSE loss를 사용한다. 데이터는 크게 세 종류이다. 관절 action: 총 12차원이며 각 관절은 서로 다른 평균과 분산을 가진다. 정책은 각 상태에서 Gaussian distribution","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Output%20Data%20Normalization&cat=AI%2F%20Deep%20Learning","datePublished":"2026-09-04T09:31:00.000Z","dateModified":"2026-09-05T06:27:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/output-data-normalization/"}}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Deep Learning","item":"https://ursonice.github.io/topics/ai-deep-learning/"},{"@type":"ListItem","position":3,"name":"Output Data Normalization","item":"https://ursonice.github.io/posts/output-data-normalization/"}]}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -107,6 +107,7 @@
 \lambda_l L_{\text{length}}
 \]</div>
 <p>MSE loss를 계산하고 이를 바탕으로 backpropagation을 진행한다.</p>
+<p>각 loss component들은 scaling이 달라 어느 한쪽의 loss가 크면 gradient udpate를 독식할 수 있다.</p>
 <h2 id="block-3d1b12c0115c80e3a363fd03c523440f">문제정의</h2>
 <p>각 데이터의 단위와 numerical scale이 다름으로 서로 다른 물리량의 MSE numerical scale을 맞춰야 학습 불균형이 일어나지 않는다.</p>
 <h3 id="block-3d2b12c0115c8086a0dfea3f1fa12771">축별 Normalize</h3>
@@ -148,6 +149,7 @@
 <div class="math-block">\[\frac{1}{\sigma_p^2}
 \]</div>
 <p>라는 weight를 받게된다.</p>
+<h2 id="block-3d2b12c0115c80388387c623ef1064cc">Baseline MSE를 1로 맞추자</h2>
 <p>우리가 만들고자하는 모델의 MSE오차가 가장 안 좋은 성능일 때(평균만 예측했을 때) 대비 얼마나 줄었는지 알고자 한다고하면 수식은 아래와 같다.</p>
 <div class="math-block">\[\frac{\text{MSE}}{\sigma^2_p}\]</div>
 <p>분모가 왜 저렇게 되는지 보면 </p>
@@ -163,18 +165,25 @@
 <div class="math-block">\[\text{MSE}_{\text{baseline}} = \frac{1}{3}(E[e^2_x] + E[e^2_y] + E[e^2_z]) \\[1.5em] \frac{1}{3}(\sigma_x^2 + \sigma_y^2 + \sigma_z^2) = \sigma_p^2\]</div>
 <p>이 된다.</p>
 <p>Pooled std로 Normalize한 MSE는</p>
-<div class="math-block">\[\text{MSE}_{\text{Norm}} = \frac{\text{우리가 만든 모델의 오차}}{\text{평균만 찍는 바보 모델의 오차}}
+<div class="math-block">\[\text{MSE}_{\text{Norm}} = \frac{\text{우리가 만든 모델의 오차}}{\text{평균만 찍는 모델의 오차}}
 \frac{\text{MSE}}{\sigma_p^2}\]</div>
 <p>만약 우리가 열심히 학습시킨 모델의 성능이 매우 안 좋아서, 그냥 평균값을 찍어내는 수준과 오차가 똑같다면 분자와 분모의 값이 같아지게 된다.</p>
 <div class="math-block">\[\text{MSE}_{\text{Norm}} = \frac{\sigma_p^2}{\sigma_p^2} = 1\]</div>
 <p>따라서 \(\text{MSE}_{\text{Norm}}\)  수치의 결과는 다음과 같이 해석할 수 있다.</p>
 <ul><li>\(\text{MSE}_{\text{Norm}} = 1\): 모델이 데이터에서 아무런 패턴도 학습하지 못하고 평균값만 내뱉는 상태</li><li>‭\(\text{MSE}_{\text{Norm}} &lt; 1\): 평균을 찍는 것보다 오차가 작으므로, 값이 0에 가까워질수록 모델이 정답을 정확히 예측하고 있다는 뜻. (예: 0.1이라면 기본 오차 대비 10% 수준으로 오차를 줄였다는 의미)</li><li>‭\(\text{MSE}_{\text{Norm}} &gt; 1\): 모델이 무언가 단단히 잘못 학습하여, 차라리 평균을 찍는 것보다도 엉망으로 오차를 내고 있다는 상태</li></ul>
 <p>따라서 우리는 1이 가장 학습이 되지 않았다는 기준을 줌으로써 MSE의 값의 크기에 의미를 부여하게 된 것이다.</p>
-<p>정규화된 MSE는</p>
-<div class="math-block">\[\text{MSE}_{\text{Norm}}  =\frac{\text{MSE}_{\text{raw}}}{\sigma_p^2}\]</div>
-<p>가 되어서 평균만 찍는 baseline 모델의 MSE는 분산이므로</p>
-<div class="math-block">\[\text{MSE}_{\text{baseline}} = \sigma_p^2\]</div>
-<p>따라서 baseline을 정규화하면</p></div>
+<h2 id="block-3d2b12c0115c80eb9116ca9336e73813">Machine Learning 관점</h2>
+<p>그렇다면 이 가정은 모델이 학습을 시작할 때부터 정답 데이터의 평균값을 예측하고 있어야 성립한다고 생각할 수 있다. </p>
+<p>예를 들어 MLP 기반 회귀 모델을 사용한다고 하면, 초기 가중치는 일반적으로 0에 가까운 작은 값으로 초기화되기 때문에 학습 초기에 모델이 정답 데이터의 평균을 바로 예측하지는 않는다.</p>
+<p>그럼으로 학습시 모델이 가장 먼저 배우는 것은 데이터의 복잡한 패턴이 아니라 정답 데이터의 평균(bias) 위치를 먼저 배운다.</p>
+<p>가중치가 0에 가깝게 초기화되었더라도, 몇 번의 에폭(Epoch)만 지나면 출력 레이어의 편향(Bias) 파라미터가 빠르게 업데이트되면서 정답의 평균값 근처로 출력을 옮겨놓는다.</p>
+<p>따라서 학습 극초반에 \(\text{MSE}_{\text{Norm}}\)은 1보다 훨씬 큰 값에서 시작하지만, 순식간에 1 근처로 뚝 떨어지게 된다</p>
+<p>모델이 평균 위치를 대략 파악해서 오차가 1 근처가 되고 나면, 주어진 입력 데이터(피처)들의 패턴을 분석하여 정답 값들이 왜 평균과 다르게 제각각인지 그 원인을 수치적으로 찾아내고 오차를 줄여나간다. 이때부터 오차가 1 밑으로 떨어지기 시작한다.</p>
+<p>분산으로 나누어 정규화해 두었기 때문에, '속도'든 '길이'든 이 시점부터는 둘 다 1에서 시작해서 0을 향해가는 동일한 스케일의 학습을 하게 된다. 어느 한쪽의 로스(Loss)가 압도적으로 커서 기울기(Gradient)를 독식하는 현상이 방지되는 것이다.</p>
+<h2 id="block-3d2b12c0115c803b92b5f4807247f3af">Target Normalization</h2>
+<p>추가적으로 여러 물리량을 예측할 때는 Loss 함수를 Normalization수정하는 것에 그치지 않고, 아예 정답 데이터(Target) 자체를 평균이 0이고 분산이 1이 되도록 스케일링(Standardization)을 해버린다.</p>
+<p>이렇게 하면 정답의 평균이 0이 되므로, 가중치가 0에 가깝게 초기화된 MLP가 처음부터 정확히 평균(0)을 예측하는 상태에서 학습을 시작하게 된다. </p>
+<p>따라서 위 Normalization &quot;가정이 성립하려면 평균부터 시작해야 한다&quot;를 Scaling으로부터 어느정도 가정을 성립하게 만들어준다.</p></div>
     <div class="share-bar" data-share>
       <span class="share-label">Share</span>
       <button type="button" class="share-btn" data-share-copy>Copy</button>
