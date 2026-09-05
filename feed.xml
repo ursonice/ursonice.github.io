@@ -6,14 +6,22 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Sat, 05 Sep 2026 00:50:46 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 05 Sep 2026 05:28:53 GMT</lastBuildDate>
     <item>
       <title>Output Data Normalization</title>
       <link>https://ursonice.github.io/posts/output-data-normalization/</link>
       <guid isPermaLink="false">3d1b12c0-115c-80f2-a47c-ef1362edbbef</guid>
       <pubDate>Fri, 04 Sep 2026 09:31:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
-      <description>상황 로봇의 여러 물리량을 하나의 신경망에서 예측하려고 한다. 정답 데이터가 모두 존재하며, 각 출력에 대해 MSE loss를 사용한다. 데이터는 크게 세 종류이다. 관절 action: 총 12차원이며 각 관절은 서로 다른 평균과 분산을 가진다. 정책은 각 상태에서 Gaussian distribution</description>
+      <description>서론 로봇의 여러 물리량을 하나의 신경망에서 예측하려고 한다. 정답 데이터가 모두 존재하며, 각 출력에 대해 MSE loss를 사용한다. 데이터는 크게 세 종류이다. 관절 action: 총 12차원이며 각 관절은 서로 다른 평균과 분산을 가진다. 정책은 각 상태에서 Gaussian distribution</description>
+    </item>
+    <item>
+      <title>회귀모델 MSE</title>
+      <link>https://ursonice.github.io/posts/%ED%9A%8C%EA%B7%80%EB%AA%A8%EB%8D%B8-mse/</link>
+      <guid isPermaLink="false">3d2b12c0-115c-80d2-8553-d224abc2c2a9</guid>
+      <pubDate>Sat, 05 Sep 2026 02:20:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 머신러닝에서 주식 가격, 내일의 온도, 혹은 자동차의 속도(velocity)처럼 연속적인 숫자를 예측하는 작업을 &apos;회귀(Regression)&apos;라고 한다. MSE는이 회귀 문제에서 모델이 얼마나 틀렸는지 나타내는 평가지표이다. 그럼 MSE의 특징에 대해서 조금 더 알아보자. MSE 한계 MSE의 한계</description>
     </item>
     <item>
       <title>Variation Inference(VI, ELBO)</title>
@@ -238,14 +246,6 @@
       <pubDate>Mon, 11 May 2026 04:49:00 GMT</pubDate>
       <category>Reinforcement Learning</category>
       <description>서론 기존 DDPG는 성능의 단조개선(Monotonic Improvement)가 이론적으로 보장되지 않았다.(목적함수 J(\theta))가 매 iteration마다 증가한다는 보장이 없다.) 왜냐하면 Actor( \mu )가 Ciritic(Q 함수)의 gradient를 따라가도록 학습하는데 critic </description>
-    </item>
-    <item>
-      <title>(VLA) NaVILA 논문리뷰</title>
-      <link>https://ursonice.github.io/posts/vla-navila-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</link>
-      <guid isPermaLink="false">2afb12c0-115c-805f-a2dc-c2bda949f787</guid>
-      <pubDate>Tue, 18 Nov 2025 00:58:00 GMT</pubDate>
-      <category>AI/ Deep Learning</category>
-      <description>Cite Anthony Brohan, Noah Brown, Justice Carbajal, Chelsea Finn, Sergey Levine, et al.; arXiv preprint arXiv:2307.15818 [cs.RO] https://navila-bot.github.io/static/navila</description>
     </item>
   </channel>
 </rss>
