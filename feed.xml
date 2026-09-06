@@ -6,7 +6,23 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Sat, 05 Sep 2026 23:55:56 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 06 Sep 2026 04:11:03 GMT</lastBuildDate>
+    <item>
+      <title>Jacobian</title>
+      <link>https://ursonice.github.io/posts/jacobian/</link>
+      <guid isPermaLink="false">3d3b12c0-115c-80d1-ae2f-d58bd58e5c16</guid>
+      <pubDate>Sun, 06 Sep 2026 04:04:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description> 고등학생때 배웠던 미분은 단순히 함수의 접선 기울기를 구하는 것에 그쳤다면 AI/ML 관점에서는 입력을 아주 조금 변화시켰을 때 출력은 얼마나 변화하는가에 댛</description>
+    </item>
+    <item>
+      <title>Normalization / Regularization</title>
+      <link>https://ursonice.github.io/posts/normalization-regularization/</link>
+      <guid isPermaLink="false">3b660236-1572-482e-8c35-0f8e23bcf77b</guid>
+      <pubDate>Mon, 12 Jun 2023 06:39:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 이 장은 Normalization과 Regularization의 차이점에 대해서 설명한다. 그리고 Batch Normalization과 Layer Normalization에 대해서 설명한다. 목차 Normalization Regularization Batch Normalization과 Layer N</description>
+    </item>
     <item>
       <title>Output Data Normalization</title>
       <link>https://ursonice.github.io/posts/output-data-normalization/</link>
@@ -144,14 +160,6 @@
       <description>서론 이 장은 MLE에 대해서 설명한다. 확률의 의미와 기본 개념들에 대해서 같이 알아봐보자. 목차 Probability PDF(Probability Density Function) CDF(Cumulative Distribution Function) 모수 추정 Likelihood Maximum likel</description>
     </item>
     <item>
-      <title>Normalization / Regularization</title>
-      <link>https://ursonice.github.io/posts/normalization-regularization/</link>
-      <guid isPermaLink="false">3b660236-1572-482e-8c35-0f8e23bcf77b</guid>
-      <pubDate>Mon, 12 Jun 2023 06:39:00 GMT</pubDate>
-      <category>AI/ Deep Learning</category>
-      <description>서론 이 장은 Normalization과 Regularization의 차이점에 대해서 설명한다. 그리고 Batch Normalization과 Layer Normalization에 대해서 설명한다. 목차 Normalization Regularization Batch Normalization과 Layer N</description>
-    </item>
-    <item>
       <title>NAS(Neural Network Search)</title>
       <link>https://ursonice.github.io/posts/nas-neural-network-search/</link>
       <guid isPermaLink="false">d8c14d53-56d5-4447-a6a8-d43d9aa4cbbf</guid>
@@ -238,14 +246,6 @@
       <pubDate>Fri, 17 Apr 2026 01:38:00 GMT</pubDate>
       <category>Reinforcement Learning</category>
       <description>로봇이 잘 걸어가도록 하기 위해 DQN모델을 사용한다 해보자. 총 4개의 관절이 있고 각 관절은 (-90, 0, 90) 3개의 값 중 하나를 가질 수 있다. 이 경우 각 관절 당 3가지의 값을 가질 수 있으니 관절이 4개 임으로 3x3x3x3 = 81개의 조합이 만들어진다. 넘어지기 직전상태인 St에 대</description>
-    </item>
-    <item>
-      <title>TRPO - Trust Region Policy Optimizer</title>
-      <link>https://ursonice.github.io/posts/trpo-trust-region-policy-optimizer/</link>
-      <guid isPermaLink="false">35db12c0-115c-8082-9620-f701ca2b7a2f</guid>
-      <pubDate>Mon, 11 May 2026 04:49:00 GMT</pubDate>
-      <category>Reinforcement Learning</category>
-      <description>서론 기존 DDPG는 성능의 단조개선(Monotonic Improvement)가 이론적으로 보장되지 않았다.(목적함수 J(\theta))가 매 iteration마다 증가한다는 보장이 없다.) 왜냐하면 Actor( \mu )가 Ciritic(Q 함수)의 gradient를 따라가도록 학습하는데 critic </description>
     </item>
   </channel>
 </rss>

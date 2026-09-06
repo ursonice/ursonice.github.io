@@ -13,7 +13,9 @@
   <url><loc>https://ursonice.github.io/topics/kubernetes/</loc></url>
   <url><loc>https://ursonice.github.io/topics/python/</loc></url>
   <url><loc>https://ursonice.github.io/topics/coding-test/</loc></url>
-  <url><loc>https://ursonice.github.io/posts/output-data-normalization/</loc><lastmod>2026-09-05</lastmod></url>
+  <url><loc>https://ursonice.github.io/posts/jacobian/</loc><lastmod>2026-09-06</lastmod></url>
+  <url><loc>https://ursonice.github.io/posts/normalization-regularization/</loc><lastmod>2026-09-06</lastmod></url>
+  <url><loc>https://ursonice.github.io/posts/output-data-normalization/</loc><lastmod>2026-09-06</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/%ED%9A%8C%EA%B7%80%EB%AA%A8%EB%8D%B8-mse/</loc><lastmod>2026-09-05</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/variation-inference-vi-elbo/</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/1%EC%B0%A8%EC%8B%9C-markov-process/</loc><lastmod>2026-07-20</lastmod></url>
@@ -30,7 +32,6 @@
   <url><loc>https://ursonice.github.io/posts/quantization-%EC%9B%90%EB%A6%AC/</loc><lastmod>2026-07-05</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/taylor-s-series-and-maclaurin-s-series-on-ml/</loc><lastmod>2026-07-05</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/likelihood-mle/</loc><lastmod>2026-07-05</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/normalization-regularization/</loc><lastmod>2026-07-05</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/nas-neural-network-search/</loc><lastmod>2026-07-05</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/manifold-%EA%B0%9C%EB%85%90/</loc><lastmod>2026-07-05</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/machine-learning-design-pattern/</loc><lastmod>2026-07-05</lastmod></url>
