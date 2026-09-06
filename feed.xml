@@ -6,14 +6,14 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 06 Sep 2026 04:11:03 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 06 Sep 2026 08:41:27 GMT</lastBuildDate>
     <item>
-      <title>Jacobian</title>
-      <link>https://ursonice.github.io/posts/jacobian/</link>
+      <title>[ML] Jacobian</title>
+      <link>https://ursonice.github.io/posts/ml-jacobian/</link>
       <guid isPermaLink="false">3d3b12c0-115c-80d1-ae2f-d58bd58e5c16</guid>
       <pubDate>Sun, 06 Sep 2026 04:04:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
-      <description> 고등학생때 배웠던 미분은 단순히 함수의 접선 기울기를 구하는 것에 그쳤다면 AI/ML 관점에서는 입력을 아주 조금 변화시켰을 때 출력은 얼마나 변화하는가에 댛</description>
+      <description>서론 고등학생때 배웠던 미분은 단순히 함수의 접선 기울기를 구하는 것에 그쳤다면 AI/ML 관점에서는 입력을 아주 조금 변화시켰을 때 출력은 얼마나 변화하는가에 대한 관점으로 바꾸어 생각해본다. 예를들어 x에 작은 변화량 \Delta x를 주어 x → x + \Delta x가 되었다하자. 그러면 출력의 </description>
     </item>
     <item>
       <title>Normalization / Regularization</title>
