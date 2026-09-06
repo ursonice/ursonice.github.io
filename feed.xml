@@ -6,10 +6,10 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 06 Sep 2026 08:41:27 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 06 Sep 2026 12:21:10 GMT</lastBuildDate>
     <item>
-      <title>[ML] Jacobian</title>
-      <link>https://ursonice.github.io/posts/ml-jacobian/</link>
+      <title>[ML] Jacobian 1</title>
+      <link>https://ursonice.github.io/posts/ml-jacobian-1/</link>
       <guid isPermaLink="false">3d3b12c0-115c-80d1-ae2f-d58bd58e5c16</guid>
       <pubDate>Sun, 06 Sep 2026 04:04:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
