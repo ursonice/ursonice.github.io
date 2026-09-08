@@ -29,13 +29,13 @@
     <meta property="og:url" content="https://ursonice.github.io/posts/output-data-normalization/" />
     <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Output%20Data%20Normalization&amp;cat=AI%2F%20Deep%20Learning" />
     <meta property="article:published_time" content="2026-09-04T09:31:00.000Z" />
-    <meta property="article:modified_time" content="2026-09-07T05:50:00.000Z" />
+    <meta property="article:modified_time" content="2026-09-08T04:21:00.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Output Data Normalization" />
     <meta name="twitter:description" content="서론 로봇의 여러 물리량을 하나의 신경망에서 예측하려고 한다. 정답 데이터가 모두 존재하며, 각 출력에 대해 MSE loss를 사용한다. 데이터는 크게 세 종류이다. 관절 action: 총 12차원이며 각 관절은 서로 다른 평균과 분산을 가진다. 정책은 각 상태에서 Gaussian distribution" />
     <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Output%20Data%20Normalization&amp;cat=AI%2F%20Deep%20Learning" />
 
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Output Data Normalization","description":"서론 로봇의 여러 물리량을 하나의 신경망에서 예측하려고 한다. 정답 데이터가 모두 존재하며, 각 출력에 대해 MSE loss를 사용한다. 데이터는 크게 세 종류이다. 관절 action: 총 12차원이며 각 관절은 서로 다른 평균과 분산을 가진다. 정책은 각 상태에서 Gaussian distribution","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Output%20Data%20Normalization&cat=AI%2F%20Deep%20Learning","datePublished":"2026-09-04T09:31:00.000Z","dateModified":"2026-09-07T05:50:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/output-data-normalization/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Output Data Normalization","description":"서론 로봇의 여러 물리량을 하나의 신경망에서 예측하려고 한다. 정답 데이터가 모두 존재하며, 각 출력에 대해 MSE loss를 사용한다. 데이터는 크게 세 종류이다. 관절 action: 총 12차원이며 각 관절은 서로 다른 평균과 분산을 가진다. 정책은 각 상태에서 Gaussian distribution","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Output%20Data%20Normalization&cat=AI%2F%20Deep%20Learning","datePublished":"2026-09-04T09:31:00.000Z","dateModified":"2026-09-08T04:21:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/output-data-normalization/"}}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Deep Learning","item":"https://ursonice.github.io/topics/ai-deep-learning/"},{"@type":"ListItem","position":3,"name":"Output Data Normalization","item":"https://ursonice.github.io/posts/output-data-normalization/"}]}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -86,7 +86,7 @@
     <div class="article-meta">
       
       
-      <span>작성 2026년 9월 4일</span><span class="dot"></span><span>수정 2026년 9월 7일</span>
+      <span>작성 2026년 9월 4일</span><span class="dot"></span><span>수정 2026년 9월 8일</span>
       <span class="reading-size" role="group" aria-label="글자 크기">
         <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
         <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
@@ -222,7 +222,7 @@
 <div class="math-block">\[\text{MSE}_{\text{Norm}} = \frac{\text{MSE}}{\sigma_{p}^2} \]</div>
 <p>이렇게 설정하면 모델이 단순히 평균값만 예측할 때 \(\text{MSE}_{\text{Norm}} = 1\)‬‭‬이 성립한다.</p>
 <p>이로써 12차원의 Action, 3차원의 Velocity, 1차원의 Stick length 모두 모델이 평균을 예측하는 시점에서 Loss 값이 1이 되는 완벽하게 동일한 출발선을 갖게 된다. 물리량의 차원 수나 원본 데이터의 단위(Scale) 차이에 구애받지 않고, \(\lambda_a, \lambda_v, \lambda_l\) ‭가중치 조절만으로 세 가지 Task의 학습 균형을 직관적이고 안정적으로 제어할 수 있다.</p>
-<h2 id="block-3d4b12c0115c8001a319f4a76eead673">모델은 정답을 학습하는 걸까?</h2>
+<h2 id="block-3d4b12c0115c8001a319f4a76eead673">MSE는 정답을 학습하는 걸까?</h2>
 <p>출력 데이터에 정규화(Normalization)를 적용할 때 흔히 할 수 있는 오해가 있다. 정규화 때문에 원래 정답값이 바뀌면, 모델이 엉뚱한 값을 정답으로 착각하고 학습하는 것은 아닐까? 하는 의문이다.</p>
 <p>예를 들어, 어떤 입력 \(x_1\)에 대한 모델의 실제(Raw) 예측값이 <code>0.35</code>이고, 실제 정답(Ground Truth, GT)이 <code>0.5</code>라고 가정해 보자.</p>
 <p>그런데 모델 학습을 위해 출력값을 정규화(Normalize)했더니, 예측값은 <code>0.9</code>로, 정답은 <code>1.0</code>으로 스케일이 변환되었다고 해보자.
@@ -230,7 +230,14 @@
 이 상황만 보면 <em>&quot;우리는 </em>‭‬\(x_1\)<em>을 넣었을 때 0.5가 나오길 바라는데, 모델은 1.0을 정답으로 알고 학습해버리는 게 아닐까?&quot; 라</em>고 생각하기 쉽다.</p>
 <p>그러나 그렇지 않다. 그 이유는 모델이 학습에 사용하는 MSE(Mean Squared Error) Loss의 본질이 정답의 '절대적인 수치'를 외우는 것이 아니라, 예측값과 정답 사이의 '잔차(Residual, 오차)'를 줄이는 데 있기 때문이다.</p>
 <p>우리가 출력 정규화를 하는 목적은 각 출력 오차가 Loss에 미치는 수치적 스케일(Numerical Scale)을 일정하게 맞춰주어 Gradient Descent에서 안정적이고 균일한 학습이 이루어지게 하기 위함이다.</p>
-<p>따라서 정규화된 상태에서 모델이 학습을 거듭하여 예측값을 정답(1.0)에 가깝게 맞추게 되면(즉, 정규화된 잔차가 0에 수렴하면), 이를 역정규화(Denormalization)하여 원래 스케일로 되돌렸을 때의 잔차 역시 자연스럽게 0에 가까워진다.</p></div>
+<p>따라서 정규화된 상태에서 모델이 학습을 거듭하여 예측값을 정답(1.0)에 가깝게 맞추게 되면(즉, 정규화된 잔차가 0에 수렴하면), 이를 역정규화(Denormalization)하여 원래 스케일로 되돌렸을 때의 잔차 역시 자연스럽게 0에 가까워진다.</p>
+<h2 id="block-3d4b12c0115c803e83f6fd1fb170e245">평균/분산 Normalize를 쓰지 못하는 이유</h2>
+<p>1. 공간상의 벡터 방향 왜곡 (기하학적 비틀림)</p>
+<p>x, y, z‬는 3차원 공간에서 하나의 Vector를 이룬다. 각 축을 자기 평균을 빼고 분산으로 나누는 순간 공간상에서의 벡터의 원래 방향 정보를 왜곡시킨다.</p>
+<p>2. 수치적 폭발 방지 (Division by Zero)</p>
+<p>특정 방향으로의 움직임이 거의 없는 데이터(예: 평지에서만 달리는 차라 ‭z‬축 변동이 거의 없는 경우, ‭\((\sigma_x \approx 0)\)가 들어오면, \(\sigma_z\)‬로 나눌 때 값이 무한대로 폭발하여 학습이 불안정해 진다. </p>
+<p>3. 동일 물리량의 물리적 에너지 보존</p>
+<p>x, y, z‬‭‬는 모두 '속도(m/s)'라는 동일한 단위를 가진다. 축별로 따로 정규화해 버리면, 실제 공간에서 크게 요동치는 축과 거의 정지해 있는 축의 오차 비중이 강제로 똑같아진다.</p></div>
     <div class="share-bar" data-share>
       <span class="share-label">Share</span>
       <button type="button" class="share-btn" data-share-copy>Copy</button>
