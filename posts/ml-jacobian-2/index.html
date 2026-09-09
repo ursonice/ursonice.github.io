@@ -29,13 +29,13 @@
     <meta property="og:url" content="https://ursonice.github.io/posts/ml-jacobian-2/" />
     <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5BML%5D%20Jacobian%202&amp;cat=AI%2F%20Deep%20Learning" />
     <meta property="article:published_time" content="2026-09-09T02:44:00.000Z" />
-    <meta property="article:modified_time" content="2026-09-09T04:18:00.000Z" />
+    <meta property="article:modified_time" content="2026-09-09T09:00:00.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="[ML] Jacobian 2" />
     <meta name="twitter:description" content="서론 이 장에선는 Jacobian이 다루는 함수 구조에 대해서 자세히 알아본다. Jacobian shape 다변수 벡터 함수 ‭f: \mathbb{R}^n \to \mathbb{R}^m‬‭‬ ‭‬‭‬‭‬은 ‭n\times1 차원의 실수 성분을 입력받아 ‭m\times1‬개의 실수 성분을 출력하는 구조를 " />
     <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5BML%5D%20Jacobian%202&amp;cat=AI%2F%20Deep%20Learning" />
 
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"[ML] Jacobian 2","description":"서론 이 장에선는 Jacobian이 다루는 함수 구조에 대해서 자세히 알아본다. Jacobian shape 다변수 벡터 함수 ‭f: \\mathbb{R}^n \\to \\mathbb{R}^m‬‭‬ ‭‬‭‬‭‬은 ‭n\\times1 차원의 실수 성분을 입력받아 ‭m\\times1‬개의 실수 성분을 출력하는 구조를 ","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5BML%5D%20Jacobian%202&cat=AI%2F%20Deep%20Learning","datePublished":"2026-09-09T02:44:00.000Z","dateModified":"2026-09-09T04:18:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/ml-jacobian-2/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"[ML] Jacobian 2","description":"서론 이 장에선는 Jacobian이 다루는 함수 구조에 대해서 자세히 알아본다. Jacobian shape 다변수 벡터 함수 ‭f: \\mathbb{R}^n \\to \\mathbb{R}^m‬‭‬ ‭‬‭‬‭‬은 ‭n\\times1 차원의 실수 성분을 입력받아 ‭m\\times1‬개의 실수 성분을 출력하는 구조를 ","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%5BML%5D%20Jacobian%202&cat=AI%2F%20Deep%20Learning","datePublished":"2026-09-09T02:44:00.000Z","dateModified":"2026-09-09T09:00:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/ml-jacobian-2/"}}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Deep Learning","item":"https://ursonice.github.io/topics/ai-deep-learning/"},{"@type":"ListItem","position":3,"name":"[ML] Jacobian 2","item":"https://ursonice.github.io/posts/ml-jacobian-2/"}]}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -171,10 +171,163 @@ J_{\mathbf{f}}(x_1, x_2) = \begin{bmatrix} 1 &amp; 1 \\ x_2 &amp; x_1 \\ 2x_1 &a
 <p>가 되어 원래 행렬 A와 같다는 것을 볼 수 있다.</p>
 <p>따라서 Jacobian의 모든 원소가 𝐴의 대응하는 원소와 같아집니다. 이 경우, 출력의 변화도 정확히 계산할 수 있다.</p>
 <div class="math-block">\[\mathbf{g}(\mathbf{x}+\Delta\mathbf{x})-\mathbf{g}(\mathbf{x})=A(\mathbf{x}+\Delta\mathbf{x})+\mathbf{b}-(A\mathbf{x}+\mathbf{b})=A\Delta\mathbf{x}\]</div>
-<p>Jacobian이 입력 \(\mathbf{x}\)와 상관없이 고정된 상수 행렬(‭\(A\)‬)로 나오고, \(\Delta \mathbf{g} = A\Delta \mathbf{x}\)가 근사가 아닌 완벽한 등식으로 성립하는 것은 함수의 모든 성분 이 1차식(아핀 함수)일 때만 가능합니다.</p>
-<p>함수의 각 성분 \(g_i(\mathbf{x})\)가 입력 변수들의 1차 결합으로만 이루어져 있어야 편미분 시 변수가 모두 사라지고 계수(상수)만 남기 때문에 </p>
-<p>비선형 함수에서는 Jacobian을 이용해 국소적으로
-근사했지만, 이 함수는 처음부터 입력 변화와 출력 변화 사이의 관계가 선형이기 때문입니다.</p></div>
+<p>Jacobian이 입력 \(\mathbf{x}\)와 상관없이 고정된 상수 행렬(‭\(A\)‬)로 나오고, \(\Delta \mathbf{g} = A\Delta \mathbf{x}\)가 근사가 아닌 완벽한 등식으로 성립하는 것은 함수의 모든 성분 이 1차식(아핀 함수)일 때만 가능하다.</p>
+<p>그 이유는 함수의 각 성분 \(g_i(\mathbf{x})\)가 입력 변수들의 1차(1차식) 결합으로만 이루어져 있어야 편미분 시 변수가 모두 사라지고 계수(상수)만 남기 때문이다.</p>
+<p>예시로 봐보자.</p>
+<h4 id="block-3d6b12c0115c8097959fc8593654195a">Example</h4>
+<p>다음과 같은 비선형 함수를 생각하자.</p>
+<div class="math-block">\[f(x)=x^2\]</div>
+<p>입력값이 \(x \)에서 \(x+\Delta x\) 로 변할 때, 실제 출력 변화량은</p>
+<div class="math-block">\[\Delta f_{\mathrm{real}}
+=
+f(x+\Delta x)-f(x)\]</div>
+<p>이고 각각을 함수 \(f(x)=x^2\)에  대입하면,</p>
+<div class="math-block">\[\begin{aligned}\Delta f_{\mathrm{real}}&amp;=(x+\Delta x)^2-x^2 \\&amp;=x^2+2x\Delta x+(\Delta x)^2-x^2 \\&amp;=2x\Delta x+(\Delta x)^2\end{aligned}\]</div>
+<p>가 된다.</p>
+<p>이번에는 우리가 실제함수가 너무 복잡해 미분을 이용한 1차 근사를 통해 출력 변화량을 알아 내고자 한다면 다음과 같이 표기가 가능하다(Jacobian1장 참조)</p>
+<div class="math-block">\[\Delta f_{\mathrm{approx}}=f'(x)\Delta x\]</div>
+<p>이렇게 근사 형태로 표현된다.</p>
+<p>따라서 출력의 변화량이 실제와 근사한 것과 다르다는 것을 알 수 있다.</p>
+<div class="math-block">\[\Delta f_{\mathrm{real}}\neq\Delta f_{\mathrm{approx}}\]</div>
+<p>만약 \(\Delta x\)가 충분히 작다면 \(\Delta x^2\)은 매우 작아짐으로 </p>
+<div class="math-block">\[\Delta f_{\mathrm{real}}\approx \Delta f_{\mathrm{approx}}\]</div>
+<p>라고 근사할 수 있다.</p>
+<p>실제 값을 대입해서 확인해보면</p>
+<div class="math-block">\[x=2,\qquad\Delta x=0.1\]</div>
+<p>이라고 하자.</p>
+<div class="math-block">\[f'(2)=2(2)=4\]</div>
+<p>이므로 실제 출력 변화량은</p>
+<div class="math-block">\[\begin{aligned}\Delta f_{\mathrm{real}}&amp;=4(0.1)+(0.1)^2 \\&amp;=0.4+0.01 \\&amp;=0.41\end{aligned}\]</div>
+<p>이다.</p>
+<p>반면, 미분을 이용한 근사 출력 변화량은</p>
+<div class="math-block">\[\begin{aligned}\Delta f_{\mathrm{approx}}&amp;=f'(2)\Delta x \\&amp;=4(0.1) \\&amp;=0.4\end{aligned}\]</div>
+<p>이다.</p>
+<p>따라서 실제값과 근사한 값이 완전히 같지는 않지만 근사하다고 볼 수 있다.</p>
+<div class="math-block">\[0.41 \neq 0.4\]</div>
+<p>그리고 두 값의 차이는 </p>
+<div class="math-block">\[(\Delta x)^2=0.01\]</div>
+<p>임으로 \(\Delta x\)가 작으면 작을 수록 더 실제값에 가까워진다 볼 수 있다.</p>
+<p>Affine Function(아핀 함수)는 선형변환을 한 뒤, 일정한 값을 더하는 함수이다.</p>
+<p>따라서 다음과 같은 함수는 선형함수가 아닌 아핀함수가 된다.</p>
+<div class="math-block">\[f(x)=2x+3\]</div>
+<details class="toggle"><summary>선형함수 조건</summary><div class="toggle-body"><div class="math-block">\[\text{1. } f(u+v)=f(u)+f(v)\\[1.5em]
+\text{2. } f(cu)=c\,f(u)\]</div>
+<p>f(x) = 2x는 이 조건을 성립하나 g(x) = 2x + 3은 성립하지 않는다.</p></div></details>
+<p>위 아핀함수로 예시를 들어보자.</p>
+<p>입력값이 \(x \)에서 \(x+\Delta x\) 로 변할 때, 실제 출력 변화량은</p>
+<div class="math-block">\[\Delta f_{\mathrm{real}}=f(x+\Delta x)-f(x)\]</div>
+<p>이다.</p>
+<p>함수를 대입하면,</p>
+<div class="math-block">\[\begin{aligned}\Delta f_{\mathrm{real}}&amp;=\left[2(x+\Delta x)+3\right]-(2x+3) \\&amp;=2x+2\Delta x+3-2x-3 \\&amp;=2\Delta x\end{aligned}\]</div>
+<p>이다.</p>
+<p>이제 근사식의 형태를 써보자.</p>
+<div class="math-block">\[f'(x)=2\]</div>
+<p>이므로 미분을 이용한 출력 변화량은</p>
+<div class="math-block">\[\begin{aligned}\Delta f_{\mathrm{approx}}&amp;=f'(x)\Delta x \\&amp;=2\Delta x\end{aligned}\]</div>
+<p>따라서 Affine 함수에서는</p>
+<div class="math-block">\[\Delta f_{\mathrm{real}}=\Delta f_{\mathrm{approx}}\]</div>
+<p>가 성립한다.</p>
+<p>즉, 아래식은 정확한 등식의 형태다.</p>
+<div class="math-block">\[\Delta f=f'(x)\Delta x\]</div>
+<p>이렇게 비선형 함수에서는 현재시점 \(x \)에서의 기울기와 \(x+\Delta x\)에서의 기울기가 비선형임으로 다르지만 선형함수의 경우 직선형태의 꼴을 가지기 때문에 현재지점 \(x \)와 \(x+\Delta x\)에서의 기울기가 같을 수 밖에 없기 때문이다.</p>
+<div class="table-wrap"><table><tr><td>함수</td><td>선형대수에서의 분류</td></tr><tr><td>\(f(x) = 2x\)</td><td>선형 함수이자 아핀 함수</td></tr><tr><td>\(f(x) = 2x + 3\)</td><td>아핀 함수이나 선형 함수는 아님</td></tr><tr><td>\(f(x) = x^2\)</td><td>아핀 함수가 아님</td></tr></table></div>
+<h4 id="block-3d6b12c0115c80e9b1a0cb679fdb49f6">Jacobian 단위/영 행렬</h4>
+<p>Jacobian은 &quot;입력이 1만큼 변할 때 출력이 얼마나 변하는가(민감도)&quot;를 나타내는 행렬이다. </p>
+<p>2차원 공간(‭\(n=2\)‬‭‬)을 예시로 들어보자.</p>
+<p>입력 벡터를 그대로 출력하는 2차원 항등함수 ‭\(\mathbf{g}(\mathbf{x}) = \mathbf{x}\)‬‭‬‭‬‭‬‭‬가 있다.</p>
+<div class="math-block">\[\mathbf{g}\left(\begin{bmatrix}x_1\\x_2\end{bmatrix}\right)=\begin{bmatrix}g_1(x_1,x_2)\\g_2(x_1,x_2)\end{bmatrix}=\begin{bmatrix}x_1\\x_2\end{bmatrix}\]</div>
+<p>각 성분함수의 편미분을 구한다.</p>
+<ul><li>첫 번째 출력 \(g_1=x_1:\)<ul><li>\(\frac{\partial g_1}{\partial x_1}=1\)</li><li>\(\frac{\partial g_1}{\partial x_1}=0\)</li></ul></li><li>첫 번째 출력 \(g_2=x_2:\)<ul><li>\(\frac{\partial g_2}{\partial x_1}=0\)</li><li>\(\frac{\partial g_1}{\partial x_2}=1\)</li></ul></li></ul>
+<p>각각 계산한 것을 행렬로 보면 </p>
+<div class="math-block">\[J_g=\begin{bmatrix}\dfrac{\partial g_1}{\partial x_1} &amp; \dfrac{\partial g_1}{\partial x_2} \\\dfrac{\partial g_2}{\partial x_1} &amp; \dfrac{\partial g_2}{\partial x_2}\end{bmatrix}=\begin{bmatrix}1 &amp; 0 \\0 &amp; 1\end{bmatrix}=I\]</div>
+<p>이처럼 단위 행렬이 된다.</p>
+<p>입력과 무관하게 항상 고정된 값 \(\mathbf{b} = \begin{bmatrix} 3 \ 5 \end{bmatrix}\)를 출력하는 함수를 정의해 보자.</p>
+<ul><li>첫 번째 출력 \(g_1=3:\)<ul><li>\(\frac{\partial g_1}{\partial x_1}=0\)</li><li>\(\frac{\partial g_1}{\partial x_1}=0\)</li></ul></li><li>첫 번째 출력 \(g_2=5:\)<ul><li>\(\frac{\partial g_2}{\partial x_1}=0\)</li><li>\(\frac{\partial g_1}{\partial x_2}=0\)</li></ul></li></ul>
+<p>각각 계산한 것을 행렬로 보면 </p>
+<div class="math-block">\[J_{\mathbf{g}}=\begin{bmatrix}\frac{\partial g_1}{\partial x_1} &amp; \frac{\partial g_1}{\partial x_2} \\\frac{\partial g_2}{\partial x_1} &amp; \frac{\partial g_2}{\partial x_2}\end{bmatrix}=\begin{bmatrix}0 &amp; 0 \\0 &amp; 0\end{bmatrix}\]</div>
+<p>0행렬이 되는 것을 볼 수 있다.</p>
+<p>Jacobian에서 0의 의미는 그 점에서의 <strong>1차 변화율</strong>이 0이라는 것이다.</p>
+<p>예시를 가지고 살펴보자</p>
+<p>다음과 같은 함수가 있다.</p>
+<div class="math-block">\[\mathbf{f}(x_1, x_2, x_3)=\begin{bmatrix}f_1(x_1, x_2, x_3) \\f_2(x_1, x_2, x_3)\end{bmatrix}=\begin{bmatrix}x_1^2 + x_2 x_3 \\e^{x_1} + x_3\end{bmatrix}\]</div>
+<p>기준점이</p>
+<div class="math-block">\[\mathbf{a} = (0,1,2)\]</div>
+<p>라고 하자. 먼저 첫 번째 출력</p>
+<div class="math-block">\[f_1 = x_1^2 + x_2x_3\]</div>
+<p>을 첫 번째 출력을 \(x_1\)에 대해서 미분하면</p>
+<div class="math-block">\[\frac{\partial f_1}{\partial x_1} = 2x_1\]</div>
+<p>기준점 \(x_1=0\) 을 대입하면</p>
+<div class="math-block">\[\left.\frac{\partial f_1}{\partial x_1}\right|_{\mathbf{a}}= 2(0) = 0\]</div>
+<p>이다. 여기까지만 보면</p>
+<blockquote> \(x_1\)은 \(f_1\)에 영향을 안 준다고 생각하기 쉽다.</blockquote>
+<p>라고 생각하기 쉽다. 그런데 실제 함수를 보면</p>
+<div class="math-block">\[f_1 = x_1^2 + x_2x_3\]</div>
+<p>이므로 분명히\(x_1^2\)이 들어가 있다. 즉 \(x_1\)을 사용하고 있다.</p>
+<p>이를 확인하기위해 \(x_1\)을 조금 변화시켜 출력변화량을 확인한다.</p>
+<p>기준점을 대입하여 함수값을 봐보면 다음과 같다.</p>
+<div class="math-block">\[f_1(0,1,2) = 0^2 + (1)(2) = 2\]</div>
+<p>이제 \(x_1\)을 0.1만큼 바꿔보자.</p>
+<div class="math-block">\[(0,1,2) \rightarrow (0.1,1,2)\]</div>
+<p>그러면 출력은 다음과 같다.</p>
+<div class="math-block">\[f_1(0.1,1,2) = (0.1)^2 + (1)(2) = 2.01\]</div>
+<p>따라서 출력 변화량은</p>
+<div class="math-block">\[\Delta f_1 = 2.01 - 2 = 0.01\]</div>
+<p>분명히 출력이 변했다.</p>
+<p>왜 그런지 알아보자. Jacobian을 이용한 1차 근사는 다음과 같이 쓸 수 있다.</p>
+<div class="math-block">\[\Delta f_1 \approx \frac{\partial f_1}{\partial x_1}\Delta x_1\]</div>
+<p>\(\Delta x_1\)는 0.1이고 \(\frac{\partial f_1}{\partial x_1}=0\) 임으로 </p>
+<div class="math-block">\[\Delta f_1 \approx 0 \times 0.1 = 0\]</div>
+<p>이 된다. 분명 실제 계산했을 때는 2 → 2.01로 변했는데 말이다.</p>
+<p>바로 그 이유는 Jacobian은 1차(선형) 변화율에 대한 근사이기 때문에 1차항에서의 변화량만 보인다.</p>
+<p>\(x_1=0\)에서 \(x_1\)을 \(t\)만큼 변화시킨다고 해보자</p>
+<div class="math-block">\[x_1 : 0 \rightarrow t\]</div>
+<p>그러면</p>
+<div class="math-block">\[f_1(t,1,2) = t^2 + 2\]</div>
+<p>이고 원래 값은</p>
+<div class="math-block">\[f_1(0,1,2) = 2\]</div>
+<p>이므로</p>
+<div class="math-block">\[\Delta f_1 = (t^2 + 2) - 2 = \boxed{t^2}\]</div>
+<p>이다.</p>
+<p>즉 출력 변화가 \(t\)에 비례하는 것이 아니라 \(t^2\)에 비례한다.</p>
+<p>Jacobian이 잡아내는 것은 1차 변화임으로 1차항이 없어 0으로 나타난 것이다.</p>
+<p>Taylor전개 관점에서 보면</p>
+<div class="math-block">\[\Delta f_1=\underbrace{0 \cdot t}_{\text{1차항}}+\underbrace{t^2}_{\text{2차항}}\]</div>
+<p>따라서 Jacobian에는 0이라고 나오지만 실제 함수는 2차적으로 변한다.</p>
+<p>그러므로 Jacobian이 0이라고 해서 대응되는 입력이 출력에 영향이 없는 것은 아니다.</p>
+<p>(한 점에서 1차 민감도가 없다는 것과, 함수가 해당 입력을 전혀 사용하지 않는다는 것은 같은 뜻이 아님)</p>
+<h4 id="block-3d6b12c0115c805dba1cd1e5c5f71c87">Jacobian의 각 원소는 전달 비율</h4>
+<div class="math-block">\[\frac{\partial f_i}{\partial x_j}\]</div>
+<p>는 현재 점 \(x_j\)가 조금 변할 때 \(f_i\)가 얼마나 변하는지를 뜻한다.</p>
+<p>예를들어</p>
+<div class="math-block">\[J_{\mathbf{f}}=\begin{bmatrix}4 &amp; 1 \\3 &amp; 2\end{bmatrix}\]</div>
+<p>이면 첫 번째 출력은</p>
+<div class="math-block">\[\Delta f_1 \approx 4\Delta x_1 + 1\Delta x_2\]</div>
+<p>두 번째 출력은</p>
+<div class="math-block">\[\Delta f_2 \approx 3\Delta x_1 + 2\Delta x_2\]</div>
+<p>처럼 변한다.</p>
+<div class="math-block">\[J_{\mathbf{f}}(\mathbf{a})\]</div>
+<p>는 기준점 a에서의 기울기 정보이다. 비선형 함수에서는 위치가 바뀌면 Jacobian도 바뀐다.</p>
+<p>따라서 현재 점 근처에서 근사가 실제값과 정확해지고 멀어질 수록 부정확해진다.</p>
+<p>입력 변화가</p>
+<div class="math-block">\[\Delta \mathbf{x}\]</div>
+<p>라면 출력 변화는</p>
+<div class="math-block">\[
+\Delta \mathbf{f}
+\approx
+J_{\mathbf{f}}(\mathbf{a})\Delta \mathbf{x}
+\]</div>
+<p>로 근사한다.</p>
+<p>예를 들어</p>
+<div class="math-block">\[J=\begin{bmatrix}4 &amp; 1 \\3 &amp; 2\end{bmatrix} \quad\Delta \mathbf{x}
+=
+\begin{bmatrix}
+0.01 \\
+-0.02
+\end{bmatrix}\]</div>
+<p>이면</p>
+<div class="math-block">\[\Delta \mathbf{f}\approx\begin{bmatrix}0.02 \\-0.01\end{bmatrix}\]</div>
+<p>가 나오듯이 행렬곱을 통해 알 수 있었다.</p>
+<p>Jacobian은 현재 위치 근처에서는‭ \(\Delta \mathbf{f} \approx J_{\mathbf{f}}(\mathbf{a})\Delta \mathbf{x}‬‭‬‭‬‭‬‭‬‭‬‭\) 라는 한 번의 행렬곱을 통해 입력 변화에 따른 출력의 변화량을 선형적(1차 근사)으로 간단히 예측할 수 있다.</p></div>
     <div class="share-bar" data-share>
       <span class="share-label">Share</span>
       <button type="button" class="share-btn" data-share-copy>Copy</button>
