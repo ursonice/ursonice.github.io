@@ -6,22 +6,14 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Tue, 08 Sep 2026 23:42:42 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 09 Sep 2026 01:37:14 GMT</lastBuildDate>
     <item>
       <title>데이터의 크기를 나타내는 RMS</title>
       <link>https://ursonice.github.io/posts/%EB%8D%B0%EC%9D%B4%ED%84%B0%EC%9D%98-%ED%81%AC%EA%B8%B0%EB%A5%BC-%EB%82%98%ED%83%80%EB%82%B4%EB%8A%94-rms/</link>
       <guid isPermaLink="false">3d5b12c0-115c-80e2-897a-eaa5cb2e5591</guid>
       <pubDate>Tue, 08 Sep 2026 12:28:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
-      <description>서론 신경망에 들어가는 관측치(관절 각도, 속도 등)들은 서로 스케일 차이가 매우 크다. 이러한 numerical scale 차이가 너무 크면 특정 입력이 초기에 지나치게 큰 영향을 줄 수 있다. 특정 입력이 네트워크에 과도한 영향을 주는 것을 막고 올바르게 정규화(Normalize)하기 위해서는, 각 </description>
-    </item>
-    <item>
-      <title>RMS</title>
-      <link>https://ursonice.github.io/posts/rms/</link>
-      <guid isPermaLink="false">3d5b12c0-115c-80a4-8e6e-f3079e6f223d</guid>
-      <pubDate>Tue, 08 Sep 2026 12:10:00 GMT</pubDate>
-      <category>AI/ Deep Learning</category>
-      <description>서론</description>
+      <description>서론 신경망에 입력되는 observation에는 Joint Position, Joint Velocity, Linear Velocity, Angular Velocity, Projected Gravity, Previous Action 등 서로 다른 종류의 데이터가 존재한다. 예를 들어 어떤 observati</description>
     </item>
     <item>
       <title>Output Data Normalization</title>
@@ -246,6 +238,14 @@
       <pubDate>Sun, 24 May 2026 14:31:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
       <description>서론 이 논문은 단일 RGB 이미지(Monocular RGB)만으로 3D 로봇 조작 정책을 학습하는 MonoLift framework를 제안한다. 기존 RGB-D, multi-view, point cloud 기반 방법은 3D 정보를 잘 활용할 수 있지만, 추가 센서와 전처리 비용이 크다. 반대로 RGB-</description>
+    </item>
+    <item>
+      <title>Learning Vision-Based Omnidirectional Navigation: A Teacher-Student Approach Using Monocular Depth Estimation 논문리뷰</title>
+      <link>https://ursonice.github.io/posts/learning-vision-based-omnidirectional-navigation-a-teacher-student-approach-usin/</link>
+      <guid isPermaLink="false">366b12c0-115c-800d-b636-caec12f58f18</guid>
+      <pubDate>Wed, 20 May 2026 13:37:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 이 논문은 기존 2D LiDAR 기반 이동 로봇 내비게이션의 한계를 해결하기 위해, Monocular Depth Estimation(MDE) 기반 Teacher-Student framework를 제안한다. Teacher policy는 시뮬레이션에서 2D LiDAR와 로봇 자기 상태 정보를 입력으로 </description>
     </item>
   </channel>
 </rss>
