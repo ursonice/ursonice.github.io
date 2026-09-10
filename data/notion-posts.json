@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-10T00:00:13.983Z",
+  "generatedAt": "2026-09-10T04:30:25.378Z",
   "site": {
     "title": "Woojae Joo — Developer Note",
     "description": "AI, Robotics, Systems 공부 기록"
@@ -50,6 +50,10 @@
       "id": "40d73572-5e1a-47ff-87f1-f1db1f668c85"
     },
     {
+      "name": "Mathematics",
+      "id": "3d7b12c0-115c-80fc-8008-000b94cd1379"
+    },
+    {
       "name": "Reinforcement Learning",
       "id": "36ab12c0-115c-8079-87da-000bf32689ed"
     }
@@ -66,6 +70,19 @@
     "github": "https://github.com/ursonice"
   },
   "posts": [
+    {
+      "id": "3d7b12c0-115c-80de-8094-f6ccedce1666",
+      "title": "",
+      "slug": "3d7b12c0-115c-80de-8094-f6ccedce1666",
+      "category": "Mathematics",
+      "tags": [],
+      "created": "2026-09-10T02:19:00.000Z",
+      "updated": "2026-09-10T02:19:00.000Z",
+      "readingTime": 1,
+      "summary": "",
+      "sourceUrl": "https://app.notion.com/p/3d7b12c0115c80de8094f6ccedce1666",
+      "html": ""
+    },
     {
       "id": "3d6b12c0-115c-8021-8b92-ee4114ea82cb",
       "title": "[ML] Jacobian 2",
