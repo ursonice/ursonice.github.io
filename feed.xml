@@ -6,14 +6,38 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Thu, 10 Sep 2026 04:30:25 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 10 Sep 2026 09:08:03 GMT</lastBuildDate>
     <item>
-      <title></title>
-      <link>https://ursonice.github.io/posts/3d7b12c0-115c-80de-8094-f6ccedce1666/</link>
+      <title>[ML] Jacobian 1</title>
+      <link>https://ursonice.github.io/posts/ml-jacobian-1/</link>
+      <guid isPermaLink="false">3d3b12c0-115c-80d1-ae2f-d58bd58e5c16</guid>
+      <pubDate>Sun, 06 Sep 2026 04:04:00 GMT</pubDate>
+      <category>Mathematics</category>
+      <description>서론 고등학생때 배웠던 미분은 단순히 함수의 접선 기울기를 구하는 것에 그쳤다면 AI/ML 관점에서는 입력을 아주 조금 변화시켰을 때 출력은 얼마나 변화하는가에 대한 관점으로 바꾸어 생각해본다. 예를들어 x에 작은 변화량 \Delta x를 주어 x → x + \Delta x가 되었다하자. 그러면 출력의 </description>
+    </item>
+    <item>
+      <title>EM 알고리즘 (작성중)</title>
+      <link>https://ursonice.github.io/posts/em-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-%EC%9E%91%EC%84%B1%EC%A4%91/</link>
+      <guid isPermaLink="false">3a2b12c0-115c-8044-8f18-fa8d0560f1bb</guid>
+      <pubDate>Sun, 19 Jul 2026 06:47:00 GMT</pubDate>
+      <category>Mathematics</category>
+      <description>우리는 각 데이터가 어떤 군집에 속하는지 알 수가 없는 상황에서 비슷한 데이터끼리 여러 그룹으로 나누고 싶다. 이렇게 데이터의 라벨을 모르는 상태에서 어떻게 각 비슷한 데이터끼리 그룹으로 구분할 수 있을까? 여기서 우리가 관측한 데이터는 X, 각 데이터가 어느 군집에 속해있는지 나타내는 잠재변수를 Z라고</description>
+    </item>
+    <item>
+      <title>Variation Inference(VI, ELBO)</title>
+      <link>https://ursonice.github.io/posts/variation-inference-vi-elbo/</link>
+      <guid isPermaLink="false">390b12c0-115c-805b-962c-c637a21344c5</guid>
+      <pubDate>Wed, 01 Jul 2026 07:19:00 GMT</pubDate>
+      <category>Mathematics</category>
+      <description>Variation Inference(VI, ELBO) 개요 복잡한 데이터를 이해하고싶어서 어떤 요인들이 데이터에 영향을 주는지 알고 싶다. 즉 우리가 보는 데이터가 왜 그렇게 나왔는지 숨은 원인을 알고 싶은 것. (데이터 x가 주어졌을때 숨은 요인 z가 어떻게 나오는지를 알고싶은 것이다. p(z|x)) </description>
+    </item>
+    <item>
+      <title>수반행렬(Adjoint Matrix)</title>
+      <link>https://ursonice.github.io/posts/%EC%88%98%EB%B0%98%ED%96%89%EB%A0%AC-adjoint-matrix/</link>
       <guid isPermaLink="false">3d7b12c0-115c-80de-8094-f6ccedce1666</guid>
       <pubDate>Thu, 10 Sep 2026 02:19:00 GMT</pubDate>
       <category>Mathematics</category>
-      <description></description>
+      <description>소행렬식(Minor Determinant) n\times n 정방행렬 A에서 어떤 원소 a_{ij}를 기준으로 i번째 행과 j번째 열을 제거한 뒤 남은 부분행렬의 determinant를 소행렬식이라고 한다. 이를 예를 들어 (1, 1) 원소의 소행렬식 위와 같은 행렬이 있을 때 1행과 1열을 제거한 행렬</description>
     </item>
     <item>
       <title>[ML] Jacobian 2</title>
@@ -22,14 +46,6 @@
       <pubDate>Wed, 09 Sep 2026 02:44:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
       <description>서론 이 장에선는 Jacobian이 다루는 함수 구조에 대해서 자세히 알아본다. Jacobian shape 다변수 벡터 함수 ‭f: \mathbb{R}^n \to \mathbb{R}^m‬‭‬ ‭‬‭‬‭‬은 ‭n\times1 차원의 실수 성분을 입력받아 ‭m\times1‬개의 실수 성분을 출력하는 구조를 </description>
-    </item>
-    <item>
-      <title>[ML] Jacobian 1</title>
-      <link>https://ursonice.github.io/posts/ml-jacobian-1/</link>
-      <guid isPermaLink="false">3d3b12c0-115c-80d1-ae2f-d58bd58e5c16</guid>
-      <pubDate>Sun, 06 Sep 2026 04:04:00 GMT</pubDate>
-      <category>AI/ Deep Learning</category>
-      <description>서론 고등학생때 배웠던 미분은 단순히 함수의 접선 기울기를 구하는 것에 그쳤다면 AI/ML 관점에서는 입력을 아주 조금 변화시켰을 때 출력은 얼마나 변화하는가에 대한 관점으로 바꾸어 생각해본다. 예를들어 x에 작은 변화량 \Delta x를 주어 x → x + \Delta x가 되었다하자. 그러면 출력의 </description>
     </item>
     <item>
       <title>데이터의 크기를 나타내는 RMS</title>
@@ -64,28 +80,12 @@
       <description>서론 머신러닝에서 주식 가격, 내일의 온도, 혹은 자동차의 속도(velocity)처럼 연속적인 숫자를 예측하는 작업을 &apos;회귀(Regression)&apos;라고 한다. MSE는이 회귀 문제에서 모델이 얼마나 틀렸는지 나타내는 평가지표이다. 그럼 MSE의 특징에 대해서 조금 더 알아보자. MSE 한계 MSE의 한계</description>
     </item>
     <item>
-      <title>Variation Inference(VI, ELBO)</title>
-      <link>https://ursonice.github.io/posts/variation-inference-vi-elbo/</link>
-      <guid isPermaLink="false">390b12c0-115c-805b-962c-c637a21344c5</guid>
-      <pubDate>Wed, 01 Jul 2026 07:19:00 GMT</pubDate>
-      <category>Reinforcement Learning</category>
-      <description>Variation Inference(VI, ELBO) 개요 복잡한 데이터를 이해하고싶어서 어떤 요인들이 데이터에 영향을 주는지 알고 싶다. 즉 우리가 보는 데이터가 왜 그렇게 나왔는지 숨은 원인을 알고 싶은 것. (데이터 x가 주어졌을때 숨은 요인 z가 어떻게 나오는지를 알고싶은 것이다. p(z|x)) </description>
-    </item>
-    <item>
       <title>[1차시] Markov process</title>
       <link>https://ursonice.github.io/posts/1%EC%B0%A8%EC%8B%9C-markov-process/</link>
       <guid isPermaLink="false">39cb12c0-115c-8084-9eb2-f4abfd8d67c7</guid>
       <pubDate>Mon, 13 Jul 2026 03:26:00 GMT</pubDate>
       <category>Reinforcement Learning</category>
       <description>서론 강화학습의 목표는 “현재 상황에서 어떤 행동을 해야 미래에 더 좋은 결과를 얻을 수 있는가?” 이라고 볼 수 있다. 이 질문을 다루려면 먼저 시간에 따라 상태가 어떻게 변할지를 표현해야 한다. 하지만 미래의 상태는 정확히 정해져 있지 않고 확률적으로 변한다.(예를 들어 로봇이 앞으로 가려고 해도 바</description>
-    </item>
-    <item>
-      <title>EM 알고리즘 (작성중)</title>
-      <link>https://ursonice.github.io/posts/em-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-%EC%9E%91%EC%84%B1%EC%A4%91/</link>
-      <guid isPermaLink="false">3a2b12c0-115c-8044-8f18-fa8d0560f1bb</guid>
-      <pubDate>Sun, 19 Jul 2026 06:47:00 GMT</pubDate>
-      <category>Reinforcement Learning</category>
-      <description>우리는 각 데이터가 어떤 군집에 속하는지 알 수가 없는 상황에서 비슷한 데이터끼리 여러 그룹으로 나누고 싶다. 이렇게 데이터의 라벨을 모르는 상태에서 어떻게 각 비슷한 데이터끼리 그룹으로 구분할 수 있을까? 여기서 우리가 관측한 데이터는 X, 각 데이터가 어느 군집에 속해있는지 나타내는 잠재변수를 Z라고</description>
     </item>
     <item>
       <title>PPO</title>
