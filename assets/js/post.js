@@ -943,8 +943,7 @@ const applyThemeIcon = () => {
 
 const initTheme = () => {
   const saved = localStorage.getItem("theme");
-  const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)").matches;
-  document.documentElement.dataset.theme = saved || (prefersDark ? "dark" : "light");
+  document.documentElement.dataset.theme = saved || "light";
   document.documentElement.dataset.reading = localStorage.getItem("reading") || "md";
   applyThemeIcon();
   $("[data-theme-toggle]").addEventListener("click", () => {
