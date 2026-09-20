@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-19T23:36:22.167Z",
+  "generatedAt": "2026-09-20T01:42:22.654Z",
   "site": {
     "title": "Woojae Joo — Developer Note",
     "description": "AI, Robotics, Systems 공부 기록"
@@ -62,6 +62,19 @@
     "github": "https://github.com/ursonice"
   },
   "posts": [
+    {
+      "id": "3e1b12c0-115c-8099-a00f-cb031987f646",
+      "title": "",
+      "slug": "3e1b12c0-115c-8099-a00f-cb031987f646",
+      "category": "Mathematics",
+      "tags": [],
+      "created": "2026-09-20T00:29:00.000Z",
+      "updated": "2026-09-20T00:29:00.000Z",
+      "readingTime": 1,
+      "summary": "",
+      "sourceUrl": "https://app.notion.com/p/3e1b12c0115c8099a00fcb031987f646",
+      "html": ""
+    },
     {
       "id": "3d3b12c0-115c-80d1-ae2f-d58bd58e5c16",
       "title": "[ML] Jacobian 1",
