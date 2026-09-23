@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0a0b0e" />
+    <meta name="theme-color" content="#fbfaf7" />
+    <script>(function(){try{var t=localStorage.getItem("theme")||"light";document.documentElement.dataset.theme=t;var r=localStorage.getItem("reading");if(r)document.documentElement.dataset.reading=r;var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",t==="dark"?"#0a0b0e":"#fbfaf7");}catch(e){}})();</script>
 
     <!-- Google Analytics (GA4) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
@@ -44,7 +45,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=40" />
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
@@ -54,6 +55,7 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
   </head>
   <body>
+    <a class="skip-link" href="#content">본문으로 이동</a>
     <div class="read-progress" data-read-progress></div>
     <header class="site-header" data-header>
       <a class="brand" href="/" aria-label="Woojae Joo home">
@@ -75,7 +77,7 @@
       </button>
     </header>
 
-    <main class="article-shell">
+    <main class="article-shell" id="content">
       <article class="article" data-article data-prerendered>
     <nav class="breadcrumb" aria-label="breadcrumb">
       <a href="/">홈</a>
@@ -172,7 +174,8 @@ May 14 14:40:41 ai-07 sshd[1388940]: Accepted password for groupai from 221.xxx.
       </a>
     </div>
 
-    <script src="/assets/js/post.js?v=13" type="module"></script>
-    <script src="/assets/js/palette.js?v=8" defer></script>
+    <script src="/assets/js/theme.js?v=1" defer></script>
+    <script src="/assets/js/post.js?v=14" type="module"></script>
+    <script src="/assets/js/palette.js?v=9" defer></script>
   </body>
 </html>

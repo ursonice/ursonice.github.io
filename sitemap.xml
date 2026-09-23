@@ -14,7 +14,6 @@
   <url><loc>https://ursonice.github.io/topics/kubernetes/</loc></url>
   <url><loc>https://ursonice.github.io/topics/python/</loc></url>
   <url><loc>https://ursonice.github.io/topics/coding-test/</loc></url>
-  <url><loc>https://ursonice.github.io/posts/3e1b12c0-115c-8099-a00f-cb031987f646/</loc><lastmod>2026-09-20</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/ml-jacobian-1/</loc><lastmod>2026-09-10</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/em-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-%EC%9E%91%EC%84%B1%EC%A4%91/</loc><lastmod>2026-09-10</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/variation-inference-vi-elbo/</loc><lastmod>2026-09-10</lastmod></url>
@@ -43,7 +42,7 @@
   <url><loc>https://ursonice.github.io/posts/gradient/</loc><lastmod>2026-07-05</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/activation-function/</loc><lastmod>2026-07-05</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/knowledge-distillation/</loc><lastmod>2026-07-05</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/</loc><lastmod>2026-06-26</lastmod></url>
+  <url><loc>https://ursonice.github.io/posts/dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det-3/</loc><lastmod>2026-06-26</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/deltar-depth-estimation-from-a-light-weight-tof-sensor-and-rgb-image-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2026-06-04</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/monolift-learning-3d-manipulation-policies-from-monocular-rgb-via-distillation/</loc><lastmod>2026-05-30</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/learning-vision-based-omnidirectional-navigation-a-teacher-student-approach-usin/</loc><lastmod>2026-05-24</lastmod></url>
@@ -61,7 +60,7 @@
   <url><loc>https://ursonice.github.io/posts/vit-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2025-10-13</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/ubuntu-nvidia-driver-install/</loc><lastmod>2025-08-16</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/towards-total-recall-in-industrial-anomaly-detection-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</loc><lastmod>2025-07-20</lastmod></url>
-  <url><loc>https://ursonice.github.io/posts/dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/</loc><lastmod>2025-07-20</lastmod></url>
+  <url><loc>https://ursonice.github.io/posts/dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det-2/</loc><lastmod>2025-07-20</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/onnx-runtime%EC%97%90%EC%84%9C-custom-operator-%EA%B5%AC%ED%98%84-study/</loc><lastmod>2025-07-20</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/raspberry-pi%EC%97%90%EC%84%9C-ubuntu-setting%EB%B6%80%ED%84%B0-coral-tpu%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%B4-mobilenetv2-inference-%E1%84%92/</loc><lastmod>2025-07-20</lastmod></url>
   <url><loc>https://ursonice.github.io/posts/onnx-mlir-%EB%8B%A4%EB%A4%84%EB%B3%B4%EA%B8%B0-mobilenetv2-12/</loc><lastmod>2025-07-19</lastmod></url>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-K7VKNXKJJ7");</script>
+    <title>Kubernetes — Woojae Joo</title>
+    <meta name="description" content="Kubernetes 관련 글 39개 — Woojae Joo 개발 노트." />
+    <link rel="canonical" href="https://ursonice.github.io/topics/kubernetes/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Kubernetes — Woojae Joo" />
+    <meta property="og:description" content="Kubernetes 관련 글 39개 — Woojae Joo 개발 노트." />
+    <meta property="og:url" content="https://ursonice.github.io/topics/kubernetes/" />
+    <meta property="og:image" content="https://ursonice.github.io/assets/og/default.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script>(function(){var s=localStorage.getItem("theme");var d=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.dataset.theme=s||(d?"dark":"light");})();</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=37" />
+  </head>
+  <body>
+    <a class="skip-link" href="#topic">본문으로 이동</a>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text"><span class="brand-name">Woojae Joo</span><span class="brand-sub">ursonice</span></span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환"><span aria-hidden="true" data-theme-icon>◐</span></button>
+    </header>
+    <main class="section shell" id="topic">
+      <div class="section-heading">
+        <p class="eyebrow"><a href="/#topics">← Topics</a></p>
+        <h1>Kubernetes</h1>
+        <p>39 notes</p>
+      </div>
+      <div class="post-grid">
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-backup-and-restore/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Backup and Restore</h3>
+            <p>서론 Kubernetes 클러스터를 안정적으로 운영하기 위해서는 정기적인 백업과 복원이 필요하다. 이 장에서는 Kubernetes 리소스를 백업하고 복원하는 두 가지 주요 방법에 대해 알아보자. 첫 번째는 Kube API 서버를 통해 리소스 정의를 백업하는 방식이고 두 번째는 etcd 데이터베이스 자체를</p>
+            <div class="post-footer"><span>2025년 7월 13일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-cluster-upgrade/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Cluster Upgrade</h3>
+            <p>서론 Kubernetes는 최근 3개의 버전만을 공식 지원하기 때문에, 정기적인 업그레이드가 필요하다. 예를 들어 최신 버전이 1.13일 경우, 지원 대상은 1.13, 1.12, 1.11이며 1.10은 지원되지 않는다. 따라서 최신 버전(1.13)이 release되기 전에 1.10을 사용하고 있다면 1.</p>
+            <div class="post-footer"><span>2025년 7월 3일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-version/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Version</h3>
+            <p>서론 쿠버네티스에는 다양한 릴리즈와 버전 체계가 있다. 이에 대해 알아보자 본론 쿠버네티스 버전을 확인하는 방법은 kubectl get nodes를 통해알 수 있다. 쿠버네티스 버전 출시는 메이저 버전, 마이너 버전, 패치 버전이 존재한다. 메이저 버전은 아키텍처가 크게 바뀔때 올라간다. 마이너 버전은 </p>
+            <div class="post-footer"><span>2025년 7월 3일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-drain-cordon-uncordon/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Drain, Cordon, Uncordon</h3>
+            <p>서론 클러스터를 운영하다보면 노드에 OS업그레이드나 보안 패치를 적용하기 위해 잠시 노드를 중단해야 하는 상황이 생긴다. 이때 파드가 끊기는 시간을 최소화하면서 안전하게 노드를 관리해야 한다. 이와 관련하여 Drain명령어를 통해 노드에 실행중인 파드들을 모드 종료하고 다른 노드에 생성하도록 한다. 파드</p>
+            <div class="post-footer"><span>2025년 7월 3일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-autoscaling/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] AutoScaling</h3>
+            <p>Cluster 관점 Horizontal Scaling 노드 갯수 조절 노드를 옆으로 늘리는 것으로 예를들어 서버가 3대인데 자원이 부족해서 서버를 3대 더 추가해 총 6대로 만드는 것이다. 스케일링 방법 Manual Way(수동 방식) 새 서버를 직접 준비하고 kubeadm join 명령으로 클러스터에 </p>
+            <div class="post-footer"><span>2025년 6월 29일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-multi-container-pods/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Multi Container Pods</h3>
+            <p>서론 쿠버네티스에서 multi container 파드를 구성할 때 두 가지 패턴(종류)가 있다. 하나는 Sidecar container와 co-located container이다. 두 컨테이너는 같은 파드 안에 존재하지만 역할과 생명주기 동작방식에서 차이가 있다. 이 두 종류에 대해서 알아보자 Sidec</p>
+            <div class="post-footer"><span>2025년 6월 28일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-secrets/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Secrets</h3>
+            <p>서론 Kubernetes에서 환경변수를 파드에 직접 삽입이 가능했으나 이는 파드의 갯수가 많아 질 경우 관리하기 힘들다. 따라서 ConfigMap을 사용하여 환경변수 데이터를 중앙화 하였다. ConfigMap은 이러한 환경변수를 텍스트 형태로 저장한다. 따라서 아이디나 비밀번호와 같은 민감한 정보를 텍스</p>
+            <div class="post-footer"><span>2025년 6월 22일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-configure-environment-variables-in-applications/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Configure Environment Variables in Applications</h3>
+            <p>서론 Kubernetes에서는 컨테이너 실행 시 필요한 환경 변수를 설정할 수 있다. 이 장에서는 Pod정의 파일에서 환경 변수를 설정하는 기본적인 방법과 ConfigMap, Secret대해 공부한다. Pod Pod 정의 파일에서 spec.containers.env 항목을 사용하여 환경 변수 설정 가능하</p>
+            <div class="post-footer"><span>2025년 6월 21일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-command-configure-application/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Command Configure Application</h3>
+            <p>서론 쿠버네티스에서 파드 정의 파일에서의 명령어와 인자(arguments)를 설정하는 부분이 있다. 이것에 대해 이해하기 위해서 먼저 Docker에서의 명령어와 컨테이너에 대한 이해가 선행되어야 한다. 따라서 이후 Kubernetes 파드 개념으로 연결해보자. CMD docker run ubuntu 명령</p>
+            <div class="post-footer"><span>2025년 6월 21일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-rolling-updates-and-rollbacks/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Rolling Updates and Rollbacks</h3>
+            <p>서론 Kubernetes에서 애플리케이션을 안정적으로 운영하기 위해서는 배포(Deployment)할 때 서비스 중단 없이 애플리케이션을 업그레이드하거나 문제가 발생했을 때 이전 상태로 되돌리는 롤아웃(Rollout)과 롤백(Rollback) 기능에 대해서 알아본다. Rollout &amp; Rollback Ku</p>
+            <div class="post-footer"><span>2025년 6월 17일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-cluster-monitoring-logs/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Cluster Monitoring / Logs</h3>
+            <p>서론 쿠버네티스 클러스터에서의 자원 사용량을 모니터링하는 방법에 대해 알아본다. 모니터링의 주요 대상은 크게 노드 수준과 파드 수준으로 나뉘며, 각각 다음과 같은 지표들을 포함한다. 노드 수준: 클러스터 내 노드의 수, 각 노드의 상태(정상 여부), CPU, 메모리, 디스크, 네트워크 사용량 등 파드 수</p>
+            <div class="post-footer"><span>2025년 6월 17일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kuberentes-validating-and-mutating-admission-controller-webhook/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kuberentes] Validating and Mutating Admission Controller / Webhook</h3>
+            <p>서론 이전 페이지에서 Admission Controller의 역할에 대해서 알아봤다. Admission Controller는 Kube-apisever에서 사용자의 요청을 검증하고 거부하는것 뿐만 아니라 요청 자체를 수정하는 역할을 한다고 하였다. 이전 페이지에서 보았던 NamespaceExists, Na</p>
+            <div class="post-footer"><span>2025년 6월 12일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-admission-controller/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Admission Controller</h3>
+            <p>서론 사용자가 어떤 명령어 전달할 때 kubectl을 통해Kubernetes클러스터에서 다양한 작업을 수행했다. 파드를 생성하는 등의 요청을 보낼 때마다 그 요청은 API 서버로 전달되고, 이후 파드가 생성되며 최종적으로 그 정보는 Etcd 데이터베이스에 저장된다. 이때 사용자의 요청이 API 서버에 도</p>
+            <div class="post-footer"><span>2025년 6월 12일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-multiple-schedulers/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Multiple Schedulers</h3>
+            <p>서론 스케줄러는 taints, tolerations, node affinity 등 다양한 조건을 고려하여 파드를 노드에 고르게 분산시키는 알고리즘을 사용한다. 그런데 나만의 스케줄링 알고리즘을 만들어 파드를 노드에 배치하고자 하려면 어떻게해야 할까? 사용자는 자신만의 스케줄러 프로그램을 작성하여, 이를 </p>
+            <div class="post-footer"><span>2025년 6월 4일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-priority-classes/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Priority Classes</h3>
+            <p>서론 Kubernetes는 파드를 실행시킬 때 서로 다른 우선순위를 가지도록 실행한다. 예를 들어, Kubernetes의 control plane components 들도 클러스터 내에서 파드로 실행되는데 이러한 컴포넌트들은 어떤 상황에서도 항상 실행되어야 한다. 즉 클러스터내에서 중요한 애플리케이션들은</p>
+            <div class="post-footer"><span>2025년 6월 3일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-daemonset/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Daemonset</h3>
+            <p>서론 DaemonSet은 클러스터의 모든 노드에 파드가 항상 하나씩 존재하도록 보장한다. 새로운 노드가 클러스터에 추가되면, 해당 노드에 자동으로 파드 복제본이 추가되고 반대로 노드가 제거되면, 해당 노드의 파드도 자동으로 제거된다. 데몬셋에 대해서 알아보자. Daemonset 동작방식 Kubernete</p>
+            <div class="post-footer"><span>2025년 6월 3일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-limitrange-resourcequota/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] LimitRange &amp; ResourceQuota</h3>
+            <p>서론 파드의 리소스 또는 컨테이너의 리소스를 제안하고싶다면 어떻게 해야하는지에 대해서 알아본다. Container단위의 Resources 할당/제한 # pod-definition.yaml apiVersion: v1 kind: Pod metadata: name: resource-nginx-pod label</p>
+            <div class="post-footer"><span>2025년 5월 31일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-taints-toleration-vs-node-affinity/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Taints &amp; Toleration VS Node Affinity</h3>
+            <p>서론 Taints와 Toleration은 파드가 특정 노드에 접근하는 것을 제한하기 위해 사용하는 기능이다. 그리고 Node Affinity는 파드가 특정 노드에 배치되도록 선호하거나 강제하기 위해 사용하는 기능이다. 이 둘의 기능의 차이점에 대해서 알아본다. Taint &amp; Toleration VS No</p>
+            <div class="post-footer"><span>2025년 5월 29일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-nodeaffinity/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] NodeAffinity</h3>
+            <p>서론 NodeSelector를 활용하여 단순 레이블을 바탕으로 파드를 특정 노드에 배치할 수 있도록 하는 역할을 하였다. 그러나 NodeAffinity를 활용하면 좀 더 세부적인 설정을 바탕으로 파드를 특정 노드에 배치할 수 있게 된다. 따라서 이번 포스트에서는 NodeAffinity에 대해서 알아본다.</p>
+            <div class="post-footer"><span>2025년 5월 29일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-nodeselector/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] NodeSelector</h3>
+            <p>서론 이번 강의에서는 NodeSelector를 사용하여 파드가 특정 노드에 배포되도록 하는 방법을 배운다. NodeSelector 파드가 특정 노드에 배치되도록 보장하기 위해 사용된다. 고성능이 필요한 데이터 처리 작업을 성능이 좋은 노드에 배치해야 하는 경우 ex)nodeSelector: disk=ss</p>
+            <div class="post-footer"><span>2025년 5월 29일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-taint-toleration/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Taint &amp; Toleration</h3>
+            <p>서론 Taint와 Toleration의 관계에 대해서 설명한다. Taint와 Toleration는 사람과 벌레 두 요소로 예를 들면 이해하기가 쉽다. 사람은 노드에 비유하며 벌레는 파드이다. 벌레 스프레이(Taint)를 사람(Node)에게 뿌리면 벌래(Pod)는 사람(Node)에게 접근하지 못한다. 그러</p>
+            <div class="post-footer"><span>2025년 5월 28일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-labels-and-selector/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Labels and Selector</h3>
+            <p>서론 Kubernetes 입장에서는 파드, 서비스, ReplicaSet, Deployment들이 모두가 서로 다른 오브젝트들이다. 시간이 지남에 따라 클러스터 안에 수백 개, 수천 개의 오브젝트가 쌓일 수 있는데 그때는 서로 다른 기준에 따라 오브젝트를 필터링하고 조회할 수 있는 방법이 필요하다. 예를들</p>
+            <div class="post-footer"><span>2025년 5월 28일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kuberenetes-kubectl-apply/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kuberenetes] kubectl apply</h3>
+            <p>서론 kubectl apply 명령어는 create, replace 등의 명령어와는 사뭇 다르게 동작한다. apply, create 등 어떤 명령어를 통해 쿠버네티스의 객체를 생성하면, 우리가 작성한 yaml 파일에 객체 상태를 저장하기 위한 필드들이 자동으로 추가되어진다. 이렇게 추가되어진 파일을 li</p>
+            <div class="post-footer"><span>2025년 5월 28일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-service/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Service</h3>
+            <p>NodePort NodePort는 Kubernetes의 서비스 유형중 하나로 k8s 클러스터 외부에서 내부 파드에 접근할 수 있도록 해주는 서비스 타입이다. Node의 IP와 지정된 포트(Node port)를 통해 파드로 요청을 전달한다. 노드 포트 서비스 작성방식으로 서비스의 관점에서 작성된다. Tar</p>
+            <div class="post-footer"><span>2025년 5월 23일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-namespace/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Namespace</h3>
+            <p>서론 쿠버네티스 클러스터를 설치할 때 네트워크, DNS 등 내부 시스템을 위해 자체적으로 파드와 서비스들을 실행하는데 이런 시스템들이 사용자로 부터 삭제 또는 수정되는 것을 방지하기 위해 kube-system이라는 별도의 namespace안에서 생성되어 진다. 그리고 모든 사용자에게 공개되어야 하는 리소</p>
+            <div class="post-footer"><span>2025년 5월 18일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-pod-static-pod/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Pod / Static Pod</h3>
+            <p>서론 이 장에서는 쿠버네티스에서 컨테이너를 배포하는 단위인 파드에 대해서 알아본다. 또한 하나의 파드에서 하느의 컨테이너를 사용하는 경우와 하나의 파드에 여러 컨테이너를 두는 경우에 대해서도 알아본다. 최종적으로는 Pod를 생성하기 위해 어떤 형태의 yaml파일을 구성해야 하는지도 알아보자. Pod Ku</p>
+            <div class="post-footer"><span>2025년 5월 17일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-kube-proxy/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] kube-proxy</h3>
+            <p>서론 쿠버네티스 클러스터 내에서는 Pod Network를 통해 모든 파드가 서로 통신할 수 있다. Pod Network는 모든 노드를 어우르는 내부 가상 네트워크이며, 모든 파드가 이 네트워크에 연결되어 이를 통해 서로 통신할 수 있다. 예를 들어, 첫 번째 노드에는(위 그림에서의 왼쪽) Web Appl</p>
+            <div class="post-footer"><span>2025년 5월 17일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-kubelet/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Kubelet</h3>
+            <p>서론 Kubelet은 Kubernetes 워커 노드의 관리자 역할을 하며, 마스터(Control Plane)로부터 받은 명령을 실행하고, 파드 및 노드 상태를 지속적으로 보고한다. 이 장에서는 kubelet의 상세 역할에 대해서 알아본다. Kubelet 마스터 노드의 스케줄러(Scheduler) 가 특정</p>
+            <div class="post-footer"><span>2025년 5월 17일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-scheduler/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Scheduler</h3>
+            <p>서론 스케줄러는 어떤 파드를 어떤 노드에 배치할지를 결정(명령)하는 역할을 한다. 직접 파드를 노드에 배치(수행)하는 것은 kubelet의 역할이다. 따라서 스케줄러는 단지 “어디에 배치할지”만 결정만한다. 이 장에서는 스케줄러가 실제로 어떻게 작동하는지 좀 더 자세히 살펴본다. Scheduler 많은 </p>
+            <div class="post-footer"><span>2025년 5월 17일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-controller-replication-controller-replicationcontroller-replicaset-de/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Controller, Replication Controller, ReplicationController, ReplicaSet, Deployment</h3>
+            <p>서론 쿠버네티스 시스템 내 여러 구성 요소의 상태를 지속적으로 감시하며, 전체 시스템이 원하는 상태로 동작하도록 유지하는 프로세스이다. Kubernetes 안에는 Node Controller, Replication Controller 이 외에도 다양한 컨트롤러가 존재하며 deployment, servic</p>
+            <div class="post-footer"><span>2025년 5월 17일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-kube-apiserver/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] kube-apiserver</h3>
+            <p>서론 kube-apiserver는 Kubernetes의 주요 관리 컴포넌트이다. 우리가 kubectl 명령어를 실행하면 실제로는 kube-apiserver에게 요청을 보내는 것이다. kube-api에 대해서 자세히 알아보자 Kube-api server 사용자가 파드 생성 요청을 보내면 요청에 대한 인증과</p>
+            <div class="post-footer"><span>2025년 5월 17일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-etcd/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] ETCD</h3>
+            <p>서론 이 장에서는 Kubernetes에서 etcd가 수행하는 역할에 대해 알아본다. etcd Kubernetes 클러스터의 모든 상태 정보(노드 · 파드 · Config · Secret · RBAC 등)를 저장하는 키-값 데이터베이스이다. kubectl get 명령어로 확인하는 모든 정보는 etcd 서버</p>
+            <div class="post-footer"><span>2025년 5월 16일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-kuberntes-history/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Kuberntes History</h3>
+            <p>서론 이 장에서는 지금까지 쿠버네티스가 어떻게 발전해 왔는지에 대해서 설명한다. History of Kubernetes 초기 쿠버네티스는 Docker Engine을 직접 호출해서 컨테이너를 실행시켰다. 도커 이외의 다수의 컨테이너 런타임을 지원하기 위해 CRI(Container Runtime Interf</p>
+            <div class="post-footer"><span>2025년 5월 3일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-%ED%8C%8C%EC%9D%BC-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EA%B0%AF%EC%88%98-%EB%8A%98%EB%A6%AC%EA%B8%B0/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] 파일 시스템 갯수 늘리기</h3>
+            <p>서론 On-prmise에서 쿠버네티스를 사용하다보면 파일 시스템 갯수제한(파일을 열수있는 갯수) 때문에 파드를 실행하지 못하는 경우가 생긴다. 데이터베이스도 결국 파일시스템을 사용하여 내용을 유지하고 있듯이 쿠버네티스의 파드도 마찬가지이다. 파일 시스템 갯수제한 오류 오류를 봐보자 {“level”:“in</p>
+            <div class="post-footer"><span>2025년 4월 29일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-pv%EC%99%80-pvc/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] PV와 PVC</h3>
+            <p>PV(Persistent Volume) 물리적 스토리지 리소스를 나타내는 쿠버네티스 오브젝트 개발자가 직접 만들 수 도 있고(Static), 필요할 때마다 자동으로 만들어지도록 할 수 있음(Dynamic) 즉, 사용가능하도록 하는 물리적 용량 PVC(Persistent Volume Claim) Pod가 </p>
+            <div class="post-footer"><span>2025년 4월 21일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-mario-game-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Mario Game 배포하기</h3>
+            <p>서론 On premise 환경에서 Kubernetes를 사용해 웹브라우저로 Mario게임을 배포한다. 이때 Ingress와 NodePort 두 가지 방식으로 배포해본다. 1. </p>
+            <div class="post-footer"><span>2025년 3월 14일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-model-serving/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Model Serving</h3>
+            <p>서론 On premise 환경에서 Kubernetes를 사용해 Mnist model을 GPU에 올려 추론 결과까지 출력하는 것을 목표로 한다. 이때 클라이언트는 노드 포트를 사용해 서버에 접속하여 API 요청을 하고 결과를 얻는다. 동작 순서는 아래와 같다. 간단한 모델을 구한다. 로컬에서 Fast AP</p>
+            <div class="post-footer"><span>2025년 3월 14일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kubernetes-nvida-gpu-plugin-%EC%84%A4%EC%B9%98/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kubernetes] Nvida GPU Plugin 설치</h3>
+            <p>서론 K8s Node에서 GPU를 사용하기 위한 설치 과정을 설명한다. 1. Nvidia-driver 설치 Nvidia Driver를 설치한다. sudo apt-get update sudo ubuntu-drivers devices sudo apt install nvidia-driver-{version} </p>
+            <div class="post-footer"><span>2025년 2월 26일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/kuberentes-ml-serving-framework-%EB%B9%84%EA%B5%90/">
+            <div class="post-meta"><span class="cat">Kubernetes</span></div>
+            <h3>[Kuberentes] ML Serving Framework 비교</h3>
+            <p>비교 항목 Tensorflow Serving Torch Serve BentoML NVIDIA Triton Inference Server 이력서 다듬고 벤토에멜 공부해오고 쿠버네티스 책 보고</p>
+            <div class="post-footer"><span>2025년 1월 8일</span></div>
+          </a>
+      </div>
+    </main>
+    <footer class="site-footer"><div class="footer-inner"><p>© <span data-year></span> Woojae Joo · ursonice</p><div class="footer-links"><a href="/">← Blog</a></div></div></footer>
+    <script>
+      (function () {
+        var t = document.querySelector("[data-theme-icon]");
+        function icon() { if (t) t.textContent = document.documentElement.dataset.theme === "dark" ? "☀" : "◐"; }
+        icon();
+        var b = document.querySelector("[data-theme-toggle]");
+        if (b) b.addEventListener("click", function () { var n = document.documentElement.dataset.theme === "dark" ? "light" : "dark"; document.documentElement.dataset.theme = n; localStorage.setItem("theme", n); icon(); });
+        var h = document.querySelector("[data-header]");
+        function s() { if (h) h.toggleAttribute("data-scrolled", window.scrollY > 8); }
+        s(); window.addEventListener("scroll", s, { passive: true });
+        var y = document.querySelector("[data-year]"); if (y) y.textContent = new Date().getFullYear();
+      })();
+    </script>
+    <script src="/assets/js/palette.js?v=7" defer></script>
+  </body>
+</html>

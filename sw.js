@@ -1,6 +1,7 @@
 // Service worker: network-first for same-origin GETs (always fresh online),
 // falling back to the cache when offline. Avoids staleness while giving offline support.
-const CACHE = "ursonice-v1";
+// Bump CACHE to invalidate everything previously stored (old versioned assets, etc.).
+const CACHE = "ursonice-v2";
 
 self.addEventListener("install", () => self.skipWaiting());
 
@@ -21,12 +22,24 @@ self.addEventListener("fetch", (event) => {
   event.respondWith(
     fetch(request)
       .then((res) => {
-        const copy = res.clone();
-        caches.open(CACHE).then((c) => c.put(request, copy));
+        // Only cache real responses — a cached 404/500 would keep serving errors offline.
+        if (res.ok) {
+          const copy = res.clone();
+          caches
+            .open(CACHE)
+            .then((c) => c.put(request, copy))
+            .catch(() => {}); // quota/opaque failures must not surface as unhandled rejections
+        }
         return res;
       })
       .catch(() =>
-        caches.match(request).then((cached) => cached || (request.mode === "navigate" ? caches.match("/index.html") : undefined)),
+        caches.match(request).then(
+          (cached) =>
+            cached ||
+            // Offline navigation to an uncached page → fall back to the cached homepage.
+            // (The homepage is cached under its real key "/", not "/index.html".)
+            (request.mode === "navigate" ? caches.match("/") : undefined),
+        ),
       ),
   );
 });

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>ResNet50 코드리뷰 — Woojae Joo</title>
+    <meta name="post-slug" content="resnet50-코드리뷰" />
+    <meta name="description" content="서론 이 장은 ResNet50 모델의 코드를 리뷰한다. 사전지식으로는 pytorch에서 torch.Size([1, 64, 56, 56])와 같은 형태를 사용하는데 이 의미는 batch=1, channels=64, output_featuremap_height=56, output_featuremap_widt" />
+    <link rel="canonical" href="https://ursonice.github.io/posts/resnet50-%EC%BD%94%EB%93%9C%EB%A6%AC%EB%B7%B0/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="ResNet50 코드리뷰" />
+    <meta property="og:description" content="서론 이 장은 ResNet50 모델의 코드를 리뷰한다. 사전지식으로는 pytorch에서 torch.Size([1, 64, 56, 56])와 같은 형태를 사용하는데 이 의미는 batch=1, channels=64, output_featuremap_height=56, output_featuremap_widt" />
+    <meta property="og:url" content="https://ursonice.github.io/posts/resnet50-%EC%BD%94%EB%93%9C%EB%A6%AC%EB%B7%B0/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=ResNet50%20%EC%BD%94%EB%93%9C%EB%A6%AC%EB%B7%B0&amp;cat=AI%2F%20Deep%20Learning" />
+    <meta property="article:published_time" content="2023-06-12T03:48:00.000Z" />
+    <meta property="article:modified_time" content="2023-06-21T01:30:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ResNet50 코드리뷰" />
+    <meta name="twitter:description" content="서론 이 장은 ResNet50 모델의 코드를 리뷰한다. 사전지식으로는 pytorch에서 torch.Size([1, 64, 56, 56])와 같은 형태를 사용하는데 이 의미는 batch=1, channels=64, output_featuremap_height=56, output_featuremap_widt" />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=ResNet50%20%EC%BD%94%EB%93%9C%EB%A6%AC%EB%B7%B0&amp;cat=AI%2F%20Deep%20Learning" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"ResNet50 코드리뷰","description":"서론 이 장은 ResNet50 모델의 코드를 리뷰한다. 사전지식으로는 pytorch에서 torch.Size([1, 64, 56, 56])와 같은 형태를 사용하는데 이 의미는 batch=1, channels=64, output_featuremap_height=56, output_featuremap_widt","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=ResNet50%20%EC%BD%94%EB%93%9C%EB%A6%AC%EB%B7%B0&cat=AI%2F%20Deep%20Learning","datePublished":"2023-06-12T03:48:00.000Z","dateModified":"2023-06-21T01:30:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/resnet50-%EC%BD%94%EB%93%9C%EB%A6%AC%EB%B7%B0/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Deep Learning","item":"https://ursonice.github.io/topics/ai-deep-learning/"},{"@type":"ListItem","position":3,"name":"ResNet50 코드리뷰","item":"https://ursonice.github.io/posts/resnet50-%EC%BD%94%EB%93%9C%EB%A6%AC%EB%B7%B0/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/ai-deep-learning/">AI/ Deep Learning</a>
+    </nav>
+    <h1>ResNet50 코드리뷰</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2023년 6월 12일</span><span class="dot"></span><span>수정 2023년 6월 21일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-6becf75676a44e08b1a5181272544c5d">서론</h2>
+<p>이 장은 ResNet50 모델의 코드를 리뷰한다.</p>
+<p>사전지식으로는 pytorch에서 torch.Size([1, 64, 56, 56])와 같은 형태를 사용하는데 이 의미는 <code>batch=1</code>, <code>channels=64</code>, <code>output_featuremap_height</code>=56, <code>output_featuremap_width</code>=56 에 해당한다.</p>
+<h2 id="block-4942beb8d30146b5aa71fe0e65e62d8b">목차</h2>
+<ol><li><a href="#block-fcb7699ffbe54f97b33766132d374d82">ResNet50</a> </li><li><a href="#block-20457a2e370f42c8ab25a5dbe642837a">결론</a> </li><li><a href="#block-43120c3c69b64b9ba230ef8a01324ea4">전체 코드</a> </li></ol>
+<h2 id="block-fcb7699ffbe54f97b33766132d374d82">ResNet50</h2>
+<p>기본적으로 stride=1을 가지고 <strong>1x1</strong> conv2d + relu를 형성하는 함수이다.</p>
+<figure><img src="/assets/notion/resnet50-코드리뷰/0335eda5-0335-46b1-996f-4fae9f0f9225.png" alt="" loading="lazy" width="1434" height="329" /></figure>
+<p>기본적으로 stride=1을 가지고 <strong>3x3</strong> conv2d + relu를 형성하는 함수이다.</p>
+<figure><img src="/assets/notion/resnet50-코드리뷰/9ebf09b5-9750-44e8-8f26-c3d2edbd67c6.png" alt="" loading="lazy" width="1585" height="332" /></figure>
+<p>아래는 <code>down=True</code>인 경우 stride=2로 설정하면서 feature map의 크기를 절반으로 줄이는 bottleneck을 형성한다.  <code>down=False</code>인 경우 크기를 줄이지 않고 bottleneck을 형성한다.</p>
+<p>자세히 알아보자.</p>
+<figure><img src="/assets/notion/resnet50-코드리뷰/9f0f1f20-0fda-4625-af16-1b73aa270eeb.png" alt="" loading="lazy" width="1927" height="1318" /></figure>
+<p>bottlneck의 마지막 부분에서만 feature map의 height, width를 절반으로 줄이게 되는데, 이 경우 skip connection에 <code>self.downsample = nn.Conv2d(in_channels, out_channels, kernel, stride=2)</code> 로 설정하여 입력 크기를 절반으로 줄인다.</p>
+<p>그리고 self.layer의 <code>conv_block_1</code>으로 인해 절반으로 준 입력 크기를 <code>self.downsample</code>과 더해준다.</p>
+<figure><img src="/assets/notion/resnet50-코드리뷰/a7d3d786-9953-47d2-be1d-53712e2f4298.png" alt="" loading="lazy" width="1121" height="335" /></figure>
+<p>다음 코드는 feature map을 절반으로 줄이지 않는 부분에 해당하는 부분이다. </p>
+<figure><img src="/assets/notion/resnet50-코드리뷰/f84c2b4c-5658-4d58-838f-5a0a2522ea73.png" alt="" loading="lazy" width="1339" height="438" /></figure>
+<p><code>self.dim_equalizer</code> 맴버 변수는 절반으로 줄이지 않는 부분에 대해서 skip connection을 위해 사용된다.</p>
+<p>Resnet50에서의 x.size() 와 out.size()는 항상 다르기 때문에 사실상 if문은 크게 의미가 없다. </p>
+<p>input의 크기를 output과 맞춰주기 위해 input의 차원을 바꿔주는(확장시키는) <code>self.dim_equalizer = nn.Conv2d(in_dim, out_dim, kernel_size = 1)</code> 역할을 해준다.</p>
+<figure><img src="/assets/notion/resnet50-코드리뷰/2b196694-86d8-4f2b-b98c-ccb9a63b6350.png" alt="" loading="lazy" width="1729" height="656" /></figure>
+<p>ResNet50의 경우Conv2d의 out_channels에 해당하는 <code>base_dim=64</code>이다. <code>kernel=7</code>, <code>padding=3</code>인 경우에 대해서는 input_size가 유지되는데 <code>stride=2</code>로 설정함으로써 input_size가 절반으로 줄어든다. 따라서 입력이 <code>(1, 3, 224, 224)</code>인 경우에 대해서 Conv2d를 통과하게되면 <code>(1, 64, 112, 112)</code>가 나온다.</p>
+<p>그 다음 MaxPool2d에서 <code>kernel=3</code>, <code>padding=1</code>로 input_size를 유지하나, <code>stride=2</code>임으로 input_size가 절반으로 줄어든다.  따라서 (1, 64, 56, 56)이 나온다.</p>
+<figure><img src="/assets/notion/resnet50-코드리뷰/0787ecf4-fd34-4689-b01d-9b354b92bb38.png" alt="" loading="lazy" width="1970" height="532" /></figure>
+<p>아래 표에 따라서 총 16개의 Bottleneck이 만들어진다.</p>
+<figure><img src="/assets/notion/resnet50-코드리뷰/99ced854-e407-4f43-8672-226a588238a0.png" alt="" loading="lazy" width="1583" height="680" /></figure>
+<figure><img src="/assets/notion/resnet50-코드리뷰/f4c09aaa-0352-48a6-8618-bc63564b04f2.png" alt="" loading="lazy" width="1667" height="1157" /></figure>
+<p>이후 AvgPool2d(7, 1)을 적용하는데 마지막 bottleneck인 layer_5의 최종 output_shape은 <code>(1, 2048, 7, 7)</code> 이 나온다. 이에 <code>kernel=7</code>이고 <code>stride=1</code>인 pool을 적용하면 다음과 같은 공식으로 인해 <code>(1, 2048, 1, 1)</code> output_shape으로 나오게된다. Conv의 output shape 과 pooling의 output shape의 계산 공식은 동일하다.</p>
+<figure><img src="/assets/notion/resnet50-코드리뷰/0c612366-5244-47b5-bd8e-575ca65c5ba5.png" alt="" loading="lazy" width="1750" height="744" /></figure>
+<figure><img src="/assets/notion/resnet50-코드리뷰/b7f0a228-7e50-4e3c-8a5d-ceee790d14c2.png" alt="" loading="lazy" width="1586" height="894" /></figure>
+<p>최종적으로 out.view함수로 인해 <code>(1, 2048)</code>만 남게되고 이를 <code>self.fc_layer = nn.Linear(base_dim * 32, num_classes)</code> 의 형태로 classifier하는 부분으로 모델구조를 결정짓는다.</p>
+<h2 id="block-20457a2e370f42c8ab25a5dbe642837a">결론</h2>
+<p>논문에서는 단순히 skip connection을 사용하여 bottleneck의 output과 더해준다고 말하고 있지만, 구현된 코드를 분석해보면 이미지의 크기를 down_sampling하는 경우에는 input에 1x1convolution, stride=2를 적용하여 down_sampling된 크기로 output_feature와 shape을 맞추어 add를하고 down_sampling을 하지 않는 경우에는 output과 차원을 맞춰주는 단지 1x1 Conv를 사용하여 output_feature와 shape을 맞추어 add를 한다는 점이다. 즉 그림으로 보면 아래와 같은 식으로 된다.</p>
+<figure><img src="/assets/notion/resnet50-코드리뷰/d9e1319a-bf92-4784-b249-6b727d6768fa.png" alt="" loading="lazy" width="1957" height="852" /></figure>
+<p>  </p>
+<h2 id="block-43120c3c69b64b9ba230ef8a01324ea4">전체 코드</h2>
+<details class="toggle"><summary><strong>Code</strong></summary><div class="toggle-body"><pre data-lang="python"><code class="language-python">from torch import nn
+import torchsummary
+import torch
+
+def conv_block_1(in_dim, out_dim, act_fn, stride = 1):
+    &quot;&quot;&quot;  bottleneck 구조를 만들기 위한 1x1 convolution &quot;&quot;&quot;
+    model = nn.Sequential(
+        nn.Conv2d(in_dim, out_dim, kernel_size = 1, stride = stride),
+        act_fn
+    )
+    return model
+
+def conv_block_3(in_dim, out_dim, act_fn):
+    &quot;&quot;&quot;  bottleneck 구조를 만들기 위한 3x3 convolution &quot;&quot;&quot;
+    model = nn.Sequential(
+        nn.Conv2d(in_dim, out_dim, kernel_size = 3, stride = 1, padding = 1),
+        act_fn
+    )
+    return model
+    
+class BottleNeck(nn.Module):
+    &quot;&quot;&quot;
+    Residual Network의 bottleneck 구조
+    - down 파라미터는 down 블록을 통과하였을 때, feature map의 크기가 줄어드는 지의 여부의 불리언 값 입니다.
+        - True인 경우 stride = 2가 되어 크기가 반으로 줄어듭니다.
+    - 경우에 따라서 채널의 갯수가 달라 더해지지 않는 경우가 있는데, 이럴 때는 차원을 맞춰 주는 1x1 conv를 추가하여
+      입력의 채널을 출력의 채널과 같게 만들어 줍니다.
+     &quot;&quot;&quot;
+    def __init__(self, in_dim, mid_dim, out_dim, act_fn, down=False):
+        super(BottleNeck, self).__init__()
+        self.act_fn = act_fn
+        self.down = down
+
+        if self.down:
+            self.layer = nn.Sequential(
+                conv_block_1(in_dim, mid_dim, act_fn, 2), 
+                conv_block_3(mid_dim, mid_dim, act_fn), 
+                conv_block_1(mid_dim, out_dim, act_fn) 
+            )            
+            self.downsample = nn.Conv2d(in_dim, out_dim, 1, 2)
+        else:
+            self.layer = nn.Sequential(
+                conv_block_1(in_dim, mid_dim, act_fn), 
+                conv_block_3(mid_dim, mid_dim, act_fn), 
+                conv_block_1(mid_dim, out_dim, act_fn)
+            )
+        
+        # shape을 맞추기 위한 1x1 conv
+        self.dim_equalizer = nn.Conv2d(in_dim, out_dim, kernel_size = 1)
+        
+    def forward(self, x):
+        # input_size를 줄이는 경우에 대해서는 skip connection 부분에 convolution을 적용하고
+        if self.down:
+            downsample = self.downsample(x) # (1, 256, 28, 28)
+            out = self.layer(x)
+            out = out + downsample
+        else:
+            # input_size를 줄이지 않는 경우에 대해서는 그냥 skip connection을 진행한다.
+            out = self.layer(x) # x_size -&gt; (1, 64, 56, 56), out_size -&gt; (1, 256, 56, 56)
+            if x.size() is not out.size():
+                x = self.dim_equalizer(x) # (1, 256, 56, 56) (1, 256, 56, 56)
+                #print(x.shape)
+            out = out + x
+        return out
+
+
+class ResNet(nn.Module):
+    &quot;&quot;&quot; ResNet 50 layer &quot;&quot;&quot;
+    def __init__(self, base_dim, num_classes = 2):
+        super(ResNet, self).__init__()
+        self.act_fn = nn.ReLU()
+        self.layer_1 = nn.Sequential(
+            nn.Conv2d(in_channels=3, out_channels=base_dim, kernel_size=7, stride=2, padding=3),
+            nn.ReLU(),
+            # nn.MaxPool2d(kernel_size, stride, padding)
+            nn.MaxPool2d(kernel_size=3, stride=2, padding=1),
+        )
+        
+        # random_input = torch.randn(1, 3, 224, 224)
+        # out = self.layer_1(random_input)
+        # print(out.shape)
+        # layer_1 출력 : (1, 64, 56, 56) 
+        
+        self.layer_2 = nn.Sequential(
+            # BottleNeck(in_dim, mid_dim, out_dim, act_fn, down)
+            BottleNeck(base_dim, base_dim, base_dim * 4, self.act_fn),
+            BottleNeck(base_dim * 4, base_dim, base_dim * 4, self.act_fn),
+            BottleNeck(base_dim * 4, base_dim, base_dim * 4, self.act_fn, down = True),
+        )
+        self.layer_3 = nn.Sequential(
+            BottleNeck(base_dim * 4, base_dim * 2, base_dim * 8, self.act_fn),
+            BottleNeck(base_dim * 8, base_dim * 2, base_dim * 8, self.act_fn),
+            BottleNeck(base_dim * 8, base_dim * 2, base_dim * 8, self.act_fn),
+            BottleNeck(base_dim * 8, base_dim * 2, base_dim * 8, self.act_fn, down = True),
+        )
+        self.layer_4 = nn.Sequential(
+            BottleNeck(base_dim * 8, base_dim * 4, base_dim * 16, self.act_fn),
+            BottleNeck(base_dim * 16, base_dim * 4, base_dim * 16, self.act_fn),
+            BottleNeck(base_dim * 16, base_dim * 4, base_dim * 16, self.act_fn),
+            BottleNeck(base_dim * 16, base_dim * 4, base_dim * 16, self.act_fn),
+            BottleNeck(base_dim * 16, base_dim * 4, base_dim * 16, self.act_fn),
+            BottleNeck(base_dim * 16, base_dim * 4, base_dim * 16, self.act_fn, down = True),
+        )
+        self.layer_5 = nn.Sequential(
+            BottleNeck(base_dim * 16, base_dim * 8, base_dim * 32, self.act_fn),
+            BottleNeck(base_dim * 32, base_dim * 8, base_dim * 32, self.act_fn),
+            BottleNeck(base_dim * 32, base_dim * 8, base_dim * 32, self.act_fn),
+        )
+        
+        self.avgpool = nn.AvgPool2d(7, 1)
+        self.fc_layer = nn.Linear(base_dim * 32, num_classes)
+        
+    def forward(self, x):
+        out = self.layer_1(x)
+        out = self.layer_2(out)
+        out = self.layer_3(out)
+        out = self.layer_4(out)
+        out = self.layer_5(out) # (1, 2048, 7, 7)
+        out = self.avgpool(out) # (1, 2048, 1, 1)
+        out = out.view(out.size(0), -1) # (1, 2048)
+        out = self.fc_layer(out)
+        return out
+    
+    
+if __name__=='__main__' :
+    model = ResNet(base_dim=64)
+    input_tensor = torch.randn(1, 3, 224, 224)
+    model(input_tensor)
+    
+    #device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    #model = model.to(device)
+    #input_size = (3, 224, 224)
+    #torchsummary.summary(model, input_size)
+    
+    #print(model)
+    
+    # for name, module in model.named_modules() :
+    #     if isinstance(module, nn.Conv2d) :
+    #         print(f&quot;{name}: {module.weight.shape}&quot;)</code></pre></div></details>
+<p>[reference]</p>
+<p><a href="https://gaussian37.github.io/dl-concept-resnet/" target="_blank" rel="noreferrer">https://gaussian37.github.io/dl-concept-resnet/</a></p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/post.js?v=13" type="module"></script>
+    <script src="/assets/js/palette.js?v=8" defer></script>
+  </body>
+</html>

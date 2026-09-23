@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>ONNX Model Quantization — Woojae Joo</title>
+    <meta name="post-slug" content="onnx-model-quantization" />
+    <meta name="description" content="서론 This post shows how to Quantize ONNX model. Use : MobileNetV2-12.onnx 목차 Quantization Confirm the Model Consider of Quantization Sharing Code Quantization You need to " />
+    <link rel="canonical" href="https://ursonice.github.io/posts/onnx-model-quantization/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="ONNX Model Quantization" />
+    <meta property="og:description" content="서론 This post shows how to Quantize ONNX model. Use : MobileNetV2-12.onnx 목차 Quantization Confirm the Model Consider of Quantization Sharing Code Quantization You need to " />
+    <meta property="og:url" content="https://ursonice.github.io/posts/onnx-model-quantization/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=ONNX%20Model%20Quantization&amp;cat=Application" />
+    <meta property="article:published_time" content="2023-01-19T06:23:00.000Z" />
+    <meta property="article:modified_time" content="2024-09-10T01:35:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ONNX Model Quantization" />
+    <meta name="twitter:description" content="서론 This post shows how to Quantize ONNX model. Use : MobileNetV2-12.onnx 목차 Quantization Confirm the Model Consider of Quantization Sharing Code Quantization You need to " />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=ONNX%20Model%20Quantization&amp;cat=Application" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"ONNX Model Quantization","description":"서론 This post shows how to Quantize ONNX model. Use : MobileNetV2-12.onnx 목차 Quantization Confirm the Model Consider of Quantization Sharing Code Quantization You need to ","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=ONNX%20Model%20Quantization&cat=Application","datePublished":"2023-01-19T06:23:00.000Z","dateModified":"2024-09-10T01:35:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/onnx-model-quantization/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"Application","item":"https://ursonice.github.io/topics/application/"},{"@type":"ListItem","position":3,"name":"ONNX Model Quantization","item":"https://ursonice.github.io/posts/onnx-model-quantization/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/application/">Application</a>
+    </nav>
+    <h1>ONNX Model Quantization</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2023년 1월 19일</span><span class="dot"></span><span>수정 2024년 9월 10일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-0e3af7ce1731418d9f244becc0bb3eea">서론</h2>
+<p>This post shows how to Quantize ONNX model.</p>
+<p><strong>Use : MobileNetV2-12.onnx</strong></p>
+<h2 id="block-e4f294d0724a4dac8b486792d6a1b2c0">목차</h2>
+<ol><li><a href="#block-ed6201b5598942238d9027e8e86c8623">Quantization</a> </li><li><a href="#block-0dcee40dfd3f4b6caf7d00623be72d84">Confirm the Model</a> </li><li><a href="#block-f1e7769ff1804684ad00d4363ba312c1">Consider of Quantization</a> </li><li><a href="#block-42609f6c3ac44dc196f4a314a7e71cac">Sharing Code</a> </li></ol>
+<h2 id="block-ed6201b5598942238d9027e8e86c8623">Quantization</h2>
+<ul><li>You need to download <code><a href="http://run.py/" target="_blank" rel="noreferrer">run.py</a></code> and <code>resnet50_data_reader.py</code> in the same folder.</li><li><code>resnet50_data_reader.py</code> include preprocessing function so that model which you would like to quantization gets input same as training.</li><li>you can download them from <strong><a href="https://github.com/microsoft/onnxruntime-inference-examples/tree/main/quantization/image_classification/cpu" target="_blank" rel="noreferrer">here</a></strong></li></ul>
+<p>Put this below command to make your model quantized.</p>
+<ul><li><code>input_model</code> : The model you would like to quantize.</li><li><code>output_model</code> : Model name after quantization</li><li><code>calibrate_dataset</code> : Calibration Dataset Path</li><li><code>quant_format</code> : Quantization format<ul><li>Here is Quantization Format<ul><li>QOperation : If you don’t need more than 16bit operation, After being quantized once, it continues to the end without dequantizing.</li><li>ONNXQuantizer Module is executed.</li><li>QDQ : after quantization operation is finished from a node, Dequantize will execute.<ul><li>QDQQuantizer Module is executed.</li></ul></li></ul></li></ul></li><li><code>per_channel</code> : channel 별로 Quantization 할 것인지 여부. False 일 경우 모든 입력 텐서에 대해서 하나의 값으로 zero_point와 scale이 결정 된다.</li></ul>
+<pre data-lang="shell"><code class="language-bash">python3 run.py --input_model='./modified_edited_mobilenet12.onnx' --output_model='./output.model' --calibrate_dataset='./imagenet-sample-images' --quant_format QOperator --per_channel True</code></pre>
+<figure><img src="/assets/notion/onnx-model-quantization/eb030a29-84cd-428f-be94-c6e0cb0dc3c4.png" alt="" loading="lazy" width="3094" height="1119" /></figure>
+<h2 id="block-0dcee40dfd3f4b6caf7d00623be72d84">Confirm the Model</h2>
+<p>I used parrot image to confirm whether the model quantized well or not.</p>
+<p>We did it!</p>
+<figure><img src="/assets/notion/onnx-model-quantization/96aacef8-6edf-40b6-bf64-75ef26629e2c.png" alt="" loading="lazy" width="1654" height="195" /></figure>
+<h2 id="block-f1e7769ff1804684ad00d4363ba312c1">Consider of Quantization</h2>
+<ol><li>Need to edit pre-processing function<ol><li>Edit _preprocess_images function from resnet50_data_reader.py </li></ol></li><li>Write pre-processing code same as training the model.</li><li>Quantization parameter<ul><li>op_types_to_quantize (list) : quantization 시킬 특정 연산자만 지정 가능</li><li>reduce_range (bool) : True 시 weight 및 8비트에서 7비트 전환됨</li><li>activation_type (QuantType) : 입력 값을 int8/uint8 로 양자화</li><li>weight_type (QuantType) : 가중치 값을 int8/uint8 로 양자화</li><li>nodes_to_quantize, nodes_to_exclude (list(str)): 특정 노드만 양자화, 특정 노드만 제외</li></ul></li><li>preprocessing<ul><li>Do quantization after pre-process images.</li></ul></li><li>quantize_static vs quantize_dynamic</li></ol>
+<p>현재 코드는 static으로 구현 된 상태. dynamic의 경우에는 calibration 데이터는 필요 없지만, 매 계산마다 scale과 zero point를 재계산 하여 최적의 파라미터로 네트워크에 입력하게 된다. 이럴 경우 노드의 복잡도가 더 커지므로 static 이용 권장한다.</p>
+<h2 id="block-42609f6c3ac44dc196f4a314a7e71cac">Sharing Code</h2>
+<details class="toggle"><summary><strong>ONNX Inference Code</strong></summary><div class="toggle-body"><pre data-lang="python"><code class="language-python">import cv2
+import numpy
+import onnxruntime
+import onnx
+
+with open(&quot;imagenet_classes.txt&quot;, &quot;r&quot;) as f :
+    categories = [s.strip() for s in f.readlines()]
+
+def softmax(x):
+    e_x = numpy.exp(x - numpy.max(x))
+    return e_x / e_x.sum()
+
+
+image_filepath = './parrot.jpg'
+image = cv2.imread(image_filepath, 1)  # image read
+image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+image_data = cv2.resize(image, (256, 256), interpolation=cv2.INTER_LINEAR).astype(
+    numpy.float32)  # cv2.INTER_LINEAR
+image_data = image_data[16:240, 16:240, :].copy()
+image_data = image_data.transpose([2, 0, 1])  # C, H, W
+mean = numpy.array([0.079, 0.05, 0]) + 0.406  # 0.485, 0.456, 0.406
+std = numpy.array([0.005, 0, 0.001]) + 0.224  # 0.229, 0.224, 0.225
+
+for channel in range(image_data.shape[0]):
+    image_data[channel, :, :] = (image_data[channel, :, :] / 255 - mean[channel]) / std[channel]  # RGB
+
+image_data= numpy.expand_dims(image_data, axis=0)  # 1, 3, 224, 224
+
+ort_session = onnxruntime.InferenceSession(&quot;output.onnx&quot;)
+
+first_input_name = ort_session.get_inputs()[0].name
+first_output_name = ort_session.get_outputs()[0].name
+
+#print(first_input_name, first_output_name)
+ortvalue = onnxruntime.OrtValue.ortvalue_from_numpy(image_data)
+outputs = ort_session.run([&quot;output&quot;], {&quot;input&quot; : ortvalue})
+outputs = softmax(outputs[0][0])
+idx = numpy.argmax(outputs)
+print(f&quot;Label: {categories[idx]}, score: {outputs[idx]}&quot;)</code></pre></div></details>
+<details class="toggle"><summary><strong>Preprocessing Code</strong></summary><div class="toggle-body"><pre data-lang="python"><code class="language-python">import numpy
+import onnxruntime
+import os
+from onnxruntime.quantization import CalibrationDataReader
+from PIL import Image
+import cv2
+
+def _preprocess_images(images_folder: str, height: int, width: int, size_limit=0):
+    &quot;&quot;&quot;
+    Loads a batch of images and preprocess them
+    parameter images_folder: path to folder storing images
+    parameter height: image height in pixels
+    parameter width: image width in pixels
+    parameter size_limit: number of images to load. Default is 0 which means all images are picked.
+    return: list of matrices characterizing multiple images
+    &quot;&quot;&quot;
+
+    image_names = os.listdir(images_folder)
+    if size_limit &gt; 0 and len(image_names) &gt;= size_limit:
+        batch_filenames = [image_names[i] for i in range(size_limit)]
+    else:
+        batch_filenames = image_names
+
+    unconcatenated_batch_data = []
+
+    for image_name in batch_filenames:
+        image_filepath = images_folder + &quot;/&quot; + image_name
+        image = cv2.imread(image_filepath, 1)  # image read
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        image_data = cv2.resize(image, (256, 256), interpolation=cv2.INTER_LINEAR).astype(
+            numpy.float32)  # cv2.INTER_LINEAR
+        image_data = image_data[16:240, 16:240, :].copy()
+        image_data = image_data.transpose([2, 0, 1])  # C, H, W
+        mean = numpy.array([0.079, 0.05, 0]) + 0.406  # 0.485, 0.456, 0.406
+        std = numpy.array([0.005, 0, 0.001]) + 0.224  # 0.229, 0.224, 0.225
+
+        for channel in range(image_data.shape[0]):
+            image_data[channel, :, :] = (image_data[channel, :, :] / 255 - mean[channel]) / std[channel]  # RGB
+
+
+        nhwc_data = numpy.expand_dims(image_data, axis=0) # 1, 3, 224, 224
+
+        yield nhwc_data
+
+
+
+class ResNet50DataReader(CalibrationDataReader):
+    def __init__(self, calibration_image_folder: str, model_path: str):
+        self.enum_data = None
+
+        # Use inference session to get input shape.
+        session = onnxruntime.InferenceSession(model_path, None)
+        (_, _, height, width) = session.get_inputs()[0].shape
+
+        # Convert image to input data
+        self.nhwc_data_list = _preprocess_images(
+            calibration_image_folder, height, width, size_limit=0
+        )
+        self.input_name = session.get_inputs()[0].name
+        #self.datasize = len(self.nhwc_data_list)
+
+    def get_next(self):
+        if self.enum_data is None:
+            self.enum_data = iter(
+                [{self.input_name: nhwc_data} for nhwc_data in self.nhwc_data_list]
+            )
+        return next(self.enum_data, None)
+
+    def rewind(self):
+        self.enum_data = None</code></pre></div></details>
+<details class="toggle"><summary><strong>Download Parrot.jpg</strong></summary><div class="toggle-body"><figure><img src="/assets/notion/onnx-model-quantization/e51ceb47-529b-4ee5-a005-90b281179e12.jpg" alt="" loading="lazy" width="512" height="929" /></figure></div></details>
+<details class="toggle"><summary><strong>Download ImageNetClass.txt</strong></summary><div class="toggle-body"><p><a href="https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/1cde7f39-faff-4f13-8cdb-0f212bcc42fc/imagenet_classes.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB466UVFXIKGB%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164525Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJIMEYCIQC5pl4lQcSoCzDZkgVY0%2Fl3NNrzWjVju0BzbkiqKconDgIhAJm5x1lLMoAF0kfjCtLsm59kUB2SsAg7uELiLvyxsYYhKv8DCEcQABoMNjM3NDIzMTgzODA1Igzchwwf4Sl6naFlE%2FAq3AMp5ijHo4HIdl6XQam%2BaQx00YFiqE5i%2FTRB12L2MPjaw8B6eEz1g%2FjlBrnZrhmw%2FHFm1mfXkOyEcMrmxMAHPuZ6mt7gpW2qdGzRQSjAuMZEGWQu603xxrEDidLHU1OwmcYrce8V69nS8S9GbMeh2sDGV0Zq0rf4tvYFDw1tefL9DzoPUlNIUQ2un4zMLShw49UqETYgNgpGsDxI9mVjFovqiRiXhR9cAcTUkUDo6YO5EGx%2BltGLj%2BIg4E3terGumYNtahr4EA3RHLMTvkSlZx6gEKwbklFEs8HgsbIPUQzuKJWo%2BpmEpS%2Flvjy9McfuZusjPQaNSkSkXZIopWRoRPjsTlegLEu0LtM%2FcIHJ073g0CyvDdYf89ukgZC6KMJTxzTqESRjcfbBNMBB3aakGANP%2FNsM%2FLSIgOTQp6TcsGfeH7RkZZUg4JNrGTjCi3lNLxiQLO52Co8ujUIrUj7il8s3UymFDRTOkR0PWuNv%2BTp2bKUgoPMlGxhD%2F7GJbUnHc%2Fu3jgADJweLZP2sjjObaoavciRthFi2mPKQHFsrREj1a4%2FFO7Zy%2B9Rln1wXZRAXLS2mNJuCI0NBY%2BpZ36JQlVXUqVUngkN11mwuMIymhInMamx%2FTiok7KeaWTluyTDGxOPSBjqkAQt9bxgL6tD%2F%2Bx7wNm5f3yjD5%2BJ9%2BYhu8AzxdrzBeSoHdvSzAjr7PqHqafs28ZGXModynfipXXy7FilB0Tbx%2FwJZESvj3XGb99ZFtHEQp1QDKEb%2BUV4ToXSnqVNQ7%2Fq3fJkMZDKKy7qhzbai45ba9lVt%2FG9zlbBcCsMylTv8vcOPFn3UbaCNbjHj8wkRqUqQfox%2BYZ4NY7Jr%2BlkeU4ZtHFAHzX4T&amp;X-Amz-Signature=a9008ab0b31658bf2dae5bb2b81ec858cb087b9b6d73342cd90945922e08b6c7&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject" target="_blank" rel="noreferrer">https://prod-files-secure.s3.us-west-2.amazonaws.com/2861f846-8c98-4301-9ec7-27b23866c687/1cde7f39-faff-4f13-8cdb-0f212bcc42fc/imagenet_classes.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAZI2LB466UVFXIKGB%2F20260716%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20260716T164525Z&amp;X-Amz-Expires=3600&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJIMEYCIQC5pl4lQcSoCzDZkgVY0%2Fl3NNrzWjVju0BzbkiqKconDgIhAJm5x1lLMoAF0kfjCtLsm59kUB2SsAg7uELiLvyxsYYhKv8DCEcQABoMNjM3NDIzMTgzODA1Igzchwwf4Sl6naFlE%2FAq3AMp5ijHo4HIdl6XQam%2BaQx00YFiqE5i%2FTRB12L2MPjaw8B6eEz1g%2FjlBrnZrhmw%2FHFm1mfXkOyEcMrmxMAHPuZ6mt7gpW2qdGzRQSjAuMZEGWQu603xxrEDidLHU1OwmcYrce8V69nS8S9GbMeh2sDGV0Zq0rf4tvYFDw1tefL9DzoPUlNIUQ2un4zMLShw49UqETYgNgpGsDxI9mVjFovqiRiXhR9cAcTUkUDo6YO5EGx%2BltGLj%2BIg4E3terGumYNtahr4EA3RHLMTvkSlZx6gEKwbklFEs8HgsbIPUQzuKJWo%2BpmEpS%2Flvjy9McfuZusjPQaNSkSkXZIopWRoRPjsTlegLEu0LtM%2FcIHJ073g0CyvDdYf89ukgZC6KMJTxzTqESRjcfbBNMBB3aakGANP%2FNsM%2FLSIgOTQp6TcsGfeH7RkZZUg4JNrGTjCi3lNLxiQLO52Co8ujUIrUj7il8s3UymFDRTOkR0PWuNv%2BTp2bKUgoPMlGxhD%2F7GJbUnHc%2Fu3jgADJweLZP2sjjObaoavciRthFi2mPKQHFsrREj1a4%2FFO7Zy%2B9Rln1wXZRAXLS2mNJuCI0NBY%2BpZ36JQlVXUqVUngkN11mwuMIymhInMamx%2FTiok7KeaWTluyTDGxOPSBjqkAQt9bxgL6tD%2F%2Bx7wNm5f3yjD5%2BJ9%2BYhu8AzxdrzBeSoHdvSzAjr7PqHqafs28ZGXModynfipXXy7FilB0Tbx%2FwJZESvj3XGb99ZFtHEQp1QDKEb%2BUV4ToXSnqVNQ7%2Fq3fJkMZDKKy7qhzbai45ba9lVt%2FG9zlbBcCsMylTv8vcOPFn3UbaCNbjHj8wkRqUqQfox%2BYZ4NY7Jr%2BlkeU4ZtHFAHzX4T&amp;X-Amz-Signature=a9008ab0b31658bf2dae5bb2b81ec858cb087b9b6d73342cd90945922e08b6c7&amp;X-Amz-SignedHeaders=host&amp;x-amz-checksum-mode=ENABLED&amp;x-id=GetObject</a></p></div></details>
+<p>[reference]</p>
+<p><a href="https://www.exusio.ml/befa52a7-b8c9-4be3-bb90-6bc0d98a29b0#8dff59cc935d419fae8b4aa01f94c28f" target="_blank" rel="noreferrer">https://www.exusio.ml/befa52a7-b8c9-4be3-bb90-6bc0d98a29b0#8dff59cc935d419fae8b4aa01f94c28f</a></p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/post.js?v=13" type="module"></script>
+    <script src="/assets/js/palette.js?v=8" defer></script>
+  </body>
+</html>

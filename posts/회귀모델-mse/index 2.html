@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0b0e" />
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>회귀모델 MSE — Woojae Joo</title>
+    <meta name="post-slug" content="회귀모델-mse" />
+    <meta name="description" content="서론 머신러닝에서 주식 가격, 내일의 온도, 혹은 자동차의 속도(velocity)처럼 연속적인 숫자를 예측하는 작업을 '회귀(Regression)'라고 한다. MSE는이 회귀 문제에서 모델이 얼마나 틀렸는지 나타내는 평가지표이다. 그럼 MSE의 특징에 대해서 조금 더 알아보자. MSE 한계 MSE의 한계" />
+    <link rel="canonical" href="https://ursonice.github.io/posts/%ED%9A%8C%EA%B7%80%EB%AA%A8%EB%8D%B8-mse/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="회귀모델 MSE" />
+    <meta property="og:description" content="서론 머신러닝에서 주식 가격, 내일의 온도, 혹은 자동차의 속도(velocity)처럼 연속적인 숫자를 예측하는 작업을 '회귀(Regression)'라고 한다. MSE는이 회귀 문제에서 모델이 얼마나 틀렸는지 나타내는 평가지표이다. 그럼 MSE의 특징에 대해서 조금 더 알아보자. MSE 한계 MSE의 한계" />
+    <meta property="og:url" content="https://ursonice.github.io/posts/%ED%9A%8C%EA%B7%80%EB%AA%A8%EB%8D%B8-mse/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%ED%9A%8C%EA%B7%80%EB%AA%A8%EB%8D%B8%20MSE&amp;cat=AI%2F%20Deep%20Learning" />
+    <meta property="article:published_time" content="2026-09-05T02:20:00.000Z" />
+    <meta property="article:modified_time" content="2026-09-05T03:11:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="회귀모델 MSE" />
+    <meta name="twitter:description" content="서론 머신러닝에서 주식 가격, 내일의 온도, 혹은 자동차의 속도(velocity)처럼 연속적인 숫자를 예측하는 작업을 '회귀(Regression)'라고 한다. MSE는이 회귀 문제에서 모델이 얼마나 틀렸는지 나타내는 평가지표이다. 그럼 MSE의 특징에 대해서 조금 더 알아보자. MSE 한계 MSE의 한계" />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%ED%9A%8C%EA%B7%80%EB%AA%A8%EB%8D%B8%20MSE&amp;cat=AI%2F%20Deep%20Learning" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"회귀모델 MSE","description":"서론 머신러닝에서 주식 가격, 내일의 온도, 혹은 자동차의 속도(velocity)처럼 연속적인 숫자를 예측하는 작업을 '회귀(Regression)'라고 한다. MSE는이 회귀 문제에서 모델이 얼마나 틀렸는지 나타내는 평가지표이다. 그럼 MSE의 특징에 대해서 조금 더 알아보자. MSE 한계 MSE의 한계","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%ED%9A%8C%EA%B7%80%EB%AA%A8%EB%8D%B8%20MSE&cat=AI%2F%20Deep%20Learning","datePublished":"2026-09-05T02:20:00.000Z","dateModified":"2026-09-05T03:11:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/%ED%9A%8C%EA%B7%80%EB%AA%A8%EB%8D%B8-mse/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Deep Learning","item":"https://ursonice.github.io/topics/ai-deep-learning/"},{"@type":"ListItem","position":3,"name":"회귀모델 MSE","item":"https://ursonice.github.io/posts/%ED%9A%8C%EA%B7%80%EB%AA%A8%EB%8D%B8-mse/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/ai-deep-learning/">AI/ Deep Learning</a>
+    </nav>
+    <h1>회귀모델 MSE</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2026년 9월 5일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-3d2b12c0115c802ea10afea8aceb3493">서론</h2>
+<p>머신러닝에서 주식 가격, 내일의 온도, 혹은 자동차의 속도(velocity)처럼 연속적인 숫자를 예측하는 작업을 '회귀(Regression)'라고 한다.</p>
+<p>MSE는이 회귀 문제에서 모델이 얼마나 틀렸는지 나타내는 평가지표이다.</p>
+<p>그럼 MSE의 특징에 대해서 조금 더 알아보자.</p>
+<h2 id="block-3d2b12c0115c8069ac52ca579c73966b">MSE 한계</h2>
+<p>MSE의 한계는 절대적인 크기만으로는 알 수 없다</p>
+<p>MSE는 예측값과<strong> </strong>정답의 차이를<strong> 제곱해서 평균 낸 값이다.</strong> 계산하기 쉽고 직관적이지만 치명적인 단점이 있다.
+데이터의 원래 단위와 스케일에 그대로 묶여 있다는 점입니다.</p>
+<ul><li>예시<strong>:</strong> 아파트 가격을 예측하는 모델에서 오차가 '1만 원'이라면 성능이 좋은 모델이다. 하지만 동네 빵집의 빵 가격을 예측하는 모델에서 오차가 '1만 원'이라면 쓸모없는 모델이다.</li><li>결과적으로 MSE가 0.02, 100, 10000 이라는 숫자 자체만으로는 모델이 똑똑한지 멍청한지 알 수 없다.</li></ul>
+<h2 id="block-3d2b12c0115c80a8ac04ce412c690685">비교 대상의 필요성</h2>
+<p>우리 모델이 훌륭한지 평가하려면 '기준점(Baseline)'이 필요하다.</p>
+<p>우리는 학습 데이터와 정답 데이터를 가지고 있다. 학습데이터를 모델에 넣고 학습을 시키면 모델은 MSE가 최소가 되도록 Weight를 조절하며 학습할 것이다.</p>
+<p>그런데 입력 데이터에서 유용한 정보를 학습하지 못해서 MSE 오차가 줄어들지 않는다고 해보자.(학습이 안 되고 있는 것이다.)</p>
+<p>이렇게 학습이 이뤄지지 않는 경우 MSE를 가장 작게 만들기 위한 최선의 선택은 어떤 입력이 들어 오든 모델이 정답 데이터의 평균만을 출력하는 것이다. 왜나하면 모든 입력에 대해 MSE를 가장 작게 만드는 값이기 때문이다.</p>
+<p>수식으로 봐보면 모델이 어떤 상수 c만 예측한다고 해보자.</p>
+<div class="math-block">\[\text{MSE}(c) = \frac{1}{N}\sum_{i=1}^{N}(y_i -c)^2\]</div>
+<p>위 함수의 미분값이 0인 지점이 최솟값이 됨으로 먼저 미분을 하고</p>
+<div class="math-block">\[\frac{d}{dc}\text{MSE}(c) = \frac{1}{N}\frac{d}{dc}\sum_{i=1}^{N}(y_i -c)^2 \\[1.5em] = \frac{1}{N}\sum_{i=1}^{N}-2(y_i -c) =  -\frac{2}{N} \sum_{i=1}^{N} (y_i - c) = 0  \\[1.5em] =  \sum_{i=1}^{N} (y_i - c) = 0\]</div>
+<p>0이 되도록하는 c를 찾으면</p>
+<div class="math-block">\[\sum_{i=1}^{N}y_i -Nc = 0 \\[1.5em] c = \frac{1}{N}\sum_{i=1}^{N}y_i = \bar{y}\]</div>
+<p>c는 정답 데이터의 평균이 된다.</p>
+<p>즉, MSE를 사용하는 회귀모델에서 입력 데이터를 보고도 정답을 예측할 만한 유용한 정보를 얻지 못해 하나의 값만 찍어야 한다면, MSE를 가장 작게 만드는 최선의 선택은 정답 데이터의 평균값을 예측하는 것이다.</p>
+<p>이 경우 모델은 어떤 입력 \(x_i\)가 들어오더라도 항상 동일하게 정답 데이터의 평균 \(\bar{y}\) 를 예측한다.</p>
+<p>반면 각 입력 (\(x_i\))에 대응하는 실제 정답 (\(y_i\))는 샘플마다 달라진다. 따라서 모델의 예측 오차는 결국 각 정답 데이터가 정답의 평균으로부터 얼마나 떨어져 있는가를 측정하는 형태가 된다.</p>
+<div class="math-block">\[\text{MSE}(\hat{y}=\bar{y}) = \frac{1}{N}\sum_{i=1}^{N}(y_i-\bar{y})^2 = \text{Var}(y_i)\]</div>
+<p>즉 학습을 완료한 MSE의 값은 정답 데이터들의 분산이 되어버린다.</p>
+<p>이제 우리는 모델의 가장 성능이 나빴을가 정답 데이터들의 분산이라는 기준(baseline)을 찾았다.</p>
+<p>예를들어 정답 데이터(MSE 기준)의 분산이</p>
+<div class="math-block">\[\text{MSE}_{\text{baseline}} = \text{Var}(y) = 10\]</div>
+<p>이고 모델의 오차가</p>
+<div class="math-block">\[\text{MSE}_{\text{model}} = 2\]</div>
+<p>라면 </p>
+<div class="math-block">\[\frac{\text{MSE}_{\text{model}}}{\text{MSE}_{\text{baseline}}} = \frac{2}{10}= 0.2\]</div>
+<p>우리 모델은 평균만 찍는 모델이 내던 오차의 20%만 남겼다는 뜻이 된다.</p>
+<p>우리의 모델은 “평균만 찍었을 때 생기는 오차인 분산(<strong>가장 오차가 심할 때</strong>)에 비해 우리 모델의 MSE가 얼마나 작은가”를 봐야 한다.</p>
+<p>따라서 오차의 감소율은</p>
+<div class="math-block">\[1-\frac{2}{10} = 0.8\]</div>
+<p>80% 감소했다고 볼 수 있다.</p>
+<p>이것을 결정계수라고 한다.</p>
+<div class="math-block">\[R^2 = 1 - \frac{\text{MSE}_{\text{model}}}{\text{Var}(y)}\]</div>
+<ul><li>분산 = 10, MSE = 2  → 꽤 잘 예측함, \(R^2=0.8\) </li><li>분산 = 2, MSE = 2 → 평균만 찍는 것과 동일, \(R^2=0\)</li><li>분산 = 1, MSE = 2  → 평균만 찍는 것보다 못함, \(R^2=-1\)</li></ul></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/post.js?v=13" type="module"></script>
+    <script src="/assets/js/palette.js?v=8" defer></script>
+  </body>
+</html>

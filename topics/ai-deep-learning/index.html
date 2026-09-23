@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0a0b0e" />
+    <meta name="theme-color" content="#fbfaf7" />
+    <script>(function(){try{var t=localStorage.getItem("theme")||"light";document.documentElement.dataset.theme=t;var r=localStorage.getItem("reading");if(r)document.documentElement.dataset.reading=r;var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",t==="dark"?"#0a0b0e":"#fbfaf7");}catch(e){}})();</script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-K7VKNXKJJ7");</script>
     <title>AI/ Deep Learning — Woojae Joo</title>
@@ -17,11 +18,10 @@
     <meta property="og:url" content="https://ursonice.github.io/topics/ai-deep-learning/" />
     <meta property="og:image" content="https://ursonice.github.io/assets/og/default.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <script>(function(){var s=localStorage.getItem("theme");var d=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.dataset.theme=s||(d?"dark":"light");})();</script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/assets/css/styles.css?v=37" />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=40" />
   </head>
   <body>
     <a class="skip-link" href="#topic">본문으로 이동</a>
@@ -166,13 +166,13 @@
             <p>서론 사람의 시각체계는(HVS) 이미지의 밝기(Luminance), 대비(Contrast), 구조(Structure) 등에 자각하여 이미지의 품질(Quality)을 관찰하는데 L2 loss는 모든 픽셀이 독립적이라는 가정 가정이 내포되어 있다. 이는 한 이미지의 특정 픽셀이 다른 이미지의 동일한 위치의 </p>
             <div class="post-footer"><span>2023년 7월 18일</span></div>
           </a>
-          <a class="post-card" href="https://ursonice.github.io/posts/dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/">
+          <a class="post-card" href="https://ursonice.github.io/posts/dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det-3/">
             <div class="post-meta"><span class="cat">AI/ Deep Learning</span></div>
             <h3>DRÆM – A discriminatively trained reconstruction embedding for surface anomaly detection 코드 리뷰</h3>
             <p>서론 DRÆM – A discriminatively trained reconstruction embedding for surface anomaly detection 모델 코드에 대해 리뷰한다. 목차 코드 리뷰 Dependency 아래는 코드는 필요한 모듈을 import한다. learn_rate값을 가져오</p>
             <div class="post-footer"><span>2023년 7월 18일</span></div>
           </a>
-          <a class="post-card" href="https://ursonice.github.io/posts/dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det/">
+          <a class="post-card" href="https://ursonice.github.io/posts/dr%C3%A6m-a-discriminatively-trained-reconstruction-embedding-for-surface-anomaly-det-2/">
             <div class="post-meta"><span class="cat">AI/ Deep Learning</span></div>
             <h3>DRÆM – A discriminatively trained reconstruction embedding for surface anomaly detection 논문 리뷰</h3>
             <p>서론 Vitjan Zavrtanik, Matej Kristan, Danijel Skočaj; Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2021, pp. 1-10. DRÆM – A Discrim</p>
@@ -218,13 +218,13 @@
             <div class="post-meta"><span class="cat">AI/ Deep Learning</span></div>
             <h3>ShuffleNetV1 논문리뷰</h3>
             <p>서론 Xiangyu Zhang, Xinyu Zhou, Mengxiao Lin, Jian Sun; Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2018, pp. 6848-6856, 2017 Shuf</p>
-            <div class="post-footer"><span>2023년 6월 15일</span></div>
+            <div class="post-footer"><span>2023년 6월 16일</span></div>
           </a>
           <a class="post-card" href="https://ursonice.github.io/posts/resnet-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/">
             <div class="post-meta"><span class="cat">AI/ Deep Learning</span></div>
             <h3>ResNet 논문리뷰</h3>
             <p>서론 Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun; &quot;Deep Residual Learning for Image Recognition&quot;, Proceedings of the IEEE Conference on Computer Vision and Pattern Re</p>
-            <div class="post-footer"><span>2023년 6월 14일</span></div>
+            <div class="post-footer"><span>2023년 6월 15일</span></div>
           </a>
           <a class="post-card" href="https://ursonice.github.io/posts/likelihood-mle/">
             <div class="post-meta"><span class="cat">AI/ Deep Learning</span></div>
@@ -242,7 +242,7 @@
             <div class="post-meta"><span class="cat">AI/ Deep Learning</span></div>
             <h3>Stride &amp; Pooling 장/단점</h3>
             <p>서론 Convolutional Neural Network(CNN)에서 해상도(resolution)을 줄이는 방법에는 주로 두 가지가 있다. 하나는 stride가 2인 convolution을 사용하는 것이고, 다른 하나는 max/average pooling을 사용하는 것이다. 이 장은 이 장은 Stride</p>
-            <div class="post-footer"><span>2023년 6월 12일</span></div>
+            <div class="post-footer"><span>2023년 6월 13일</span></div>
           </a>
           <a class="post-card" href="https://ursonice.github.io/posts/normalization-regularization/">
             <div class="post-meta"><span class="cat">AI/ Deep Learning</span></div>
@@ -278,7 +278,7 @@
             <div class="post-meta"><span class="cat">AI/ Deep Learning</span></div>
             <h3>Machine Learning Design Pattern</h3>
             <p>서론 이 장은 Machine Learning 디자인 패턴에 대해 공부한 것을 설명한다. 더 많은 데이터를 수집할 수 없을 때 데이터 균형(분포)을 이해하면 이를 고려하여 모델을 설계하는데 도움이 된다. 서빙(serving) : 모델을 배포하여 예측값을 전송하는 시스템 서빙의 하위 항목들로는 온프레미스(o</p>
-            <div class="post-footer"><span>2023년 1월 26일</span></div>
+            <div class="post-footer"><span>2023년 1월 27일</span></div>
           </a>
           <a class="post-card" href="https://ursonice.github.io/posts/what-is-auto-encoder/">
             <div class="post-meta"><span class="cat">AI/ Deep Learning</span></div>
@@ -308,13 +308,13 @@
             <div class="post-meta"><span class="cat">AI/ Deep Learning</span></div>
             <h3>ConvNeXtV1 논문리뷰</h3>
             <p>서론 이 장은 ConvNet의 장점을 유지하면서 backbone의 ResNet을 개선한 모델인 ConvNeXt에 대해서 소개한다. 목차 Training Techniques Modernizing a ConvNet: a Roadmap Macro Design (1) Changing stage compute r</p>
-            <div class="post-footer"><span>2022년 12월 12일</span></div>
+            <div class="post-footer"><span>2022년 12월 13일</span></div>
           </a>
           <a class="post-card" href="https://ursonice.github.io/posts/swin-transformer-hierarchical-vision-transformer-using-shifted-windows-%EB%85%BC%EB%AC%B8-%EB%A6%AC/">
             <div class="post-meta"><span class="cat">AI/ Deep Learning</span></div>
             <h3>Swin Transformer : Hierarchical Vision Transformer using Shifted Windows 논문 리뷰</h3>
             <p>서론 이 장은 ViT를 다양한 Task(Obejct Detection, Segmenation)에 적용한 모델인 Microsoft의 Swin Transformer에 대해 설명한다. 목차 Dataset ViT 한계 Herarchical Feature Map Local window Model Architect</p>
-            <div class="post-footer"><span>2022년 12월 12일</span></div>
+            <div class="post-footer"><span>2022년 12월 13일</span></div>
           </a>
           <a class="post-card" href="https://ursonice.github.io/posts/vit-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/">
             <div class="post-meta"><span class="cat">AI/ Deep Learning</span></div>
@@ -349,19 +349,7 @@
       </div>
     </main>
     <footer class="site-footer"><div class="footer-inner"><p>© <span data-year></span> Woojae Joo · ursonice</p><div class="footer-links"><a href="/">← Blog</a></div></div></footer>
-    <script>
-      (function () {
-        var t = document.querySelector("[data-theme-icon]");
-        function icon() { if (t) t.textContent = document.documentElement.dataset.theme === "dark" ? "☀" : "◐"; }
-        icon();
-        var b = document.querySelector("[data-theme-toggle]");
-        if (b) b.addEventListener("click", function () { var n = document.documentElement.dataset.theme === "dark" ? "light" : "dark"; document.documentElement.dataset.theme = n; localStorage.setItem("theme", n); icon(); });
-        var h = document.querySelector("[data-header]");
-        function s() { if (h) h.toggleAttribute("data-scrolled", window.scrollY > 8); }
-        s(); window.addEventListener("scroll", s, { passive: true });
-        var y = document.querySelector("[data-year]"); if (y) y.textContent = new Date().getFullYear();
-      })();
-    </script>
-    <script src="/assets/js/palette.js?v=7" defer></script>
+    <script src="/assets/js/theme.js?v=1" defer></script>
+    <script src="/assets/js/palette.js?v=9" defer></script>
   </body>
 </html>
