@@ -4,3 +4,6 @@ node_modules/
 .env
 .env.*
 .claude/settings.local.json
+
+# HEIC originals are converted to .jpg by scripts/convert-heic.mjs and must not be committed
+assets/notion/**/*.heic

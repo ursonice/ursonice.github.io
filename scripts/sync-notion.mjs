@@ -24,22 +24,42 @@ if (!TOKEN) {
   throw new Error("NOTION_TOKEN 또는 NOTION_API_KEY 환경 변수가 필요합니다.");
 }
 
-const notion = async (path, init = {}) => {
-  const response = await fetch(`https://api.notion.com/v1${path}`, {
-    ...init,
-    headers: {
-      Authorization: `Bearer ${TOKEN}`,
-      "Notion-Version": NOTION_VERSION,
-      "Content-Type": "application/json",
-      ...(init.headers || {}),
-    },
-  });
+// Notion API call with retry: 429 (rate limit, honoring Retry-After), 5xx and
+// network errors back off and retry so one transient blip doesn't abort a sync
+// (an aborted render used to silently unpublish posts).
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const MAX_RETRIES = 5;
 
-  if (!response.ok) {
+const notion = async (path, init = {}) => {
+  let lastError;
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt += 1) {
+    let response;
+    try {
+      response = await fetch(`https://api.notion.com/v1${path}`, {
+        ...init,
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+          "Notion-Version": NOTION_VERSION,
+          "Content-Type": "application/json",
+          ...(init.headers || {}),
+        },
+      });
+    } catch (error) {
+      lastError = error; // network error → retry
+      await sleep(500 * 2 ** attempt);
+      continue;
+    }
+
+    if (response.ok) return response.json();
+
     const text = await response.text();
-    throw new Error(`${init.method || "GET"} ${path} failed: ${response.status} ${text}`);
+    lastError = new Error(`${init.method || "GET"} ${path} failed: ${response.status} ${text.slice(0, 300)}`);
+    const retryable = response.status === 429 || response.status >= 500;
+    if (!retryable || attempt === MAX_RETRIES) throw lastError;
+    const retryAfter = Number(response.headers.get("retry-after"));
+    await sleep(Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 : 500 * 2 ** attempt);
   }
-  return response.json();
+  throw lastError;
 };
 
 // Auto-discover every database/data source the integration can access via Notion search,
@@ -104,7 +124,8 @@ const readSources = async () => {
   for (const s of await discoverSources()) {
     if (s.dataSourceId && !byId.has(s.dataSourceId)) byId.set(s.dataSourceId, s);
   }
-  const all = [...byId.values()];
+  // Stable order → stable JSON output → CI can detect "nothing changed" and skip the commit.
+  const all = [...byId.values()].sort((a, b) => (a.dataSourceId || "").localeCompare(b.dataSourceId || ""));
   console.log(`sources total: ${all.length} → [${all.map((s) => s.name || s.dataSourceId).join(", ")}]`);
   return all;
 };
@@ -154,14 +175,20 @@ const summaryFromPage = (page, plainText) => {
   return plainText.replace(/\s+/g, " ").slice(0, 170);
 };
 
+// NFKC (composed) keeps Korean as whole syllables. The old NFKD form emitted
+// decomposed-Jamo slugs, which made macOS (NFC) and Linux CI (byte-exact NFD)
+// write the same asset directory under two names — the repo ended up tracking
+// both, and prerendered pages 404'd on images. Slicing after NFKC also can't
+// cut a Hangul syllable in half anymore.
 const slugify = (value) =>
   value
     .toString()
-    .normalize("NFKD")
+    .normalize("NFKC")
     .replace(/[^\p{Letter}\p{Number}]+/gu, "-")
     .replace(/(^-|-$)/g, "")
     .toLowerCase()
-    .slice(0, 80);
+    .slice(0, 80)
+    .replace(/-$/, "");
 
 const slugFromPage = (page, title) => {
   const prop = propertyValue(page.properties, SLUG_PROP);
@@ -271,11 +298,16 @@ const downloadImage = async (url, pageSlug, blockId) => {
   const safeBlockId = blockId.replace(/[^a-zA-Z0-9-]/g, "");
   const dir = `${ASSET_DIR}/${pageSlug}`;
 
-  try {
-    const existing = (await readdir(dir)).find((file) => file.startsWith(`${safeBlockId}.`));
-    if (existing) return `${dir}/${existing}`;
-  } catch {
-    // directory not created yet — fall through to download
+  // Reuse the already-downloaded file for this block (also keeps HEIC→JPG
+  // conversions sticky). An image REPLACED in Notion keeps its blockId, so it
+  // won't refresh on its own — run with NOTION_FORCE_FULL=1 to re-download.
+  if (!FORCE_FULL) {
+    try {
+      const existing = (await readdir(dir)).find((file) => file.startsWith(`${safeBlockId}.`));
+      if (existing) return `${dir}/${existing}`;
+    } catch {
+      // directory not created yet — fall through to download
+    }
   }
 
   const response = await fetch(url);
@@ -511,10 +543,20 @@ const queryDataSource = async (source, cache) => {
         }
         stats.rendered += 1;
 
-        const title = titleFromPage(page);
+        const rawTitle = titleFromPage(page).trim();
+        const title = rawTitle === "Untitled" ? "" : rawTitle;
         const pageSlug = slugFromPage(page, title);
         currentPageId = page.id;
         const rendered = await renderBlocks(page.id, { pageSlug });
+
+        // Empty drafts (no title AND no content) — e.g. a page created in Notion but
+        // not written yet — used to publish as a blank card with a UUID URL. Skip them;
+        // they appear automatically once they have a title or content.
+        if (!title && !rendered.html.trim()) {
+          console.warn(`page skipped (empty draft): ${page.id}`);
+          continue;
+        }
+
         const tags = tagsFromPage(page);
         const category = source.name || textFromRich(sourceMeta.title || []) || "Notes";
         const summary = summaryFromPage(page, rendered.plainText);
@@ -522,7 +564,7 @@ const queryDataSource = async (source, cache) => {
         const series = seriesFromPage(page);
         posts.push({
           id: page.id,
-          title,
+          title: title || "Untitled",
           slug: pageSlug,
           category,
           tags,
@@ -535,7 +577,16 @@ const queryDataSource = async (source, cache) => {
           ...(series ? { series, seriesOrder: seriesOrderFromPage(page) } : {}),
         });
       } catch (error) {
-        console.warn(`page skipped (${page.id}): ${error.message}`);
+        // A page that fails to render must not silently disappear from the site:
+        // fall back to its cached version, and fail the sync if there is none
+        // (the previous commit's content then stays live).
+        const cached = cache.get(page.id);
+        if (cached) {
+          console.warn(`page render failed (${page.id}) — reusing cached version: ${error.message}`);
+          posts.push(cached);
+        } else {
+          throw new Error(`page render failed with no cached fallback (${page.id}): ${error.message}`);
+        }
       }
     }
 
@@ -613,29 +664,67 @@ const readExistingOutput = async () => {
   }
 };
 
+// Two different posts can slugify to the same string (long titles truncate at
+// 80 chars; identically-titled posts). Give later ones (by creation date) a
+// -2/-3… suffix so every post keeps a working URL. Deterministic across runs.
+const dedupeSlugs = (posts) => {
+  const groups = new Map();
+  for (const post of posts) {
+    const key = (post.slug || "").normalize("NFC");
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(post);
+  }
+  for (const [slug, group] of groups) {
+    if (group.length < 2) continue;
+    group.sort((a, b) => new Date(a.created) - new Date(b.created));
+    group.forEach((post, i) => {
+      if (i === 0) return;
+      post.slug = `${slug}-${i + 1}`;
+      console.warn(`slug collision: "${slug}" → "${post.slug}" (${post.id})`);
+    });
+  }
+  return posts;
+};
+
 const main = async () => {
   const sources = await readSources();
   const existing = await readExistingOutput();
   const cache = new Map((existing.posts || []).map((post) => [post.id, post]));
 
+  // A source that fails outright would silently unpublish all of its posts,
+  // and the page generators would then delete their live pages. Fail the sync
+  // instead — the previous commit stays live and the next trigger retries.
   const nestedPosts = [];
   for (const source of sources) {
     try {
       nestedPosts.push(await queryDataSource(source, cache));
     } catch (error) {
-      console.warn(`source skipped (${source.name || source.dataSourceId}): ${error.message}`);
+      throw new Error(`source failed (${source.name || source.dataSourceId}): ${error.message}`);
     }
   }
 
-  const posts = nestedPosts
-    .flat()
-    .sort((a, b) => new Date(b.updated || b.created) - new Date(a.updated || a.created));
+  const posts = dedupeSlugs(
+    nestedPosts.flat().sort((a, b) => new Date(b.updated || b.created) - new Date(a.updated || a.created)),
+  );
 
-  let about = null;
+  // Shrink guard: a sync that suddenly returns far fewer posts than the last
+  // committed data is almost certainly a partial/failed read, not mass deletion.
+  // Refuse to write (override with NOTION_ALLOW_SHRINK=1 for intentional purges).
+  const previousCount = (existing.posts || []).length;
+  const allowShrink = ["1", "true", "yes"].includes((process.env.NOTION_ALLOW_SHRINK || "").toLowerCase());
+  if (!allowShrink && previousCount >= 10 && posts.length < previousCount * 0.7) {
+    throw new Error(
+      `post count dropped ${previousCount} → ${posts.length}; refusing to publish (set NOTION_ALLOW_SHRINK=1 if intentional).`,
+    );
+  }
+
+  // About/profile: fall back to the previously-synced content on a transient
+  // error instead of blanking the section.
+  let about = existing.about || null;
   try {
     about = await fetchAbout(existing.about || null);
   } catch (error) {
-    console.warn(`about skipped: ${error.message}`);
+    console.warn(`about fetch failed — keeping cached about: ${error.message}`);
   }
 
   let profile = null;
@@ -645,8 +734,9 @@ const main = async () => {
     console.warn(`profile skipped: ${error.message}`);
   }
 
+  // Deliberately no generatedAt/timestamp field: the output must be byte-identical
+  // when nothing changed in Notion, so CI can skip no-op commits and deploys.
   const payload = {
-    generatedAt: new Date().toISOString(),
     site: {
       title: "Woojae Joo — Developer Note",
       description: "AI, Robotics, Systems 공부 기록",
@@ -662,39 +752,8 @@ const main = async () => {
   console.log(
     `Synced ${posts.length} posts (${stats.rendered} re-rendered, ${stats.reused} reused)${about ? " + about page" : ""} to ${OUTPUT}`,
   );
-
-  // --- RSS feed + sitemap (regenerated each sync) ---
-  const SITE = process.env.SITE_URL || "https://ursonice.github.io";
-  const xmlEsc = (s = "") =>
-    s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" }[c]));
-  const postUrl = (p) => `${SITE}/posts/${encodeURIComponent((p.slug || "").normalize("NFC"))}/`;
-
-  const items = posts
-    .slice(0, 30)
-    .map(
-      (p) =>
-        `    <item>\n      <title>${xmlEsc(p.title)}</title>\n      <link>${xmlEsc(postUrl(p))}</link>\n      <guid isPermaLink="false">${p.id}</guid>\n      <pubDate>${new Date(p.created || p.updated).toUTCString()}</pubDate>\n      <category>${xmlEsc(p.category || "Notes")}</category>\n      <description>${xmlEsc(p.summary || "")}</description>\n    </item>`,
-    )
-    .join("\n");
-  const feed = `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n  <channel>\n    <title>${xmlEsc(payload.site.title)}</title>\n    <link>${SITE}/</link>\n    <atom:link href="${SITE}/feed.xml" rel="self" type="application/rss+xml"/>\n    <description>${xmlEsc(payload.site.description)}</description>\n    <language>ko</language>\n    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>\n${items}\n  </channel>\n</rss>\n`;
-  await writeFile("feed.xml", feed);
-
-  const topicSlug = (s) =>
-    (s || "").toString().toLowerCase().normalize("NFC").replace(/[^a-z0-9가-힣]+/g, "-").replace(/^-+|-+$/g, "") || "topic";
-  const topicSlugs = [...new Set(posts.map((p) => topicSlug(p.category || "Notes")))];
-  const urlEntries = [
-    `  <url><loc>${SITE}/</loc></url>`,
-    `  <url><loc>${SITE}/cv.html</loc></url>`,
-    `  <url><loc>${SITE}/archive.html</loc></url>`,
-    ...topicSlugs.map((s) => `  <url><loc>${SITE}/topics/${s}/</loc></url>`),
-    ...posts.map(
-      (p) =>
-        `  <url><loc>${xmlEsc(postUrl(p))}</loc><lastmod>${new Date(p.updated || p.created).toISOString().slice(0, 10)}</lastmod></url>`,
-    ),
-  ].join("\n");
-  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urlEntries}\n</urlset>\n`;
-  await writeFile("sitemap.xml", sitemap);
-  console.log(`Wrote feed.xml (${Math.min(30, posts.length)} items) + sitemap.xml (${posts.length + 1} urls)`);
+  // feed.xml / sitemap.xml / data/posts-index.json are derived from this output
+  // by scripts/gen-derived.mjs (runs next in the pipeline; works locally too).
 };
 
 main().catch((error) => {

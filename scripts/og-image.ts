@@ -16,10 +16,15 @@ const FONT_URL =
 
 let fontPromise: Promise<ArrayBuffer> | null = null;
 const font = () =>
-  (fontPromise ??= fetch(FONT_URL).then((r) => {
-    if (!r.ok) throw new Error("font fetch " + r.status);
-    return r.arrayBuffer();
-  }));
+  (fontPromise ??= fetch(FONT_URL)
+    .then((r) => {
+      if (!r.ok) throw new Error("font fetch " + r.status);
+      return r.arrayBuffer();
+    })
+    .catch((err) => {
+      fontPromise = null; // don't cache the failure — retry on the next request
+      throw err;
+    }));
 
 const clamp = (s: string, n: number) => (s.length > n ? s.slice(0, n - 1) + "…" : s);
 

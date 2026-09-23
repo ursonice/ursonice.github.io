@@ -6,10 +6,10 @@
 // Runs in CI right after sync-notion.mjs (before the page generators), and is safe to
 // run locally too. Idempotent: <img> tags that already carry a width are left alone.
 //
-// Image paths in data/notion-posts.json are stored NFD, but the committed files are NFC,
-// so paths are normalized before reading.
+// Paths are NFC everywhere since the NFC unification, but resolution still tries NFC/NFD
+// variants defensively (blindly normalizing used to silently skip NFD files in Linux CI).
 
-import { readFileSync, writeFileSync, openSync, readSync, closeSync } from "node:fs";
+import { readFileSync, writeFileSync, openSync, readSync, closeSync, existsSync } from "node:fs";
 
 // Read just the header bytes (enough for any of the formats below) without loading huge files.
 const readHead = (path, bytes = 65536) => {
@@ -75,15 +75,16 @@ const dimsCache = new Map();
 const readDims = (src) => {
   // Only handle locally-downloaded images; leave external/remote URLs alone.
   if (!/^\.?\/?assets\//.test(src)) return null;
-  const path = src.replace(/^\.?\//, "").normalize("NFC");
-  if (dimsCache.has(path)) return dimsCache.get(path);
+  const raw = src.replace(/^\.?\//, "");
+  if (dimsCache.has(raw)) return dimsCache.get(raw);
+  const path = [raw, raw.normalize("NFC"), raw.normalize("NFD")].find((p) => existsSync(p));
   let dims = null;
   try {
-    dims = imageSize(readHead(path));
+    if (path) dims = imageSize(readHead(path));
   } catch {
     dims = null;
   }
-  dimsCache.set(path, dims);
+  dimsCache.set(raw, dims);
   return dims;
 };
 

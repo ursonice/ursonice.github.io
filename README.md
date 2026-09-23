@@ -120,9 +120,11 @@ npm run serve
 npm install                                # heic-convert, sharp (이미지 변환용)
 export NOTION_TOKEN=ntn_여기에토큰          # 절대 커밋하지 마세요
 export NOTION_ABOUT_PAGE_ID=...            # About 페이지가 있으면 (선택)
-npm run sync:notion                        # data/notion-posts.json + assets/notion/ 갱신
+npm run build                              # 동기화 + 전체 페이지/피드/인덱스 생성 (CI와 동일)
 npm run serve                              # http://localhost:4173 에서 확인
 ```
+
+`npm run build`는 CI와 동일한 전체 파이프라인(동기화 → HEIC 변환 → 이미지 크기 주석 → 글/토픽/홈 페이지 생성 → feed/sitemap/posts-index 생성)을 돌립니다. `npm run sync:notion`은 첫 단계(데이터 동기화)만 실행하므로, 로컬에서 결과를 커밋할 거라면 반드시 `npm run build`를 쓰세요 — 그래야 생성물이 CI와 어긋나지 않습니다.
 
 데이터소스의 속성 이름이 기본값(`이름`, `Tag`, `Summary`, `Slug`)과 다르면 위 "옵션 환경 변수"로 맞춰주세요. 결과물(`data/notion-posts.json`, `assets/notion/`)만 커밋하고 토큰은 커밋하지 않습니다.
 

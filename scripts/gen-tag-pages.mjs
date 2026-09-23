@@ -5,32 +5,11 @@
 // Keep slugify() in sync with assets/js/main.js (topic-card hrefs point here).
 
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from "node:fs";
-
-const SITE = "https://ursonice.github.io";
-const CSS_V = "37";
+import { SITE, esc, topicSlug as slugify, postUrl, fmtDateKo as fmtDate, THEME_BOOTSTRAP, ASSET_VER, assertPosts } from "./lib/shared.mjs";
 
 const data = JSON.parse(readFileSync("data/notion-posts.json", "utf8"));
 const posts = Array.isArray(data.posts) ? data.posts : [];
-
-const esc = (v = "") =>
-  String(v).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
-
-const slugify = (s) =>
-  (s || "")
-    .toString()
-    .toLowerCase()
-    .normalize("NFC")
-    .replace(/[^a-z0-9가-힣]+/g, "-")
-    .replace(/^-+|-+$/g, "") || "topic";
-
-const postUrl = (p) => `${SITE}/posts/${encodeURIComponent((p.slug || "").normalize("NFC"))}/`;
-const fmtDate = (s) => {
-  try {
-    return new Date(s).toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" });
-  } catch {
-    return "";
-  }
-};
+assertPosts(posts, "gen-tag-pages"); // never rmSync the live pages over empty data
 
 const byCat = new Map();
 posts.forEach((p) => {
@@ -56,7 +35,8 @@ const page = (cat, list) => {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0a0b0e" />
+    <meta name="theme-color" content="#fbfaf7" />
+    ${THEME_BOOTSTRAP}
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-K7VKNXKJJ7");</script>
     <title>${esc(cat)} — Woojae Joo</title>
@@ -70,11 +50,10 @@ const page = (cat, list) => {
     <meta property="og:url" content="${esc(url)}" />
     <meta property="og:image" content="${SITE}/assets/og/default.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <script>(function(){var s=localStorage.getItem("theme");var d=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.dataset.theme=s||(d?"dark":"light");})();</script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/assets/css/styles.css?v=${CSS_V}" />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=${ASSET_VER.css}" />
   </head>
   <body>
     <a class="skip-link" href="#topic">본문으로 이동</a>
@@ -102,20 +81,8 @@ const page = (cat, list) => {
       </div>
     </main>
     <footer class="site-footer"><div class="footer-inner"><p>© <span data-year></span> Woojae Joo · ursonice</p><div class="footer-links"><a href="/">← Blog</a></div></div></footer>
-    <script>
-      (function () {
-        var t = document.querySelector("[data-theme-icon]");
-        function icon() { if (t) t.textContent = document.documentElement.dataset.theme === "dark" ? "☀" : "◐"; }
-        icon();
-        var b = document.querySelector("[data-theme-toggle]");
-        if (b) b.addEventListener("click", function () { var n = document.documentElement.dataset.theme === "dark" ? "light" : "dark"; document.documentElement.dataset.theme = n; localStorage.setItem("theme", n); icon(); });
-        var h = document.querySelector("[data-header]");
-        function s() { if (h) h.toggleAttribute("data-scrolled", window.scrollY > 8); }
-        s(); window.addEventListener("scroll", s, { passive: true });
-        var y = document.querySelector("[data-year]"); if (y) y.textContent = new Date().getFullYear();
-      })();
-    </script>
-    <script src="/assets/js/palette.js?v=7" defer></script>
+    <script src="/assets/js/theme.js?v=${ASSET_VER.theme}" defer></script>
+    <script src="/assets/js/palette.js?v=${ASSET_VER.palette}" defer></script>
   </body>
 </html>
 `;

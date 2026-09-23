@@ -24,10 +24,12 @@ export default async function (req: Request): Promise<Response> {
   if (req.method === "OPTIONS") return new Response(null, { headers: CORS });
 
   const url = new URL(req.url);
-  const slug = (url.searchParams.get("slug") || "").normalize("NFC").slice(0, 300);
+  const slug = (url.searchParams.get("slug") || "").normalize("NFC").slice(0, 200);
   const hit = url.searchParams.get("hit") === "1";
-  if (!slug) {
-    return new Response(JSON.stringify({ error: "missing slug" }), { status: 400, headers: CORS });
+  // Only slug-shaped keys (letters/digits/dashes) — otherwise any ?slug= string
+  // becomes a permanent key in the counter blob.
+  if (!slug || !/^[\p{Letter}\p{Number}-]+$/u.test(slug)) {
+    return new Response(JSON.stringify({ error: "invalid slug" }), { status: 400, headers: CORS });
   }
 
   const counts: Record<string, number> = (await blob.getJSON(KEY).catch(() => null)) || {};

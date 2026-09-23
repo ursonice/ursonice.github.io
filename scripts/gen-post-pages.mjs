@@ -9,15 +9,15 @@
 // Run after the Notion sync (reads data/notion-posts.json). Safe to run locally too.
 
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from "node:fs";
+import { SITE, esc, topicSlug, cleanSlug, fmtDateKo, THEME_BOOTSTRAP, ASSET_VER, assertPosts } from "./lib/shared.mjs";
 
-const SITE = "https://ursonice.github.io";
 const DEFAULT_IMG = `${SITE}/assets/og/default.png`;
 
 // OG share-card image service (val.town, see scripts/og-image.ts) — generated title cards
-// for link previews. Override with the OG_IMAGE_URL env var; empty → fall back to the
-// post's first image / default.png.
+// for link previews. Override with the OG_IMAGE_URL env var; set it to "" to fall back to
+// the post's first image / default.png. (?? not ||, so an explicit "" is honored.)
 const OG_IMAGE_URL =
-  process.env.OG_IMAGE_URL || "https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/";
+  process.env.OG_IMAGE_URL ?? "https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/";
 const ogCard = (post) => {
   const sep = OG_IMAGE_URL.includes("?") ? "&" : "?";
   const title = encodeURIComponent((post.title || "Woojae Joo").slice(0, 120));
@@ -27,13 +27,7 @@ const ogCard = (post) => {
 
 const data = JSON.parse(readFileSync("data/notion-posts.json", "utf8"));
 const posts = Array.isArray(data.posts) ? data.posts : [];
-
-const esc = (value = "") =>
-  String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
+assertPosts(posts, "gen-post-pages"); // never rmSync the live pages over empty data
 
 // First <img> in the body as an absolute URL → used as the OG/Twitter thumbnail.
 // encodeURI keeps the path scraper-safe (Korean notion folders → %xx) without double-encoding.
@@ -42,20 +36,10 @@ const firstImage = (html = "") => {
   if (!m) return DEFAULT_IMG;
   const src = m[1];
   const abs = /^https?:/i.test(src) ? src : src.startsWith("/") ? SITE + src : `${SITE}/${src.replace(/^\.?\//, "")}`;
-  // notion-posts.json stores image paths in NFD, but the committed files are NFC → normalize.
   return encodeURI(abs.normalize("NFC"));
 };
 
-// Topic → URL slug. MUST match scripts/gen-tag-pages.mjs / main.js / post.js.
-const topicSlug = (s) =>
-  (s || "").toString().toLowerCase().normalize("NFC").replace(/[^a-z0-9가-힣]+/g, "-").replace(/^-+|-+$/g, "") || "topic";
-
-const fmtDate = (value) => {
-  if (!value) return "";
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return value;
-  return new Intl.DateTimeFormat("ko-KR", { year: "numeric", month: "long", day: "numeric" }).format(date);
-};
+const fmtDate = fmtDateKo;
 
 // Prerendered article HTML — mirrors post.js renderPost so Google sees the full body in the
 // STATIC /posts/<slug>/index.html instead of an empty JS-filled shell. (Without this, the page
@@ -150,7 +134,8 @@ const head = (post, slug, url) => {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0a0b0e" />
+    <meta name="theme-color" content="#fbfaf7" />
+    ${THEME_BOOTSTRAP}
 
     <!-- Google Analytics (GA4) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
@@ -191,7 +176,7 @@ const head = (post, slug, url) => {
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/assets/css/styles.css?v=39" />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=${ASSET_VER.css}" />
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
@@ -210,7 +195,7 @@ const ARTICLE_SHELL_RE = /<article class="article" data-article>[\s\S]*?<\/artic
 rmSync("posts", { recursive: true, force: true });
 let count = 0;
 for (const post of posts) {
-  const slug = (post.slug || "").normalize("NFC").replace(/\//g, "-").trim();
+  const slug = cleanSlug(post.slug || "");
   if (!slug) continue;
   const url = `${SITE}/posts/${encodeURIComponent(slug)}/`;
   const prerendered = `<article class="article" data-article data-prerendered>${articleHtml(post)}</article>`;

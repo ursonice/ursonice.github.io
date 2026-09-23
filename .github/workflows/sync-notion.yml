@@ -34,24 +34,26 @@ jobs:
           NOTION_DATA_SOURCE_IDS: ${{ secrets.NOTION_DATA_SOURCE_IDS }}
           NOTION_ABOUT_PAGE_ID: ${{ secrets.NOTION_ABOUT_PAGE_ID }}
           NOTION_VERSION: "2026-03-11"
-        run: |
-          node scripts/sync-notion.mjs
-          node scripts/convert-heic.mjs
-          node scripts/add-image-dims.mjs
-          node scripts/gen-post-pages.mjs
-          node scripts/gen-tag-pages.mjs
-          node scripts/gen-home-page.mjs
+        run: npm run build
       - name: Commit generated data
         run: |
-          if [[ -n "$(git status --porcelain data/notion-posts.json assets/notion feed.xml sitemap.xml posts topics index.html 2>/dev/null)" ]]; then
+          if [[ -n "$(git status --porcelain data feed.xml sitemap.xml posts topics index.html 2>/dev/null)" ]]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add data/notion-posts.json feed.xml sitemap.xml posts topics index.html
+            git add data feed.xml sitemap.xml posts topics index.html
             if [[ -d assets/notion ]]; then
               git add assets/notion
             fi
             git commit -m "Sync Notion posts"
-            git push
+            # A human push during the multi-minute sync used to make this push fail
+            # and drop the whole sync's output — rebase and retry instead.
+            for i in 1 2 3; do
+              if git push; then
+                break
+              fi
+              echo "push rejected — rebasing onto origin/main (attempt $i)"
+              git pull --rebase origin main || exit 1
+            done
           else
             echo "No changes to commit"
           fi

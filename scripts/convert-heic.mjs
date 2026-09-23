@@ -10,9 +10,19 @@
 //
 // heic-convert (libheif WASM) decodes the HEVC-compressed HEIC; sharp then downscales the
 // result to a web-friendly JPEG (≤1600px) so phone-resolution photos don't bloat the repo
-// or page load. Image paths are NFD in the JSON but NFC on disk, so paths are normalized.
+// or page load. Paths are NFC everywhere since the NFC unification, but resolution still
+// tries NFC/NFD variants defensively (blindly normalizing to NFC used to make this script
+// a silent no-op on Linux CI when the files on disk were NFD).
 
 import { readFileSync, writeFileSync, existsSync, rmSync } from "node:fs";
+
+// Find the on-disk spelling of a path whose Unicode normalization may differ.
+const resolveExisting = (path) => {
+  for (const candidate of [path, path.normalize("NFC"), path.normalize("NFD")]) {
+    if (existsSync(candidate)) return candidate;
+  }
+  return null;
+};
 import convert from "heic-convert";
 import sharp from "sharp";
 
@@ -38,8 +48,9 @@ let reused = 0;
 let failed = 0;
 
 for (const src of heicSrcs) {
-  const localHeic = src.replace(/^\.?\//, "").normalize("NFC");
-  const localJpg = localHeic.replace(/\.heic$/i, ".jpg");
+  const rawPath = src.replace(/^\.?\//, "");
+  const localHeic = resolveExisting(rawPath) || rawPath.normalize("NFC");
+  const localJpg = resolveExisting(rawPath.replace(/\.heic$/i, ".jpg")) || localHeic.replace(/\.heic$/i, ".jpg");
   const jpgSrc = src.replace(/\.heic$/i, ".jpg");
   try {
     if (existsSync(localJpg)) {

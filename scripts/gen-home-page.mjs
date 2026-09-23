@@ -9,24 +9,16 @@
 // Runs in CI after sync-notion.mjs. Idempotent — re-running over its own output is fine.
 
 import { readFileSync, writeFileSync } from "node:fs";
+import { esc, topicSlug, postPath, fmtDateKo, assertPosts } from "./lib/shared.mjs";
 
 const PAGE_SIZE = 12; // matches main.js state.pageSize
 
 const data = JSON.parse(readFileSync("data/notion-posts.json", "utf8"));
 const posts = Array.isArray(data.posts) ? data.posts : [];
+assertPosts(posts, "gen-home-page"); // don't blank the prerendered homepage over empty data
 
-const esc = (v = "") =>
-  String(v).replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
-
-const fmtDate = (value) => {
-  if (!value) return "날짜 없음";
-  const d = new Date(value);
-  if (Number.isNaN(d.getTime())) return value;
-  return new Intl.DateTimeFormat("ko-KR", { year: "numeric", month: "short", day: "numeric" }).format(d);
-};
-
-const topicSlug = (s) =>
-  (s || "").toString().toLowerCase().normalize("NFC").replace(/[^a-z0-9가-힣]+/g, "-").replace(/^-+|-+$/g, "") || "topic";
+const fmtDate = (value) =>
+  fmtDateKo(value, { year: "numeric", month: "short", day: "numeric" }) || "날짜 없음";
 
 // Newest-created first (matches main.js sortedByCreated).
 const sorted = [...posts].sort((a, b) => new Date(b.created || b.updated) - new Date(a.created || a.updated));
@@ -36,7 +28,7 @@ const postCardsHtml = sorted
   .slice(0, PAGE_SIZE)
   .map((post) => {
     const tags = (post.tags || []).slice(0, 2);
-    const href = `/posts/${encodeURIComponent((post.slug || "").normalize("NFC"))}/`;
+    const href = postPath(post);
     return `
         <a class="post-card" href="${href}">
           <div class="post-meta">

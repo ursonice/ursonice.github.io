@@ -4,6 +4,8 @@
   "type": "module",
   "scripts": {
     "sync:notion": "node scripts/sync-notion.mjs",
+    "generate": "node scripts/convert-heic.mjs && node scripts/add-image-dims.mjs && node scripts/gen-post-pages.mjs && node scripts/gen-tag-pages.mjs && node scripts/gen-home-page.mjs && node scripts/gen-derived.mjs",
+    "build": "npm run sync:notion && npm run generate",
     "serve": "node scripts/serve.mjs"
   },
   "dependencies": {

@@ -47,10 +47,12 @@ export default async function (req: Request): Promise<Response> {
     });
   }
 
-  // 2) Real event: only fire the workflow for relevant event types.
+  // 2) Real event: only fire the workflow for known Notion event types. A POST
+  //    without a recognizable type is not a Notion event — ignore it instead of
+  //    letting any stray request trigger a full CI sync.
   const type = typeof payload.type === "string" ? payload.type : "";
-  if (type && !TRIGGER_EVENTS.has(type)) {
-    return new Response(`ignored: ${type}`, { status: 200 });
+  if (!TRIGGER_EVENTS.has(type)) {
+    return new Response(`ignored: ${type || "(no type)"}`, { status: 200 });
   }
 
   const token = Deno.env.get("GITHUB_TOKEN");

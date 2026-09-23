@@ -9,9 +9,10 @@
 // Key file is hosted at the site root (referenced by `keyLocation` below).
 
 import { readFileSync } from "node:fs";
+import { postUrl } from "./lib/shared.mjs";
 
-const SITE = "https://ursonice.github.io";
 const HOST = "ursonice.github.io";
+const SITE = `https://${HOST}`;
 const KEY = "152cb4d732d4f0d98c37d07ac337d28c";
 const RECENT_DAYS = 7;
 const ENDPOINT = "https://api.indexnow.org/indexnow";
@@ -30,7 +31,7 @@ if (recent.length === 0) {
   process.exit(0);
 }
 
-const urlList = recent.map((p) => `${SITE}/posts/${encodeURIComponent((p.slug || "").normalize("NFC"))}/`);
+const urlList = recent.map(postUrl);
 
 const payload = {
   host: HOST,
