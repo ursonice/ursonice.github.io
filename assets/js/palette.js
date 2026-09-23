@@ -1,14 +1,15 @@
 // ⌘K / Ctrl+K command palette: quick post search + jump, on every page.
 // Reuses posts already loaded by main.js / post.js (window.__POSTS__), or fetches once on demand.
 (() => {
-  const DATA_URL = "/data/notion-posts.json";
+  const DATA_URL = "/data/posts-index.json";
   let overlay = null;
   let input = null;
   let list = null;
   let emptyEl = null;
   let results = [];
   let active = 0;
-  let fetched = null;
+  let fetching = null; // shared promise → concurrent opens fire one fetch, not several
+  let lastFocused = null;
 
   const esc = (s = "") =>
     String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -16,14 +17,14 @@
 
   const data = async () => {
     if (Array.isArray(window.__POSTS__) && window.__POSTS__.length) return window.__POSTS__;
-    if (fetched) return fetched;
-    try {
-      const r = await fetch(DATA_URL, { cache: "force-cache" });
-      fetched = (await r.json()).posts || [];
-    } catch {
-      fetched = [];
-    }
-    return fetched;
+    fetching ??= fetch(DATA_URL, { cache: "force-cache" })
+      .then((r) => r.json())
+      .then((d) => d.posts || [])
+      .catch(() => {
+        fetching = null; // allow a retry on the next open
+        return [];
+      });
+    return fetching;
   };
 
   const build = () => {
@@ -44,10 +45,19 @@
     overlay.querySelector("[data-cmdk-close]").addEventListener("click", close);
     input.addEventListener("input", () => render(input.value));
     input.addEventListener("keydown", onKey);
+    // Escape must close the palette even when focus left the input (e.g. after a
+    // click on the list), or the overlay gets stuck open with body scroll locked.
+    overlay.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        close();
+      }
+    });
   };
 
   const open = async () => {
     if (!overlay) build();
+    lastFocused = document.activeElement;
     overlay.hidden = false;
     document.body.style.overflow = "hidden";
     input.value = "";
@@ -59,6 +69,7 @@
   const close = () => {
     if (overlay) overlay.hidden = true;
     document.body.style.overflow = "";
+    if (lastFocused?.focus) lastFocused.focus();
   };
 
   const render = async (q) => {

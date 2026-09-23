@@ -1,28 +1,9 @@
-// Standalone profile / CV page — reuses the Notion-synced about, profile, and posts.
+// Standalone profile / CV page — reuses the Notion-synced about, profile, and posts
+// from the lightweight index. Theme toggle / header scroll live in assets/js/theme.js.
 const $ = (sel, root = document) => root.querySelector(sel);
 
-const applyThemeIcon = () => {
-  const icon = $("[data-theme-icon]");
-  if (icon) icon.textContent = document.documentElement.dataset.theme === "dark" ? "☀" : "◐";
-};
-
-const initTheme = () => {
-  applyThemeIcon();
-  $("[data-theme-toggle]")?.addEventListener("click", () => {
-    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = next;
-    localStorage.setItem("theme", next);
-    applyThemeIcon();
-  });
-};
-
-const initHeaderScroll = () => {
-  const header = $("[data-header]");
-  if (!header) return;
-  const onScroll = () => header.toggleAttribute("data-scrolled", window.scrollY > 8);
-  onScroll();
-  window.addEventListener("scroll", onScroll, { passive: true });
-};
+const esc = (s = "") =>
+  String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
 const fmtDate = (value) => {
   try {
@@ -35,7 +16,7 @@ const fmtDate = (value) => {
 const render = async () => {
   let data = {};
   try {
-    data = await (await fetch("/data/notion-posts.json", { cache: "no-cache" })).json();
+    data = await (await fetch("/data/posts-index.json")).json();
   } catch {
     /* offline / fetch failed → leave placeholders */
   }
@@ -67,7 +48,7 @@ const render = async () => {
   if (focus) {
     focus.innerHTML = Object.entries(counts)
       .sort((a, b) => b[1] - a[1])
-      .map(([c, n]) => `<span class="badge">${c} <em>${n}</em></span>`)
+      .map(([c, n]) => `<span class="badge">${esc(c)} <em>${n}</em></span>`)
       .join("");
   }
 
@@ -90,8 +71,4 @@ const render = async () => {
   }
 };
 
-initTheme();
-initHeaderScroll();
-const yearEl = $("[data-year]");
-if (yearEl) yearEl.textContent = new Date().getFullYear();
 render();

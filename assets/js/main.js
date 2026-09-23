@@ -1,8 +1,11 @@
-const DATA_URL = "data/notion-posts.json";
+// Homepage: search / topic filters / tag filters / load-more over the post list.
+// Fetches the lightweight data/posts-index.json (list fields + text excerpt), not the
+// full notion-posts.json with every post body. Theme toggle / header scroll / footer
+// year live in assets/js/theme.js (shared by every page).
+const DATA_URL = "/data/posts-index.json";
 
 const state = {
   posts: [],
-  about: null,
   profile: null,
   activeTopic: "all",
   activeTag: null,
@@ -37,8 +40,8 @@ const formatDate = (value) => {
 
 const normalize = (value = "") => value.toString().trim().toLowerCase();
 
-const escAttr = (value = "") =>
-  value.toString().replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+const esc = (value = "") =>
+  value.toString().replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
 
 const sortedByRecent = (posts) =>
   [...posts].sort((a, b) => new Date(b.updated || b.created) - new Date(a.updated || a.created));
@@ -56,7 +59,7 @@ const uniqueTopics = (posts) => {
   return [...counts.entries()].sort((a, b) => b[1] - a[1]);
 };
 
-// Topic → URL slug. MUST match scripts/gen-tag-pages.mjs (static /topics/<slug>/ pages).
+// Topic → URL slug. Mirrors scripts/lib/shared.mjs topicSlug() (static /topics/<slug>/ pages).
 const topicSlug = (s) =>
   (s || "")
     .toString()
@@ -72,16 +75,15 @@ const renderFilters = () => {
   container.innerHTML = buttons
     .map(
       ([value, label]) =>
-        `<button class="filter-button" type="button" data-filter="${value}" aria-pressed="${value === state.activeTopic}">${label}</button>`,
+        `<button class="filter-button" type="button" data-filter="${esc(value)}" aria-pressed="${value === state.activeTopic}">${esc(label)}</button>`,
     )
     .join("");
 };
 
-// Plain-text search haystack (title + summary + category + tags + body), computed once per post.
+// Plain-text search haystack (title + summary + category + tags + body excerpt).
 const searchText = (post) => {
   if (post._search == null) {
-    const body = (post.html || "").replace(/<[^>]+>/g, " ");
-    post._search = normalize([post.title, post.summary, post.category, ...(post.tags || []), body].join(" "));
+    post._search = normalize([post.title, post.summary, post.category, ...(post.tags || []), post.plain || ""].join(" "));
   }
   return post._search;
 };
@@ -109,13 +111,13 @@ const renderPosts = () => {
       return `
         <a class="post-card" href="${href}">
           <div class="post-meta">
-            <span class="cat">${post.category || "Notes"}</span>
+            <span class="cat">${esc(post.category || "Notes")}</span>
             ${tags
-              .map((tag) => `<span class="badge" data-tag="${escAttr(tag)}" role="button" tabindex="0" title="${escAttr(tag)} 태그로 필터">${tag}</span>`)
+              .map((tag) => `<span class="badge" data-tag="${esc(tag)}" role="button" tabindex="0" title="${esc(tag)} 태그로 필터">${esc(tag)}</span>`)
               .join("")}
           </div>
-          <h3>${post.title}</h3>
-          <p>${post.summary || "노션에서 가져온 공부 기록입니다."}</p>
+          <h3>${esc(post.title)}</h3>
+          <p>${esc(post.summary || "노션에서 가져온 공부 기록입니다.")}</p>
           <div class="post-footer">
             <span>${formatDate(post.created || post.updated)}</span>
           </div>
@@ -161,7 +163,7 @@ const renderActiveTag = () => {
     grid.parentNode.insertBefore(bar, grid);
   }
   bar.hidden = false;
-  bar.innerHTML = `<span class="active-tag-label">태그</span><strong>#${escAttr(state.activeTag)}</strong><button type="button" class="active-tag-clear" data-clear-tag>✕ 해제</button>`;
+  bar.innerHTML = `<span class="active-tag-label">태그</span><strong>#${esc(state.activeTag)}</strong><button type="button" class="active-tag-clear" data-clear-tag>✕ 해제</button>`;
 };
 
 const setActiveTag = (tag) => {
@@ -176,7 +178,7 @@ const renderTopics = () => {
   container.innerHTML = uniqueTopics(state.posts)
     .map(
       ([topic, count]) =>
-        `<a class="topic-card" href="/topics/${topicSlug(topic)}/"><strong>${topic}</strong><span>${count} notes</span></a>`,
+        `<a class="topic-card" href="/topics/${topicSlug(topic)}/"><strong>${esc(topic)}</strong><span>${count} notes</span></a>`,
     )
     .join("");
 };
@@ -186,34 +188,6 @@ const renderStats = () => {
   $("[data-stat='post-count']").textContent = state.posts.length;
   $("[data-stat='topic-count']").textContent = uniqueTopics(state.posts).length;
   $("[data-stat='last-updated']").textContent = latest ? formatDate(latest.updated || latest.created) : "–";
-};
-
-const renderAbout = () => {
-  const container = $("[data-about]");
-  if (!container) return; // About section moved to the standalone /cv.html page
-  if (state.about?.html) {
-    container.innerHTML = state.about.html;
-  } else {
-    container.innerHTML = `
-      <p>아직 노션 About 페이지가 연결되지 않았습니다. 노션에 자기소개 · 경력 · 학력 · 기술 스택을 정리한 페이지를 만들고
-      <code>NOTION_ABOUT_PAGE_ID</code>로 연결하면 이 영역이 자동으로 채워집니다.</p>
-      <p>그 전까지는 이 자리에서 디자인과 레이아웃을 미리 확인할 수 있습니다.</p>`;
-  }
-
-  const avatarImg = $(".profile-card .avatar img");
-  if (avatarImg && state.about?.avatar) {
-    avatarImg.src = state.about.avatar;
-    avatarImg.alt = "Woojae Joo";
-    avatarImg.closest(".avatar")?.classList.add("has-photo");
-  }
-
-  const chips = $("[data-about-topics]");
-  if (chips) {
-    chips.innerHTML = uniqueTopics(state.posts)
-      .slice(0, 8)
-      .map(([topic]) => `<span class="badge">${topic}</span>`)
-      .join("");
-  }
 };
 
 const bindEvents = () => {
@@ -256,46 +230,19 @@ const bindEvents = () => {
   });
 };
 
-const applyThemeIcon = () => {
-  const icon = $("[data-theme-icon]");
-  if (icon) icon.textContent = document.documentElement.dataset.theme === "dark" ? "☀" : "◐";
-};
-
-const initTheme = () => {
-  const saved = localStorage.getItem("theme");
-  document.documentElement.dataset.theme = saved || "light";
-  applyThemeIcon();
-
-  $("[data-theme-toggle]").addEventListener("click", () => {
-    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = next;
-    localStorage.setItem("theme", next);
-    applyThemeIcon();
-  });
-};
-
-const initHeaderScroll = () => {
-  const header = $("[data-header]");
-  const onScroll = () => header.toggleAttribute("data-scrolled", window.scrollY > 8);
-  onScroll();
-  window.addEventListener("scroll", onScroll, { passive: true });
-};
-
 const init = async () => {
-  $("[data-year]").textContent = new Date().getFullYear();
-  initTheme();
-  initHeaderScroll();
-
   try {
-    const response = await fetch(DATA_URL, { cache: "no-store" });
+    const response = await fetch(DATA_URL);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
     state.posts = sortedByCreated(data.posts || []);
-    state.about = data.about || null;
     state.profile = data.profile || null;
     window.__POSTS__ = state.posts; // shared with the ⌘K palette
   } catch (error) {
-    console.warn("Failed to load Notion data", error);
+    // Keep the prerendered grid/topics/stats (gen-home-page.mjs) instead of
+    // wiping them with an empty re-render.
+    console.warn("Failed to load post index — keeping prerendered content", error);
+    return;
   }
 
   const tagParam = new URLSearchParams(location.search).get("tag");
@@ -306,7 +253,6 @@ const init = async () => {
   renderActiveTag();
   renderPosts();
   renderTopics();
-  renderAbout();
   applyProfile();
   bindEvents();
 

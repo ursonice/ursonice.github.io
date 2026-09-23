@@ -1,4 +1,9 @@
-const DATA_URL = "/data/notion-posts.json";
+// Post page script. Static /posts/<slug>/ pages arrive PRERENDERED (full article in the
+// HTML, via scripts/gen-post-pages.mjs) and only need the lightweight index for related
+// posts / series / author box. The /post.html?slug= SPA fallback still needs the full
+// JSON for the post body. Theme toggle / header scroll live in assets/js/theme.js.
+const INDEX_URL = "/data/posts-index.json";
+const FULL_DATA_URL = "/data/notion-posts.json";
 const $ = (selector, scope = document) => scope.querySelector(selector);
 
 // Canonical pretty URL for a post (static per-post page with correct OG tags).
@@ -41,10 +46,25 @@ const giscusThemeUrl = (mode) =>
 const giscusTheme = () =>
   giscusThemeUrl(document.documentElement.dataset.theme === "dark" ? "dark" : "light");
 
+// Push a theme change into the giscus iframe. If the iframe hasn't mounted yet
+// (theme toggled right after load), retry briefly instead of dropping the change.
+let giscusThemeTimer = null;
 const setGiscusTheme = (mode) => {
   const theme = giscusThemeUrl(mode);
-  const frame = document.querySelector("iframe.giscus-frame");
-  frame?.contentWindow?.postMessage({ giscus: { setConfig: { theme } } }, "https://giscus.app");
+  clearInterval(giscusThemeTimer);
+  let tries = 0;
+  const send = () => {
+    const frame = document.querySelector("iframe.giscus-frame");
+    if (frame?.contentWindow) {
+      frame.contentWindow.postMessage({ giscus: { setConfig: { theme } } }, "https://giscus.app");
+      return true;
+    }
+    return false;
+  };
+  if (send()) return;
+  giscusThemeTimer = setInterval(() => {
+    if (send() || tries++ > 20) clearInterval(giscusThemeTimer);
+  }, 500);
 };
 
 const loadGiscus = (term) => {
@@ -421,10 +441,15 @@ const initArticleSearch = () => {
     if (q.length < 2) return;
     const re = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
     const walker = document.createTreeWalker(content, NodeFilter.SHOW_TEXT, {
-      acceptNode: (n) =>
-        n.nodeValue.trim() && !n.parentElement.closest("pre, code, .code-block, script, style, mark") && re.test(n.nodeValue)
-          ? NodeFilter.FILTER_ACCEPT
-          : NodeFilter.FILTER_REJECT,
+      acceptNode: (n) => {
+        if (!n.nodeValue.trim() || n.parentElement.closest("pre, code, .code-block, script, style, mark")) {
+          return NodeFilter.FILTER_REJECT;
+        }
+        // A global regex keeps lastIndex between .test() calls, which silently
+        // skips matches — reset it before every probe.
+        re.lastIndex = 0;
+        return re.test(n.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      },
     });
     const nodes = [];
     let node;
@@ -500,26 +525,38 @@ const initLightbox = () => {
 };
 
 // Render ```mermaid code blocks as diagrams (loaded from CDN on demand).
+// Sources are kept so diagrams re-render in the matching theme on toggle.
 const initMermaid = () => {
   const blocks = [...document.querySelectorAll('.article-content pre[data-lang="mermaid"]')];
   if (!blocks.length) return;
-  const nodes = blocks.map((pre) => {
+  const diagrams = blocks.map((pre) => {
     const div = document.createElement("div");
     div.className = "mermaid";
     div.textContent = (pre.querySelector("code") || pre).textContent;
     pre.replaceWith(div);
-    return div;
+    return { el: div, src: div.textContent };
   });
   const render = () => {
     if (!window.mermaid) return;
     const theme = document.documentElement.dataset.theme === "dark" ? "dark" : "default";
     try {
       window.mermaid.initialize({ startOnLoad: false, theme, securityLevel: "strict" });
-      window.mermaid.run({ nodes });
+      window.mermaid.run({ nodes: diagrams.map((d) => d.el) });
     } catch {
       /* leave source as-is on error */
     }
   };
+  window.addEventListener("themechange", () => {
+    // mermaid.run consumes the source, so rebuild each node from the kept source.
+    diagrams.forEach((d) => {
+      const fresh = document.createElement("div");
+      fresh.className = "mermaid";
+      fresh.textContent = d.src;
+      d.el.replaceWith(fresh);
+      d.el = fresh;
+    });
+    render();
+  });
   if (window.mermaid) return render();
   const s = document.createElement("script");
   s.type = "module";
@@ -572,13 +609,13 @@ const setMeta = (post) => {
   upsert('link[rel="canonical"]', () => { const l = document.createElement("link"); l.rel = "canonical"; return l; }, "href", url);
 };
 
-// First image in the post body, as an absolute URL (used for the KakaoTalk share thumbnail).
+// First image in the post, as an absolute URL (used for the KakaoTalk share thumbnail).
+// On prerendered pages the index post has no html — read the first article <img> instead.
 const firstImage = (post) => {
   const m = (post.html || "").match(/<img[^>]+src=["']([^"']+)["']/i);
-  if (!m) return `${location.origin}/assets/og/default.png`;
-  const src = m[1];
+  const src = m?.[1] || $(".article-content img")?.getAttribute("src");
+  if (!src) return `${location.origin}/assets/og/default.png`;
   const abs = /^https?:/i.test(src) ? src : src.startsWith("/") ? location.origin + src : `${location.origin}/${src.replace(/^\.?\//, "")}`;
-  // Image paths in the JSON are NFD but the files are NFC → normalize so the URL resolves.
   return encodeURI(abs.normalize("NFC"));
 };
 
@@ -617,7 +654,12 @@ const initCite = (post) => {
   const title = (post.title || "Woojae Joo").replace(/\s+/g, " ").trim();
   const year = new Date(post.created || post.updated || Date.now()).getFullYear();
   const today = new Date().toISOString().slice(0, 10);
-  const key = ((post.slug || "post").normalize("NFC").replace(/[^a-zA-Z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "post").toLowerCase();
+  // BibTeX key: the latin/digit part of the slug; Korean-only slugs fall back to the
+  // page id so different posts never share the same citation key.
+  const key = (
+    (post.slug || "").normalize("NFC").replace(/[^a-zA-Z0-9]+/g, "-").replace(/^-+|-+$/g, "") ||
+    (post.id || "post").replace(/-/g, "").slice(0, 8)
+  ).toLowerCase();
   const bibtex = `@online{joo${year}_${key},
   author  = {Joo, Woojae},
   title   = {${title}},
@@ -852,9 +894,9 @@ const renderPost = (post) => {
       <nav class="breadcrumb" aria-label="breadcrumb">
         <a href="/">홈</a>
         <span class="bc-sep" aria-hidden="true">›</span>
-        <a href="/topics/${topicSlug(post.category || "Notes")}/">${post.category || "Notes"}</a>
+        <a href="/topics/${topicSlug(post.category || "Notes")}/">${escapeHtml(post.category || "Notes")}</a>
       </nav>
-      <h1>${post.title}</h1>
+      <h1>${escapeHtml(post.title)}</h1>
       <div class="article-meta">
         ${(post.tags || [])
           .map((tag) => `<a class="meta-tag" href="/index.html?tag=${encodeURIComponent(tag)}">#${escapeHtml(tag)}</a>`)
@@ -936,41 +978,41 @@ const renderMissing = () => {
     <p class="article-summary">주소가 바뀌었거나 아직 노션에서 동기화되지 않은 글입니다.</p>`;
 };
 
-const applyThemeIcon = () => {
-  const icon = $("[data-theme-icon]");
-  if (icon) icon.textContent = document.documentElement.dataset.theme === "dark" ? "☀" : "◐";
-};
+// Giscus follows the theme toggle (assets/js/theme.js dispatches "themechange").
+window.addEventListener("themechange", (e) => setGiscusTheme(e.detail?.theme));
 
-const initTheme = () => {
-  const saved = localStorage.getItem("theme");
-  document.documentElement.dataset.theme = saved || "light";
-  document.documentElement.dataset.reading = localStorage.getItem("reading") || "md";
-  applyThemeIcon();
-  $("[data-theme-toggle]").addEventListener("click", () => {
-    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = next;
-    localStorage.setItem("theme", next);
-    applyThemeIcon();
-    setGiscusTheme(next);
-  });
-};
-
-const initHeaderScroll = () => {
-  const header = $("[data-header]");
-  const onScroll = () => header.toggleAttribute("data-scrolled", window.scrollY > 8);
-  onScroll();
-  window.addEventListener("scroll", onScroll, { passive: true });
+// Hydration that works from the prerendered DOM alone — used when the post index
+// can't be fetched (offline, JSON temporarily missing). The already-rendered
+// article stays intact; only data-dependent extras (related posts, series,
+// author box, share metadata) are skipped.
+const hydratePrerendered = (slug) => {
+  buildToc();
+  initReadingSize();
+  addHeadingAnchors();
+  initMermaid();
+  highlightCode();
+  decorateCodeBlocks();
+  initLightbox();
+  initFootnotes();
+  initArticleSearch();
+  numberFigures();
+  typesetMath();
+  loadGiscus(slug);
+  initJumpToComments();
+  initReadProgress();
+  initBackToTop();
 };
 
 const init = async () => {
-  initTheme();
-  initHeaderScroll();
   // Slug from the static per-post page's <meta name="post-slug"> (pretty /posts/<slug>/ URLs),
   // falling back to ?slug= (the post.html SPA). Normalize to NFC so Korean slugs always match.
   const metaSlug = document.querySelector('meta[name="post-slug"]')?.content;
   const slug = (metaSlug || new URLSearchParams(location.search).get("slug") || "").normalize("NFC");
+  const prerendered = $("[data-article]")?.hasAttribute("data-prerendered");
   try {
-    const response = await fetch(DATA_URL, { cache: "no-store" });
+    // Prerendered pages only need the lightweight index; the SPA fallback needs
+    // the full JSON because it builds the article body client-side.
+    const response = await fetch(prerendered ? INDEX_URL : FULL_DATA_URL);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
     window.__POSTS__ = data.posts || []; // shared with the ⌘K palette
@@ -986,16 +1028,26 @@ const init = async () => {
       renderAuthorBox(data.about, data.profile);
       renderSeries(post, data.posts);
       renderPostNav(post, data.posts);
-      loadGiscus(post.slug);
+      loadGiscus((post.slug || "").normalize("NFC"));
       initJumpToComments();
       initReadProgress();
       initBackToTop();
+    } else if (prerendered) {
+      // The page exists statically but the (possibly newer) index doesn't list the
+      // slug — keep the prerendered content instead of replacing it with "not found".
+      console.warn("Slug missing from index — keeping prerendered content");
+      hydratePrerendered(slug);
     } else {
       renderMissing();
     }
   } catch (error) {
-    console.warn("Failed to load post", error);
-    renderMissing();
+    if (prerendered) {
+      console.warn("Failed to load post index — hydrating prerendered content only", error);
+      hydratePrerendered(slug);
+    } else {
+      console.warn("Failed to load post", error);
+      renderMissing();
+    }
   }
 };
 

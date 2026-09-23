@@ -1,18 +1,7 @@
-const DATA_URL = "/data/notion-posts.json";
+// Archive page: all posts grouped by year. Uses the lightweight post index.
+// Theme toggle / header scroll live in assets/js/theme.js.
+const DATA_URL = "/data/posts-index.json";
 const $ = (s) => document.querySelector(s);
-
-// Theme toggle (theme itself is applied inline in <head> to avoid a flash).
-const applyThemeIcon = () => {
-  const i = $("[data-theme-icon]");
-  if (i) i.textContent = document.documentElement.dataset.theme === "dark" ? "☀" : "◐";
-};
-applyThemeIcon();
-$("[data-theme-toggle]")?.addEventListener("click", () => {
-  const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-  document.documentElement.dataset.theme = next;
-  localStorage.setItem("theme", next);
-  applyThemeIcon();
-});
 
 const esc = (s = "") =>
   String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -22,10 +11,14 @@ const md = (v) => new Intl.DateTimeFormat("ko-KR", { month: "long", day: "numeri
 (async () => {
   let posts = [];
   try {
-    const r = await fetch(DATA_URL, { cache: "no-store" });
+    const r = await fetch(DATA_URL);
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
     posts = (await r.json()).posts || [];
   } catch (e) {
     console.warn("Failed to load posts", e);
+    const el = $("[data-archive]");
+    if (el) el.innerHTML = '<p class="empty-state">글 목록을 불러오지 못했습니다. 잠시 후 새로고침해 주세요.</p>';
+    return;
   }
   window.__POSTS__ = posts; // shared with the ⌘K palette
   posts.sort((a, b) => new Date(b.created || b.updated) - new Date(a.created || a.updated));

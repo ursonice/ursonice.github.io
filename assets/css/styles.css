@@ -25,7 +25,6 @@
   color-scheme: light;
 
   --bg: #fbfaf7;
-  --bg-tint: #f3f1ec;
   --surface: #ffffff;
   --surface-2: #f6f4ef;
   --ink: #15171c;
@@ -46,13 +45,11 @@
   --glass-strong: color-mix(in srgb, var(--surface) 78%, transparent);
   --glass-edge: rgba(237, 241, 248, 0.85);
   --header-edge: rgba(240, 244, 250, 0.92);
-  --glass-shade: rgba(21, 23, 28, 0.06);
   --blur: blur(22px) saturate(180%);
 
   --r-sm: 10px;
   --r-md: 14px;
   --r-lg: 20px;
-  --r-xl: 28px;
 
   --shadow-sm: 0 1px 2px rgba(21, 23, 28, 0.04), 0 2px 8px rgba(21, 23, 28, 0.04);
   --shadow-md: 0 8px 30px rgba(21, 23, 28, 0.08);
@@ -70,7 +67,6 @@
   color-scheme: dark;
 
   --bg: #0a0b0e;
-  --bg-tint: #0f1115;
   --surface: #131519;
   --surface-2: #1a1d23;
   --ink: #f4f4f6;
@@ -90,7 +86,6 @@
   --glass-strong: color-mix(in srgb, var(--surface) 72%, transparent);
   --glass-edge: rgba(255, 255, 255, 0.1);
   --header-edge: rgba(255, 255, 255, 0.12);
-  --glass-shade: rgba(0, 0, 0, 0.4);
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 10px 34px rgba(0, 0, 0, 0.45);
@@ -277,14 +272,14 @@ p {
 
 /* Light theme reads glass via crisp highlights + a soft float, not refraction —
    so give the light capsule brighter specular edges and a cooler drop shadow. */
-[data-theme="light"] .site-header::before {
+:root:not([data-theme="dark"]) .site-header::before {
   box-shadow:
     0 12px 34px rgba(24, 36, 60, 0.1),
     inset 0 1px 1px rgba(255, 255, 255, 0.95),
     inset 0 -7px 16px rgba(255, 255, 255, 0.4);
 }
 
-[data-theme="light"] .site-header[data-scrolled]::before {
+:root:not([data-theme="dark"]) .site-header[data-scrolled]::before {
   box-shadow:
     0 18px 46px rgba(24, 36, 60, 0.14),
     inset 0 1px 1px rgba(255, 255, 255, 1),
@@ -1345,33 +1340,14 @@ p {
   opacity: 1;
 }
 
-.facts-card {
-  padding: 20px 24px;
-  border: 1px solid var(--glass-edge);
-  border-radius: var(--r-lg);
-  background: var(--glass);
-  -webkit-backdrop-filter: var(--blur);
-  backdrop-filter: var(--blur);
-  box-shadow: var(--shadow-sm), inset 0 1px 0 var(--glass-edge);
-}
-
-.facts-card h4 {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink);
-  margin-bottom: 14px;
-}
-
-.facts-card .chips {
+/* "Writing about" chips on the CV page (informational, not filters). */
+.chips {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-/* "Writing about" chips wear the accent blue (informational, not filters). */
-.facts-card .chips .badge {
+.chips .badge {
   color: var(--accent-ink);
 }
 
@@ -1773,6 +1749,12 @@ p {
   font-weight: 400;
 }
 
+:root[data-theme="dark"] .article-content :not(pre) > code {
+  background: var(--surface-2);
+  border-color: color-mix(in srgb, var(--code-ink) 45%, var(--surface-2));
+  color: #ff6b76;
+}
+
 .article-content pre {
   overflow-x: auto;
   padding: 20px;
@@ -1915,7 +1897,6 @@ p {
   color: var(--ink);
 }
 
-.article-content tbody tr:nth-child(even) td,
 .article-content table tr:nth-child(even) td {
   background: color-mix(in srgb, var(--surface-2) 55%, transparent);
 }
@@ -2293,13 +2274,13 @@ p {
 }
 
 /* Light mode: the copy button matches the light code card. */
-[data-theme="light"] .copy-btn {
+:root:not([data-theme="dark"]) .copy-btn {
   border-color: #d0d7de;
   background: #ffffff;
   color: #57606a;
 }
 
-[data-theme="light"] .copy-btn:hover {
+:root:not([data-theme="dark"]) .copy-btn:hover {
   color: #1f2328;
   border-color: #b8c0ca;
   background: #eef1f4;
@@ -3322,74 +3303,74 @@ mark.search-hit.current {
 }
 
 /* ===================== Light-mode syntax theme ===================== */
-[data-theme="light"] .code-block {
+:root:not([data-theme="dark"]) .code-block {
   background: #ffffff;
   border-color: #d8dee4;
 }
 
-[data-theme="light"] .code-head {
+:root:not([data-theme="dark"]) .code-head {
   background: #f3f5f8;
   border-bottom-color: #d8dee4;
 }
 
-[data-theme="light"] .code-lang {
+:root:not([data-theme="dark"]) .code-lang {
   color: #57606a;
 }
 
-[data-theme="light"] .code-gutter {
+:root:not([data-theme="dark"]) .code-gutter {
   background: #f6f8fa;
   color: #8c959f;
   border-right-color: #e6e9ee;
 }
 
-[data-theme="light"] .article-content .hljs {
+:root:not([data-theme="dark"]) .article-content .hljs {
   color: #1f2328;
 }
 
-[data-theme="light"] .hljs-comment,
-[data-theme="light"] .hljs-quote {
+:root:not([data-theme="dark"]) .hljs-comment,
+:root:not([data-theme="dark"]) .hljs-quote {
   color: #6e7781;
 }
 
-[data-theme="light"] .hljs-keyword,
-[data-theme="light"] .hljs-selector-tag,
-[data-theme="light"] .hljs-literal,
-[data-theme="light"] .hljs-doctag {
+:root:not([data-theme="dark"]) .hljs-keyword,
+:root:not([data-theme="dark"]) .hljs-selector-tag,
+:root:not([data-theme="dark"]) .hljs-literal,
+:root:not([data-theme="dark"]) .hljs-doctag {
   color: #cf222e;
 }
 
-[data-theme="light"] .hljs-string,
-[data-theme="light"] .hljs-regexp,
-[data-theme="light"] .hljs-meta .hljs-string {
+:root:not([data-theme="dark"]) .hljs-string,
+:root:not([data-theme="dark"]) .hljs-regexp,
+:root:not([data-theme="dark"]) .hljs-meta .hljs-string {
   color: #0a3069;
 }
 
-[data-theme="light"] .hljs-number,
-[data-theme="light"] .hljs-built_in,
-[data-theme="light"] .hljs-attr,
-[data-theme="light"] .hljs-variable,
-[data-theme="light"] .hljs-template-variable,
-[data-theme="light"] .hljs-symbol,
-[data-theme="light"] .hljs-bullet,
-[data-theme="light"] .hljs-link {
+:root:not([data-theme="dark"]) .hljs-number,
+:root:not([data-theme="dark"]) .hljs-built_in,
+:root:not([data-theme="dark"]) .hljs-attr,
+:root:not([data-theme="dark"]) .hljs-variable,
+:root:not([data-theme="dark"]) .hljs-template-variable,
+:root:not([data-theme="dark"]) .hljs-symbol,
+:root:not([data-theme="dark"]) .hljs-bullet,
+:root:not([data-theme="dark"]) .hljs-link {
   color: #0550ae;
 }
 
-[data-theme="light"] .hljs-title,
-[data-theme="light"] .hljs-section,
-[data-theme="light"] .hljs-name,
-[data-theme="light"] .hljs-title.function_,
-[data-theme="light"] .hljs-title.class_ {
+:root:not([data-theme="dark"]) .hljs-title,
+:root:not([data-theme="dark"]) .hljs-section,
+:root:not([data-theme="dark"]) .hljs-name,
+:root:not([data-theme="dark"]) .hljs-title.function_,
+:root:not([data-theme="dark"]) .hljs-title.class_ {
   color: #8250df;
 }
 
-[data-theme="light"] .hljs-type,
-[data-theme="light"] .hljs-tag {
+:root:not([data-theme="dark"]) .hljs-type,
+:root:not([data-theme="dark"]) .hljs-tag {
   color: #116329;
 }
 
-[data-theme="light"] .hljs-attribute,
-[data-theme="light"] .hljs-meta {
+:root:not([data-theme="dark"]) .hljs-attribute,
+:root:not([data-theme="dark"]) .hljs-meta {
   color: #953800;
 }
 

@@ -3,7 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0a0b0e" />
+    <meta name="theme-color" content="#fbfaf7" />
+    <!-- Apply saved theme before paint (light default site-wide) -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("theme") || "light";
+          document.documentElement.dataset.theme = t;
+          var m = document.querySelector('meta[name="theme-color"]');
+          if (m) m.setAttribute("content", t === "dark" ? "#0a0b0e" : "#fbfaf7");
+        } catch (e) {}
+      })();
+    </script>
 
     <!-- Google Analytics (GA4) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
@@ -23,14 +34,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/assets/css/styles.css?v=29" />
-    <script>
-      (() => {
-        const saved = localStorage.getItem("theme");
-        const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-        document.documentElement.dataset.theme = saved || (prefersDark ? "dark" : "light");
-      })();
-    </script>
+    <link rel="stylesheet" href="/assets/css/styles.css?v=40" />
   </head>
   <body>
     <main class="shell" style="min-height: 80vh; display: grid; place-items: center; text-align: center; padding: 80px 0;">
