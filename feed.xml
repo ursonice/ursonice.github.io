@@ -6,7 +6,15 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Thu, 10 Sep 2026 06:49:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 25 Sep 2026 02:27:00 GMT</lastBuildDate>
+    <item>
+      <title>Output Data Normalization</title>
+      <link>https://ursonice.github.io/posts/output-data-normalization/</link>
+      <guid isPermaLink="false">3d1b12c0-115c-80f2-a47c-ef1362edbbef</guid>
+      <pubDate>Fri, 04 Sep 2026 09:31:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 로봇의 여러 물리량을 하나의 신경망에서 예측하려고 한다. 정답 데이터가 모두 존재하며, 각 출력에 대해 MSE loss를 사용한다. 데이터는 크게 세 종류이다. 관절 action: 총 12차원이며 각 관절은 서로 다른 평균과 분산을 가진다. 정책은 각 상태에서 Gaussian distribution</description>
+    </item>
     <item>
       <title>[ML] Jacobian 1</title>
       <link>https://ursonice.github.io/posts/ml-jacobian-1/</link>
@@ -54,14 +62,6 @@
       <pubDate>Tue, 08 Sep 2026 12:28:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
       <description>서론 신경망에 입력되는 observation에는 Joint Position, Joint Velocity, Linear Velocity, Angular Velocity, Projected Gravity, Previous Action 등 서로 다른 종류의 데이터가 존재한다. 예를 들어 어떤 observati</description>
-    </item>
-    <item>
-      <title>Output Data Normalization</title>
-      <link>https://ursonice.github.io/posts/output-data-normalization/</link>
-      <guid isPermaLink="false">3d1b12c0-115c-80f2-a47c-ef1362edbbef</guid>
-      <pubDate>Fri, 04 Sep 2026 09:31:00 GMT</pubDate>
-      <category>AI/ Deep Learning</category>
-      <description>서론 로봇의 여러 물리량을 하나의 신경망에서 예측하려고 한다. 정답 데이터가 모두 존재하며, 각 출력에 대해 MSE loss를 사용한다. 데이터는 크게 세 종류이다. 관절 action: 총 12차원이며 각 관절은 서로 다른 평균과 분산을 가진다. 정책은 각 상태에서 Gaussian distribution</description>
     </item>
     <item>
       <title>Normalization / Regularization</title>
