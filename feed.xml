@@ -6,10 +6,10 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Sat, 26 Sep 2026 06:27:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 27 Sep 2026 03:34:00 GMT</lastBuildDate>
     <item>
-      <title>생성 모델 2장</title>
-      <link>https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-2%EC%9E%A5/</link>
+      <title>생성 모델 2장 (작성중)</title>
+      <link>https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-2%EC%9E%A5-%EC%9E%91%EC%84%B1%EC%A4%91/</link>
       <guid isPermaLink="false">3e7b12c0-115c-8079-aa3f-c0f00f2830c5</guid>
       <pubDate>Sat, 26 Sep 2026 03:25:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
