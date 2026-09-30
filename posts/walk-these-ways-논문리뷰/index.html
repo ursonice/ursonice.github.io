@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fbfaf7" />
+    <script>(function(){try{var t=localStorage.getItem("theme")||"light";document.documentElement.dataset.theme=t;var r=localStorage.getItem("reading");if(r)document.documentElement.dataset.reading=r;var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",t==="dark"?"#0a0b0e":"#fbfaf7");}catch(e){}})();</script>
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>Walk These Ways 논문리뷰 — Woojae Joo</title>
+    <meta name="post-slug" content="walk-these-ways-논문리뷰" />
+    <meta name="description" content="서론 강화학습을 통해 go1 보행정책을 학습했다. 그런데 제대로 보행하지 못해 기존 선행연구를 찾아보았고 해당 논문을 읽어보게 되어 기록하게 되었다. 핵심 본 논문의 핵심아다. 기존에는 로봇개보고 5m/s로 앞으로가라 라고 학습을 시켰다. 이런 경우 로봇개가 앞으로 그냥 발을 질질 끌고가든 때고가든 상관" />
+    <link rel="canonical" href="https://ursonice.github.io/posts/walk-these-ways-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="Walk These Ways 논문리뷰" />
+    <meta property="og:description" content="서론 강화학습을 통해 go1 보행정책을 학습했다. 그런데 제대로 보행하지 못해 기존 선행연구를 찾아보았고 해당 논문을 읽어보게 되어 기록하게 되었다. 핵심 본 논문의 핵심아다. 기존에는 로봇개보고 5m/s로 앞으로가라 라고 학습을 시켰다. 이런 경우 로봇개가 앞으로 그냥 발을 질질 끌고가든 때고가든 상관" />
+    <meta property="og:url" content="https://ursonice.github.io/posts/walk-these-ways-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Walk%20These%20Ways%20%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0&amp;cat=AI%2F%20Deep%20Learning" />
+    <meta property="article:published_time" content="2026-09-04T01:27:00.000Z" />
+    <meta property="article:modified_time" content="2026-09-30T01:59:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Walk These Ways 논문리뷰" />
+    <meta name="twitter:description" content="서론 강화학습을 통해 go1 보행정책을 학습했다. 그런데 제대로 보행하지 못해 기존 선행연구를 찾아보았고 해당 논문을 읽어보게 되어 기록하게 되었다. 핵심 본 논문의 핵심아다. 기존에는 로봇개보고 5m/s로 앞으로가라 라고 학습을 시켰다. 이런 경우 로봇개가 앞으로 그냥 발을 질질 끌고가든 때고가든 상관" />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Walk%20These%20Ways%20%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0&amp;cat=AI%2F%20Deep%20Learning" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Walk These Ways 논문리뷰","description":"서론 강화학습을 통해 go1 보행정책을 학습했다. 그런데 제대로 보행하지 못해 기존 선행연구를 찾아보았고 해당 논문을 읽어보게 되어 기록하게 되었다. 핵심 본 논문의 핵심아다. 기존에는 로봇개보고 5m/s로 앞으로가라 라고 학습을 시켰다. 이런 경우 로봇개가 앞으로 그냥 발을 질질 끌고가든 때고가든 상관","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=Walk%20These%20Ways%20%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0&cat=AI%2F%20Deep%20Learning","datePublished":"2026-09-04T01:27:00.000Z","dateModified":"2026-09-30T01:59:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/walk-these-ways-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Deep Learning","item":"https://ursonice.github.io/topics/ai-deep-learning/"},{"@type":"ListItem","position":3,"name":"Walk These Ways 논문리뷰","item":"https://ursonice.github.io/posts/walk-these-ways-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=40" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">본문으로 이동</a>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell" id="content">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/ai-deep-learning/">AI/ Deep Learning</a>
+    </nav>
+    <h1>Walk These Ways 논문리뷰</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2026년 9월 4일</span><span class="dot"></span><span>수정 2026년 9월 30일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-3e8b12c0115c8051a485f29d33bc992b">서론</h2>
+<p>강화학습을 통해 go1 보행정책을 학습했다.</p>
+<figure><img src="/assets/notion/walk-these-ways-논문리뷰/3ebb12c0-115c-8052-8881-e1cb7ac9e3f6.gif" alt="" loading="lazy" width="140" height="250" /></figure>
+<p>그런데 제대로 보행하지 못해 기존 선행연구를 찾아보았고 해당 논문을 읽어보게 되어 기록하게 되었다.</p>
+<h2 id="block-3e8b12c0115c805cafbcca4b4461159b">핵심</h2>
+<p>본 논문의 핵심아다.</p>
+<p>기존에는 로봇개보고 5m/s로 앞으로가라 라고 학습을 시켰다. 이런 경우 로봇개가 앞으로 그냥 발을 질질 끌고가든 때고가든 상관이없으니 우리가 원하는 보행정책이 나오지 않을 수 있다.</p>
+<p>따라서 발을 10cm정도 들고 걸어라 라는 추가 보상함수를 추가할 수 있다.</p>
+<p>그래서 발을 떄면서 걷는 보행정책을 잘 학습시켰다고해보자.</p>
+<p>그런데 이후 계단을 만났더니 발을 10cm를 드는것정도로는 계단을 오를 수 없다. 그래서 이번에는 다시 발을 20cm정도 들고 걸어라 라는 정책을 다시 시뮬레이션상에서 학습시킨다.</p>
+<p>이렇게 매번 상황에 따라 보행정책을 학습시키는 것은 비용이 많이든다.</p>
+<p>따라서 기준값 10cm, 20cm값들을 리워드항에 넣는 것이아닌 policy의 항에 observation과 함께 주는 것을 제안한다.</p>
+<p>따라서 학습할때 입력으로 “발을 x만큼 들어라” 라고 x를 다양하게 입력으로 주고 그걸 실제 보상항에 </p>
+<p><code>|p_foot -p_target|</code> 이렇게줘서 이 x일 때 이렇게해야 보상을 많이받는다는 식으로 학습을 했다면 실제 리얼환경에서도 해당 입력위치에 값을 우리가 동적으로 적용함으로써 다양한 보행정책을 쓸 수 있는 것이다.</p>
+<h2 id="block-3e8b12c0115c80db9597e553cefbc1ca">Method</h2>
+<p>Behavior vector: \(b_t=[\theta_1^{cmd},\theta_2^{cmd},\theta_3^{cmd},f^{cmd},h_z^{cmd},\phi^{cmd},s_y^{cmd},h_{fz}^{cmd}]\)</p>
+<p>\(\theta^{cmd}=(\theta_1^{cmd},\theta_2^{cmd},\theta_3^{cmd})\) : 네 발이 서로 몇 박자 차이로 움직일지</p>
+<p>\(f^{cmd}\): 얼마나 빠른 박자로 발을 움직일지</p>
+<ul><li>3\(Hz\)이면 각 발이 1초에 3번씩 땅을 디디는 빠르기로 움직이도록</li></ul>
+<p>\(h_z^{cmd}\): 몸체 높이 명령(몸을 얼마나 높일지 낮출지)</p>
+<p>\(\phi^{cmd}\): 몸체 pitch 각도 명령이다.(몸을 앞이나 뒤로 얼마나 기울일지)</p>
+<p>\(s_y^{cmd}\): 는 발 사이의 stance width 명령(좌우 다리를 얼마나 넓게 벌리고 걸을지)</p>
+<p>\(h_{fz}^{cmd}\): 는 swing 중 발의 높이 명령이다.(발을 공중에서 높이 들지)</p>
+<h3 id="block-3e8b12c0115c806ebbbed13e2d6a242f">reward</h3>
+<p>전체 reward는 task reward와 auxiliary reward를 단순히 더하지 않고, \(r = r_{\text{task}} \exp(c_{\text{aux}} r_{\text{aux}})\)</p>
+<p>형태로 구성한다.</p>
+<p>이렇게 하면 auxiliary penalty가 크더라도 task를 수행해서 얻은 보상이 완전히 사라지지 않는다.</p>
+<p>예를 들어 \(r_{\text{task}}=10\), \(r_{\text{aux}}=-5\), \(c_{\text{aux}}=0.02\) 라면 전체 reward는 약 (9.05)가 된다. </p>
+<p>즉, task를 수행했다는 기본 점수 10점은 유지하되 auxiliary 조건을 만족하지 못한 만큼 점수가 감소하는 구조이다. 따라서 로봇이 auxiliary penalty를 피하기 위해 아예 task 수행을 포기하는 문제를 완화할 수 있다.</p>
+<p>MoB에서는 이러한 auxiliary reward 중 일부를 behavior parameter (\(b_t\))에 따라 달라지도록 설계한다.</p>
+<p>특정 보행 스타일을 하나의 고정된 형태로 강제하는 것이 아니라, 사용자가 입력한 behavior parameter에 맞는 움직임이 나타날수록 높은 reward를 주는 방식이다.</p>
+<p>그러나 behavior parameter를 단순하게 reward에 넣으면 원래 task와 충돌할 수 있다.</p>
+<p>대표적인 예가 stance width \(s_y^{cmd}\)이다. </p>
+<p>가장 단순하게 생각하면 왼발과 오른발 사이의 거리가 항상 사용자가 지정한 값이 되도록 reward를 줄 수 있다.</p>
+<p>예를 들어 \(s_y^{cmd}=0.3m\)라면 로봇이 항상 발 사이 간격을 30 cm로 유지하도록 학습시키는 방식이다.</p>
+<p>문제는 로봇이 회전하거나 빠르게 방향을 바꿀 때 발생한다. 빠른 회전을 수행하려면 각 발이 상대적으로 좌우 방향으로 움직여야 하므로, 순간적으로 발 사이의 거리가 30 cm에서 벗어나는 것이 오히려 자연스럽고 필요한 동작일 수 있다. 그런데 stance width를 항상 30 cm로 고정하도록 reward를 설계하면, 이러한 정상적인 회전 동작까지 penalty를 받게 된다.</p>
+<p>결국 behavior reward가 원래의 velocity tracking task를 방해하게 되는 것이다.</p>
+<p>이를 해결하기 위해 저자들은 stance width를 절대적인 발 간격으로 직접 강제하지 않고 <strong>Raibert Heuristic</strong>을 사용한다. </p>
+<p>사용자가 입력한 (\(s_y^{cmd}\))를 기본 stance width로 사용하되, 현재 로봇의 목표 속도와 gait의 contact timing을 고려하여 실제로 각 발이 놓여야 할 목표 위치를 계산한다.</p>
+<p>\(s_y^{cmd}\)를 곧바로 “항상 유지해야 하는 발 간격”으로 사용하는 것이 아니라, </p>
+<p>\(s_y^{cmd}
+\rightarrow
+\text{baseline stance width}
+\rightarrow
+\text{velocity 및 gait timing에 따른 보정}
+\rightarrow
+p_{foot,x,y}^{cmd}\)</p>
+<p>의 과정을 거친다.</p>
+<p>따라서 로봇이 직진할 때는 사용자가 지정한 stance width에 가까운 형태를 유지하면서도, 회전이나 방향 전환이 필요한 상황에서는 발 위치를 자연스럽게 조절할 수 있다.</p>
+<p>핵심은 behavior parameter를 그대로 강제하는 것이 아니라, task 수행을 방해하지 않는 범위에서 원하는 보행 스타일이 나타나도록 reward의 목표값 자체를 상황에 맞게 조정하는 것이다.</p>
+<h3 id="block-3e8b12c0115c8033a385e7e6aab1e6fb">Learning Diversified Locomotion</h3>
+<p>한 episode 동안 계속 같은 걸음만 시키는 게 아니라, 학습 도중에 “trot → pace → 몸 낮추기 → 발 높이 올리기”처럼 명령을 바꿔줘서, policy가 보행 스타일을 부드럽게 전환하는 방법까지 배우게 한다.</p>
+<p>처음부터 아주 빠른 속도와 회전을 무작정 주는 것이 아니라, 현재 로봇이 잘 수행하는 정도에 맞춰 점점 더 어려운 속도 명령을 주는 curriculum 방식으로 \(c_t\)를 선택한다.</p>
+<p>\((\theta_1^{cmd},\theta_2^{cmd},\theta_3^{cmd})\)는 pronking, trotting, bounding, pacing 중 하나의 대칭적인 사족보행 접촉 패턴으로 샘플링한다. 이러한 gait(보행)들은 비교적 안정적인 것으로 알려져 있으며, 저자들은 다양한 유용한 gait를 표현하기 위한 충분한 기반이 된다고 판단하였다.</p>
+<p>그다음 나머지 command parameter \((v_y^{cmd},f^{cmd},h_z^{cmd},\phi^{cmd},h_{fz}^{cmd},s_y^{cmd})\)는 각각 서로 독립적으로 균등분포에서 샘플링한다.
+</p>
+<p>policy는 최근 30 step 동안 로봇이 어떻게 움직였고, 어떤 명령을 받았고, 어떤 action을 냈는지까지 함께 본다.</p>
+<p>\(
+\pi(
+\underbrace{o_{t-29:t}}_{\text{로봇 상태}},
+\underbrace{c_{t-29:t}}_{\text{이동 명령}},
+\underbrace{b_{t-29:t}}_{\text{보행 스타일}},
+\underbrace{a_{t-30:t-1}}_{\text{이전 action}},
+\underbrace{t_{t-29:t}}_{\text{gait phase}}
+)\)</p>
+<p>Observation \(o_t\)는 joint encoder로 측정한 관절 위치와 속도 \(q_t,\dot q_t\), 그리고 accelerometer로 측정한 body frame 기준 gravity vector \(g_t\)로 구성된다. (각 관절이 지금 어디에 있는지, 얼마나 빠르게 움직이는지, 그리고 몸이 어느 방향으로 기울어져 있는지)</p>
+<ul><li><strong>Policy frequency </strong>\(f^\pi\): policy가 1초에 몇 번 새 action을 내는지</li><li><strong>Gait frequency </strong>\(f^{cmd}\): 1초에 보행 주기를 몇 번 반복하는지</li><li><strong>Gait phase </strong>\(\phi\): 현재 한 보행 주기에서 어디쯤 와 있는지를 \(0\sim1\)로 나타낸 값</li><li>\(\Delta\phi\): policy가 한 번 실행될 때마다 gait phase가 얼마나 앞으로 가는</li></ul>
+<p>예를들어 정책 제어 주파수가 \(f^{\pi}=50Hz\) 라면 0.02초마다 한 번씩 액션을 출력하는 것이다.</p>
+<p>그리고 gait frequency가 \(f^{cmd} = 2Hz\) 라면 1초에 보행주기(gait cycle)를 2번 돈다. 따라서 한 gait cycle의 실제 시간은 \(0.5s\)가 된다.</p>
+<p>즉 로봇은 \(0.00s\rightarrow0.50s\) 동안 첫 번째 gait cycle을 끝내고, \(0.50s\rightarrow1.00s\) 동안 두 번째 gait cycle을 끝낸다.</p>
+<p>한 gait cycle을 \(\phi=0\rightarrow1\) 로 표현하고싶다.</p>
+<p>그런데 한 cycle을 끝내는 데 \(0.5s\)가 걸리고 policy는 \(0.02s\)마다 실행된다.</p>
+<p>그러면 한 cycle 동안 policy는 몇 번 실행될까?  \(\frac{0.5}{0.02}=25\) 번이다.</p>
+<p>\(\phi=0\rightarrow1\)을 25번에 나누어서 이동해야 한다. </p>
+<p>그래서 policy 한 번마다 이동하는 phase가 \(\Delta\phi
+=
+\frac1{25}
+=
+0.04\) 가 된다.</p>
+<p>\(
+[t_{FR},t_{FL},t_{RR},t_{RL}]
+=
+[
+t+\theta_2^{cmd}+\theta_3^{cmd},
+\;
+t+\theta_1^{cmd}+\theta_3^{cmd},
+\;
+t+\theta_1^{cmd},
+\;
+t+\theta_2^{cmd}
+]
+\) 로 둔다.</p>
+<p>\(t\)는 네 다리가 공통으로 따라가는 기본 시간이고 \(\theta_1,\theta_2,\theta_3\) 를 두어 각 다리들의 움직이는 타이밍을 서로 어긋나게 만들도록 한다.</p>
+<p>따라서 \(t_{FR},t_{FL},t_{RR},t_{RL}\) 은 각 다리가 실제로 보는 자기 phase가 되는 것이다.</p>
+<p>즉 \(\theta\)가 누가 누구보다 먼저/늦게 움직일 것인가를 정한다.</p>
+<p>Policy는 hidden layer 크기가 \([512,256,128]\) 이고 ELU activation을 사용하는 MLP이다.</p>
+<p>또한 센서로 직접 정확히 알기 어려운 실제 몸체 속도와 바닥 마찰계수를 최근 observation history로 추정해서 policy의 입력으로 넣는다.</p>
+<p>body velocity와 ground friction을 추정하는 별도의 작은 신경망인 Estimator module은 hidden layer 크기가 \([256,128]\)이고 ELU activation을 사용하는 MLP이다.</p>
+<p>이러한 estimation이 보행 정책에 어떤 영향을 미치는지는 별도로 분석하지 않았지만 배포에서 실제 로봇이 현재 어떤 속도나 마찰 상태라고 판단하는지 확인하는데 유용했다.</p>
+<p>policy가 직접 torque를 출력하는 것이 아니라, Go1의 12개 관절이 다음 순간 어느 각도로 가야 하는지 목표 관절각을 출력한다.</p>
+<p>예를들어 policy가 어떤 관절에 \(a_i=0\)을 출력했다고 해서 관절각을 \(0\,rad\) 으로 만들라는 뜻이 아니라, 미리 정해둔 기본 자세 \(\hat q\)에서 변화시키지 말라는 의미이다.</p>
+<p>보통 \(q_t^{des}  = \hat q + \text{scale}\cdot a_t\) 이렇게되서 \(a_t=0\) 이면 \(q_t^{des}=\hat q
+\) 이다.</p>
+<p>policy는 “관절을 여기까지 움직여”라는 목표 각도만 출력하고, 실제 모터에 필요한 torque는 아래의 PD controller가 계산한다.</p>
+<p>\(\tau =
+k_p(q^{des}-q)
+
++
+
+k_d(\dot q^{des}-\dot q)\) 이고 이 논문에서는 \(k_p=20,\; k_d=0.5\) 로 설정한다. </p>
+<p>\(k_p\): 목표 위치까지 끌고 가는 힘으로 목표 위치를 강하게 추종한다. 만약 이 값이 작다면 목표로부터 천천히 도달하게 한다.</p>
+<p>\(k_d\): 너무 빠르게 움직이지 못하게 잡아주는 힘으로 현재 관절이 빠르게 움직이고 있다면 그 움직임의 반대 방향으로 토크를 준다. 이를 감쇠라고 한다.</p>
+<p>Domain Randomization은 시뮬레이션의 물리 환경을 항상 똑같이 두지 않고, 질량·마찰·모터 성능 등을 조금씩 바꿔가며 학습시키는 방법이다.</p>
+<p>실제 Go1은 시뮬레이션과 완전히 똑같지 않기 때문에, 학습할 때부터 질량, 모터 힘, 관절 오차, 마찰, 충돌 시 튀는 정도, 중력을 조금씩 바꿔가면서 학습한다.</p>
+<p>실제 로봇에서는 명령을 내렸다고 즉시 정확한 토크가 발생하지 않는다. 그래서 실제 모터 특성과 명령 전달 지연까지 시뮬레이션에 넣는다.</p>
+<p>그리고 변하지 않는 특성들을 직접 식별하면, 불필요한 domain randomization으로 인해 지나치게 보수적인 행동을 학습하는 것을 피할 수 있다.</p>
+<p>또한 PD error와 실제로 발생한 torque 사이의 비이상적인 관계를 모델링하기 위해 actuator network를 학습한다.</p>
+<p>먼저 PD error는 \(\tau_{\mathrm{PD}} = K_p(q^{des}-q)
++
+K_d(\dot q^{des}-\dot q)\)처럼 쓴다.</p>
+<p>여기서 각각은 \(e_p = q^{des}-q\) 이 position error, 즉 목표 관절각과 실제 관절각의 차이이고,</p>
+<p>\(e_d = \dot q^{des}-\dot q\) 가 velocity error, 즉 목표 관절속도와 실제 관절속도의 차이이다.</p>
+<p>이 둘을 PD error라고 부른다.</p>
+<p>그리고 그 오차에 gain을 곱해서 나온 \(\tau_{\mathrm{PD}} = K_p e_p + K_d e_d\) 값이 바로 PD 제어기의 토크이다.</p>
+<p>제 로봇에서는 이 관계가 저렇게 이상적이지 않다</p>
+<p>예를 들어 \(K_p=20,\; e_p=0.1\) 이고 속도 오차가 0이라면, \(\tau_{\mathrm{PD}}
+=20\times0.1
+=2\text{ Nm}\) 이니까 </p>
+<p>시뮬레이터는 “오차가 0.1 rad니까 모터가 2 Nm를 정확히 발생시키겠지.” 라고 가정할 수 있다.</p>
+<p>그런데 실제 모터에서는 꼭 2 Nm가 나오지 않다.</p>
+<p>예를 들어 실제로는 \(\tau_{\mathrm{actual}} = 1.63 \text{ Nm}\)가 나올 수도 있다.</p>
+<p>왜냐하면 실제 actuator에는 모터, 감속기, 마찰, 모터 드라이버, 전류 제한, 토크-속도 제한, 지연, 백래시 등의 효과가 있기 때문이다.</p>
+<p>따라서 actuator network는 실제 데이터를 보고 \(\tau_{\mathrm{actual}}
+f_\theta(
+
+e_p,e_d,\text{history},\ldots
+
+)
+
+\) 를 배우게하자.</p>
+<p>acutator 네트워크 입력은</p>
+<ul><li>과거/현재 관절 position error와 joint velocity를  넣는다.</li></ul>
+<p>정답은 joint torque로 하여 학습시킨다.</p>
+<p>별도로, 우리 시스템에서 약 20 ms의 지연 시간을 확인하였으며, 이를 simulation에서 일정한 action delay로 모델링한다.</p>
+<p>Policy가 \(t=0\)에서 action을 출력했다고 해서 실제 Go1이 바로 \(t=0\) 에 움직이는 게 아니다.</p>
+<p>실제 시스템에서는 약 \(20\,ms=0.02\,s\) 뒤에 그 명령의 효과가 나타났다.</p>
+<p>그래서 simulation에서도 Policy action을 바로 로봇에 넣는 것이 아니라, \(20\,ms\) 기다렸다가 적용 하도록 만든 것이다.</p>
+<p>정리하면 sim-to-real gap을 줄이기 위해 두 종류의 접근을 같이 사용한다.</p>
+<p><strong>첫째, 정확히 알기 어려운 것은 Domain Randomization으로 여러 상황을 경험하라</strong></p>
+<p><strong>둘째, 실제로 측정해서 알 수 있는 것은 굳이 randomization하지 않고 System Identification으로 직접 측정해서 simulation에 넣어라</strong></p>
+<h4 id="block-3e8b12c0115c80a4a218e98aaadbd315">Materials</h4>
+<p><strong>Simulator and Learning Algorithm.</strong></p>
+<p>Isaac Gym 시뮬레이터에서 학습 환경을 구성하였다.</p>
+<p>정책은 Proximal Policy Optimization(PPO)을 사용하여 학습하며, 자세한 내용은 Appendix A에 제시한다.</p>
+<p>우리는 학습한 제어기를 실제 환경의 Unitree Go1 Edu 로봇에 배포하였고, Jetson TX2 NX 에서 학습된 정책을 실행한다.</p>
+<p>우리의 코드와 Unitree에서 제공하는 저수준 제어 SDK 사이에서 센서 데이터, 모터 명령, 조이스틱 상태를 주고받기 위해 Lightweight Communications and Marshalling(LCM)기반 인터페이스를 구현하였다.</p>
+<p>학습과 실제 로봇 배포 모두에서 제어 주파수는 50 Hz이다.</p>
+<h2 id="block-3e8b12c0115c8017a328ec80cd8e24f1">Limitation</h2>
+<p>MoB를 넣으면 여러 보행을 다양하게 할 수 있다는 장점은 생기지만, 대신 평지에서 그냥 최대한 빨리 달리는 성능은 오히려 조금 떨어질 수 있다.</p>
+<p>또한 로봇이 앞으로 아주 빠르게 가면서 동시에 빠르게 회전해야하는 상황에서는 미리 정해둔 gait parameter 구조가 오히려 움직임의 자유도를 제한할 수 있다.</p>
+<p>쉽게말하면 이 속도와 회전을 만족시키려면 기존 gait 틀에서 벗어나야 하는데, MoB의 parameterization이 그걸 제한한다. </p>
+<p>따라서 우리의 테스크는 gait를 예쁘고 안정적으로 만들기 위한 보상을 많이 넣으면 task 성능이 떨어질 수 있고, 반대로 task 성능만 강조하면 원하는 gait가 안 나올 수 있어</p>
+<p>Task performance와 various gait에 대해 trade off relationship이 존재한다.</p>
+<p>또한 현재는 behavior parameter를 사람이 직접 조절한다. 하지만 앞으로는 로봇이 상황에 맞는 behavior를 스스로 선택하도록 만드는 것이 향우 연구 방향이다.</p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/theme.js?v=1" defer></script>
+    <script src="/assets/js/post.js?v=14" type="module"></script>
+    <script src="/assets/js/palette.js?v=9" defer></script>
+  </body>
+</html>

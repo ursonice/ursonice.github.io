@@ -6,7 +6,15 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 27 Sep 2026 03:34:00 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 30 Sep 2026 01:59:00 GMT</lastBuildDate>
+    <item>
+      <title>Walk These Ways 논문리뷰</title>
+      <link>https://ursonice.github.io/posts/walk-these-ways-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</link>
+      <guid isPermaLink="false">3d1b12c0-115c-80ff-a2fd-d638d6d944bc</guid>
+      <pubDate>Fri, 04 Sep 2026 01:27:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 강화학습을 통해 go1 보행정책을 학습했다. 그런데 제대로 보행하지 못해 기존 선행연구를 찾아보았고 해당 논문을 읽어보게 되어 기록하게 되었다. 핵심 본 논문의 핵심아다. 기존에는 로봇개보고 5m/s로 앞으로가라 라고 학습을 시켰다. 이런 경우 로봇개가 앞으로 그냥 발을 질질 끌고가든 때고가든 상관</description>
+    </item>
     <item>
       <title>생성 모델 2장 (작성중)</title>
       <link>https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-2%EC%9E%A5-%EC%9E%91%EC%84%B1%EC%A4%91/</link>
@@ -238,14 +246,6 @@
       <pubDate>Sun, 20 Nov 2022 02:33:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
       <description>서론 이 장은 AI에서 가장 기본적인 활성화 함수에 대해 소개한다 목차 Sigmoid 하이퍼볼릭 탄젠트(Hyperbolic Tangent Function - Tanh) 소프트맥스(SoftMax Function) 렐루(Relu -Rectified Linear Unit Function) Sigmoid 시그모</description>
-    </item>
-    <item>
-      <title>Knowledge Distillation</title>
-      <link>https://ursonice.github.io/posts/knowledge-distillation/</link>
-      <guid isPermaLink="false">381b12c0-115c-801b-abe2-c16494ef2dc2</guid>
-      <pubDate>Tue, 16 Jun 2026 01:53:00 GMT</pubDate>
-      <category>AI/ Deep Learning</category>
-      <description>서론 지식 증류관련 논문을 읽다보면 Teacher-Student를 같이 학습하는 경우가 있고, Teacher를 먼저 학습하고 Student를 학습하는 경우가 있다. 어떤 경우에는 같이 학습하는지 그리고 어떤 경우에는 선행 학습 후 전이가 이뤄지는지 고민하여 찾아본 결과에 대해 작성한다. 목차 방법 A: </description>
     </item>
   </channel>
 </rss>
