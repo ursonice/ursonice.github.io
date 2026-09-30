@@ -6,7 +6,15 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Wed, 30 Sep 2026 01:59:00 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 30 Sep 2026 06:47:00 GMT</lastBuildDate>
+    <item>
+      <title>PPO의 평균과 분산 해석</title>
+      <link>https://ursonice.github.io/posts/ppo%EC%9D%98-%ED%8F%89%EA%B7%A0%EA%B3%BC-%EB%B6%84%EC%82%B0-%ED%95%B4%EC%84%9D/</link>
+      <guid isPermaLink="false">3ebb12c0-115c-8002-919a-e25719d47869</guid>
+      <pubDate>Wed, 30 Sep 2026 06:42:00 GMT</pubDate>
+      <category>Reinforcement Learning</category>
+      <description>서론 학습도중 P1_v8(보라색) 그래프의 개형이 Reward는 상승하는데 Entropy가 감소하지 않는 것이 어떻게 발생하는지에 대해서 알아본다. 본론 L^{CLIP} = \mathbb E_t \left[ \min \left( r_tA_t,\; \operatorname{clip}(r_t,1-\epsil</description>
+    </item>
     <item>
       <title>Walk These Ways 논문리뷰</title>
       <link>https://ursonice.github.io/posts/walk-these-ways-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</link>
@@ -238,14 +246,6 @@
       <pubDate>Sun, 20 Nov 2022 04:44:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
       <description>서론 이 장은 Foward 신경망에 대한 Weight(가중치)를 update하는 방법(backpropagation)에 대해 다룬다. 목차 1. Analytical Differentiation(해석적 미분) 2. Numerical Differentiation(수치 미분) 3. Symbolic differe</description>
-    </item>
-    <item>
-      <title>Activation Function</title>
-      <link>https://ursonice.github.io/posts/activation-function/</link>
-      <guid isPermaLink="false">085ecacc-284d-4b68-8bef-872284e94440</guid>
-      <pubDate>Sun, 20 Nov 2022 02:33:00 GMT</pubDate>
-      <category>AI/ Deep Learning</category>
-      <description>서론 이 장은 AI에서 가장 기본적인 활성화 함수에 대해 소개한다 목차 Sigmoid 하이퍼볼릭 탄젠트(Hyperbolic Tangent Function - Tanh) 소프트맥스(SoftMax Function) 렐루(Relu -Rectified Linear Unit Function) Sigmoid 시그모</description>
     </item>
   </channel>
 </rss>
