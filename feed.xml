@@ -6,7 +6,15 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Wed, 30 Sep 2026 06:47:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 10 Oct 2026 08:08:00 GMT</lastBuildDate>
+    <item>
+      <title>Distillation Robustifies Unlearning 논문리뷰</title>
+      <link>https://ursonice.github.io/posts/distillation-robustifies-unlearning-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</link>
+      <guid isPermaLink="false">3f5b12c0-115c-80a8-b21c-f364a3cf07a1</guid>
+      <pubDate>Sat, 10 Oct 2026 04:30:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 기존 LLM의 Unlearning은 특정 지식을 잊은 것처럼 행동하도록 만들지만 내부의 잠재 능력은 여전히 남아 있어 조금의 Fine-tuning만으로도 해당 지식이 복구되는 문제가 있다. 본 논문에서는 이러한 문제를 해결하기 위해 Unlearning과 Knowledge Distillation을 결</description>
+    </item>
     <item>
       <title>PPO의 평균과 분산 해석</title>
       <link>https://ursonice.github.io/posts/ppo%EC%9D%98-%ED%8F%89%EA%B7%A0%EA%B3%BC-%EB%B6%84%EC%82%B0-%ED%95%B4%EC%84%9D/</link>
@@ -238,14 +246,6 @@
       <pubDate>Thu, 26 Jan 2023 23:17:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
       <description>서론 이 장은 Machine Learning 디자인 패턴에 대해 공부한 것을 설명한다. 더 많은 데이터를 수집할 수 없을 때 데이터 균형(분포)을 이해하면 이를 고려하여 모델을 설계하는데 도움이 된다. 서빙(serving) : 모델을 배포하여 예측값을 전송하는 시스템 서빙의 하위 항목들로는 온프레미스(o</description>
-    </item>
-    <item>
-      <title>Gradient</title>
-      <link>https://ursonice.github.io/posts/gradient/</link>
-      <guid isPermaLink="false">34a741d8-2bcf-4dcb-b056-d30e59af6b93</guid>
-      <pubDate>Sun, 20 Nov 2022 04:44:00 GMT</pubDate>
-      <category>AI/ Deep Learning</category>
-      <description>서론 이 장은 Foward 신경망에 대한 Weight(가중치)를 update하는 방법(backpropagation)에 대해 다룬다. 목차 1. Analytical Differentiation(해석적 미분) 2. Numerical Differentiation(수치 미분) 3. Symbolic differe</description>
     </item>
   </channel>
 </rss>
