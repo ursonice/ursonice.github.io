@@ -6,7 +6,16 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Sat, 10 Oct 2026 08:08:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 10 Oct 2026 13:01:00 GMT</lastBuildDate>
+    <item>
+      <title>Protecting Language Models Against Unauthorized Distillation through
+Trace Rewriting 논문리뷰</title>
+      <link>https://ursonice.github.io/posts/protecting-language-models-against-unauthorized-distillation-through-trace-rewri/</link>
+      <guid isPermaLink="false">3f5b12c0-115c-809c-bb68-f8a85a2b9f86</guid>
+      <pubDate>Sat, 10 Oct 2026 08:11:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 Knowledge Distillation은 LLM의 능력을 더 작고 효율적인 Student 모델로 전달하기 위해 널리 사용되는 기술이다. 그러나 공격자가 Teacher API의 응답을 대량 수집하여 Student를 학습시키면, 원본 모델 개발에 투입된 비용을 부담하지 않고도 그 능력을 모방할 수 있</description>
+    </item>
     <item>
       <title>Distillation Robustifies Unlearning 논문리뷰</title>
       <link>https://ursonice.github.io/posts/distillation-robustifies-unlearning-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</link>
@@ -238,14 +247,6 @@
       <pubDate>Sun, 11 Jun 2023 05:05:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
       <description>서론 이 장은 Manifold의 개념에 대해서 설명한다. 목차 Manifold Manifold Hypothesis 1. Data compression 2. Data visualization 3. Curse of dimensionality 개선 4. Discovering most important feat</description>
-    </item>
-    <item>
-      <title>Machine Learning Design Pattern</title>
-      <link>https://ursonice.github.io/posts/machine-learning-design-pattern/</link>
-      <guid isPermaLink="false">8066838b-23c6-4bbb-9c9f-63b21698aaeb</guid>
-      <pubDate>Thu, 26 Jan 2023 23:17:00 GMT</pubDate>
-      <category>AI/ Deep Learning</category>
-      <description>서론 이 장은 Machine Learning 디자인 패턴에 대해 공부한 것을 설명한다. 더 많은 데이터를 수집할 수 없을 때 데이터 균형(분포)을 이해하면 이를 고려하여 모델을 설계하는데 도움이 된다. 서빙(serving) : 모델을 배포하여 예측값을 전송하는 시스템 서빙의 하위 항목들로는 온프레미스(o</description>
     </item>
   </channel>
 </rss>
