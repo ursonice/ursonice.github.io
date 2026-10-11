@@ -6,7 +6,31 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Sat, 10 Oct 2026 23:59:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 11 Oct 2026 06:42:00 GMT</lastBuildDate>
+    <item>
+      <title>PFD 논문 분석</title>
+      <link>https://ursonice.github.io/posts/pfd-%EB%85%BC%EB%AC%B8-%EB%B6%84%EC%84%9D/</link>
+      <guid isPermaLink="false">3f6b12c0-115c-804e-865f-cb59d03b682b</guid>
+      <pubDate>Sun, 11 Oct 2026 06:39:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>9/28 Student가 관측하는 정보를 H Teacher와 Student의 출력차이 correction을 r Adapter를 g(\cdot) 하자. → Student가 가진 정보 H만으로 실제 correction r을 어디까지 예측할 수 있을까? 설정 Teacher: (\text{propriocepti</description>
+    </item>
+    <item>
+      <title>PFD 논문 연구 실험</title>
+      <link>https://ursonice.github.io/posts/pfd-%EB%85%BC%EB%AC%B8-%EC%97%B0%EA%B5%AC-%EC%8B%A4%ED%97%98/</link>
+      <guid isPermaLink="false">3f4b12c0-115c-80ac-af33-e6eee6fb0073</guid>
+      <pubDate>Fri, 09 Oct 2026 02:22:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>0. R의 문제 R=\frac{(m(h)-c)^2}{E[(r-c)^2\mid H=h]} 분모는 Student가 동일한 입력 h를 받았을 때 발생할 수 있는 모든 Teacher residual r에 대한 평균 오차. 예를 들어 Student가 입력 A를 받았다고 하자. Student는 Aa와 Ab를 구분하</description>
+    </item>
+    <item>
+      <title>PFD 논문리뷰</title>
+      <link>https://ursonice.github.io/posts/pfd-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</link>
+      <guid isPermaLink="false">3dcb12c0-115c-80bb-95ca-ca8e6079dbbc</guid>
+      <pubDate>Tue, 15 Sep 2026 04:33:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 PFD는 “미래 영상을 예측하도록 학습시키는 것이 실제 행동 성능에 왜 도움이 되는가?”라는 질문에서 출발한다. 학습할 때 World Action Model은 보통 두 가지를 같이 학습한다. 현재 장면을 보고 로봇 action 예측 현재 장면을 보고 미래 영상 예측 그런데 최근 연구에서 학습이 끝난</description>
+    </item>
     <item>
       <title>Protecting Language Models Against Unauthorized Distillation through
 Trace Rewriting 논문리뷰</title>
@@ -223,30 +247,6 @@ Trace Rewriting 논문리뷰</title>
       <pubDate>Tue, 27 Jun 2023 02:05:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
       <description>서론 이 장은 Taylor&apos;s series와 Maclaurin&apos;s series가 무엇인지 간단하게 알아보고 두 급수의 차이점을 알아본다. 그리고 ML에서 어떻게 적용되는지 알아보자. 목차 Taylor&apos;s series Maclaurin&apos;s series Taylor&apos;s series &amp; Maclaurin&apos;s </description>
-    </item>
-    <item>
-      <title>Likelihood(MLE)</title>
-      <link>https://ursonice.github.io/posts/likelihood-mle/</link>
-      <guid isPermaLink="false">38883001-3d8c-451a-a56f-f475f9d69d26</guid>
-      <pubDate>Wed, 14 Jun 2023 02:07:00 GMT</pubDate>
-      <category>AI/ Deep Learning</category>
-      <description>서론 이 장은 MLE에 대해서 설명한다. 확률의 의미와 기본 개념들에 대해서 같이 알아봐보자. 목차 Probability PDF(Probability Density Function) CDF(Cumulative Distribution Function) 모수 추정 Likelihood Maximum likel</description>
-    </item>
-    <item>
-      <title>NAS(Neural Network Search)</title>
-      <link>https://ursonice.github.io/posts/nas-neural-network-search/</link>
-      <guid isPermaLink="false">d8c14d53-56d5-4447-a6a8-d43d9aa4cbbf</guid>
-      <pubDate>Sun, 11 Jun 2023 06:33:00 GMT</pubDate>
-      <category>AI/ Deep Learning</category>
-      <description>서론 이 장은 NAS의 개념에 대해 설명한다. 목차 NAS Search Space Search Strategy Search Algorithm Performance Estimation Search Strategy &amp; Search Algorithm 차이점 Example NAS Neural Architectu</description>
-    </item>
-    <item>
-      <title>Manifold 개념</title>
-      <link>https://ursonice.github.io/posts/manifold-%EA%B0%9C%EB%85%90/</link>
-      <guid isPermaLink="false">7c984a89-c8d3-4b5d-aff7-f782c8101731</guid>
-      <pubDate>Sun, 11 Jun 2023 05:05:00 GMT</pubDate>
-      <category>AI/ Deep Learning</category>
-      <description>서론 이 장은 Manifold의 개념에 대해서 설명한다. 목차 Manifold Manifold Hypothesis 1. Data compression 2. Data visualization 3. Curse of dimensionality 개선 4. Discovering most important feat</description>
     </item>
   </channel>
 </rss>

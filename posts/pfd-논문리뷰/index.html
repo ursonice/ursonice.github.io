@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fbfaf7" />
+    <script>(function(){try{var t=localStorage.getItem("theme")||"light";document.documentElement.dataset.theme=t;var r=localStorage.getItem("reading");if(r)document.documentElement.dataset.reading=r;var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",t==="dark"?"#0a0b0e":"#fbfaf7");}catch(e){}})();</script>
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>PFD 논문리뷰 — Woojae Joo</title>
+    <meta name="post-slug" content="pfd-논문리뷰" />
+    <meta name="description" content="서론 PFD는 “미래 영상을 예측하도록 학습시키는 것이 실제 행동 성능에 왜 도움이 되는가?”라는 질문에서 출발한다. 학습할 때 World Action Model은 보통 두 가지를 같이 학습한다. 현재 장면을 보고 로봇 action 예측 현재 장면을 보고 미래 영상 예측 그런데 최근 연구에서 학습이 끝난" />
+    <link rel="canonical" href="https://ursonice.github.io/posts/pfd-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="PFD 논문리뷰" />
+    <meta property="og:description" content="서론 PFD는 “미래 영상을 예측하도록 학습시키는 것이 실제 행동 성능에 왜 도움이 되는가?”라는 질문에서 출발한다. 학습할 때 World Action Model은 보통 두 가지를 같이 학습한다. 현재 장면을 보고 로봇 action 예측 현재 장면을 보고 미래 영상 예측 그런데 최근 연구에서 학습이 끝난" />
+    <meta property="og:url" content="https://ursonice.github.io/posts/pfd-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=PFD%20%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0&amp;cat=AI%2F%20Deep%20Learning" />
+    <meta property="article:published_time" content="2026-09-15T04:33:00.000Z" />
+    <meta property="article:modified_time" content="2026-10-11T06:40:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="PFD 논문리뷰" />
+    <meta name="twitter:description" content="서론 PFD는 “미래 영상을 예측하도록 학습시키는 것이 실제 행동 성능에 왜 도움이 되는가?”라는 질문에서 출발한다. 학습할 때 World Action Model은 보통 두 가지를 같이 학습한다. 현재 장면을 보고 로봇 action 예측 현재 장면을 보고 미래 영상 예측 그런데 최근 연구에서 학습이 끝난" />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=PFD%20%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0&amp;cat=AI%2F%20Deep%20Learning" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"PFD 논문리뷰","description":"서론 PFD는 “미래 영상을 예측하도록 학습시키는 것이 실제 행동 성능에 왜 도움이 되는가?”라는 질문에서 출발한다. 학습할 때 World Action Model은 보통 두 가지를 같이 학습한다. 현재 장면을 보고 로봇 action 예측 현재 장면을 보고 미래 영상 예측 그런데 최근 연구에서 학습이 끝난","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=PFD%20%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0&cat=AI%2F%20Deep%20Learning","datePublished":"2026-09-15T04:33:00.000Z","dateModified":"2026-10-11T06:40:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/pfd-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Deep Learning","item":"https://ursonice.github.io/topics/ai-deep-learning/"},{"@type":"ListItem","position":3,"name":"PFD 논문리뷰","item":"https://ursonice.github.io/posts/pfd-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=40" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">본문으로 이동</a>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell" id="content">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/ai-deep-learning/">AI/ Deep Learning</a>
+    </nav>
+    <h1>PFD 논문리뷰</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2026년 9월 15일</span><span class="dot"></span><span>수정 2026년 10월 11일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-3dcb12c0115c806d9c51f699374af534">서론</h2>
+<p>PFD는 “미래 영상을 예측하도록 학습시키는 것이 실제 행동 성능에 왜 도움이 되는가?”라는 질문에서 출발한다.</p>
+<p>학습할 때 World Action Model은 보통 두 가지를 같이 학습한다.</p>
+<ul><li>현재 장면을 보고 로봇 action 예측</li><li>현재 장면을 보고 미래 영상 예측</li></ul>
+<p>그런데 최근 연구에서 학습이 끝난 뒤 실제 로봇을 움직이는 추론 단계에서 미래 영상을 예측하는 branch를 제거해도 성능이 거의 떨어지지 않았다.</p>
+<p>그래서 기존에는 미래 영상 예측이 실제 action 결정에 직접 필요한 것이 아니라, 학습 과정에서 visual backbone이 더 좋은 feature를 배우도록 도와주는 보조적인 regularizer 역할을 한 것 아닐까?라는 해석이 제기되었다.</p>
+<ul><li>보조적인 regularizer: 모델이 한 가지 목표에만 과하게 맞춰지지 않고, 더 좋은 특징을 배우도록 옆에서 도와주는 추가 학습 신호입니다.</li></ul>
+<p>하지만 PFD는 이에 대해, 미래 정보가 단순히 backbone을 잘 학습시키는 보조 역할만 하는 것이 아니라,</p>
+<p>미래를 보았기 때문에 action을 어떻게 수정해야 하는지에 대한 실제 행동 보정 정보(action correction)가 생긴다고 주장한다.</p>
+<h2 id="block-3dcb12c0115c807485f6c856ae9c01f3">Introtuction</h2>
+<p>Teacher는 현재 장면뿐 아니라 실제 미래 장면이라는 특권정보(privileged information)까지 볼 수 있기 때문에, 현재 장면만 보는 Student보다 더 정확한 행동 방향을 예측할 수 있다.</p>
+<p>PFD의 핵심은 Teacher의 행동을 그대로 Student가 따라 하도록 만드는 것이 아니라, 미래 정보를 보았을 때와 보지 않았을 때의 행동 예측 차이(residual)를 계산하여 Student에게 학습시키는 것이다.</p>
+<p>예를 들어 현재 장면만 본 모델이 “오른쪽으로 5만큼 움직여야 한다”고 예측하고, 미래 장면까지 본 Teacher가 “오른쪽으로 7만큼 움직여야 한다”고 예측했다고 하자. 이때</p>
+<p>7−5=27-5=2</p>
+<p>라는 차이가 바로 미래 정보가 제공한 행동 보정량(residual correction)이다.</p>
+<p>PFD는 이 보정량을 Student에게 증류한다. 따라서 실제 추론 시 Student는 미래 영상을 볼 수 없지만, 학습 과정에서 “현재 상황이 이러할 때 행동을 어느 방향으로 얼마나 보정해야 하는가”라는 패턴을 학습할 수 있다.</p>
+<p>구조적으로 Teacher와 Student는 동일한 backbone을 사용하며, 차이는 video token에 적용되는 attention mask이다. Teacher는 mask를 통해 현재 영상과 미래 영상을 모두 볼 수 있지만, Student는 현재 영상만 볼 수 있다.</p>
+<p>따라서 PFD의 핵심 주장은, 미래 예측을 이용한 보조 학습의 효과가 단순히 visual backbone을 더 잘 학습시키는 regularization에만 있는 것이 아니라, 미래 정보가 제공하는 action-relevant correction을 Student에게 전달하기 때문에 성능이 향상된다는 것이다. 저자들은 이를 통제 실험을 통해 검증하였다.</p>
+<h2 id="block-3dcb12c0115c805ba0cec713a6cac775">Method</h2>
+<p>Student와 Teacher는 같은 backbone을 쓰지만, 볼 수 있는 정보의 범위만 다르다</p>
+<p>Student의 action token은 현재 프레임의 video token과 action token만 참조하며, 이는 Fast-WAM의 현재 프레임 기반 inference 방식과 동일하다.</p>
+<ul><li><strong>현재 영상만 보고 action을 결정</strong></li></ul>
+<p>반면 Teacher의 action token은 학습 중에만 사용할 수 있는 실제 미래 프레임을 포함하여 모든 video token을 참조한다.</p>
+<ul><li>Teacher는 \(X_1, X_2, X_3, ...\)</li></ul>
+<p>를 모두 볼 수 있어서 Student보다 더 많은 정보를 가지고 있다.</p>
+<p>학습 중 같은 MoT backbone에 두 종류의 mask를 적용하여 Student의 \(v_{\text{base}}\)와 stop-gradient된 Teacher의 \(v_{\text{teacher}}\) 를 얻는다.</p>
+<figure><img src="/assets/notion/pfd-논문리뷰/3dcb12c0-115c-8034-a7c4-d1a344429d2f.png" alt="" loading="lazy" width="1136" height="380" /></figure>
+<p>분리된 residual target \(r=\operatorname{sg}(v_{\text{teacher}}-v_{\text{base}})\)은 미래 정보를 봄으로써 생긴 action-denoising 보정량으로 미래를 보면 stduent의 행동 예측을 얼마나 보정해야 하는가를 계산한 GT 값이다.</p>
+<div class="math-block">\[\delta = v_{\text{teacher}} - v_{\text{base}}\]</div>
+<p>이고 \(v_{\text{base}} = 0.4,\;\;v_{\text{teacher}} = 0.7 \) 이이라면 \(\delta = 0.3\) 임으로 미래 정보 때문에 +0.3 만큼 행동 예측이 바뀐 것</p>
+<p>이를 예측하기 위해 작은 adapter를 학습시킨다.</p>
+<p>작은 adapter \(g_\phi\)는 \(v_{\text{base}}\)<strong> 를 입력으로 받아</strong> residual \(\delta\) 을 맞추기 위한 \(\hat{\delta}\)를 예측한다.</p>
+<p>즉, Student가 미래 영상을 직접 볼 수 없으므로 <strong>미래를 봤다면 생겼을 보정량”을 adapter가 예측하도록 학습하여</strong></p>
+<figure><img src="/assets/notion/pfd-논문리뷰/3dcb12c0-115c-8046-91b5-fcd01cd6f382.png" alt="" loading="lazy" width="1076" height="606" /></figure>
+<p>최종적으로 \(v_{\text{final}}=v_{\text{base}}+\hat{\delta}\) 를 만든다.</p>
+<p>inference 시 Teacher 경로와 미래 video token은 모두 제거하여 Student mask(입력)만 사용하고 adapter의 correction을 적용한다.</p>
+<p>PFD의 핵심 철학은 Future 자체를 배우지 말고, Future(특권정보)가 Action을 얼마나 수정했는지를 배우자
+</p>
+<h2 id="block-3ddb12c0115c80ecac08f47db0ff2714">Loss</h2>
+<p>현재 장면을 조건으로 주었을 때, noise가 섞인 미래 영상 latent를 실제 미래 영상 쪽으로 복원하는 방법을 Video backbone이 배우게 하는 Loss</p>
+<div class="math-block">\[\boldsymbol{\mathcal{L}}_{\text{video}} = \boldsymbol{w}_v(\tau_v) \|\boldsymbol{u}_{\text{video}} - \boldsymbol{u}_{\text{target}}\|^2\]</div>
+<p>최종 action prediction \(v_{\text{final}}\)이 실제 action flow target \(v_{\text{target}}\)과 가까워지도록 학습한다.</p>
+<div class="math-block">\[\boldsymbol{\mathcal{L}}_{\text{gt}} = \boldsymbol{w}_a(\tau_a) \|\boldsymbol{v}_{\text{final}} - \boldsymbol{v}_{\text{target}}\|^2\]</div>
+<p>Adapter가 에측한 residual \(\hat \delta\)가 Teacher로부터 얻은 residual target \(r\)과 가까워지도록 학습한다.</p>
+<div class="math-block">\[\boldsymbol{\mathcal{L}}_{\text{res}} = \|\hat{\boldsymbol{\delta}} - \boldsymbol{r}\|^2\]</div>
+<p>Student의 최종 prediction \(v_{\text{final}}\)이 Teacher prediction \(v_{\text{teacher}}\)과 가까워지도록 하는 loss이다.</p>
+<div class="math-block">\[\boldsymbol{\mathcal{L}}_{\text{teacher}} = \|\boldsymbol{v}_{\text{final}} - \boldsymbol{v}_{\text{teacher}}\|^2\]</div>
+<p>전체 PFD loss는 다음 네 loss의 weighted sum이다</p>
+<div class="math-block">\[\mathcal{L} = \text{Video 학습} + \text{실제 Action 정답} + \text{Future correction 학습} + \text{Teacher 모방}\]</div>
+<div class="math-block">\[\boldsymbol{\mathcal{L}} = \boldsymbol{\lambda}_{\text{video}} \boldsymbol{\mathcal{L}}_{\text{video}} + \boldsymbol{\lambda}_{\text{gt}} \boldsymbol{\mathcal{L}}_{\text{gt}} + \boldsymbol{\lambda}_{\text{res}} \boldsymbol{\mathcal{L}}_{\text{res}} + \boldsymbol{\lambda}_{\text{teacher}} \boldsymbol{\mathcal{L}}_{\text{teacher}}\]</div>
+<ul><li><code>L_gt</code>: <strong>실제 데이터의 정답에서 벗어나지 않게 anchor</strong></li><li><code>L_teacher</code>: <strong>future를 본 Teacher가 알아낸 foresight 방향을 Student에게 전달</strong></li></ul>
+<h2 id="block-3ddb12c0115c807a8697eb6d0a929330">Limitation</h2>
+<p>PFD는</p>
+<ul><li>Future를 어떻게 전달할까?</li></ul>
+<p>에서</p>
+<ul><li>Future가 action에 만든 correction을 전달하자.</li></ul>
+<div class="math-block">\[r_t^F = v_T(H_t, F_t) - v_S(H_t)\]</div>
+<p>이렇게 feature를 직접 복원하는 대신 이 residual을 Student의 adapter에 학습한다.</p>
+<p>이를 제안한 논문에서는</p>
+<figure><img src="/assets/notion/pfd-논문리뷰/3deb12c0-115c-8016-a801-c1cac1141133.png" alt="" loading="lazy" width="1632" height="624" /></figure>
+<p>한계를 “실험에서는 small adapter가 residual을 잘 absorb하는 것을 보였으나 어떤 조건에서 residual이 small adapter로 근사 가능한지는 모른다.”</p>
+<p>이에 생각해볼 질문은</p>
+<ul><li>그 correction \(r^F_t\) 중 history(\(H_t \))로 예측 가능한 residual과 예측 불가능한 residual을 분석해보자.</li><li>그리고 예측 가능한 경우에만 골라서 distilation하자.</li></ul>
+<p>로 나가볼 수 있다.</p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/theme.js?v=1" defer></script>
+    <script src="/assets/js/post.js?v=14" type="module"></script>
+    <script src="/assets/js/palette.js?v=9" defer></script>
+  </body>
+</html>

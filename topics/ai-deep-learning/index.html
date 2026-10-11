@@ -8,13 +8,13 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-K7VKNXKJJ7");</script>
     <title>AI/ Deep Learning — Woojae Joo</title>
-    <meta name="description" content="AI/ Deep Learning 관련 글 55개 — Woojae Joo 개발 노트." />
+    <meta name="description" content="AI/ Deep Learning 관련 글 58개 — Woojae Joo 개발 노트." />
     <link rel="canonical" href="https://ursonice.github.io/topics/ai-deep-learning/" />
     <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="/manifest.json" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="AI/ Deep Learning — Woojae Joo" />
-    <meta property="og:description" content="AI/ Deep Learning 관련 글 55개 — Woojae Joo 개발 노트." />
+    <meta property="og:description" content="AI/ Deep Learning 관련 글 58개 — Woojae Joo 개발 노트." />
     <meta property="og:url" content="https://ursonice.github.io/topics/ai-deep-learning/" />
     <meta property="og:image" content="https://ursonice.github.io/assets/og/default.png" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -43,9 +43,15 @@
       <div class="section-heading">
         <p class="eyebrow"><a href="/#topics">← Topics</a></p>
         <h1>AI/ Deep Learning</h1>
-        <p>55 notes</p>
+        <p>58 notes</p>
       </div>
       <div class="post-grid">
+          <a class="post-card" href="https://ursonice.github.io/posts/pfd-%EB%85%BC%EB%AC%B8-%EB%B6%84%EC%84%9D/">
+            <div class="post-meta"><span class="cat">AI/ Deep Learning</span></div>
+            <h3>PFD 논문 분석</h3>
+            <p>9/28 Student가 관측하는 정보를 H Teacher와 Student의 출력차이 correction을 r Adapter를 g(\cdot) 하자. → Student가 가진 정보 H만으로 실제 correction r을 어디까지 예측할 수 있을까? 설정 Teacher: (\text{propriocepti</p>
+            <div class="post-footer"><span>2026년 10월 11일</span></div>
+          </a>
           <a class="post-card" href="https://ursonice.github.io/posts/protecting-language-models-against-unauthorized-distillation-through-trace-rewri/">
             <div class="post-meta"><span class="cat">AI/ Deep Learning</span></div>
             <h3>Protecting Language Models Against Unauthorized Distillation through
@@ -59,6 +65,12 @@ Trace Rewriting 논문리뷰</h3>
             <p>서론 기존 LLM의 Unlearning은 특정 지식을 잊은 것처럼 행동하도록 만들지만 내부의 잠재 능력은 여전히 남아 있어 조금의 Fine-tuning만으로도 해당 지식이 복구되는 문제가 있다. 본 논문에서는 이러한 문제를 해결하기 위해 Unlearning과 Knowledge Distillation을 결</p>
             <div class="post-footer"><span>2026년 10월 10일</span></div>
           </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/pfd-%EB%85%BC%EB%AC%B8-%EC%97%B0%EA%B5%AC-%EC%8B%A4%ED%97%98/">
+            <div class="post-meta"><span class="cat">AI/ Deep Learning</span></div>
+            <h3>PFD 논문 연구 실험</h3>
+            <p>0. R의 문제 R=\frac{(m(h)-c)^2}{E[(r-c)^2\mid H=h]} 분모는 Student가 동일한 입력 h를 받았을 때 발생할 수 있는 모든 Teacher residual r에 대한 평균 오차. 예를 들어 Student가 입력 A를 받았다고 하자. Student는 Aa와 Ab를 구분하</p>
+            <div class="post-footer"><span>2026년 10월 9일</span></div>
+          </a>
           <a class="post-card" href="https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-2%EC%9E%A5-%EC%9E%91%EC%84%B1%EC%A4%91/">
             <div class="post-meta"><span class="cat">AI/ Deep Learning</span></div>
             <h3>생성 모델 2장 (작성중)</h3>
@@ -70,6 +82,12 @@ Trace Rewriting 논문리뷰</h3>
             <h3>생성 모델 1장</h3>
             <p>서론 생성 모델의 핵심 문제는 단순히 학습 데이터를 외우는 것이 아니라, 데이터가 어떤 규칙에 따라 나타나는지를 나타내는 관측된 데이터의 분포를 학습하는 것이다. 그런데 여기서 딜레마가 생긴다. 복잡한 데이터 분포를 충분히 표현하는 것과 그 분포에서 확률 또는 확률밀도를 실제로 계산할 수 있게 만드는 것</p>
             <div class="post-footer"><span>2026년 9월 20일</span></div>
+          </a>
+          <a class="post-card" href="https://ursonice.github.io/posts/pfd-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/">
+            <div class="post-meta"><span class="cat">AI/ Deep Learning</span></div>
+            <h3>PFD 논문리뷰</h3>
+            <p>서론 PFD는 “미래 영상을 예측하도록 학습시키는 것이 실제 행동 성능에 왜 도움이 되는가?”라는 질문에서 출발한다. 학습할 때 World Action Model은 보통 두 가지를 같이 학습한다. 현재 장면을 보고 로봇 action 예측 현재 장면을 보고 미래 영상 예측 그런데 최근 연구에서 학습이 끝난</p>
+            <div class="post-footer"><span>2026년 9월 15일</span></div>
           </a>
           <a class="post-card" href="https://ursonice.github.io/posts/ml-jacobian-2/">
             <div class="post-meta"><span class="cat">AI/ Deep Learning</span></div>

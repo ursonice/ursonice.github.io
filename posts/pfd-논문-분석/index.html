@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fbfaf7" />
+    <script>(function(){try{var t=localStorage.getItem("theme")||"light";document.documentElement.dataset.theme=t;var r=localStorage.getItem("reading");if(r)document.documentElement.dataset.reading=r;var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",t==="dark"?"#0a0b0e":"#fbfaf7");}catch(e){}})();</script>
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>PFD 논문 분석 — Woojae Joo</title>
+    <meta name="post-slug" content="pfd-논문-분석" />
+    <meta name="description" content="9/28 Student가 관측하는 정보를 H Teacher와 Student의 출력차이 correction을 r Adapter를 g(\cdot) 하자. → Student가 가진 정보 H만으로 실제 correction r을 어디까지 예측할 수 있을까? 설정 Teacher: (\text{propriocepti" />
+    <link rel="canonical" href="https://ursonice.github.io/posts/pfd-%EB%85%BC%EB%AC%B8-%EB%B6%84%EC%84%9D/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="PFD 논문 분석" />
+    <meta property="og:description" content="9/28 Student가 관측하는 정보를 H Teacher와 Student의 출력차이 correction을 r Adapter를 g(\cdot) 하자. → Student가 가진 정보 H만으로 실제 correction r을 어디까지 예측할 수 있을까? 설정 Teacher: (\text{propriocepti" />
+    <meta property="og:url" content="https://ursonice.github.io/posts/pfd-%EB%85%BC%EB%AC%B8-%EB%B6%84%EC%84%9D/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=PFD%20%EB%85%BC%EB%AC%B8%20%EB%B6%84%EC%84%9D&amp;cat=AI%2F%20Deep%20Learning" />
+    <meta property="article:published_time" content="2026-10-11T06:39:00.000Z" />
+    <meta property="article:modified_time" content="2026-10-11T06:42:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="PFD 논문 분석" />
+    <meta name="twitter:description" content="9/28 Student가 관측하는 정보를 H Teacher와 Student의 출력차이 correction을 r Adapter를 g(\cdot) 하자. → Student가 가진 정보 H만으로 실제 correction r을 어디까지 예측할 수 있을까? 설정 Teacher: (\text{propriocepti" />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=PFD%20%EB%85%BC%EB%AC%B8%20%EB%B6%84%EC%84%9D&amp;cat=AI%2F%20Deep%20Learning" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"PFD 논문 분석","description":"9/28 Student가 관측하는 정보를 H Teacher와 Student의 출력차이 correction을 r Adapter를 g(\\cdot) 하자. → Student가 가진 정보 H만으로 실제 correction r을 어디까지 예측할 수 있을까? 설정 Teacher: (\\text{propriocepti","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=PFD%20%EB%85%BC%EB%AC%B8%20%EB%B6%84%EC%84%9D&cat=AI%2F%20Deep%20Learning","datePublished":"2026-10-11T06:39:00.000Z","dateModified":"2026-10-11T06:42:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/pfd-%EB%85%BC%EB%AC%B8-%EB%B6%84%EC%84%9D/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Deep Learning","item":"https://ursonice.github.io/topics/ai-deep-learning/"},{"@type":"ListItem","position":3,"name":"PFD 논문 분석","item":"https://ursonice.github.io/posts/pfd-%EB%85%BC%EB%AC%B8-%EB%B6%84%EC%84%9D/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=40" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">본문으로 이동</a>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell" id="content">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/ai-deep-learning/">AI/ Deep Learning</a>
+    </nav>
+    <h1>PFD 논문 분석</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2026년 10월 11일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-3f6b12c0115c8096adacccd2be4aeb14">9/28</h2>
+<p>Student가 관측하는 정보를 \(H\)</p>
+<p>Teacher와 Student의 출력차이 correction을 \(r\)</p>
+<p>Adapter를 \(g(\cdot)\)  하자.</p>
+<p>→ Student가 가진 정보 \(H\)만으로 실제 correction \(r\)을 어디까지 예측할 수 있을까?</p>
+<h3 id="block-3f6b12c0115c80498dcced6af8c17877">설정</h3>
+<ul><li>Teacher: \((\text{proprioception},\text{depth})\)</li><li>Student: \(H=(\text{proprioception})\)</li><li>Teacher correction이 \(r_t
+=
+a_t^{Teacher}-a_t^{Student}\) </li><li>Adapter는 \(g(H_t)\approx r_t\) 를 학습</li></ul>
+<p>MSE로 충분히 잘 학습했다면 이상적으로 \(g^*(H_t)
+=
+E[r_t\mid H_t]\) 가 된다.</p>
+<p>그런데 같은 \(H_t\)가 주어졌더라도 depth가 다르면 Teacher가 요구하는 correction이 다를 수 있다.</p>
+<p>예를 들어 \(H_t=h\) 가 똑같아도, \(\text{depth}_1
+\rightarrow r_t=-1,
+\quad
+\text{depth}_2
+\rightarrow r_t=1\) 라면</p>
+<p>Student 입장에서는 depth를 모르므로 둘을 구별할 방법이 없다.</p>
+<p>그래서 아무리 Adapter가 잘 학습되어도 \(g^*(h)=0\) 같은 평균적인 correction밖에 낼 수 없다.</p>
+<p>그리고 남는 \(r_t-g^*(H_t)\)가 바로 Student의 관측만으로 recover할 수 없는 Teacher correction이다.</p>
+<p>이렇게 recover 할 수 없는 Teacher correction을 수식적으로 봐보자.</p>
+<h3 id="block-3f6b12c0115c8081ab7bef0c09f4ae17">Example</h3>
+<p>State: \(Aa, Ab, Ba, Bb\) 가 있다.</p>
+<p>각 확률은 \(1/4\) 이고 Teacher correction \(r\)은 다음과 같다.</p>
+<p>\(
+\begin{array}{c|c|c}
+\text{실제 상태} &amp; \text{Student가 보는 것 }H &amp; \text{정답 }r\\
+\hline
+Aa &amp; A &amp; -1\\
+Ab &amp; A &amp; 1\\
+Ba &amp; B &amp; 3\\
+Bb &amp; B &amp; 5
+\end{array}\)</p>
+<p>그런데 Student는 소문자 a, b를 볼 수 없다.</p>
+<p>Student 입장에서는 </p>
+<ul><li>\(Aa, Bb \rightarrow A\) 로 똑같이 보이고</li><li>\(Ba, Bb \rightarrow B\) 로 똑같이 보인다.</li></ul>
+<p>따라서 \(H=A\)를 봤다고 해도 실제 \(Aa\)인지 \(Ab\)인지 모른다.</p>
+<h4 id="block-3f6b12c0115c802b8c34d75f7873c6c2">Case 1: Student가 아무 정보도 못 보는 경우</h4>
+<p>\(r\)은 \(-1, 1, 3, 5\) 중 하나이고 모두 같은 확률이다.</p>
+<p>평균은 \(E[r] = \frac{-1+1+3+5}{4}= 2\) 가 된다. MSE로 하나의 숫자를 예측해야 한다면 가장 좋은 답은 평균 2이다.</p>
+<ul><li>아무것도 모를 때는 정답 데이터의 평균을 예측하는 것이 오차가 제일 작을 것이기 때문이다.</li></ul>
+<p>예를들어 항상 2를 예측하면</p>
+<div class="math-block">\[\operatorname{MSE} = \operatorname{Var(r)}= 
+\frac{(-1-2)^2+(1-2)^2+(3-2)^2+(5-2)^2}{4} \\=
+\frac{9+1+1+9}{4}
+=5\]</div>
+<p>따라서 \(E[r] = 2,\; \text{Var}(r) =5\) .</p>
+<ul><li>아무 정보가 없을 때 MSE의 최선의 예측은 평균이고 최선의 예측으로 부터 남은 MSE는 분산이 된다.</li><li>\(\hat r=E[r]\text{로 예측할 때 MSE} = 
+\operatorname{Var}(r)\)</li></ul>
+<h4 id="block-3f6b12c0115c802d9898f1b573f35f8c">Case 2: Student가 A/B는 구별하는 경우</h4>
+<ol><li>Student가 \(H=A\)라는 정보는 받았다. 그럼 가능한 경우는 두 개뿐이다.</li></ol>
+<ul><li>\(Aa: r = -1\)</li><li>\(Ab: r = 1\)</li></ul>
+<details class="toggle"><summary>부연설명</summary><div class="toggle-body"><p>A라는 입력정보를 이용해서 (3,5)에 해당하는 경우를 제거했다.</p>
+<p>\(H = A\) 라는 정보를 주면 \(
+\{-1,1,3,5\}
+\overset{H=A}{\longrightarrow}
+\{-1,1\}\) 로 후보가 좁혀진다.</p>
+<p>그런데 여기서 a, b를 모르니까 \(
+\{-1,1\}
+\overset{\text{MSE}}{\longrightarrow}
+0\) (즉 입력정보로 활용하지 못하는 부분이라 볼 수 있다)</p>
+<p><strong>Student는 </strong>\(A\)<strong>라는 정보로 </strong>\((3,5)\)<strong>는 제외할 수 있지만, </strong>\((a,b)\)<strong>를 구별할 정보는 없으므로 남은 </strong>\((-1,1)\)<strong>에 대해서는 결국 ‘아무 정보도 없는 경우’와 동일하게 그냥 정답 데이터의 평균을 예측하게 됨.</strong></p></div></details>
+<p>각각 확률이 \(1/2\) 이므로</p>
+<div class="math-block">\[
+E[r\mid H=A]
+=
+\frac{-1+1}{2}
+=0\]</div>
+<p>따라서 MSE 기준으로 가장 합리적인 예측은 \(g(A) = 0\) </p>
+<ol><li>Student가 \(H=B\)라는 정보는 받았다. 그럼 가능한 경우는 두 개뿐이다.</li></ol>
+<ul><li>\(Ba: r=3\)</li><li>\(Bb: r=5\)</li></ul>
+<div class="math-block">\[E[r|H=B]=\frac{3+5}{2}= 4\]</div>
+<p>따라서 MSE 기준으로 가장 합리적인 예측은 \(g(B) =4\)</p>
+<h3 id="block-3f6b12c0115c80ea8f65c79ffffb96fc">평균이 MSE에서 최적일까?</h3>
+<p>\(H=A\)라고 하자.  \(r\)은 \(-1,\; 1\) 중 하나이다. Student Adapter가 어떤 숫자 \(c\)를 예측한다고 하자.</p>
+<details class="toggle"><summary>부연설명</summary><div class="toggle-body"><p>Student 입장에서는 정답 데이터가 사실상 \(A \rightarrow 1, \; A \rightarrow -1\) 이다.</p>
+<p>왜냐하면 입력 \(A\)가 들어왔는데 어떤 데이터에서는 정답이 \(-1,\;\)다른 데이터에서는 정답이 \(1\)</p>
+<p>실제로는 A+a, A+b라서 다른데 Student 입장에서는 a, b는 알 수 없기 때문.</p>
+<p>정리하면 한 샘플의 정답이 -1일 수도 있고 1일 수도 있다는 뜻이 아니라, Student에게 동일하게 A로 관측되는 여러 샘플 중에는 정답이 -1인 것도 있고 1인 것도 있다는 뜻</p></div></details>
+<p>그러면 평균 MSE는</p>
+<div class="math-block">\[L_{A}(c) = \frac{(-1-c)^2 + (1-c)^2}{2}\]</div>
+<p>계산해서 전개하면</p>
+<div class="math-block">\[
+L_A(c)
+=
+\frac{2+2c^2}{2}
+=
+1+c^2\]</div>
+<p>그런데 \(c^2\ge0
+\) 이므로 \(c=0\) 가장 \(L\)이 작다.</p>
+<p>따라서 \(g^*(A)=0=E[r\mid H=A]\) 가 성립한다.</p>
+<p>마찬가지로 \(B\))에서는 \(L_B(c)\) </p>
+<div class="math-block">\[L_{B}(c) = \frac{(3-c)^2+(5-c)^2}{2}\]</div>
+<p>이고 정리하면</p>
+<div class="math-block">\[L_B(c)=1+(c-4)^2\]</div>
+<p>따라서 최소가 되는 지점은 \(c=4\)</p>
+<p>따라서 \(g^*(B)=4=E[r\mid H=B]\) 가 성립한다.</p>
+<p>그래서 일반적으로 MSE를 사용해 충분히 잘 학습하면 \(g^*(H)=E[r\mid H]\) 를 배우게 된다.</p>
+<h3 id="block-3f6b12c0115c80fdb69acc59a3337c0e">최적의 MSE인데도 생기는 오차</h3>
+<p>\(H = A\)일 때 Adapter의 최선의 예측은 \(g(A) = 0\) 이다.</p>
+<p>이때 \(r = \{-1,\; 1\}\) 따라서  \(\text{MSE} =
+\frac{(-1)^2+(1)^2}{2}
+=1\).</p>
+<p>그런데 \(\text{MSE}=1\) 이라는 오차가 모델이 못 배워서 생기는 오차가 아니다.</p>
+<p>왜냐하면 Student는 \(A\)를 봤는데 \(A\)만 가지고 실제 상태가 \(Aa\)인지 \(Ab\)인지 알 수 없다.</p>
+<p>Teacher는 뒤의 \(a/b\) 까지 볼 수 있기 때문에 \(Aa \rightarrow -1,\; Ab \rightarrow 1\) 을 정확하게 구분할 수 있다.</p>
+<p>그래서 가장 합리적인 답이 \(\frac{-1+1}{2}=0\) 인 것이다.</p>
+<p>최적의 Adapter조차도 \(\text{MSE}=1\) 남고 이를 Student가 가진 정보만으로 </p>
+<p>제거할 수 없는 오차 irreducible Error라고 한다.</p>
+<h3 id="block-3f6b12c0115c80b9a929fb8c319124fb">수학적으로 이 남는 오차가 바로 조건부 분산</h3>
+<ul><li>\(A\)일 때 \(E[r\mid H=A]=0\) 이고, \(\operatorname{Var}(r\mid H=A) = E[(r-0)^2\mid H=A]
+= \frac{(-1-0)^2+(1-0)^2}{2} = 1\)</li><li>\(B\)일 때 \(E[r\mid H=B]=4\) 이고, \(\operatorname{Var}(r\mid H=B) = E[(r-4)^2\mid H=A]= \frac{(3-4)^2+(5-4)^2}{2}
+=1\)</li></ul>
+<p>즉 최적의 MSE predictor를 사용했을 때 남는 오차가 \(E\left[(r-g^*(H))^2\mid H\right]
+= \operatorname{Var}(r\mid H)\)</p>
+<ul><li>\(g^*(H)=E[r\mid H]
+\)</li></ul>
+<h3 id="block-3f6b12c0115c80428675ecb4be819cf3">그럼 Global Recoverability?</h3>
+<p>Student가 아무 정도도 없어 평균적으로 2를 예측하면 \(\operatorname{Var}(r) = 5\)</p>
+<p>그런데 \(A/B\)라는 Student 정보를 이용하면 최적 \(\text{MSE} = 1\) 까지 내려간다. 5 → 1</p>
+<p>Law of Total Variance에 의해 분산은</p>
+<div class="math-block">\[
+\operatorname{Var}(r)
+=
+\operatorname{Var}(E[r\mid H])
++
+E[\operatorname{Var}(r\mid H)]
+\]</div>
+<p>전체 \(r\)은 \(-1,\;1,\;3,\;5\) 이고 평균은 2, 전체 분산은 \(\operatorname{Var}(r)=5\) 였다.</p>
+<p>첫 번째 항 \(\operatorname{Var}(E[r\mid H])\)는 \(A/B\)라는 정보를 알게 됨으로써 구별할 수 있게 된 차이다.</p>
+<p>Student가 정보를 받아서 예측한 최적의 MSE는 각 그룹의 평균이였고 그 값은 각각</p>
+<blockquote> \(E[r\mid H=A]=0, \; E[r\mid H=B]=4\) 였다.</blockquote>
+<p>각 조건부 평균이 \(0,\;4\) 이고 이것들의 평균은 다시 2이므로 0, 4에 대하여 분산을 구하면</p>
+<div class="math-block">\[
+\operatorname{Var}(E[r\mid H])
+=
+\frac{(0-2)^2+(4-2)^2}{2}
+=
+4\]</div>
+<p>따라서 \(4\text{는 \;\(H=A/B\)를 알기 때문에 설명할 수 있게 된 변동}\)</p>
+<p>두 번째 항 \(E[\operatorname{Var}(r\mid H)]\)는 \(A\)라고 알더라도 \(-1,\;1\)중 어느 것인지는 \(a/b\) 를 못 보고 있기 때문에 구별하지 못한다.</p>
+<div class="math-block">\[
+\operatorname{Var}(r\mid H=A)
+=
+\frac{(-1-0)^2+(1-0)^2}{2}
+=1\]</div>
+<p>이고 \(B\)도 마찬가지로</p>
+<div class="math-block">\[
+\operatorname{Var}(r\mid H=B)
+=
+\frac{(3-4)^2+(5-4)^2}{2}
+=1\]</div>
+<p>이제 평균내면 \(
+E[\operatorname{Var}(r\mid H)]
+=
+\frac{1+1}{2}
+=1\) </p>
+<p>따라서 \(1\text{은 \(H=A/B\)만으로는 설명할 수 없는 내부 변동}\)</p>
+<p>최종적으로 \(5 = 4 + 1\) 로 표현되며</p>
+<div class="math-block">\[
+\underbrace{\operatorname{Var}(r)}_{5}
+=
+\underbrace{\operatorname{Var}(E[r\mid H])}_{4:\,H\text{로 구별 가능한 부분}}
++
+\underbrace{E[\operatorname{Var}(r\mid H)]}_{1:\,H\text{만으로 구별 불가능한 부분}}
+\]</div>
+<p>가 된다.</p>
+<p>그래서 Global recoverability를 </p>
+<div class="math-block">\[R_{\mathrm{global}} =
+\frac{\operatorname{Var}(E[r\mid H])}
+
+{\operatorname{Var}(r)}\]</div>
+<p>로 하였다.</p>
+<p>그러나 우리는 지금 이순간의 \(h_t\)에서는 얼마나 recover 가능한가를 보고싶다.</p>
+<h4 id="block-3f6b12c0115c805b8fb9e650eaa71352">그러나 Global recoverability를 그대로 timestep에 적용할 수 없다.</h4>
+<div class="math-block">\[
+R_{\mathrm{global}}
+=
+1-
+\frac{E[\operatorname{Var}(r\mid H)]}
+{\operatorname{Var}(r)}\]</div>
+<p>왜냐하면 Law of total variance에서 </p>
+<div class="math-block">\[\operatorname{Var}(r)
+=
+\operatorname{Var}(E[r\mid H])
++
+E[\operatorname{Var}(r\mid H)]\]</div>
+<p>이므로 \(
+E[\operatorname{Var}(r\mid H)]
+\le
+\operatorname{Var}(r)\) 가 항상 성립한다.</p>
+<p>따라서 \(
+0
+\le
+\frac{E[\operatorname{Var}(r\mid H)]}
+{\operatorname{Var}(r)}
+\le1\) 조건을 만족한다.</p>
+<p>현재 Student가 \(H_t=h_t\) 를 관측했다고 하자.</p>
+<p>Global 식에서 분자의 \(E[\operatorname{Var}(r\mid H)] \rightarrow \operatorname{Var}(r\mid H)\) 평균만 빼고 단순히  </p>
+<div class="math-block">\[R_t^{\text{naive}} = 1-
+\frac{\operatorname{Var}(r\mid H=h_t)}
+{\operatorname{Var}(r)}\]</div>
+<p>라고 정의하고 싶을 수 있다.</p>
+<p>그러나 Global에서는 \(E[\operatorname{Var}(r\mid H)]
+\le
+\operatorname{Var}(r)\)가 보장되지만, 특정 하나의 \(h_t\)에 대해서는</p>
+<p>\(\operatorname{Var}(r\mid H=h_t)
+\le
+\operatorname{Var}(r)\) 가 보장되지 않는다.</p>
+<p>즉 어떤 특정 상황에서는 \(\operatorname{Var}(r\mid H=h_t) &gt;
+\operatorname{Var}(r)\)일 수도 있다. 그러면 </p>
+<div class="math-block">\[\frac{\operatorname{Var}(r\mid H=h_t)}
+
+{\operatorname{Var}(r)}
+&gt;
+1\]</div>
+<p>
+이 되고, \(R_t^{\text{naive}}&lt;0\) 가 되어 버린다.</p>
+<p>예) \(Aa:-1, Ab:1, Ba:-3,Bb:3\)</p>
+<ul><li>\(E[r|H=A]=0\), \(V[r|H=A]=1\)</li><li>\(E[r|H=B]=0\), \(V[r|H=B] = 9\) <ul><li>B라는 정보를 받았을 때가 정보가 없었을 때보다 불확실성이 커졌다.</li></ul></li><li>\(E[r]=0, V[r]=(1+1+9+9)/4=5\)</li><li>\(R_{\text{global}}=1-\frac{(1+9)/2}{5}=0\)</li><li>\(R_A= 1-\frac{1}{5}=0.8\) , \(R_B=1-\frac95=-0.8\) 이 되서 음수가 된다.</li></ul>
+<h3 id="block-3f6b12c0115c80a59974d49d86db69f7">Point wise Recoverability는 어떻게 구해야할까?</h3>
+<p>Adapter를 MSE로 학습한다고 하자: \(\mathcal L = E[(r_t-g(H_t))^2]\)</p>
+<p>특정 Student observation \(H_t=h\) 가 주어졌다고 고정하고 Adapter가 어떤 c를 출력했다.</p>
+<p>그때 MSE는 \(E[(r_t - c)^2 | H_t = h]\) 이다.</p>
+<p>\(h\)를 사용했을 때 최적 예측은 \(m(h) = E[r_t | H_t = h]\)이다.</p>
+<p>그러면 \(r_t-c = (r_t-m(h))+(m(h)-c)\) 로 쓸 수 있고 제곱해서 조건부 평균을 취하면</p>
+<p>\(
+(r_t-c)^2
+=
+(r_t-m(h))^2
++
+2(r_t-m(h))(m(h)-c)
++
+(m(h)-c)^2\)</p>
+<p>이제 양변에 조건부 평균 \(E[\cdot\mid H_t=h]\) 을 취한다.</p>
+<div class="math-block">\[
+\begin{aligned}
+E[(r_t-c)^2\mid H_t=h]
+={}&amp;
+E[(r_t-m(h))^2\mid H_t=h]\\
+&amp;+
+E[2(r_t-m(h))(m(h)-c)\mid H_t=h]\\
+&amp;+
+E[(m(h)-c)^2\mid H_t=h].
+\end{aligned}
+\]</div>
+<h4 id="block-3f6b12c0115c8097a834edb2ce4e467a">첫 번째 항</h4>
+<p>\(E[(r_t-m(h))^2\mid H_t=h]\)인데, \(m(h)=E[r_t\mid H_t=h]\) 이므로 </p>
+<p>\(E\left[
+\left(r_t-E[r_t\mid H_t=h]\right)^2
+\mid H_t=h
+\right]\)</p>
+<p>\(\operatorname{Var}(r_t\mid H_t=h)
+=
+E[(r_t-m(h))^2\mid H_t=h]\)</p>
+<p>따라서 첫 번째 항은 \(\operatorname{Var}(r_t\mid H_t=h)\) 가 된다.</p>
+<h4 id="block-3f6b12c0115c802d8c95d89814da3368">두 번째 항</h4>
+<p>\(E[2(r_t-m(h))(m(h)-c)\mid H_t=h]\)</p>
+<p>지금 \(H_t=h\) 라고 조건을 걸어놓았음으로 \(m(h)\)는 상수</p>
+<p>예를 들어 \(h\)가 주어졌을 때 \(m(h)=0.7\) 이라면 조건부 기대값을 계산하는 동안 \(0.7\)은 변하지 않는다.</p>
+<p>\(c\)도 우리가 선택한 하나의 상수이므로 역시 변하지 않습니다. 따라서 \(2(m(h)-c)\) 를 기대값 밖으로 꺼낼 수 있다.</p>
+<p>\(2(m(h)-c)
+E[r_t-m(h)\mid H_t=h]\)</p>
+<p>그리고</p>
+<div class="math-block">\[
+
+
+\begin{aligned}
+
+E[r_t-m(h)\mid H_t=h]
+
+&amp;=
+
+E[r_t\mid H_t=h] -
+E[m(h)\mid H_t=h]\\
+
+&amp;=
+
+m(h)-m(h)\\
+
+&amp;=0
+
+\end{aligned}\]</div>
+<h4 id="block-3f6b12c0115c80ef88f9ff1bfed4aa56">마지막 항</h4>
+<p>\(E[(m(h)-c)^2\mid H_t=h]\) \(H_t=h\) 를 고정하면 \(m(h)\)도 고정된 숫자이고 \(c\)도 숫자.</p>
+<p>따라서 \((m(h)-c)^2\) 에는 더 이상 랜덤한 것이 없음으로 \(E[(m(h)-c)^2\mid H_t=h] =
+(m(h)-c)^2\)</p>
+<p>이제 세 항을 합치면 \(E[(r_t-c)^2\mid H_t=h] =
+\operatorname{Var}(r_t\mid H_t=h)
+
++
+
+(m(h)-c)^2\)</p>
+<p>이 식을 직관적으로 보면</p>
+<div class="math-block">\[\underbrace{E[(r_t - c)^2 \mid H_t = h]}_{\text{내가 } c\text{를 예측했을 때 평균 제곱오차}} = \underbrace{\text{Var}(r_t \mid H_t = h)}_{\text{어떤 } c\text{를 골라도 없앨 수 없는 오차}} + \underbrace{(m(h) - c)^2}_{\text{내 예측 } c\text{를 잘못 골라서 생긴 오차}}\]</div>
+<p>즉 MSE 오차 = 줄일 수 없는 오차 + 줄일 수 있는 오차(reducible error)로</p>
+<div class="math-block">\[
+
+\text{conditional MSE}
+=
+\underbrace{(m(h)-c)^2}_{\text{reducible}}
++
+\underbrace{\operatorname{Var}(r\mid h)}_{\text{irreducible}}
+\]</div>
+<p>첫 번째 항 \(\operatorname{Var}(r_t\mid H_t=h)\)은 c와 아무 상관이 없다. </p>
+<p>Student가 무엇을 출력하든 그대로 남는다.</p>
+<p>그래서 MSE를 최소화하려면 Student가 조절할 수 있는 두 번째 항 \((m(h)-c)^2\)만 최소화하면 되고 이 값은 \(c = m(h)\) 일 때 0이 된다.</p>
+<p>따라서 Point-wise recoverability를</p>
+<div class="math-block">\[R_{\text{pointwise}}=\frac{(m(h)-c)^2}{\operatorname{Var}(r\mid h)+(m(h)-\mu)^2}\in[0,1]\]</div>
+<p>가 되고 이것의 의미는</p>
+<div class="math-block">\[
+R_{\text{pointwise}}
+=
+\frac{\text{줄일 수 있는 오차}}{\text{전체 오차}}
+\]</div>
+<h3 id="block-3f6b12c0115c8021a30ed3b92db647e1">Example</h3>
+<h4 id="block-3f6b12c0115c805c97f1e642e66a09bb">timestep 1: 대부분 재현 가능한 경우</h4>
+<p>예를 들어</p>
+<p>현재 오차 10 중에서</p>
+<ul><li>2: Student에게 없는 정보 때문에 아무리 학습해도 남음</li><li>8: Student가 h를 잘 활용해서 \(m(h)\)를 배우면 없앨 수 있음</li></ul>
+<div class="math-block">\[10
+=
+\underbrace{2}_{\operatorname{Var}(r\mid h)}
++
+\underbrace{8}_{(m(h)-c)^2}\]</div>
+<p>라고 하자.</p>
+<p>Student가 충분히 학습하면 오차를 \(10\rightarrow2\) 까지 줄일 수 있다.</p>
+<p>그러므로 현재 Teacher correction의 \(\frac{8}{10}=0.8\)</p>
+<p>따라서 80%는 Student가 재현할 수 있는 부분이라고 볼 수 있다.</p>
+<p>그래서 이런 timestep에는 distillation loss를 강하게 줘도 된다. → \(w_t=0.8\)</p>
+<h4 id="block-3f6b12c0115c8018a47cce35fb60d5e5">timestep 2: 대부분 재현 불가능한 경우</h4>
+<p>이번에는 똑같이 전체 MSE가 10인데</p>
+<div class="math-block">\[10
+=
+\underbrace{8}_{\operatorname{Var}(r\mid h)}
++
+\underbrace{2}_{(m(h)-c)^2}\]</div>
+<p>라고 해자.</p>
+<p>Student가 충분히 학습하면 오차를 \(10\rightarrow8\) 까지 줄일 수 있다.</p>
+<p>그러므로 실제로 Student가 recover 가능한 부분은 \(\frac{2}{10}=0.2\)</p>
+<p>따라서 20% 는 Student가 재현할 수 있는 부분이라고 볼 수 있다.</p>
+<p>이 timestep에서 Teacher action을 강하게 따라가라고 하면 Student 입장에서는 문제가 생긴다.</p>
+<p>왜냐하면 Student가 가지고 있지도 않은 정보를 맞히라고 강요하는 셈이다.</p>
+<p>그래서 weight를 작게 줘도 된다 → \(w_t=0.2\)</p>
+<p>예를 들어 같은 \(H_t=h\) 에 대해 Teacher correction이 depth에 따라</p>
+<div class="math-block">\[r_t=
+\begin{cases}
+-1 &amp; 50\%\\
++1 &amp; 50\%
+\end{cases}\]</div>
+<p>라면 \(m(h)=E[r_t\mid H_t=h]=0\) 이고 분산은 \(\operatorname{Var}(r_t\mid H_t=h)=1\)</p>
+<p>Student가 \(c=0.3\)을 예측한다고 해보면, \(E[(r_t-0.3)^2\mid h]
+=
+1+(0-0.3)^2
+=
+1.09.\)</p>
+<p>반면 최적인 \(c=0\)을 출력하면 \(E[(r_t-0)^2\mid h]
+=
+1.\)</p>
+<p>여기서 1은 Student가 depth를 모르기 때문에 아무리 잘 학습해도 제거할 수 없는 오차가 된다.</p>
+<h3 id="block-3f6b12c0115c80999c19ffecd71c31a2">이전 발표 Feedback</h3>
+<p>교수님이 피드백으로 Gaussian MPC에서 실시간 불확실성을 출력하니 알아보라 하셨다.</p>
+<p>확인해보니 이는 현재와 과거 상태 데이터들이 주어졌을 때를 조건부로하여 다음상태가 조건부 가우시안 분포를 따른다고 가정하고 다음 예측값을 구한다.</p>
+<p>그러나 우리의 task는 과거 입력 데이터들이 아닌 현재 입력데이터가 주어졌을 때를 조건부로 출력 분포를 학습하도록 하고 이때의 분포는 가우시안이며 가우시안의 평균을 출력하도록 하는 것이다.</p>
+<details class="toggle"><summary><strong>GP MPC 예시</strong></summary><div class="toggle-body"><h3 id="block-3f6b12c0115c80dc801bfa1709368e18">Example</h3>
+<h4 id="block-3f6b12c0115c80a9b9a5fa1dcf5b122b">Step 1</h4>
+<p>t 시점에서 속도가 \(x_t = 0.50\)</p>
+<p>기존 물리모델은 이 상태에서 다음 속도를 \(
+\hat x_{t+1}=0.54\) 라고 예측</p>
+<p>그런데 실제 다음 속도를 측정해보니 \(
+x_{t+1}=0.60
+\) </p>
+<p>모델의 오차는 \(
+d_t
+=
+x_{t+1} - \hat x_{t+1}
+=0.60-0.54
+=+0.06
+\) </p>
+<p>그래서 GP 학습 데이터로 \((0.50,\;+0.06)\) 를 저장.</p>
+<ul><li>속도가 0.50인 상태에서는 기존 모델이 다음 상태를 약 0.06 작게 예측했네.</li></ul>
+<h4 id="block-3f6b12c0115c8031a31cf4089c26ef0b">Step 2</h4>
+<p>그 다음 시점 t+1에서 속도가 \(x_{t+1}=0.60\)</p>
+<p>기존 물리모델은 이 상태에서 다음 속도를 \(\hat{x}_{t+2}=0.68
+\) 이라고 예측</p>
+<p>그런데 실제 다음 속도를 측정해보니 \(x_{t+2}=0.78\)</p>
+<p>모델의 오차는 \(d_{t+1} = x_{t+2}-\hat{x}_{t+2} =0.78 - 0.68 = +0.10\)</p>
+<p>그래서 GP 학습 데이터로 \((0.60,\;+0.10)\) 를 저장.</p>
+<ul><li>속도가 \(0.60\)인 상태에서는 기존 모델이 다음 상태를 약 \(0.10\)작게 예측했네.</li></ul>
+<h4 id="block-3f6b12c0115c80369151f3d585964389">Total</h4>
+<p>그러면 Step 1~2까지 GP가 가지고 있는 데이터는</p>
+<div class="math-block">\[
+X=
+\begin{bmatrix}
+0.50\\
+0.60
+\end{bmatrix},
+\qquad
+y=
+\begin{bmatrix}
+0.06\\
+0.10
+\end{bmatrix}
+\]</div>
+<h4 id="block-3f6b12c0115c80f3a3dacf7383341e49">Deploy</h4>
+<h4 id="block-3f6b12c0115c8070ae42c459229c412d">Step 1</h4>
+<p>현재 속도가 \(x_* = 0.52\) 로 측정되었다.</p>
+<p>현재 0.52가 과거 데이터들 (0.50, 0.60)과 얼마나 비슷한지 계산</p>
+<p>비슷한 정도는 커널 함수로 계산.</p>
+<p>현재 \(0.52\)와 과거 \(0.50\)을 비교하면 커널함수로 계산했더니 \(\approx 0.995\)</p>
+<p>거의 1에 가까움으로 현재 0.52는 과거의 0.50과 거의 같은 상황이다.</p>
+<p>이번에는 \(0.60\)과 비교했더니 \(\approx 0.923\)</p>
+<p>현재 상태와 과거 데이터의 유사도를 모으면</p>
+<div class="math-block">\[k_*= \begin{bmatrix} 0.995\\ 0.923 \end{bmatrix}\]</div>
+<p>과거 데이터끼리 서로 얼마나 비슷한지도 알고 있어야 한다.</p>
+<p>과거 입력은 \(0.50,\;0.60\) 이므로 \(k(0.50,0.50)=1\)</p>
+<p>\(k(0.60,0.60)=1\), \(k(0.50,0.60) \approx0.882\)</p>
+<p>과거 데이터들끼리의 유사도를 모으면</p>
+<p>\(K= \begin{bmatrix} 1 &amp; 0.882\\ 0.882 &amp; 1 \end{bmatrix}\)</p>
+<h4 id="block-3f6b12c0115c802baa79d83d49e4cf93">Step 2</h4>
+<p>제 GP가 실제로 알고 싶은 것은</p>
+<blockquote>현재 속도가 0.52일 때 기존 모델은 얼마나 틀릴까?</blockquote>
+<p>GP의 평균 식: \(\mu(x_*) = k_*^T (K+\sigma_n^2I)^{-1} y \)</p>
+<p>측정 노이즈를 \(\sigma_n^2=0.01\) 라고 하면 \(K+\sigma_n^2I = \begin{bmatrix} 1.01 &amp; 0.882\\ 0.882 &amp; 1.01 \end{bmatrix}\)</p>
+<p>\( \mu(0.52) = \begin{bmatrix} 0.995 &amp; 0.923 \end{bmatrix} \begin{bmatrix} 1.01 &amp; 0.882\\ 0.882 &amp; 1.01 \end{bmatrix}^{-1} \begin{bmatrix} 0.06\\ 0.10 \end{bmatrix} \approx 0.0698\)</p>
+<p>약 + 0.07 정도의 오차가 발생할 것이라고 추정</p>
+<p>\(\sigma^2(x_*) = k(x_*,x_*)-k_*^T
+(K+\sigma_n^2I)^{-1}
+k_*\)</p>
+<ul><li>\(k(0.52,0.52)=1\)</li></ul>
+<p>\( \sigma^2(0.52) = 1- \begin{bmatrix} 0.995&amp;0.923 \end{bmatrix} \begin{bmatrix} 1.01&amp;0.882\\ 0.882&amp;1.01 \end{bmatrix}^{-1} \begin{bmatrix} 0.995\\ 0.923 \end{bmatrix} \approx 0.0077\)</p>
+<p>0.52 근처는 내가 이미 본 영역이네, 그러니까 내가 예상한 +0.07이라는 오차를 꽤 믿을 수 있겠군.</p>
+<p>이제 기존 물리모델이 현재 \(x_*=0.52\)에서 다음 속도를 \(\hat x_{t+1}=0.56\) 이라고 예측</p>
+<p>그런데 GP는 \(\mu(0.52)\approx+0.07\) 이라고 했음으로 </p>
+<p>최종예측은 \(\hat x'_{t+1} = \hat x_{t+1} + \mu(0.52)= 0.56 + 0.07 = 0.63\) </p>
+<p>다음 속도는 0.63이고 이때의 예측 불확실성은 0.0077</p>
+<p>핵심: 기존 모델로 실제 시스템을 운용하면서 <code>상태 → 모델 오차</code> 데이터를 미리 수집하고, 이후 운용할 때 현재 상태와 과거 상태들의 유사도를 이용해 기존 모델의 다음 상태 예측을 GP로 보정하면서, 동시에 그 보정값의 불확실성까지 계산한다.</p>
+<p>사전에 학습완료된 모델로 스튜던트가 residual을 예측하게 한다. 그리고 그 예측한 것과 정답과의 오차를 저장한다. 모든 입력데이터에 대해서 저장한다.</p>
+<p>그리고 scratch 학습시에 어느시점에 스튜던트가 residual을 예측한다.
+그 예측한 값과 유사도를 계산해서 유사도 테이블을 만들고  \(\mu(x_*) = k_*^T (K+\sigma_n^2I)^{-1} y \) 를 계산한다.</p>
+<p>그리고 그 때의 \(\sigma^2(x_*) = k(x_*,x_*)-k_*^T
+(K+\sigma_n^2I)^{-1}
+k_*\) 를 구한다.</p>
+<p>GP는 입력 \(x_1,x_2,\dots,x_N\)를 그냥 주어진 위치들로 보고, 그 위치에서의 함수값 </p>
+<p>\(f(x_1),f(x_2),\dots,f(x_N)\) 이 공동 Gaussian을 따른다고 가정</p>
+<p>\(\begin{bmatrix} f(x_1)\\ f(x_2)\\ \vdots\\ f(x_N)\\ f(x_*) \end{bmatrix} \sim \mathcal N(\mu,K) \)</p>
+<p>\(\text{함수의 출력값 }f(x)\text{들이 joint Gaussian}\) 을 따른다.</p>
+<p>이때 공동 Gaussian에서 일반적으로 \(\begin{bmatrix} a\\ b \end{bmatrix} \sim \mathcal N \left( \begin{bmatrix} \mu_a\\ \mu_b \end{bmatrix}, \begin{bmatrix} A&amp;C\\ C^T&amp;B \end{bmatrix} \right)\)</p>
+<p>이면 \(b | a\) 의 분산이 \(B-C^TA^{-1}C\) 가 된다.</p></div></details></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/theme.js?v=1" defer></script>
+    <script src="/assets/js/post.js?v=14" type="module"></script>
+    <script src="/assets/js/palette.js?v=9" defer></script>
+  </body>
+</html>
