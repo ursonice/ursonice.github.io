@@ -6,7 +6,7 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Sat, 10 Oct 2026 13:01:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 10 Oct 2026 23:59:00 GMT</lastBuildDate>
     <item>
       <title>Protecting Language Models Against Unauthorized Distillation through
 Trace Rewriting 논문리뷰</title>
