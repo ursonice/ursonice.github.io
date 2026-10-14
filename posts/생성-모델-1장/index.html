@@ -30,13 +30,13 @@
     <meta property="og:url" content="https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-1%EC%9E%A5/" />
     <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8%201%EC%9E%A5&amp;cat=AI%2F%20Deep%20Learning" />
     <meta property="article:published_time" content="2026-09-20T00:32:00.000Z" />
-    <meta property="article:modified_time" content="2026-09-26T03:21:00.000Z" />
+    <meta property="article:modified_time" content="2026-10-14T10:09:00.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="생성 모델 1장" />
     <meta name="twitter:description" content="서론 생성 모델의 핵심 문제는 단순히 학습 데이터를 외우는 것이 아니라, 데이터가 어떤 규칙에 따라 나타나는지를 나타내는 관측된 데이터의 분포를 학습하는 것이다. 그런데 여기서 딜레마가 생긴다. 복잡한 데이터 분포를 충분히 표현하는 것과 그 분포에서 확률 또는 확률밀도를 실제로 계산할 수 있게 만드는 것" />
     <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8%201%EC%9E%A5&amp;cat=AI%2F%20Deep%20Learning" />
 
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"생성 모델 1장","description":"서론 생성 모델의 핵심 문제는 단순히 학습 데이터를 외우는 것이 아니라, 데이터가 어떤 규칙에 따라 나타나는지를 나타내는 관측된 데이터의 분포를 학습하는 것이다. 그런데 여기서 딜레마가 생긴다. 복잡한 데이터 분포를 충분히 표현하는 것과 그 분포에서 확률 또는 확률밀도를 실제로 계산할 수 있게 만드는 것","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8%201%EC%9E%A5&cat=AI%2F%20Deep%20Learning","datePublished":"2026-09-20T00:32:00.000Z","dateModified":"2026-09-26T03:21:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-1%EC%9E%A5/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"생성 모델 1장","description":"서론 생성 모델의 핵심 문제는 단순히 학습 데이터를 외우는 것이 아니라, 데이터가 어떤 규칙에 따라 나타나는지를 나타내는 관측된 데이터의 분포를 학습하는 것이다. 그런데 여기서 딜레마가 생긴다. 복잡한 데이터 분포를 충분히 표현하는 것과 그 분포에서 확률 또는 확률밀도를 실제로 계산할 수 있게 만드는 것","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8%201%EC%9E%A5&cat=AI%2F%20Deep%20Learning","datePublished":"2026-09-20T00:32:00.000Z","dateModified":"2026-10-14T10:09:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-1%EC%9E%A5/"}}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Deep Learning","item":"https://ursonice.github.io/topics/ai-deep-learning/"},{"@type":"ListItem","position":3,"name":"생성 모델 1장","item":"https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-1%EC%9E%A5/"}]}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -88,7 +88,7 @@
     <div class="article-meta">
       
       
-      <span>작성 2026년 9월 20일</span><span class="dot"></span><span>수정 2026년 9월 26일</span>
+      <span>작성 2026년 9월 20일</span><span class="dot"></span><span>수정 2026년 10월 14일</span>
       <span class="reading-size" role="group" aria-label="글자 크기">
         <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
         <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
@@ -106,7 +106,8 @@
 <p>예를 들어 사진 (x)가 주어졌을 때 \(p(y\mid x)\) 즉, “이 사진이 고양이일 확률은 얼마인가?”를 판단하는 문제가 대표적이다.</p>
 <p>반면 생성 모델은 새로운 (x) 자체를 만들어야 한다.</p>
 <p>모델은 어떤 눈 모양이 자연스러운지 귀와 얼굴이 어떤 관계를 가지는지 털, 자세, 배경 등이 어떻게 함께 나타나는지와 같은 데이터 전체의 통계적 구조와 규칙을 배워야 한다.</p>
-<p>이를 확률적으로 표현하면 실제 데이터가 생성되는 알 수 없는 분포 \(p_{\text{data}}(x)\)를 직접 알 수 없으므로, 우리의 모델이 표현하는 분포 \(q_\theta(x)\)가 그것을 최대한 잘 근사하도록 학습하는 문제라고 볼 수 있다. </p>
+<p>이를 확률적으로 표현하면 실제 데이터가 생성되는 알 수 없는 분포 \(p_{\text{data}}(x)\)를 직접 알 수 없으므로, </p>
+<p>실제 데이터가 따르는 확률분포를 우리 모델(\(q_\theta(x)\))이 학습하여 최대한 비슷하게 만들어 내도록 학습한다.</p>
 <p>즉, 생성 모델의 목적은 학습 데이터라는 점들의 목록을 외우는 것이 아니라, 그 점들이 나타나는 분포를 배우는 것이다.</p>
 <h4 id="block-3e6b12c0115c8073808df6304de6d158">그렇다면 어떤 분포가 데이터를 잘 설명한다고 판단할 것인가?</h4>
 <p>문제는 실제 데이터 분포 \(p_{\text{data}}(x)\)를 우리가 직접 모른다는 것이다.</p>
@@ -158,10 +159,9 @@ q_\theta(x_n)\]</div>
 <p>라고 이해할 수 있다.</p>
 <h4 id="block-3e7b12c0115c80b883f1db6ef4ab862b"><strong>연속 데이터에서는 ‘확률’과 ‘밀도’를 구분해야 한다</strong></h4>
 <p>지금까지 우리는 실제 데이터 \(x_i\)에 대해 \(q_\theta(x_i)\)가 클수록 모델이 그 데이터를 더 그럴듯하게 설명한다고 보았다.</p>
-<p>앞에서 우리는 모델이 실제 관측 데이터에 높은 \(q_\theta(x_i)\)를 부여할수록, 그 데이터를 잘 설명하는 모델이라고 보았다.</p>
 <p>그런데 여기서 \(q_\theta(x_i)\)가 정확히 무엇을 의미하는지 짚고 넘어가야 한다.</p>
 <p>키와 같이 연속적인 값을 다루는 경우 \(q_\theta(x_i)\)는 \(x_i\)가 나올 확률이 아니라 그 위치의 확률밀도(probability density) 이다.</p>
-<p>연속확률변수에서는 정확히 한 점이 나올 확률은 \(P(X=x)=0\) 이고 실제 확률은 특정 구간에 대해서 계산한다/</p>
+<p>연속확률변수에서는 정확히 한 점이 나올 확률은 \(P(X=x)=0\) 이고 실제 확률은 특정 구간에 대해서 계산한다.</p>
 <div class="math-block">\[P(a\le X\le b)
 =
 \int_a^b q_\theta(x)\ dx\]</div>
@@ -211,15 +211,15 @@ q_\theta(x_n)\]</div>
 <p>학습 데이터의 규칙과 비슷하다면 새로운 데이터를 만들어낼 수 있어야 한다.</p>
 <p>예를 들어 우리가 학습한 고양이 사진 중에</p>
 <ul><li>정확히 이 자세이고</li><li>정확히 이 털 색깔이며</li><li>정확히 이 배경을 가진</li></ul>
-<p>고양이가 한 번도 없었다고 하더라도, 그 조합이 충분히 자연스러운 고양이 사진이라면 생성 모델은 이를 만들어낼 수 있어야 한다.
-</p>
+<p>고양이가 한 번도 없었다고 하더라도, 그 조합이 충분히 자연스러운 고양이 사진이라면 생성 모델은 이를 만들어낼 수 있어야 한다.</p>
 <p>우리가 원하는 것은 단순히 데이터의 목록을 외우는 것이 아니라 관측된 데이터들을 보고</p>
 <p>“이 데이터들이 어떤 규칙을 따라 모여 있는가?” 를 알아낸 뒤, 아직 직접 보지 못한 위치에도 적절한 밀도를 부여할 수 있어야 한다.</p>
 <p>즉 단순히 점 하나하나(데이터)를 외우는 대신, 점들 사이의 공통적인 구조를 이용해 분포 전체를 추정해야 한다.</p>
 <p>그래서 다음 아이디어가 나온다.</p>
 <blockquote>그렇다면 “가우시안처럼 이미 수식으로 정의된 분포를 하나 정한 뒤, 데이터에 맞게 그 분포의 모양만 조절하면 어떨까?”</blockquote>
 <h4 id="block-3e7b12c0115c802dad71e1e38dc79ff2"><strong>방법 B. 모양이 정해진 확률분포로 데이터를 근사한다</strong></h4>
-<p>수식으로 정의된 분포를 하나 정하는 이유는 확률밀도함수가 있어야 확률밀도를 계산할 수 있기 때문이다. 그중 가우시안 분포는</p>
+<p>수식으로 정의된 분포를 하나 정하는 이유는 확률밀도함수가 있어야 확률밀도를 계산할 수 있기 때문이다. </p>
+<p>우리는 가우시안 분포로 정한다.</p>
 <div class="math-block">\[q_\theta(x)
 =
 \frac{1}{\sqrt{2\pi\sigma^2}}
@@ -227,8 +227,7 @@ q_\theta(x_n)\]</div>
 \left(
 -\frac{(x-\mu)^2}{2\sigma^2}
 \right)\]</div>
-<p>처럼 이미 확률밀도 함수의 형태가 정해져 있다.</p>
-<p>우리가 결정해야 하는 것은 주로 \(\mu,\; \sigma\) 로 어디를 중심으로 할 것인가, 그리고 얼마나 넓게 퍼질 것인가이다. 이 방법의 장점은 매우 크다.</p>
+<p>가우시안 분포는 주로 \(\mu,\; \sigma\) 로 어디를 중심으로 할 것 인가, 그리고 얼마나 넓게 퍼질 것인가 이다. 이 방법의 장점은 매우 크다.</p>
 <p>히스토그램에서는 데이터가 없는 칸에 곧바로 0을 주었지만, 가우시안에서는 관측 데이터 주변에도 자연스럽게 밀도가 이어진다.</p>
 <p>따라서 likelihood를 계산할 수 있다.</p>
 <h4 id="block-3e7b12c0115c803db53ad7f034593e3d">그런데 가우시안 하나로 실제 데이터를 설명할 수 있을까?</h4>
@@ -387,10 +386,10 @@ q_\theta(x_n)\]</div>
 <p>따라서 새로운 \(\mu\)와 \(\sigma\)가 주어져도 복잡한 적분을 매번 다시 풀 필요 없이, 이미 알려진 공식에 대입하면 바로 확률밀도를 계산할 수 있다.</p>
 <p>반면 신경망의 경우 \(Z_\theta
 =
-\int \exp(f_\theta(x))\,dx\) 에서 \(f_\theta(x)\)가 만들어내는 모양이 거의 어떤 형태든 될 수 있다.</p>
+\int \exp(f_\theta(x))\,dx\) 에서 \(f_\theta(x)\)가 만들어내는 모양은 어떤 형태든 될 수 있다.</p>
 <p>따라서 가우시안처럼 “이 함수의 전체 넓이는 항상 이 공식으로 계산된다.” 라고 미리 적어둘 수 있는 간단한 식이 일반적으로 존재하지 않는다.</p>
 <h4 id="block-3e7b12c0115c80ec94becaf8018b5d21">왜 이런 차이가 생길까?</h4>
-<p> 가우시안의 모양이 매우 제한적이기 때문이다. 가우시안은 아무 모양이나 만들 수 있는 함수가 아니다. 평균 \(\mu\)를 움직이면 봉우리의 위치가 바뀌고, 분산 \(\sigma^2\)을 바꾸면 봉우리의 폭이 변하지만, 결국 기본적으로는 하나의 매끄러운 종 모양이라는 형태를 벗어나지 않는다.</p>
+<p>가우시안의 모양이 매우 제한적이기 때문이다. 가우시안은 아무 모양이나 만들 수 있는 함수가 아니다. 평균 \(\mu\)를 움직이면 봉우리의 위치가 바뀌고, 분산 \(\sigma^2\)을 바꾸면 봉우리의 폭이 변하지만, 결국 기본적으로는 하나의 매끄러운 종 모양이라는 형태를 벗어나지 않는다.</p>
 <p>즉 가우시안은 표현할 수 있는 모양을 제한한 대신,</p>
 <div class="math-block">\[\int
 \exp\left(
