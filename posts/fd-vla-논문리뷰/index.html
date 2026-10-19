@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fbfaf7" />
+    <script>(function(){try{var t=localStorage.getItem("theme")||"light";document.documentElement.dataset.theme=t;var r=localStorage.getItem("reading");if(r)document.documentElement.dataset.reading=r;var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",t==="dark"?"#0a0b0e":"#fbfaf7");}catch(e){}})();</script>
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>FD-VLA 논문리뷰 — Woojae Joo</title>
+    <meta name="post-slug" content="fd-vla-논문리뷰" />
+    <meta name="description" content="서론 1. 기존 문제점 VLA가 정밀한 접촉 작업을 수행하려면 힘(Force) 정보가 중요하지만, 힘-토크 센서는 비용이 높고 하드웨어 복잡성을 증가시킨다. 2. 핵심 아이디어 학습 단계에서는 실제 힘 센서 정보를 활용하되, 추론 단계에서는 카메라 영상과 로봇 상태만으로 힘과 관련된 특징을 예측하는 FD" />
+    <link rel="canonical" href="https://ursonice.github.io/posts/fd-vla-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="FD-VLA 논문리뷰" />
+    <meta property="og:description" content="서론 1. 기존 문제점 VLA가 정밀한 접촉 작업을 수행하려면 힘(Force) 정보가 중요하지만, 힘-토크 센서는 비용이 높고 하드웨어 복잡성을 증가시킨다. 2. 핵심 아이디어 학습 단계에서는 실제 힘 센서 정보를 활용하되, 추론 단계에서는 카메라 영상과 로봇 상태만으로 힘과 관련된 특징을 예측하는 FD" />
+    <meta property="og:url" content="https://ursonice.github.io/posts/fd-vla-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=FD-VLA%20%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0&amp;cat=AI%2F%20Deep%20Learning" />
+    <meta property="article:published_time" content="2026-10-16T12:42:00.000Z" />
+    <meta property="article:modified_time" content="2026-10-19T01:00:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="FD-VLA 논문리뷰" />
+    <meta name="twitter:description" content="서론 1. 기존 문제점 VLA가 정밀한 접촉 작업을 수행하려면 힘(Force) 정보가 중요하지만, 힘-토크 센서는 비용이 높고 하드웨어 복잡성을 증가시킨다. 2. 핵심 아이디어 학습 단계에서는 실제 힘 센서 정보를 활용하되, 추론 단계에서는 카메라 영상과 로봇 상태만으로 힘과 관련된 특징을 예측하는 FD" />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=FD-VLA%20%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0&amp;cat=AI%2F%20Deep%20Learning" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"FD-VLA 논문리뷰","description":"서론 1. 기존 문제점 VLA가 정밀한 접촉 작업을 수행하려면 힘(Force) 정보가 중요하지만, 힘-토크 센서는 비용이 높고 하드웨어 복잡성을 증가시킨다. 2. 핵심 아이디어 학습 단계에서는 실제 힘 센서 정보를 활용하되, 추론 단계에서는 카메라 영상과 로봇 상태만으로 힘과 관련된 특징을 예측하는 FD","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=FD-VLA%20%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0&cat=AI%2F%20Deep%20Learning","datePublished":"2026-10-16T12:42:00.000Z","dateModified":"2026-10-19T01:00:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/fd-vla-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Deep Learning","item":"https://ursonice.github.io/topics/ai-deep-learning/"},{"@type":"ListItem","position":3,"name":"FD-VLA 논문리뷰","item":"https://ursonice.github.io/posts/fd-vla-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=40" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">본문으로 이동</a>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell" id="content">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/ai-deep-learning/">AI/ Deep Learning</a>
+    </nav>
+    <h1>FD-VLA 논문리뷰</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2026년 10월 16일</span><span class="dot"></span><span>수정 2026년 10월 19일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-3fbb12c0115c80a9b869de0746673702">서론</h2>
+<p>1. 기존 문제점</p>
+<ul><li>VLA가 정밀한 접촉 작업을 수행하려면 힘(Force) 정보가 중요하지만, 힘-토크 센서는 비용이 높고 하드웨어 복잡성을 증가시킨다.</li></ul>
+<p>2. 핵심 아이디어</p>
+<ul><li>학습 단계에서는 실제 힘 센서 정보를 활용하되, 추론 단계에서는 카메라 영상과 로봇 상태만으로 힘과 관련된 특징을 예측하는 FDM을 학습한다.</li><li>이를 위해 Force Distillation Module(FDM) 을 도입하여 실제 힘 정보를 잠재 표현인 Force Token으로 증류한다.</li></ul>
+<p>3. 제안 방법</p>
+<ul><li>Force Distillation Module(FDM): 학습 가능한 Query Token을 이용해 영상과 로봇 상태에서 힘 관련 특징을 추출하고, 실제 힘 센서로부터 얻은 특징과 유사해지도록 학습한다.</li><li>Force Token 활용: 추론 단계에서 예측한 힘 관련 특징(Force Token)을 VLM에 추가로 입력하여, 실제 힘 센서 없이도 힘을 고려한 로봇 행동을 생성한다.</li></ul>
+<blockquote>Query Token은 힘 정보를 찾아내기 위한 학습 가능한 벡터</blockquote>
+<p>4. 실험 결과</p>
+<ul><li>실제 로봇 실험에서 예측 Force Token을 사용하는 FD-VLA가 실제 힘 센서 정보를 직접 사용하는 기존 비교 모델보다 높은 작업 성능을 보였다.</li><li>추가적인 Force-Vision-State 융합을 통해 접촉 작업에서의 인식 및 행동 강건성을 향상시켰다고 보고한다.</li></ul>
+<h2 id="block-3fdb12c0115c8031bf26c85ab5c970fe">본론</h2>
+<p>힘 센서를 모델의 입력에 추가하기 위해 대규모 시각-언어 모델을 직접 재학습하는 것은 계산 비용이 매우 크며, 기존에 잘 정렬된 시각-언어 표현을 손상시킬 위험이 있다.</p>
+<p>따라서 우리는 사전학습된 VLM을 수정하지 않고 별도의 모듈을 통해 힘 정보를 사용할 수 있도록 한다.</p>
+<h3 id="block-3fdb12c0115c8027b120d61202790702">1. 힘 센서의 문제</h3>
+<figure><img src="/assets/notion/fd-vla-논문리뷰/3fdb12c0-115c-804f-bf76-d64a1aac8b33.png" alt="" loading="lazy" width="672" height="462" /></figure>
+<p>그림 3에서 보이는 것처럼, 실제 환경에서 수집한 힘 센서에는 고주파 잡음과 저주파 드리프트가 포함되는 경우가 많으므로 정책 학습에 적합하지 않을 수 있음을 관찰하였다.</p>
+<blockquote>고주파 잡음: 센서의 측정값이 잛은 시간에 빠르게 흔들리는 현상
+저주파 드리프트: 센서의 기준값이 시간이 지나면서 천천히 변하는 현상</blockquote>
+<p>이런 신호를 그대로 모델에 입력하면, 실제 접촉 힘뿐 아니라 불필요한 잡음까지 학습할 수 있다.</p>
+<h3 id="block-3fdb12c0115c80f9adbaed63291eaeae">2. FD-VLA</h3>
+<h3 id="block-3fdb12c0115c80e2b577e86989800e57">3가지 원칙</h3>
+<p>이러한 문제를 해결하기 위해 다음 세 가지 설계 원칙에 기반한 FD-VLA를 제안한다.</p>
+<h4 id="block-3fdb12c0115c808fbc87c98f114c4cc4">phase 1</h4>
+<p>학습 단계에서만 실제 힘 신호를 활용하여 지식 증류를 수행하고, 이를 통해 얻은 예측 힘 토큰을 사용한다.</p>
+<h4 id="block-3fdb12c0115c807fa595f524b73264ca">phase 2</h4>
+<p>이미지, 언어, 로봇 상태, 예측된 힘 정보를 VLM 전후의 여러 단계에서 연관시켜 처리한다. 이를 통해 기존 VLM의 지식을 보존하면서도 힘을 고려한 행동을 생성하게 한다.</p>
+<h4 id="block-3fdb12c0115c80c0ba87f53037721b92">phase 3</h4>
+<p>실제 배포 환경에서는 힘 센서 없이 추론할 수 있도록 하여, 다양한 로봇 플랫폼에 실용적으로 적용할 수 있게 한다.</p>
+<h2 id="block-3fdb12c0115c803997d7c8fcd2ee1e9d">3. Framework</h2>
+<figure><img src="/assets/notion/fd-vla-논문리뷰/3fdb12c0-115c-8042-8a00-dc16adf2980d.png" alt="" loading="lazy" width="1408" height="878" /></figure>
+<p>그림 2는 제안하는 FD-VLA의 전체 프레임워크를 보여준다.</p>
+<h3 id="block-3fdb12c0115c8040971efcd1b30297a3">Input</h3>
+<p>입력은 </p>
+<ul><li>언어 명령: \(L\)</li><li>시각 관측 :\(V_t\)</li><li>로봇 상태: \(S_t\)</li><li>힘: \(F_t\)로 구성되며,</li><li>\(t\)는 시간 인덱스를 의미한다.</li></ul>
+<h4 id="block-3fdb12c0115c80269fc4c7e6a62a7857">Encoding</h4>
+<ul><li>\(L \) → pretrained Tokenizer → \(f^L \in \mathbb{R}^{N_l\times D}\) </li><li>\(V_t\) → pretrained SigLIP → \(f_t^V \in \mathbb{R}^{N_v\times D}\)</li><li>\(S_t\) → MLP → \(f_t^S \in \mathbb{R}^{N_s\times D}\) </li></ul>
+<p> 여기서 \(N_v,N_l,N_s\)는 각각 이미지, 언어, 로봇 상태의 토큰 수이고 \(D\)는 각 토큰 벡터의 차원이다.</p>
+<h2 id="block-3fdb12c0115c804e8edee5a60f54c1fc">4. 사전학습 모델</h2>
+<p>이미 학습된 SmolVLM-2를 활용한다.</p>
+<p>이미지 특징을 추출하는 데에는 SigLIP을 사용한다.</p>
+<h2 id="block-3fdb12c0115c80108d44cff83db707ba">5. Force Distillation Module</h2>
+<p>기존 방식은 힘 센서에서 측정한 데이터를 VLM에 직접 넣었다면, FD-VLA는 이미지와 로봇 상태를 이용해 힘에 관한 특징 벡터를 먼저 예측한 뒤 VLM에 전달한다.</p>
+<div class="math-block">\[
+f_t^{pF}=\operatorname{FDM}(f_t^V,f_t^S,p)
+\tag{1}
+\]</div>
+<p>시각 특징 \(f_t^V\), 로봇 상태 특징 \(f_t^S\), 학습 가능한 토큰 \(p\)를 FDM에 입력하여 예측된 잠재 힘 표현 \(f_t^{pF}\)를 생성한다.</p>
+<h2 id="block-3fdb12c0115c80d4bcc2d9f439dfdea6">6. learnable token의 의미</h2>
+<p>\(p\)는 FDM이 이미지와 로봇 상태에서 힘 관련 정보를 추출할 때 사용하는 학습 가능한 Query 토큰이다.</p>
+<ul><li>Query Weight: 지금 입력으로 부터 어떤 것을 내가 봐야하는가?</li><li>Key Weight: 지금 입력의 특징을 잘 분해해서 Query와 내적했을 때 값이 커져 원하는 정보를 쉽게 가져갈 수 있도록 표현하는 역할</li><li>Value weight: Attention score로부터 강조되는 토큰이 최종 출력에 유용한 형태로 가공되도록 하는 역할</li></ul>
+<p>처음에는 학습되지 않은 벡터이지만, 학습 과정에서 실제 힘과 관련된 특징을 잘 추출하도록 값이 갱신된다.</p>
+<p>이미지와 로봇 상태 특징을 참조하여 힘 토큰을 생성한다.</p>
+<h2 id="block-3fdb12c0115c801a9570f5602d8e6d53">7. 힘 예측</h2>
+<p>학습할 때는 실제 힘 센서 측정값을 MLP에 통과시켜 만든 특징 벡터를 정답으로 활용한다.</p>
+<p>FDM은 이미지와 로봇 상태로부터 예측한 힘 특징이 실제 힘 특징과 비슷해지도록 학습한다.</p>
+<p>하지만 학습이 끝나면 실제 힘 센서는 더 이상 사용하지 않는다.</p>
+<p>여기서 실제 힘 센서를 feature 벡터로 바꾼 것을 시간을 고려해 기호를 표현하면 \(f_t^{aF}\)이다. </p>
+<p>실제 학습에 사용하는 증류 손실은 다음과 같다. (L2거리로 정의)</p>
+<figure><img src="/assets/notion/fd-vla-논문리뷰/3fdb12c0-115c-80bf-bb9e-d348abcac053.png" alt="" loading="lazy" width="1508" height="696" /></figure>
+<div class="math-block">\[
+\mathcal L_{\mathrm{dist}}
+=
+\left\|f_t^{pF}-f_t^{aF}\right\|_2^2
+\]</div>
+<h2 id="block-3fdb12c0115c800bbd9ccfa8a41d1add">8. 모달리티 결합</h2>
+<p>VLM으로부터 생성한 이미지 토큰, 언어 토큰, 로봇 상태 토큰, 예측 힘 토큰을 하나의 토큰 시퀀스로 연결한다.</p>
+<div class="math-block">\[
+f_t^{fs}=[f_t^V,\;f^L,\;f_t^S,\;f_t^{pF}]
+
+\]</div>
+<p>각 토큰의 차원이 \(D\)로 동일하므로 다음과 같이 결합할 수 있다.</p>
+<div class="math-block">\[
+f_t^{fs}\in\mathbb R^{(N_v+N_l+N_s+1)\times D}
+\]</div>
+<ul><li>여기서 토큰 1개는 learnable 힘 토큰이다.</li></ul>
+<p>VLM 내부에서는 사전학습된 시각-언어 지식을 보존하기 위해 VLM의 파라미터를 동결한다.</p>
+<p>로봇 상태 토큰과 예측 힘 토큰이 시각 및 언어 정보 흐름에 간섭하지 않도록 Attention Masking 전략을 적용한다.</p>
+<p>논문에서는 이를 다음과 같이 두 가지로 구분해서 생각한다.</p>
+<div class="table-wrap"><table><tr><th>구분</th><th>포함된 정보</th><th>역할</th></tr><tr><td>Perceptual Stream</td><td>이미지, 언어</td><td>현재 상황과 명령 이해</td></tr><tr><td>Control Stream</td><td>로봇 상태, 예측 힘</td><td>제어에 필요한 물리 정보 처리</td></tr></table></div>
+<ul><li>\(X^{\mathrm{percept}}=[f_t^V,f^L]\)</li><li>\(X^{\mathrm{control}}=[f_t^S,f_t^{pF}]\)</li></ul>
+<figure><img src="/assets/notion/fd-vla-논문리뷰/3fdb12c0-115c-809b-a75e-f2908f821e56.png" alt="" loading="lazy" width="1524" height="596" /></figure>
+<p>예를 들어 이미지 토큰 \(V\)는 이미지와 언어는 참조할 수 있지만 로봇 상태나 힘 토큰은 참조하지 못한다.</p>
+<p>반면 예측 힘 토큰 \(F\)는 이미지, 언어, 로봇 상태 및 자신의 토큰을 참조할 수 있다.</p>
+<p>따라서 기존 시각-언어 표현력은 유지하면서, 제어에 필요한 토큰에는 여러 모달리티의 정보를 융합할 수 있다.</p>
+<p>그래서 기존 VLM이 이미지와 언어를 처리할 때는 상태와 힘 토큰의 영향을 받지 않도록 한다.</p>
+<blockquote>기존 VLM은 이미지·언어에 대해서는 좋은 표현력을 가지고 있지만, 로봇 상태 및 힘과의 관계는 학습하지 않았으므로 새로운 토큰을 넣는 것만으로 해당 정보를 효과적으로 처리한다고 보장할 수 없긴하다..</blockquote>
+<p>최종 행동을 결정하는 Action Expert는 이미지, 언어, 로봇 상태, 힘 정보를 모두 활용할 수 있다.</p>
+<h2 id="block-3fdb12c0115c805cb273c28d1c61dd23">9. Action Expert를 이용한 행동 생성</h2>
+<p>앞 단계의 VLM은 이미지, 언어, 상태, 힘 정보를 처리하여 특징 벡터를 출력한다. </p>
+<p>하지만 이 특징 자체가 로봇의 행동 명령은 아니다.</p>
+<p>따라서 Action Expert라는 별도 모델을 사용하여 이러한 특징을 실제 로봇이 수행해야 할 행동으로 변환한다.</p>
+<p>이때 Conditional Flow Matching은 초기 노이즈로부터 목표 행동 시퀀스를 생성하는 과정을 학습하는 방법이다.</p>
+<p>즉, VLM은 상황에 관한 특징을 제공하고, Action Expert는 그 특징을 조건으로 로봇 행동을 생성한다.</p>
+<div class="math-block">\[
+
+[a_t,a_{t+1},\ldots,a_{t+H-1}]
+=
+\pi_\theta\left(
+\operatorname{VLM}(f_t^{fs})
+\right)
+
+\]</div>
+<p>결합된 멀티모달 특징 \(f_t^{fs}\)를 VLM에 통과시킨 뒤, 그 결과를 Action Expert 정책 \(\pi_\theta\)에 입력하여 현재 시점부터 향후 \(H\)개 시점까지의 행동 시퀀스를 생성한다.</p>
+<p>여기서 \(\pi_\theta(\cdot)\)는 Action Expert 정책 헤드를 나타낸다.</p>
+<p>예를 들어 \(H=4\)라면, 한 번의 추론으로 다음 4개 행동을 예측한다: \([a_t,a_{t+1},a_{t+2},a_{t+3}]\)</p>
+<p>이를 Action Chunking이라고 한다. </p>
+<p>현재 행동 하나만 예측하는 대신, 앞으로 수행할 여러 행동을 한 번에 예측하는 방식이다.</p>
+<p>이러한 구조를 통해 사전학습된 VLM의 풍부한 의미적 표현 능력을 활용하는 동시에, 힘 증류를 통해 안정적이고 작업에 관련된 물리적 추론 능력을 추가함으로써, 추가적인 센서 없이도 강건성과 효율성을 모두 확보할 수 있다.</p>
+<h2 id="block-3fdb12c0115c80a09e21d37eecc4dc38">10. 센서 잡음에 대한 강건성</h2>
+<p>실제 힘 센서 데이터에는 잡음이 포함될 수 있다. FDM은 해당 센서 값을 그대로 사용하는 대신 이미지와 로봇 상태에서 힘 특징을 예측하므로, 반복적으로 나타나는 의미 있는 접촉 정보에 집중할 수 있다.</p>
+<h2 id="block-3fdb12c0115c80aa8c9dddbcb28ab80f">11. Query, Key, Value 정의</h2>
+<p>논문의 수식은 다음과 같다.</p>
+<div class="math-block">\[\begin{aligned}
+\alpha_t
+&amp;=\operatorname{softmax}\left(
+\frac{(pW_Q)([p,f_t^V,f_t^S]W_K)^\top}
+{\sqrt{d_k}}
+\right)\\[6pt]
+Z &amp;= \alpha_t V\in\mathbb R^{H\times d_k}
+\end{aligned}\]</div>
+<ul><li>Query: 힘을 예측하려는 Learnable Token \(p\)하나</li><li>Key: Learnable Token + 이미지 토큰 + 로봇 상태 토큰 전체</li><li>Value: 위 전체 토큰에서 생성한 특징 벡터</li></ul>
+<p>그럼 차원이 왜 저렇게 되는지 봐보자.</p>
+<p>예를들어 다음과 같은 네 개의 토큰이 있다고 \(D=4\)라고 가정하자.</p>
+<div class="math-block">\[C_t=
+\begin{bmatrix}
+p\\
+v_1\\
+v_2\\
+s_1
+\end{bmatrix}
+\in\mathbb R^{4\times D}\]</div>
+<ul><li>\(p\): 힘 예측용 Learnable Token</li><li>\(v_1\): 이미지 첫 번째 토큰</li><li>\(v_2\): 이미지 두 번째 토큰</li><li>\(s_1\): 로봇 상태 토큰</li></ul>
+<h4 id="block-3fdb12c0115c80eea313d6f092cba15d">(1) Query 생성</h4>
+<p>여기서는 전체 토큰이 아니라 Learnable Token \(p\)만 사용한다.</p>
+<div class="math-block">\[Q=pW_Q\]</div>
+<p>이므로 (\(W_Q\)의 차원은 2라고 가정)</p>
+<div class="math-block">\[
+\underbrace{p}_{1\times4}
+\underbrace{W_Q}_{4\times2}
+=
+\underbrace{Q}_{1\times2}
+\]</div>
+<p>따라서 Query는 1개이고, 그 특징 차원은 2이다.</p>
+<h4 id="block-3fdb12c0115c800395c3db0540072916">(2) Key 생성</h4>
+<p>Key는 네 개의 토큰 전체에서 생성한다.</p>
+<div class="math-block">\[K=C_tW_K \\[1em]
+
+\underbrace{C_t}_{4\times4}
+\underbrace{W_K}_{4\times2}
+=
+\underbrace{K}_{4\times2} \\[1em]
+
+K=
+\begin{bmatrix}
+k_p\\
+k_{v_1}\\
+k_{v_2}\\
+k_{s_1}
+\end{bmatrix}
+\]</div>
+<p>Key는 4개이고 그 특징 차원은 2이다.</p>
+<h4 id="block-3fdb12c0115c8050a162d1a36e07513a">(3) Value 생성</h4>
+<p>Value 역시 네 개의 토큰 전체에서 생성한다.</p>
+<div class="math-block">\[V=C_tW_V \\[1em]
+\underbrace{C_t}_{4\times4}
+\underbrace{W_V}_{4\times2}
+=
+\underbrace{V}_{4\times2} \\[1em]
+V=
+\begin{bmatrix}
+V_p\\
+V_{v_1}\\
+V_{v_2}\\
+V_{s_1}
+\end{bmatrix}
+\in\mathbb R^{4\times2}\]</div>
+<p>Value는 4개이고 그 특징 차원은 2이다.</p>
+<div class="table-wrap"><table><tr><th>구분</th><th>행렬 크기</th><th>의미</th></tr><tr><td>Query </td><td>\(1\times2\)</td><td>힘 토큰 1개</td></tr><tr><td>Key </td><td>\(4\times2\)</td><td>전체 토큰 4개</td></tr><tr><td>Value </td><td>\(4\times2\)</td><td>전체 토큰 4개</td></tr></table></div>
+<h4 id="block-3fdb12c0115c80ad8532c35c8e3b9f39">Query와 Key를 곱해 Attention Score를 구한다</h4>
+<div class="math-block">\[S=\frac{QK^T}{\sqrt{d_k}}\]</div>
+<p>행렬 차원을 대입해서 Attention score를 구하면</p>
+<div class="math-block">\[
+\underbrace{Q}_{1\times2}
+\underbrace{K^T}_{2\times4}
+=
+\underbrace{S}_{1\times4}
+\]</div>
+<p>\(1\times4\) 로 나온다.</p>
+<p>Query가 하나이므로, 그 Query가 네 개의 Key를 각각 비교한 결과가 나오는 것.</p>
+<figure><img src="/assets/notion/fd-vla-논문리뷰/3fdb12c0-115c-800e-8152-cf9ee5ff064b.png" alt="" loading="lazy" width="1504" height="882" /></figure>
+<p>예를 들어 Score가 Softmax를 통과한 후,</p>
+<div class="math-block">\[\alpha=[0.1,\;0.2,\;0.3,\;0.4]\]</div>
+<p>로 계산되었다고 하자.</p>
+<p>그러면 힘 예측 토큰은 네 개 토큰 각각에 이러한 가중치를 부여하게 된다.</p>
+<p>예를들어</p>
+<div class="math-block">\[
+Q=[\sqrt2,0] \\[1em]
+K= \begin{bmatrix}
+0&amp;0\\
+\ln2&amp;0\\
+\ln3&amp;0\\
+\ln4&amp;0
+\end{bmatrix}
+\]</div>
+<p>라고 하면, (\(\sqrt 2\)는 \(d_k=\)2 차원이라서)</p>
+<div class="math-block">\[\frac{QK^T}{\sqrt2}=[0,\ln2,\ln3,\ln4] \]</div>
+<p>Softmax 결과는,</p>
+<div class="math-block">\[\alpha=
+\frac{[1,2,3,4]}{1+2+3+4}
+=[0.1,0.2,0.3,0.4]\]</div>
+<p>가 된다.</p>
+<p>앞에서 계산한 Attention 가중치를 Value에 곱하면: \(
+Z=\alpha V
+\)</p>
+<p>Example)</p>
+<div class="math-block">\[
+V=
+\begin{bmatrix}
+1&amp;0\\
+0&amp;1\\
+2&amp;1\\
+1&amp;3
+\end{bmatrix}
+\]</div>
+<p>행렬곱을 계산하면,</p>
+<div class="math-block">\[Z=
+\begin{bmatrix}
+0.1&amp;0.2&amp;0.3&amp;0.4
+\end{bmatrix}
+\begin{bmatrix}
+1&amp;0\\
+0&amp;1\\
+2&amp;1\\
+1&amp;3
+\end{bmatrix}\]</div>
+<p>이를 벡터별로 풀어서 쓰면,</p>
+<div class="math-block">\[Z=
+0.1[1,0]+0.2[0,1]+0.3[2,1]+0.4[1,3]\]</div>
+<div class="math-block">\[Z=[1.1,1.7]\]</div>
+<p>원래 네 개의 토큰에 들어 있던 정보가 Query가 결정한 가중치에 따라 하나의 특징 벡터로 합쳐졌다.</p>
+<p>즉, 출력 토큰이 1개인(차원은 \(d_k=\)2 였기 때문) 이유는 Query가 하나이기 때문이다.</p>
+<h4 id="block-3fdb12c0115c8000bfb9f7f30bdbd363">그런데 Head가 H개면 어떻게 될까?</h4>
+<p>Multi-Head Attention에서는 각각의 Head가 서로 다른 가중치 행렬을 사용한다.</p>
+<div class="math-block">\[
+Q_h=pW_Q^{(h)} \\[1.0em]
+K_h=C_tW_K^{(h)} \\[1.0em]
+V_h=C_tW_V^{(h)} 
+\]</div>
+<p>그리고 각 Head에서 별도로 계산한다.</p>
+<div class="math-block">\[Z_h=
+\operatorname{Softmax}\left(
+\frac{Q_hK_h^T}{\sqrt{d_k}}
+\right)V_h\]</div>
+<p>예를 들어 Head가 3개이고 각 Head의 Value 차원이 2(\(d_k=2\))라면,</p>
+<figure><img src="/assets/notion/fd-vla-논문리뷰/3fdb12c0-115c-80f1-a119-da668b8c476f.png" alt="" loading="lazy" width="1512" height="798" /></figure>
+<p>각 Head에서 다음처럼 서로 다른 결과가 나올 수 있다.</p>
+<div class="math-block">\[Z_1=[1.1,1.7],\; Z_2=[0.6,2.3],\;Z_3=[1.8,0.4]\]</div>
+<p>이것들을 행렬로 모으면,</p>
+<div class="math-block">\[Z=
+\begin{bmatrix}
+1.1&amp;1.7\\
+0.6&amp;2.3\\
+1.8&amp;0.4
+\end{bmatrix}
+\in\mathbb R^{3\times2}\]</div>
+<p>따라서 \(Z\in\mathbb R^{H\times d_k}\) 가 된다.</p>
+<p>중요한 것은 Head가 3개라고 해서 최종 출력 토큰이 3개라는 뜻이 아니다. </p>
+<p>여기서는 각 Head가 하나의 출력 벡터를 만들었고, 일반적인 Multi-Head Attention에서는 이를 이어 붙였기 때문이다.</p>
+<p>그리고 일반적인 Multi-Head Attention에서는 이를 이어 붙인다.(concat)</p>
+<div class="math-block">\[z_{\mathrm{concat}}=
+[Z_1;Z_2;Z_3]
+\in\mathbb R^{1\times6}\]</div>
+<p>이후 출력 Projection \(W_O\)로 변환하여 하나의 힘 예측용 토큰 표현을 만든다.</p>
+<div class="math-block">\[
+
+f_t^{pF}
+=
+\operatorname{FFN}
+\left(
+\operatorname{LN}
+\left(
+[Z_1,\ldots,Z_H]W_O+p
+\right)
+\right)
+
+\]</div>
+<p>각 Attention Head의 출력 \(Z_1,\ldots,Z_H\)를 결합하고 출력 투영 행렬 \(W_O\)를 적용한 뒤, 원래 학습 가능한 토큰 \(p\)를 더한다. (residual connection 때문)</p>
+<p>(일반적으로는 residual connection으로 입력토큰 [X:시각, 언어, 상태, 힘 토큰]이 되지만 여기서는 힘 토큰만 더 해준다.)</p>
+<p>이후 Layer Normalization과 Feed-Forward Network를 통과시켜 최종 예측 힘 토큰 \(f_t^{pF}\)를 생성한다.</p>
+<h4 id="block-3fdb12c0115c80f5a157e99e73d87bde">기존의 Self-Attention과 다른 점은?</h4>
+<p>일반적인 Self-Attention에서는 입력 토큰이 4개라면 출력도 4개가 된다.</p>
+<p>하지만 이번 수식에서는 출력이 하나이다.</p>
+<div class="table-wrap"><table><tr><th>구분</th><th>일반적인 Self-Attention</th><th>현재 FDM 수식</th></tr><tr><td>Query</td><td>모든 토큰 4개</td><td>힘 토큰 1개</td></tr><tr><td>Key</td><td>모든 토큰 4개</td><td>모든 토큰 4개</td></tr><tr><td>Value</td><td>모든 토큰 4개</td><td>모든 토큰 4개</td></tr><tr><td>Attention 크기 (Head별)</td><td>\(4\times4\)</td><td>\(1\times4\)</td></tr><tr><td>출력 토큰 수</td><td>4개</td><td>1개</td></tr></table></div>
+<p>즉, FDM은 힘 토큰에 해당하는 Query만 사용해 필요한 정보를 집약한 출력을 얻는 형태이다.</p>
+<div class="math-block">\[
+f_t^{pF}=\operatorname{FFN}
+\left(\operatorname{LN}\left(
+p+\underbrace{[Z_1,\ldots,Z_H]W_O}_{\Delta p_t}
+\right)\right)\]</div>
+<p>여기서</p>
+<div class="math-block">\[\underbrace{p}_{\text{학습된 기본 토큰}}
++
+\underbrace{\Delta p_t}_{\text{현재 관측에서 수집한 정보}}\]</div>
+<p>로 해석할 수 있다..</p>
+<p>예를 들어,</p>
+<ul><li>\(p\): 학습을 통해 얻은 힘 예측용 기본 표현</li><li>\(\Delta p_t\): 현재 물체의 변형, 로봇의 관절 상태 등에서 Attention으로 수집한 정보</li></ul>
+<p>즉, 매 순간 변하지 않는 \(p\)에 현재 상황에 따라 달라지는 \(\Delta p_t\)를 더해 힘 예측용 표현을 업데이트하는 것이다.</p>
+<p>다만 \(p\)가 실제 힘의 평균값이나 기준 힘을 의미한다는 뜻은 아니며 학습된 특징 벡터일 뿐이다.</p>
+<h3 id="block-3fdb12c0115c80048545ca1de9f37c6d">왜 Key와 Value에도 p를 포함할까?</h3>
+<p>힘 토큰 \(p\)를 Key와 Value에도 포함하면, 모델은 이미지·로봇 상태에서 얻은 정보뿐 아니라 학습된 힘 토큰 자체의 정보도 Attention을 통해 선택적으로 결합할 수 있기 때문에 포함한다.</p>
+<h2 id="block-3fdb12c0115c8015952efbef1efa3f70">핵심 방법정리</h2>
+<div class="table-wrap"><table><tr><th>구분</th><th>FDM</th><th>Attention Masking</th></tr><tr><td>목적</td><td>예측 힘 토큰 생성</td><td>기존 VLM 보호 및 정보 융합</td></tr><tr><td>입력</td><td>학습 토큰, 이미지, 상태</td><td>이미지, 언어, 상태, 예측 힘</td></tr><tr><td>핵심 방법</td><td>Single-Query Multi-Head Attention</td><td>Directional Masked Self-Attention</td></tr></table></div>
+<h2 id="block-3fdb12c0115c8034a54be30d07aaf6e9">Loss</h2>
+<p>FD-VLA는 두 가지 목표를 동시에 학습한다.</p>
+<p>첫 번째는 로봇이 전문가처럼 올바른 행동을 생성하는 것이다. </p>
+<p>두 번째는 이미지와 로봇 상태만으로 실제 힘과 관련된 특징을 예측하는 것이다.</p>
+<p>따라서 행동 예측 성능만 학습하는 것이 아니라, 힘에 관한 정보도 학습하도록 별도의 손실을 추가한다.</p>
+<div class="math-block">\[
+\boxed{
+\mathcal L
+=
+\mathcal L^\tau(\theta)
++
+\lambda\mathcal L_{\mathrm{dist}}
+}
+\tag{9}
+\]</div>
+<p>위에서 구했던 \(\mathcal L_{\mathrm{dist}}\)를 대입하면</p>
+<div class="math-block">\[
+\mathcal L
+=
+\mathcal L^\tau(\theta)
++
+\lambda
+\left\|f_t^{pF}-f_t^{aF}\right\|_2^2
+\]</div>
+<p>\(\lambda\)는 힘 지도학습의 영향력을 조절하는 가중치이다.</p>
+<h2 id="block-3fdb12c0115c80968465c6b5bc45bfc6">Experiments</h2>
+<p>앞에서는 FD-VLA의 구조와 학습 방법을 설명했다. 이제 실제 로봇을 이용해 기존 모델보다 성능이 좋은지, 그리고 힘 센서 없이도 작업을 수행할 수 있는지를 검증한다.</p>
+<h3 id="block-3fdb12c0115c8047a2b4f417e2d09296">Setup</h3>
+<p>실험에서는 UR5e 로봇팔을 주요 조작 플랫폼으로 사용하고, Azure Kinect 카메라로 전체 장면의 RGB 이미지를 획득하며, RealSense D405 카메라로 로봇 그리퍼 주변의 RGB 이미지를 획득한다.</p>
+<figure><img src="/assets/notion/fd-vla-논문리뷰/3fdb12c0-115c-80cc-b903-eb25ad248242.png" alt="" loading="lazy" width="686" height="650" /></figure>
+<h3 id="block-3fdb12c0115c8017b968fcd12e068e68">Task </h3>
+<p>FD-VLA의 효과를 평가하기 위해, 접촉이 중요한 세 가지 서로 다른 로봇 조작 작업에 대한 실험을 수행하였다.</p>
+<p>지우개가 화이트보드에 계속 접촉하도록 유지하면서 움직여야 한다. 접촉이 부족하면 글씨가 지워지지 않고, 힘이 과도하면 불필요한 압력이 발생할 수 있다.</p>
+<ul><li>화이트보드 지우기 작업은 보드에 보이는 모든 표시가 완전히 지워진 경우에만 성공으로 판정하였다.</li></ul>
+<p>버튼의 위치를 정확히 찾아 누르는 것뿐 아니라 스프링 저항을 이겨낼 만큼 충분한 힘을 가해야 한다.</p>
+<ul><li>비상 버튼 누르기 작업은 버튼이 끝까지 눌리고, 다시 튀어 오르지 않은 상태로 유지되어야 성공으로 판정하였다.</li></ul>
+<p>플러그와 소켓의 위치 및 방향을 정확히 맞추어야 하며, 삽입 과정에서 발생하는 접촉 저항을 고려해 힘을 조절해야 한다.</p>
+<ul><li>플러그 삽입 작업은 플러그가 소켓 내부에 완전히 삽입되어 올바른 정렬과 삽입이 이루어진 경우 성공으로 판정하였다.</li></ul>
+<figure><img src="/assets/notion/fd-vla-논문리뷰/3fdb12c0-115c-80fc-ba04-e7aed6face70.png" alt="" loading="lazy" width="1368" height="684" /></figure>
+<h3 id="block-3fdb12c0115c808c8b7fc4d26ea3467b">실제 힘 데이터 수집</h3>
+<p>데이터 수집 과정에서는 사람이 SpaceMouse라는 3D 입력 장치를 이용해 UR5e 로봇팔을 직접 조작하여 다양한 작업을 수행하도록 한다.</p>
+<p>이 과정에서 로봇이 관측한 이미지, 로봇의 상태, 실제 힘 센서 측정값, 사람이 수행한 행동을 함께 기록한다.</p>
+<p>수집한 데이터는 두 가지 목적으로 사용된다.</p>
+<ul><li>힘 예측 학습: UR5e에 내장된 힘 센서의 측정값을 FDM의 Actual Force Branch에 입력하여, 힘을 예측하는 Prediction Branch의 지도 신호로 활용한다.</li><li>모방학습: 사람이 로봇을 조작하며 수행한 행동을 정답으로 사용하여, 로봇이 동일한 작업을 스스로 수행하도록 학습한다.</li></ul>
+<p>각 작업에 대해 50개의 전문가 시연 데이터를 수집하였다. (총 150개)</p>
+<h3 id="block-3fdb12c0115c8069833cfc663c8f7279">평가</h3>
+<p>각 작업에서 학습에 사용하는 시연 데이터는 50개이고, 학습이 끝난 모델을 실제 로봇에서 30회씩 테스트했다.</p>
+<p>성공률은 다음과 같이 계산한다.</p>
+<div class="math-block">\[
+
+\text{Success Rate}
+=
+\frac{\text{성공한 테스트 수}}{\text{전체 테스트 수}}\times100
+\]</div>
+<p>예를 들어 30번 중 21번 성공했다면 성공률은 70%이다.</p>
+<p>FD-VLA의 성능을 확인하기 위해 기존 로봇 행동 생성 모델들(DP3, π₀, SmolVLA)과 비교했다.</p>
+<ul><li>DP3는 제안 모델과 비슷한 파라미터 규모를 가지는 Diffusion 기반 제어 프레임워크로, 정밀한 이동 궤적 생성에 뛰어난 비교 모델로 선정하였다.</li><li>π₀는 훨씬 큰 모델 용량과 강력한 언어 조건부 제어 능력을 가진 최신 VLA 모델의 대표적인 사례</li><li>FD-VLA는 SmolVLA를 기반으로 FDM 등을 추가한 구조다. SmolVLA와 비교하면 힘 증류 및 관련 구조를 추가했을 때 성능이 얼마나 달라지는지 확인할 수 있다.</li></ul>
+<figure><img src="/assets/notion/fd-vla-논문리뷰/3fdb12c0-115c-80ae-af35-e330c5e64f45.png" alt="" loading="lazy" width="1272" height="436" /></figure>
+<p>그림 6은 접촉이 중요한 세 가지 로봇 조작 작업에 대한 성공률을 보여준다.</p>
+<p>화이트보드 지우기 작업에서 FD-VLA는 73.3%의 성공률을 달성하였으며, 이는 다른 모든 비교 모델보다 최소 23.3%p 높은 결과이다.</p>
+<p>모든 작업에서 FD-VLA는 평균 성공률 61.1%로 가장 높은 성능을 달성했으며, 힘 인코딩이 없는 SmolVLA(23.3%), DP3(11.1%)뿐만 아니라 약 10배 많은 파라미터를 가진 π₀보다도 높은 성능을 보였다.</p>
+<h3 id="block-3fdb12c0115c808180e0f60fd843d26a">실제 힘을 직접 입력한 모델과 비교</h3>
+<p>실제 힘 센서를 추가한 결과, SmolVLA는 15.6%p, π₀는 20.0%p 성능이 향상되었다. </p>
+<p>이는 힘 정보가 로봇 조작에 유용하다는 것을 보여준다.</p>
+<p>하지만 FD-VLA는 실제 힘을 직접 입력한 두 모델보다도 높은 61.1%의 성공률을 기록했다.</p>
+<h3 id="block-3fdb12c0115c803c86b6ed7a3b26d979">원시 힘 입력의 한계</h3>
+<p>실제 힘 센서 데이터를 추가한다고 해서 모델이 그 정보를 반드시 효과적으로 활용하는 것은 아니다.</p>
+<p>센서 데이터에 잡음이 포함되어 있다면 모델은 유용한 접촉 정보와 불필요한 잡음을 함께 처리해야 한다.</p>
+<p>저자들은 실제 힘 센서 값에 포함된 잡음이나 불필요한 정보 때문에 정책이 힘 정보를 효과적으로 활용하기 어려웠을 것이라고 해석한다.</p>
+<p>반면 Learnable Token을 통해 생성한 특징은 이미지 및 로봇 상태를 조건으로 만들어지기 때문에, 작업에 필요한 정보에 집중할 가능성이 있다.</p>
+<h2 id="block-3fdb12c0115c801d80aaea5fb26df341">Ablation Study</h2>
+<p>저자들은 FD-VLA의 높은 성능이 정말 FDM과 Learnable Token 덕분인지 확인하려고 한다.</p>
+<p>이를 위해 실제 힘 센서를 직접 사용하는 방식과, 이미지 및 로봇 상태로부터 힘 토큰을 예측하는 방식을 비교한다.</p>
+<p>본 실험에서는 접촉이 중요한 세 가지 작업에 대해 세 종류의 모델을 비교하였으며, 각 모델은 기존 주요 실험과 동일한 초기화 조건, 시간 제한, 성공 기준 아래에서 각각 30회의 독립적인 Rollout으로 평가하였다.</p>
+<h3 id="block-3fdb12c0115c80c6ab4bc73de0d64166">1. Without FDM</h3>
+<p>FDM의 Attention 구조를 제거하고, 힘 센서로부터 측정한 값을 MLP로 변환하여 VLA에 사용한다.</p>
+<div class="math-block">\[f_t^F=\operatorname{MLP}(F_t) \]</div>
+<h3 id="block-3fdb12c0115c806b93cdcfd398f2fb8b">2. FDM with Force Token</h3>
+<p>이 모델에서는 FDM의 Attention 구조는 그대로 유지한다.</p>
+<p>하지만 원래 Query로 사용하던 Learnable Token \(p\)대신 실제 힘 센서에서 얻은 특징 \(f_t^{aF}\)를 사용한다.</p>
+<p>기존 FD-VLA의 예측 방식은 다음과 같다.</p>
+<div class="math-block">\[f_t^{pF}=\operatorname{FDM}(f_t^V,f_t^S,p)\]</div>
+<p>반면 두 번째 방식은 개념적으로 다음과 같이 나타낼 수 있다.</p>
+<div class="math-block">\[\widetilde f_t^F
+\operatorname{FDM}(f_t^V,f_t^S,f_t^{aF})\]</div>
+<p>실제 힘 정보를 Query로 사용하여 이미지와 로봇 상태의 정보를 융합한다는 것이다.</p>
+<h3 id="block-3fdb12c0115c80c5b433d9eeba51225b">3. FDM with Learnable Token</h3>
+<p>세 번째 모델은 학습 가능한 토큰을 사용하는 제안 방법, 즉 FD-VLA이다.</p>
+<h3 id="block-3fdb12c0115c804c913ed9e731a1d3c8">Table I — Ablation Study 실험 결과</h3>
+<figure><img src="/assets/notion/fd-vla-논문리뷰/3fdb12c0-115c-804a-bcbf-f888c0fba8d8.png" alt="" loading="lazy" width="668" height="220" /></figure>
+<p>여기서 두 가지를 확인할 수 있다.</p>
+<ul><li>FDM을 추가하면 평균 성공률이 38.9%에서 51.1%로 12.2%p 증가한다.</li><li>실제 힘 토큰 대신 Learnable Token을 사용하면 성공률이 51.1%에서 61.1%로 10.0%p 증가한다.</li></ul>
+<p>특히 플러그 삽입 작업에서는 두 FDM 방식 모두 12/30으로 동일하다. Learnable Token의 추가적인 성능 향상은 화이트보드 지우기와 버튼 누르기에서 나타났다.</p>
+<h3 id="block-3fdb12c0115c805bb440edf430bb7921">FDM을 추가했을 때의 효과</h3>
+<p>단순히 힘 센서 데이터를 MLP로 변환해서 사용하는 것보다, FDM의 Attention을 통해 이미지와 로봇 상태 정보를 함께 융합하는 것이 더 높은 성능을 나타냈다.</p>
+<p>저자들은 FDM의 Early Fusion, 즉 VLM에 입력하기 전에 여러 모달리티를 먼저 융합하는 과정이 효과적이라고 해석한다.</p>
+<h2 id="block-3fdb12c0115c8009826dd62e7e4abc21">Model Generalization (모델 일반화 성능)</h2>
+<p>로봇이 학습할 때는 흰색 배경에서 작업했지만, 실제 환경에서는 배경 색상이나 조명이 달라질 수 있다.</p>
+<p>이때 학습 환경과 다른 이미지가 입력되더라도 기존 작업을 정상적으로 수행할 수 있다면 시각적 일반화 성능이 좋다고 볼 수 있다.</p>
+<p>이러한 문제를 검증하기 위해 두 가지 대표적인 시나리오를 사용한다. </p>
+<p>첫째, 학습 환경과 배치 및 텍스처가 다른 새로운 배경(Novel Background)이고, </p>
+<p>둘째, 조명과 대비 및 색상 분포가 변화하는 시각적 교란(Visual Perturbations)이다.</p>
+<figure><img src="/assets/notion/fd-vla-논문리뷰/3fdb12c0-115c-8013-b9e6-d5ade4f402b5.png" alt="" loading="lazy" width="694" height="402" /></figure>
+<p>그림 7에서 보이는 것처럼 이러한 실험 조건은 실제 환경에서 흔히 발생하는 문제를 반영하며, 로봇이 학습 데이터의 제한된 시각적 환경을 벗어나서도 동작할 수 있어야 함을 보여준다.</p>
+<p>저자들은 배경이나 조명이 달라져도 FD-VLA가 작업을 수행하는 모습을 관찰했다고 설명한다.</p>
+<p>다만 저자들은 성능 저하가 크지 않다고 설명할 뿐, 구체적인 성공률이나 감소 폭은 제시하지 않았다.</p>
+<p>따라서 이는 FD-VLA가 배경의 색상이나 조명 같은 표면적인 특징보다, 실제 작업 수행에 필요한 물체의 구조와 상태를 학습했을 가능성을 보여준다는 의미다.</p>
+<h2 id="block-3fdb12c0115c80eaa5dbf60caf9de232">Conclusions</h2>
+<p>향후에는 본 프레임워크를 다중 로봇 협업으로 확장하고, 확장 가능하면서 범용적인 조작 시스템으로 발전시키고자 한다.</p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/theme.js?v=1" defer></script>
+    <script src="/assets/js/post.js?v=14" type="module"></script>
+    <script src="/assets/js/palette.js?v=9" defer></script>
+  </body>
+</html>

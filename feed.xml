@@ -6,7 +6,15 @@
     <atom:link href="https://ursonice.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI, Robotics, Systems 공부 기록</description>
     <language>ko</language>
-    <lastBuildDate>Wed, 14 Oct 2026 10:28:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 19 Oct 2026 01:00:00 GMT</lastBuildDate>
+    <item>
+      <title>FD-VLA 논문리뷰</title>
+      <link>https://ursonice.github.io/posts/fd-vla-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/</link>
+      <guid isPermaLink="false">3fbb12c0-115c-8094-943d-db7b438af7fd</guid>
+      <pubDate>Fri, 16 Oct 2026 12:42:00 GMT</pubDate>
+      <category>AI/ Deep Learning</category>
+      <description>서론 1. 기존 문제점 VLA가 정밀한 접촉 작업을 수행하려면 힘(Force) 정보가 중요하지만, 힘-토크 센서는 비용이 높고 하드웨어 복잡성을 증가시킨다. 2. 핵심 아이디어 학습 단계에서는 실제 힘 센서 정보를 활용하되, 추론 단계에서는 카메라 영상과 로봇 상태만으로 힘과 관련된 특징을 예측하는 FD</description>
+    </item>
     <item>
       <title>생성 모델 2장 (작성중)</title>
       <link>https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-2%EC%9E%A5-%EC%9E%91%EC%84%B1%EC%A4%91/</link>
@@ -239,14 +247,6 @@ Trace Rewriting 논문리뷰</title>
       <pubDate>Fri, 30 Jun 2023 01:02:00 GMT</pubDate>
       <category>AI/ Deep Learning</category>
       <description>서론 Quantization 이란 Neural Network 일반적으로 Parameter는 모델의 정확도를 높이기 위해 32bit floating point(FP32)로 펴현된다. 하지만 임베디드 장치와 같이 리소스가 제한된 환경에서 FP32로 표현하게 되면 Inference과정에서굉장히 많은 시간이 소</description>
-    </item>
-    <item>
-      <title>Taylor&apos;s series and Maclaurin&apos;s series on ML</title>
-      <link>https://ursonice.github.io/posts/taylor-s-series-and-maclaurin-s-series-on-ml/</link>
-      <guid isPermaLink="false">340491c3-168a-4c32-8d5a-0216c98cc428</guid>
-      <pubDate>Tue, 27 Jun 2023 02:05:00 GMT</pubDate>
-      <category>AI/ Deep Learning</category>
-      <description>서론 이 장은 Taylor&apos;s series와 Maclaurin&apos;s series가 무엇인지 간단하게 알아보고 두 급수의 차이점을 알아본다. 그리고 ML에서 어떻게 적용되는지 알아보자. 목차 Taylor&apos;s series Maclaurin&apos;s series Taylor&apos;s series &amp; Maclaurin&apos;s </description>
     </item>
   </channel>
 </rss>
