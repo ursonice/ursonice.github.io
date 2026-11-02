@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fbfaf7" />
+    <script>(function(){try{var t=localStorage.getItem("theme")||"light";document.documentElement.dataset.theme=t;var r=localStorage.getItem("reading");if(r)document.documentElement.dataset.reading=r;var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",t==="dark"?"#0a0b0e":"#fbfaf7");}catch(e){}})();</script>
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7VKNXKJJ7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-K7VKNXKJJ7");
+    </script>
+
+    <title>생성 모델 3장 — Woojae Joo</title>
+    <meta name="post-slug" content="생성-모델-3장" />
+    <meta name="description" content="목차 Part 1. 확률분포를 알고 있다면, 어떤 값을 구할 수 있을까? 가우시안 분포, 확률밀도, 알려진 혼합 비율을 이용한 확률 계산 Part 2. 확률분포를 모른다면, 데이터로부터 알아낼 수 있을까? 관측 데이터 → 히스토그램 → 우도 → 가우시안 혼합 모델(GMM) Part 3. 데이터의 숨겨진 " />
+    <link rel="canonical" href="https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-3%EC%9E%A5/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Woojae Joo — Developer Note" href="/feed.xml" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Woojae Joo — Developer Note" />
+    <meta property="og:title" content="생성 모델 3장" />
+    <meta property="og:description" content="목차 Part 1. 확률분포를 알고 있다면, 어떤 값을 구할 수 있을까? 가우시안 분포, 확률밀도, 알려진 혼합 비율을 이용한 확률 계산 Part 2. 확률분포를 모른다면, 데이터로부터 알아낼 수 있을까? 관측 데이터 → 히스토그램 → 우도 → 가우시안 혼합 모델(GMM) Part 3. 데이터의 숨겨진 " />
+    <meta property="og:url" content="https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-3%EC%9E%A5/" />
+    <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8%203%EC%9E%A5&amp;cat=AI%2F%20Deep%20Learning" />
+    <meta property="article:published_time" content="2026-10-19T11:04:00.000Z" />
+    <meta property="article:modified_time" content="2026-11-02T12:05:00.000Z" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="생성 모델 3장" />
+    <meta name="twitter:description" content="목차 Part 1. 확률분포를 알고 있다면, 어떤 값을 구할 수 있을까? 가우시안 분포, 확률밀도, 알려진 혼합 비율을 이용한 확률 계산 Part 2. 확률분포를 모른다면, 데이터로부터 알아낼 수 있을까? 관측 데이터 → 히스토그램 → 우도 → 가우시안 혼합 모델(GMM) Part 3. 데이터의 숨겨진 " />
+    <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8%203%EC%9E%A5&amp;cat=AI%2F%20Deep%20Learning" />
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"생성 모델 3장","description":"목차 Part 1. 확률분포를 알고 있다면, 어떤 값을 구할 수 있을까? 가우시안 분포, 확률밀도, 알려진 혼합 비율을 이용한 확률 계산 Part 2. 확률분포를 모른다면, 데이터로부터 알아낼 수 있을까? 관측 데이터 → 히스토그램 → 우도 → 가우시안 혼합 모델(GMM) Part 3. 데이터의 숨겨진 ","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8%203%EC%9E%A5&cat=AI%2F%20Deep%20Learning","datePublished":"2026-10-19T11:04:00.000Z","dateModified":"2026-11-02T12:05:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-3%EC%9E%A5/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Deep Learning","item":"https://ursonice.github.io/topics/ai-deep-learning/"},{"@type":"ListItem","position":3,"name":"생성 모델 3장","item":"https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-3%EC%9E%A5/"}]}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css?v=40" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">본문으로 이동</a>
+    <div class="read-progress" data-read-progress></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="Woojae Joo home">
+        <span class="brand-mark"><img src="/assets/images/favicon.svg" alt="" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Woojae Joo</span>
+          <span class="brand-sub">ursonice</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/#posts">Writing</a>
+        <a href="/#topics">Topics</a>
+        <a href="/cv.html">CV</a>
+        <a href="/archive.html">Archive</a>
+        <a href="https://github.com/ursonice" data-profile-link="github" rel="me" target="_blank">GitHub</a>
+      </nav>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="테마 전환">
+        <span aria-hidden="true" data-theme-icon>◐</span>
+      </button>
+    </header>
+
+    <main class="article-shell" id="content">
+      <article class="article" data-article data-prerendered>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="/topics/ai-deep-learning/">AI/ Deep Learning</a>
+    </nav>
+    <h1>생성 모델 3장</h1>
+    <div class="article-meta">
+      
+      
+      <span>작성 2026년 10월 19일</span><span class="dot"></span><span>수정 2026년 11월 2일</span>
+      <span class="reading-size" role="group" aria-label="글자 크기">
+        <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
+        <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
+        <button type="button" data-reading-size="lg" aria-label="크게" title="크게">가</button>
+      </span>
+    </div>
+    <hr class="article-divider" />
+    <div class="article-content"><h2 id="block-3ffb12c0115c80858befc0c2907528d0">목차</h2>
+<ol><li>Part 1. 확률분포를 알고 있다면, 어떤 값을 구할 수 있을까?<ul><li>가우시안 분포, 확률밀도, 알려진 혼합 비율을 이용한 확률 계산</li></ul></li><li>Part 2. 확률분포를 모른다면, 데이터로부터 알아낼 수 있을까?<ul><li>관측 데이터 → 히스토그램 → 우도 → 가우시안 혼합 모델(GMM)</li></ul></li><li>Part 3. 데이터의 숨겨진 원인과 혼합 비율은 어떻게 알아낼까?<ul><li>잠재변수 → 소속 확률(책임도) → EM 알고리즘 → 반복 추정</li></ul></li><li>Part 4. 추정한 확률분포가 정말 그럴듯한지 어떻게 확인할까?<ul><li>학습한 분포에서 새로운 데이터 생성 → 원래 데이터와 비교</li></ul></li></ol>
+<h2 id="block-3ffb12c0115c80f0b4b2ca9662e4826c">잠재변수와 가우시안</h2>
+<p>우리가 가진 데이터는 어떤 확률분포에서 생성되었을 것이다. 하지만 실제로 데이터를 수집했을 때, 우리는 그 확률분포가 어떻게 생겼는지 알지 못한다. 데이터가 어떤 원인으로 생성되었는지도 알지 못한다.</p>
+<p>그렇다면 관측된 데이터만 가지고 원래의 확률분포를 알아낼 수 있을까? 그 분포를 알아냈다면, 비슷한 데이터를 새롭게 생성할 수도 있을까? 반대로 특정 데이터가 주어졌을 때, 그 데이터가 어떤 원인으로 생성되었는지도 추론할 수 있을까?</p>
+<p>이 장에서는 먼저 확률분포를 이미 알고 있다고 가정하고 관측값의 원인을 추론한다.</p>
+<p>그다음 현실에서는 확률분포를 모른다는 문제로 돌아와, 관측된 데이터로부터 원래의 분포를 역으로 추정하는 방법을 알아본다.</p>
+<h2 id="block-3ffb12c0115c8057a25efcc253c81109">Part 1. 확률분포를 알고 있다면 어떤 값을 구할 수 있을까?</h2>
+<h3 id="block-3ffb12c0115c8071be6ec000e609d8f7">1. 우리가 알고 있는 확률분포</h3>
+<p>지금까지 배운 확률과 통계에서는 일반적으로 확률분포의 모양과 수식을 알고 있는 상태에서 출발했다.</p>
+<p>예를 들어 어떤 집단의 키가 평균 170cm, 표준편차 10cm인 가우시안 분포를 따른다고 가정해 보자.</p>
+<div class="math-block">\[X\sim\mathcal N(170,10^2)\]</div>
+<p>이 분포는 다음과 같은 수식으로 나타낼 수 있다.</p>
+<div class="math-block">\[p(x)=\frac{1}{\sqrt{2\pi\sigma^2}}
+\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)\]</div>
+<p>여기서 평균 \(\mu\)와 분산 \(\sigma^2\)을 알고 있으므로, 원하는 \(x\)를 대입하면 그 지점의 확률밀도를 구할 수 있다.</p>
+<p>예를 들어 어떤 사람의 키가 180cm라면, \(x=180\)을 대입하여 그 지점의 확률밀도를 계산할 수 있다. 또한 적분을 이용하면 키가 160~180cm인 사람이 존재할 확률도 구할 수 있다.</p>
+<h3 id="block-3ffb12c0115c80498411df16f6c341f4">2. 현실의 확률분포는 하나의 가우시안으로 표현하기 어려울 수 있다</h3>
+<p>이번에는 밤과 낮에 촬영한 사진들의 평균 밝기를 조사한다고 생각해 보자.</p>
+<p>사진의 평균 밝기를 0~1 사이의 값으로 표현한다면, 일반적으로 밤에 촬영한 사진은 낮은 밝기에 많이 분포하고 낮에 촬영한 사진은 높은 밝기에 많이 분포할 것이다.</p>
+<p>각각의 밝기가 가우시안 분포를 따른다고 가정하면 두 분포를 다음과 같이 표현할 수 있다.</p>
+<div class="math-block">\[
+\begin{aligned}
+p(x\mid z=\text{밤})&amp;=\mathcal N(x;\mu_N,\sigma_N^2)\\
+p(x\mid z=\text{낮})&amp;=\mathcal N(x;\mu_D,\sigma_D^2)
+\end{aligned}
+\]</div>
+<p>그런데 밤 사진과 낮 사진을 하나의 데이터셋으로 합치면 어떻게 될까?</p>
+<p>낮은 밝기 구간과 높은 밝기 구간에 각각 데이터가 집중되므로, 전체 데이터의 분포에는 봉우리가 두 개 나타날 수 있다.</p>
+<figure><img src="/assets/notion/생성-모델-3장/3ffb12c0-115c-8069-a749-fec9220cfeaf.png" alt="" loading="lazy" width="432" height="201" /></figure>
+<p>이처럼 복잡한 분포는 하나의 가우시안보다 여러 가우시안을 조합하는 방식으로 표현할 수 있다.</p>
+<p>예를 들어 전체 사진 중 밤 사진이 40%, 낮 사진이 60%라는 사실을 이미 알고 있다면 전체 분포는 다음과 같다.</p>
+<div class="math-block">\[p(x)=0.4p(x\mid \text{밤})+0.6p(x\mid\text{낮})\]</div>
+<p>이 식의 의미는 단순하다.</p>
+<p>전체 밝기 분포는 밤 사진의 밝기 분포가 40%, 낮 사진의 밝기 분포가 60%의 비중으로 결합된 결과라는 것이다.</p>
+<p>각 가우시안의 전체 면적은 1이므로, 각각에 0.4와 0.6을 곱하면 전체 면적 역시 1이 된다.</p>
+<div class="math-block">\[0.4\times1+0.6\times1=1\]</div>
+<p>따라서 우리가 밤과 낮의 가우시안 분포와 혼합 비율을 모두 알고 있다면, 어떤 밝기에서의 전체 확률밀도를 계산할 수 있다.</p>
+<p>실제로 한번 계산해보자.</p>
+<p>우리는 사전에 다음 정보를 알고 있다고 가정해보자.</p>
+<ul><li>밤 사진은 전체의 40%이고, 밝기는 평균 0.25, 표준편차 0.07인 가우시안 분포를 따른다.</li><li>낮 사진은 전체의 60%이고, 밝기는 평균 0.62, 표준편차 0.1인 가우시안 분포를 따른다.</li></ul>
+<p>이제 &quot;밝기가 0.45인 사진은 밤과 낮 중 어디에서 생성되었을 가능성이 더 높을까?&quot;를 구하고싶다.</p>
+<p>우리는 이미 밤과 낮의 분포를 알고 있음으로 이 사진이 어디에서 나왔을 가능성이 높은지 계산할 수 있다.</p>
+<p>먼저 낮에서 생성되었다고 가정하고 구해보자.</p>
+<p>베이즈 정리를 사용하면 된다.</p>
+<div class="math-block">\[
+P(z=\text{낮}\mid x=0.45)
+=
+\frac{P(z=\text{낮})p(x=0.45\mid z=\text{낮})}
+{p(x=0.45)}
+\]</div>
+<h4 id="block-3ffb12c0115c803793fae3c1a635a84b">전체분포에서 0.45의 확률밀도(Evidence)</h4>
+<p>우리는 전체 분포를 다음과 같이 정의했다.</p>
+<div class="math-block">\[p(x)=0.4p_N(x)+0.6p_D(x)
+\]</div>
+<p>따라서 밝기 0.45에서의 확률밀도는</p>
+<div class="math-block">\[
+p(0.45)=0.4p_N(0.45)+0.6p_D(0.45)
+\]</div>
+<p>각각의 가우시안에 0.45를 대입하면 밤 가우시안의 밀도는 약 0.0962이고, 낮 가우시안의 밀도는 약 0.9405이다.</p>
+<p>각각의 가중치를 곱하면</p>
+<div class="math-block">\[0.4(0.0962)=0.0385 \\[1.0em]
+0.6(0.9405)=0.5643\]</div>
+<p>따라서</p>
+<div class="math-block">\[p(x=0.45)=0.0385+0.5643=0.6028\]</div>
+<p>가 된다.</p>
+<figure><img src="/assets/notion/생성-모델-3장/3ffb12c0-115c-80e4-bb5d-c6ec6171eccc.png" alt="" loading="lazy" width="428" height="229" /></figure>
+<h4 id="block-3ffb12c0115c803c9239e70a6ddaa49a">낮에 밝기가 0.45로 나타날 가능성(Likelihood)</h4>
+<p>낮에 촬영되었다고 가정했을 때, 밝기가 0.45인 사진이 얼마나 그럴듯하게 나타날 수 있는지 계산해 보자.</p>
+<p>이것을 Likelihood라고 한다: \(p(x=0.45\mid z=\text{낮})\)</p>
+<p>우리는 낮 사진의 밝기가 평균 0.62, 표준편차 0.1인 가우시안 분포를 따른다는 사실을 이미 알고 있다.</p>
+<p>따라서 낮 가우시안의 확률밀도함수에 0.45를 대입하면 된다.</p>
+<div class="math-block">\[\begin{aligned}
+p(x=0.45\mid z=\text{낮})
+&amp;=\mathcal N(0.45;0.62,0.1^2)\\
+&amp;\approx0.9405
+\end{aligned}\]</div>
+<p>즉, 낮이라는 원인이 주어졌을 때 밝기 0.45라는 관측값이 얼마나 그럴듯한지를 계산한 것이다.</p>
+<h4 id="block-3ffb12c0115c805eb238cf58acde4c71">낮 사진의 사전확률(Prior)</h4>
+<p>사전확률은 관측값을 확인하기 전에 이미 알고 있던 확률이다.</p>
+<p>전체 사진 중 밤 사진이 40%, 낮 사진이 60%라는 사실을 알고 있다.</p>
+<p>따라서</p>
+<div class="math-block">\[\begin{aligned}
+P(z=\text{밤})&amp;=0.4\\
+P(z=\text{낮})&amp;=0.6
+\end{aligned}\]</div>
+<p>이 의미는 사진의 밝기를 확인하기 전에는 임의로 선택한 사진이 낮에 촬영되었을 확률이 60%라는 의미다.</p>
+<p>이처럼 관측하기 전에 알고 있던 확률을 사전확률(Prior)이라고 한다.</p>
+<p>따라서 밝기가 0.45인 사진이 나타났을 때, 이 사진의 확률밀도를 계산할 수 있다.</p>
+<p>확률밀도를 한번 계산해보자.</p>
+<div class="math-block">\[
+p(x)=0.4p_N(x)+0.6p_D(x)
+\]</div>
+<p>각각의 가우시안에 0.45를 대입하면</p>
+<figure><img src="/assets/notion/생성-모델-3장/3ffb12c0-115c-80b0-910b-e5553b728e2c.png" alt="" loading="lazy" width="428" height="229" /></figure>
+<div class="math-block">\[
+p(0.45)=0.4p_N(0.45)+0.6p_D(0.45)
+\]</div>
+<p>이다.</p>
+<p>실제로 각각의 가우시안에 0.45를 대입하면 밤 가우시안의 밀도는 약 0.0962이고, 낮 가우시안의 밀도는 약 0.9405이다.</p>
+<p>각각의 가중치를 곱하면</p>
+<div class="math-block">\[0.4(0.0962)=0.0385 \\[1.0em]
+0.6(0.9405)=0.5643\]</div>
+<p>따라서</p>
+<div class="math-block">\[p(0.45)=0.0385+0.5643=0.6028\]</div>
+<p>이 된다.</p>
+<p>이 값은 밝기 0.45에서의 전체 확률밀도다. 밝기 0.45가 나올 확률을 의미하지는 않는다.</p>
+<p>우리는 확률밀도를 계산했다. </p>
+<p>그러면 여기서 우리가 알고싶은 것은  &quot;밝기가 0.45인 사진은 밤과 낮 중 어디에서 생성되었을 가능성이 더 높을까?&quot; 이다.</p>
+<p>앞에서는 밤과 낮이 전체 밀도에 얼마나 기여하는지 더했다면, 이번에는 그 기여량을 비교하여 사진의 숨겨진 원인을 추론하고자 한다.</p>
+<p>이때 베이즈 정리를 활용한다.
+\[
+P(z=\text{낮}\mid x)
+=\frac{P(z=\text{낮})p(x\mid z=\text{낮})}{p(x)}
+\]</p>
+<p>여기서 0.6028은 정확히 밝기 0.45가 나올 확률이 아니라 그 지점의 확률밀도이다.</p>
+<h4 id="block-3ffb12c0115c80f5a866ddf1df07be2d">관측 후 낮 사진일 확률(Posterior)</h4>
+<p>우리가 구하고자 하는 것은 밝기가 0.45라는 사실을 관측한 이후, 그 사진이 낮에서 생성되었을 확률이다.</p>
+<p>이를 사후확률(Posterior)이라고 한다.</p>
+<div class="math-block">\[
+P(z=\text{낮}\mid x=0.45)
+=
+\frac{
+P(z=\text{낮})p(x=0.45\mid z=\text{낮})
+}{
+p(x=0.45)
+}
+\]</div>
+<p>앞에서 구한 값들을 대입하면</p>
+<div class="math-block">\[\begin{aligned}
+P(z=\text{낮}\mid x=0.45)
+&amp;=\frac{0.6\times0.9405}{0.6028}\\[6pt]
+&amp;\approx0.9362
+\end{aligned}\]</div>
+<p>따라서</p>
+<div class="math-block">\[P(z=\text{낮}\mid x=0.45)\approx93.62\%\]</div>
+<p>이다.</p>
+<p>반대로 밤에서 생성되었을 확률은</p>
+<div class="math-block">\[\begin{aligned}
+P(z=\text{밤}\mid x=0.45)
+&amp;=1-0.9362\\
+&amp;=0.0638
+\end{aligned}\]</div>
+<p>이므로 약 6.38%이다.</p>
+<p>즉, 밝기가 0.45인 사진은 낮에서 생성되었을 가능성이 훨씬 높다고 추론할 수 있다.</p>
+<p>그런데 처음에는 낮 사진의 비율이 60%였는데, 왜 밝기 0.45를 관측한 이후에는 그 확률이 93.62%까지 증가했을까?</p>
+<p>그 이유는 밝기 0.45가 밤 사진의 가우시안보다 낮 사진의 가우시안에서 훨씬 높은 확률밀도를 갖기 때문이다.</p>
+<p>실제로 Likelihood를 비교하면</p>
+<div class="math-block">\[\begin{aligned}
+p(0.45\mid z=\text{밤})&amp;\approx0.0962\\
+p(0.45\mid z=\text{낮})&amp;\approx0.9405
+\end{aligned}\]</div>
+<p>이다.</p>
+<p>따라서 밝기 0.45라는 관측값은 밤보다 낮에서 생성되었다는 가설을 더 강하게 지지한다.</p>
+<p>베이즈 정리는 이처럼 기존에 알고 있던 사전확률(Prior)에 관측 데이터의 Likelihood를 반영하여 사후확률(Posterior)을 계산하는 방법이다.</p>
+<p>결국 우리는 관측된 데이터 \(x\)만 가지고 숨겨진 원인 \(z\)를 추론한 것이다.</p>
+<p>하지만 여기까지는 모든 정보를 이미 알고 있다는 가정에서 출발했다.</p>
+<p>실제 문제에서는 밤과 낮 각각의 밝기 분포가 어떤 모양인지, 전체 사진 중 밤 사진이 몇 퍼센트인지조차 모를 수 있다.</p>
+<p>그렇다면 우리가 가진 것이 사진 데이터뿐일 때는 어떻게 해야 할까?</p>
+<h2 id="block-3ffb12c0115c80d489e0df87884ed0b4">Part 2. 확률분포를 모른다면, 데이터로부터 알아낼 수 있을까?</h2>
+<h3 id="block-3ffb12c0115c80cca605da7a9cb4a197">1. 우리가 실제로 가지고 있는 것은 확률분포가 아니라 관측 데이터이다</h3>
+<p>실제로 사진 데이터 5,000장을 수집했다고 생각해 보자.</p>
+<p>우리는 사진 한 장마다 평균 밝기를 계산할 수 있다. 따라서 다음과 같은 데이터를 얻을 수 있다.</p>
+<div class="math-block">\[
+D=\{x_1,x_2,\ldots,x_{5000}\}
+\]</div>
+<p>하지만 사진의 밝기 값만 알고 있을 뿐, 이 데이터가 원래 어떤 확률분포에서 생성되었는지는 알 수 없다.</p>
+<p>그렇다면 데이터의 특징을 먼저 살펴보면 어떨까?</p>
+<p>예를 들어 밝기를 10개의 구간으로 나누고, 각 구간에 사진이 몇 장 존재하는지 세어 볼 수 있다.</p>
+<div class="table-wrap"><table><tr><th>밝기 구간</th><th>사진 수</th><th>전체 비율</th></tr><tr><td>0.0~0.1</td><td>200장</td><td>4%</td></tr><tr><td>0.1~0.2</td><td>700장</td><td>14%</td></tr><tr><td>0.2~0.3</td><td>1,000장</td><td>20%</td></tr><tr><td>0.3~0.4</td><td>400장</td><td>8%</td></tr><tr><td>0.4~0.5</td><td>200장</td><td>4%</td></tr><tr><td>0.5~0.6</td><td>300장</td><td>6%</td></tr><tr><td>0.6~0.7</td><td>900장</td><td>18%</td></tr><tr><td>0.7~0.8</td><td>800장</td><td>16%</td></tr><tr><td>0.8~0.9</td><td>400장</td><td>8%</td></tr><tr><td>0.9~1.0</td><td>100장</td><td>2%</td></tr></table></div>
+<p>이렇게 각 구간에 존재하는 데이터의 개수를 세면 히스토그램을 만들 수 있다.</p>
+<figure><img src="/assets/notion/생성-모델-3장/3ffb12c0-115c-80cf-8145-c06834a169f8.png" alt="" loading="lazy" width="2666" height="782" /></figure>
+<p>히스토그램을 통해 우리는 어느 밝기 구간에 사진이 많이 존재하는지, 어느 구간에는 적게 존재하는지를 관찰할 수 있다.</p>
+<p>예를 들어 0.2~0.3 구간에는 전체 사진의 20%가 존재한다. 반면 0.9~1.0 구간에는 2%만 존재한다.</p>
+<p>여기서 중요한 사실이 하나 있다.</p>
+<p>히스토그램은 원래의 확률분포 그 자체가 아니라, 원래 분포에서 추출한 표본을 통해 관찰한 결과이다.</p>
+<p>따라서 히스토그램이 보여주는 모양이 실제 확률분포와 완전히 일치한다고 보장할 수는 없다.</p>
+<p>사진을 새롭게 5,000장 수집한다면 일부 구간의 데이터 개수는 달라질 수 있기 때문이다.</p>
+<p>결국 우리가 알고 싶은 것은 히스토그램 자체가 아니라, 이러한 관측 데이터를 만들어냈을 것으로 생각되는 원래의 확률분포이다.</p>
+<h3 id="block-3ffb12c0115c80ecad10f346d04a6f5a">2. 어떤 확률분포가 관측 데이터를 가장 그럴듯하게 설명할까?</h3>
+<p>이제 우리는 관측 데이터만으로 원래 분포의 모양을 추정해야 한다.</p>
+<p>그런데 어떤 분포가 옳은지 어떻게 판단할 수 있을까?</p>
+<p>예를 들어 두 개의 후보를 생각해 보자.</p>
+<ul><li>후보 A: 대부분의 사진이 밝기 0.5 부근에서 생성된다고 가정한다.</li><li>후보 B: 대부분의 사진이 밝기 0.25와 0.7 부근에서 생성된다고 가정한다.</li></ul>
+<p>우리가 실제로 관찰한 히스토그램에서는 밝기 0.25와 0.7 부근에 데이터가 많이 집중되어 있었다.</p>
+<p>그렇다면 후보 B가 실제 데이터를 만들어냈을 가능성이 더 그럴듯해 보인다.</p>
+<p>바로 이러한 판단을 수학적으로 표현하는 방법이 우도(Likelihood)이다.</p>
+<p>어떤 확률분포의 파라미터를 \(\theta\)라고 하면, 관측 데이터에 대한 우도는 다음과 같다.</p>
+<div class="math-block">\[L(\theta;D)=\prod_{i=1}^{N}p(x_i\mid\theta)\]</div>
+<p>이 식은 우리가 선택한 분포가 실제 관측된 데이터들을 얼마나 잘 설명하는지 평가한다.</p>
+<p>그렇다면 우리는 우도가 가장 높아지는 파라미터를 선택하면 된다.</p>
+<div class="math-block">\[\theta^*=\arg\max_\theta L(\theta;D)\]</div>
+<p>계산을 편리하게 하기 위해 로그를 취하면 로그우도(Log-Likelihood)가 된다.</p>
+<div class="math-block">\[\theta^*=\arg\max_\theta
+\sum_{i=1}^{N}\log p(x_i\mid\theta)\]</div>
+<p>이것이 최대우도추정(MLE)의 기본 원리이다.</p>
+<p>즉, 관측 데이터를 가장 그럴듯하게 만들어낼 수 있는 확률분포를 찾는 것이다.</p>
+<h3 id="block-3ffb12c0115c809797f4c3109f4454c5">3. 그렇다면 복잡한 확률분포는 무엇으로 표현해야 할까?</h3>
+<p>앞에서 우리는 밤과 낮의 가우시안을 합치면 봉우리가 두 개인 분포를 만들 수 있다는 사실을 확인했다.</p>
+<p>그렇다면 같은 원리를 더욱 복잡한 분포에도 적용할 수 있지 않을까?</p>
+<p>가우시안을 두 개가 아니라 세 개, 네 개, 열 개 사용하면 된다.</p>
+<p>각 가우시안의 평균과 분산, 혼합 비율을 조정하면서 여러 분포를 결합하면 복잡한 모양도 표현할 수 있다.</p>
+<p>이러한 방법을 가우시안 혼합 모델(Gaussian Mixture Model, GMM)이라고 한다.</p>
+<div class="math-block">\[
+p(x)=\sum_{k=1}^{K}w_k\mathcal N(x;\mu_k,\sigma_k^2)
+
+\]</div>
+<p>각 기호의 의미는 다음과 같다.</p>
+<ul><li>\(K\): 사용하는 가우시안의 개수</li><li>\(\mu_k\): \(k\)번째 가우시안의 평균</li><li>\(\sigma_k^2\): \(k\)번째 가우시안의 분산</li><li>\(w_k\): 전체 분포에서 \(k\)번째 가우시안이 차지하는 혼합 비율</li></ul>
+<h4 id="block-3ffb12c0115c80cb882dcce9ddf37fab">Example</h4>
+<p>어떤 데이터 1,000개가 주어졌다고 가정하자. 우리는 이 데이터가 어떤 확률분포에서 생성되었는지 알지 못한다.</p>
+<p>그렇다면 먼저 히스토그램(Histogram) 을 이용하여 데이터가 어떤 형태로 분포하는지 살펴볼 수 있다.</p>
+<p>히스토그램은 데이터가 존재하는 전체 영역을 여러 구간으로 나누고, 각 구간에 데이터가 얼마나 많이 들어 있는지를 막대의 높이로 나타낸 그래프이다.
+
+예를 들어 전체 영역을 임의로 10개의 구간으로 나누었다고 생각해 보자.</p>
+<p>예를 들어 첫 번째 구간에 데이터가 160개 존재한다면, 전체 데이터 중 16%가 이 구간에 들어 있다는 의미이다.</p>
+<div class="math-block">\[P(\text{첫 번째 구간})=\frac{160}{1000}=0.16\]</div>
+<p>같은 방법으로 모든 구간의 비율을 구하면 다음과 같이 데이터가 분포하는 모습을 확인할 수 있다.</p>
+<figure><img src="/assets/notion/생성-모델-3장/3ffb12c0-115c-801c-953e-eb0c3da2037f.png" alt="" loading="lazy" width="1492" height="496" /></figure>
+<p>결국 우리는 관측된 데이터를 이용하여 어느 구간에 데이터가 많이 몰려 있고, 어느 구간에는 거의 존재하지 않는지 파악한 것이다.</p>
+<p>우리가 궁극적으로 알고 싶은 것은 이 데이터들을 만들어낸 원래의 확률분포이다.</p>
+<p>하지만 원래 분포의 모양과 공식은 알지 못하기 때문에, 데이터가 관측된 형태를 바탕으로 가장 그럴듯한 분포를 추정해야 한다.</p>
+<p>&quot;이 복잡한 분포는 여러 개의 단순한 가우시안 분포를 결합하여 표현할 수 있지 않을까?”</p>
+<p>이를 위해 각각의 구간에 가우시안 분포를 배치한다고 생각해 보자. 그리고 데이터가 많이 몰려 있는 영역에는 가우시안들이 결합된 결과가 높게 나타나도록, 데이터가 거의 없는 영역에서는 낮게 나타나도록 조정한다.</p>
+<figure><img src="/assets/notion/생성-모델-3장/3ffb12c0-115c-809b-a4a4-d9d64de778f8.png" alt="" loading="lazy" width="433" height="288" /></figure>
+<p>가우시안이 1개일 때는 하나의 단순한 봉우리만 표현할 수 있으므로 원본 데이터와 큰 차이가 발생한다.</p>
+<p>반면 10개로 늘리면 여러 가우시안을 서로 다른 위치에 배치할 수 있기 때문에 복잡한 모양을 조금 더 비슷하게 표현할 수 있다.</p>
+<figure><img src="/assets/notion/생성-모델-3장/3ffb12c0-115c-8055-82d3-db7ab7ef530f.png" alt="" loading="lazy" width="420" height="312" /></figure>
+<p>45개까지 늘리면 각 가우시안이 더 세밀한 부분을 표현할 수 있게 되어 그림에서는 원본 분포와의 차이가 0.026까지 감소한다.</p>
+<p>그리고 낮, 밤 분포처럼 각각의 가우시안에 혼합비율 \(w_k\)를 곱하면 된다.</p>
+<p>여기서 혼합 비율은 다음 조건을 만족한다.</p>
+<div class="math-block">\[w_k\geq0,\qquad \sum_{k=1}^{K}w_k=1\]</div>
+<p>우리는 앞에서 배운 우도를 이용해 관측 데이터에 가장 잘 맞는 GMM의 파라미터를 추정할 수 있다.</p>
+<div class="math-block">\[\theta=\{w_k,\mu_k,\sigma_k^2\}_{k=1}^{K}\]</div>
+<p>이렇게 하면 하나의 가우시안으로 표현하기 어려운 복잡한 데이터 분포도 여러 가우시안의 조합으로 근사할 수 있다.</p>
+<p>여기까지 정리하면 우리는 두 번째 문제를 해결할 방법을 찾았다.</p>
+<blockquote>원래 확률분포를 모르는 상황에서도 관측 데이터로부터 히스토그램을 만들고, 여러 가우시안을 조합한 모델을 가정한 뒤, 우도를 최대화하는 방향으로 확률분포를 추정할 수 있다.</blockquote>
+<p>그런데 여기서 새로운 문제가 등장한다.</p>
+<p>→ \(w_k\)는 어떻게 알아낼 수 있을까?</p>
+<p>우리가 구간을 나눠 근사한 것은 우도를 통한 가우시안의 모양(평균, 분산을 조종해서)을 결정한 것이다.</p>
+<p>혼합 비율은 각 가우시안이 전체 분포에 얼마나 큰 영향을 미치는지를 결정한다.</p>
+<p>아무리 모양을 비슷하게 만들어도 </p>
+<figure><img src="/assets/notion/생성-모델-3장/3ffb12c0-115c-80bd-aa33-e2ed6b5bd65d.png" alt="" loading="lazy" width="1574" height="688" /></figure>
+<p>혼합 비율이 맞지 않다면 정답 분포에 정확히 근사하기 어렵다.</p>
+<p>혼합 비율을 조절한다는 기하학적인 의미는 각 가우시안의 평균(중심위치)과 분산(형태, 퍼짐정도)를 고정한 채 곡선의 전체적인 높낮이를 조절하여 전체 데이터 분포에 기여하는 비중을 스케일링한다고 보면 된다. 추상적 의미는 해당 스타일의 이미지가 생성될 확률(등장 빈도)을 결정한다고 보면 된다.</p>
+<p>밤과 낮의 예시로 돌아가서 이 문제를 생각해 보자.</p>
+<h2 id="block-3ffb12c0115c80938364cbe1004462cb">Part 3. 데이터의 숨겨진 원인과 혼합 비율은 어떻게 알아낼까?</h2>
+<h3 id="block-3ffb12c0115c80bc81f7d08ade74aff7">1. 밤 사진과 낮 사진을 구분할 수 있다면 간단하다</h3>
+<p>앞에서 우리는 여러 가우시안을 조합하면 복잡한 확률분포를 표현할 수 있다는 사실을 확인했다.</p>
+<p>그런데 실제로 가우시안들을 결합하려면 각 가우시안의 혼합 비율을 알아야 한다.</p>
+<p>예를 들어 사진 5장이 있고, 이 중 밤 사진이 2장, 낮 사진이 3장이라는 사실을 알고 있다고 가정해 보자.</p>
+<p>그러면 혼합 비율은 간단히 구할 수 있다.</p>
+<div class="math-block">\[w_{\text{밤}}=\frac25=0.4\]</div>
+<div class="math-block">\[w_{\text{낮}}=\frac35=0.6 \]</div>
+<p>그러면 밝기에 대한 전체 분포는</p>
+<div class="math-block">\[p(x)=0.4p_N(x)+0.6p_D(x)
+\]</div>
+<ul><li>\(p_N(x):\) 사진이 밤이 촬영되었을 분포</li><li>\(p_D(x):\) 사진이 낮체 촬영되었을 분포</li></ul>
+<p>이렇게 쓸 수 있다.</p>
+<p>하지만 실제로는 사진이 언제 촬영되었는지 알려주는 레이블이 없을 수 있다.</p>
+<figure><img src="/assets/notion/생성-모델-3장/3ffb12c0-115c-80d8-8134-f1b34be04c93.png" alt="" loading="lazy" width="444" height="185" /></figure>
+<p>우리가 알고 있는 것은 사진의 밝기뿐이다.</p>
+<p>예를 들어 밝기가 0.45인 사진을 생각해 보자. 이 사진은 평소보다 밝은 밤 사진일 수도 있고, 흐린 날 촬영한 어두운 낮 사진일 수도 있다.</p>
+<p>즉, 사진의 밝기 \(x\)는 관측할 수 있지만, 그 밝기를 만들어낸 원인은 알 수 없다.</p>
+<p>이처럼 관측 데이터에 영향을 주지만 직접 관측되지 않는 변수를 잠재변수(Latent Variable)라고 한다.</p>
+<p>밤과 낮을 구분하는 잠재변수를 \(z\)라고 정의해 보자.</p>
+<div class="math-block">\[z=
+\begin{cases}
+0 &amp; \text{밤}\\
+1 &amp; \text{낮}
+\end{cases}\]</div>
+<p>우리는 사진의 밝기 \(x\)를 알고 있지만, \(z\)는 알지 못한다.</p>
+<p>그렇다면 사진의 밝기만으로 그 사진이 밤에 촬영되었을 가능성을 추정할 수 있을까?</p>
+<h3 id="block-3ffb12c0115c804693cedef1db1b4ca5">2. 각 사진이 밤 사진일 가능성을 계산해 보자</h3>
+<p>앞에서는 관측된 사진의 밝기 데이터를 바탕으로 우도를 활용하여 복잡한 확률분포를 두 개의 가우시안 분포로 근사하였다고 하자.</p>
+<p>이를 통해 밤과 낮에 해당한다고 가정한 두 가우시안 분포의 평균과 분산을 추정할 수 있었다.</p>
+<p>그런데 아직 한 가지 모르는 것이 있다.</p>
+<p>각 가우시안 분포가 전체 사진에서 얼마나 큰 비중을 차지하는가?</p>
+<p>즉, 밤과 낮의 밝기 분포는 추정했지만, 전체 사진 중 밤과 낮이 각각 얼마나 섞여 있는지는 아직 모르는 상황이다.</p>
+<p>그렇다면 각 사진이 밤일 확률을 계산하고, 이를 이용해 두 가우시안의 혼합 비율을 추정할 수 있지 않을까?</p>
+<p>즉 이번에는 밤과 낮 각각의 가우시안 모양은 알고 있지만, 혼합 비율만 모르는 상황이라는 것이다.</p>
+<p>처음에는 밤 사진과 낮 사진이 절반씩 존재한다고 가정해 보자.</p>
+<div class="math-block">\[w_{\text{N}}^{(0)}=0.5,\qquad
+w_{\text{D}}^{(0)}=0.5\]</div>
+<p>이제 밝기가 0.2인 사진을 관측했다고 생각해 보자.</p>
+<p>이 밝기에서 밤 가우시안과 낮 가우시안의 확률밀도를 각각 계산할 수 있다.</p>
+<p>다음과 같은 값이 나왔다고 하자.</p>
+<div class="math-block">\[
+\begin{aligned}
+p(x=0.2\mid z=\text{밤})&amp;=4.4159\\
+p(x=0.2\mid z=\text{낮})&amp;=0.0006
+\end{aligned}
+\]</div>
+<p>이 값들은 각각의 가우시안에서 밝기 0.2가 얼마나 그럴듯한지를 나타낸다.</p>
+<p>우리는 밤과 낮의 혼합 비율을 0.5로 가정했으므로, 각 가우시안의 확률밀도에 혼합 비율을 곱할 수 있다.</p>
+<p>그렇다면 밝기 0.2인 사진이 밤에서 왔을 조건부 확률은 베이즈 정리를 이용해 다음과 같이 구할 수 있다.</p>
+<div class="math-block">\[p(x)=0.4p(x\mid \text{밤})+0.6p(x\mid\text{낮})\]</div>
+<p>앞서 \(p(x)\)는 위와 같았다. 따라서</p>
+<div class="math-block">\[
+
+\begin{aligned}
+P(z=\text{밤}\mid x)
+&amp;=\frac{p(x\mid z=\text{밤})P(z=\text{밤})}{p(x)}\\[8pt]
+&amp;=\frac{w_{\text{N}}\;p(x\mid z=\text{밤})}
+{w_{\text{N}}\;p(x\mid z=\text{밤})+w_{\text{D}}\;p(x\mid z=\text{낮})}
+\end{aligned}
+\]</div>
+<p>이를 밝기 0.2에 적용하면</p>
+<div class="math-block">\[
+P(\text{밤}\mid0.2)
+=
+\frac{0.5(4.4159)}
+{0.5(4.4159)+0.5(0.0006)}
+\approx 0.9999
+\]</div>
+<p>
+즉, 현재 가정한 분포에서는 밝기가 0.2인 사진이 밤 사진일 확률이 약 99.99%라고 추정할 수 있다.</p>
+<p>이런 식으로 사진마다 밤에 속할 확률을 계산할 수 있다.</p>
+<h4 id="block-3ffb12c0115c80aa9f42c9b61e01e2e8">혼합비율 계산하기</h4>
+<p>밤과 낮의 혼합 비율은 수식으로 표현하기 위해 밤 사진의 비중을 \(w\), 낮 사진의 비중을 \(1-w\)라고 정의하자.</p>
+<div class="math-block">\[p(x)=wp_N(x)+(1-w)p_D(x)\]</div>
+<p>이제 우리가 알아내야 하는 것은 \(w\)라는 값이다.</p>
+<p>간단하게 예를들어 사진 5장의 밝기가 다음과 같다고 하자.</p>
+<div class="math-block">\[D=\{0.2,0.3,0.45,0.6,0.7\}\]</div>
+<figure><img src="/assets/notion/생성-모델-3장/3ffb12c0-115c-80e9-b64b-c5c62fad99b7.png" alt="" loading="lazy" width="425" height="223" /></figure>
+<ul><li>위 이미지에서 무게는 가중치를 말함</li></ul>
+<p>그리고 우리는 밤 사진의 비중이 얼마인지 모르므로 처음에는 밤과 낮의 비중이 같다고 가정해 보자.</p>
+<div class="math-block">\[w^{(0)}=0.5\]</div>
+<p>그러면 전체 분포는</p>
+<div class="math-block">\[p(x)=0.5p_N(x)+0.5p_D(x)\]</div>
+<p>가 된다.</p>
+<p>물론 이 분포가 실제 데이터를 잘 설명하는지는 아직 모른다.</p>
+<p>예를 들어 밝기가 0.45인 사진을 생각해 보자.</p>
+<p>우리가 구하고 싶은 값은</p>
+<div class="math-block">\[P(z=\text{밤}\mid x=0.45)\]</div>
+<p>이다.</p>
+<p>베이즈 정리에 대입하면</p>
+<div class="math-block">\[P(z=\text{밤}\mid x=0.45)=
+\frac{P(z=\text{밤})p(0.45\mid z=\text{밤})}
+
+{p(0.45)}\]</div>
+<p>이다.</p>
+<p>그런데 이번에는 앞에서 사용했던 사전확률 0.4가 아니라, 현재 임의로 설정한 \(w=0.5\)를 사용해야 한다.</p>
+<p>따라서</p>
+<div class="math-block">\[P(z=\text{밤}\mid x=0.45)=
+\frac{0.5p_N(0.45)}
+
+{0.5p_N(0.45)+0.5p_D(0.45)}\]</div>
+<p>가 된다.</p>
+<p>앞에서 계산했던 두 가우시안의 확률밀도를 대입하면</p>
+<div class="math-block">\[\begin{aligned}
+0.5p_N(0.45)&amp;=0.5(0.0962)=0.0481\\
+0.5p_D(0.45)&amp;=0.5(0.9405)=0.4702
+\end{aligned}\]</div>
+<p>따라서</p>
+<div class="math-block">\[\begin{aligned}
+P(z=\text{밤}\mid x=0.45)
+&amp;=\frac{0.0481}{0.0481+0.4702}\\
+&amp;\approx0.0928
+\end{aligned}\]</div>
+<p>즉, 현재 가정한 혼합 비율을 기준으로 밝기가 0.45인 사진이 밤 사진일 확률은 약 9.28%이다.</p>
+<h4 id="block-3ffb12c0115c8059bc65cb2b00b70aff">사진 5장 모두에 대해 같은 계산을 해 보자 (E-step)</h4>
+<p>방금은 밝기가 0.45인 사진에 대해서만 밤일 확률을 계산했다.</p>
+<p>이제 나머지 사진 4장에도 같은 계산을 적용하자.</p>
+<p>앞에서 배운 방법으로 각 사진이 밤 사진일 확률을 계산하면 다음과 같은 결과를 얻었다고 가정할 수 있다.</p>
+<div class="table-wrap"><table><tr><th>밝기 x</th><th>밤 사진일 확률</th></tr><tr><td>0.20</td><td>0.9999</td></tr><tr><td>0.30</td><td>0.9946</td></tr><tr><td>0.45</td><td>0.0928</td></tr><tr><td>0.60</td><td>약 0</td></tr><tr><td>0.70</td><td>약 0</td></tr></table></div>
+<p>우리는 각 사진이 밤 사진일 확률을 추정했다. 그렇다면 이 확률들을 모두 더하면 5장의 사진에서 밤 사진의 기여도를 추정할 수 있지 않을까?</p>
+<p>실제로 각 사진의 밤 사진일 확률을 더하면</p>
+<div class="math-block">\[0.9999+0.9946+0.0928+0+0
+=2.0873\]</div>
+<p>이라는 값이 나온다.</p>
+<p>현재 추정한 확률을 기준으로 전체 사진(5장)에 대하여 밤 사진의 개수가 평균적으로 약 2.0873장일 것으로 기대된다는 의미이다.</p>
+<p>이것을 전체 사진 수인 5로 나누면 밤 사진의 새로운 혼합 비율을 얻을 수 있다.</p>
+<div class="math-block">\[w_{\text{밤}}^{(1)}
+=\frac{2.0873}{5}
+\approx0.4175\]</div>
+<p>즉, 처음에는 밤과 낮이 절반씩 존재한다고 가정했지만, 실제 관측된 사진의 밝기와 각 가우시안의 모양을 반영해 보니 밤 사진의 혼합 비율을 약 41.75%로 수정하는 것이 더 적절하다고 판단한 것이다.</p>
+<p>이제 밤과 낮의 새로운 혼합 비율은 다음과 같다.</p>
+<div class="math-block">\[\begin{aligned}
+w_{\text{밤}}^{(1)}&amp;=0.4175\\
+w_{\text{낮}}^{(1)}&amp;=0.5825
+\end{aligned}\]</div>
+<p>다만 이것은 어디까지나 현재 모델이 관측 데이터를 설명하기 위해 추정한 혼합 비율이다. 실제 데이터셋에 밤 사진이 정확히 41.75% 들어 있다는 사실이 확인된 것은 아니다.</p>
+<p>앞에서 우리는 처음에 혼합 비율을 0.5로 가정했다.</p>
+<p>그리고 사진의 밝기를 이용해 각 사진이 밤 사진일 확률을 계산한 다음, 혼합 비율을 0.4175로 수정했다.</p>
+<p>그런데 생각해 보면 처음 설정한 혼합 비율 0.5는 임의로 선택한 값이었다.</p>
+<p>그렇다면 새롭게 계산한 0.4175를 이용하여 다시 각 사진의 소속 확률을 계산하면 어떨까?</p>
+<p>이렇게 하면 다시 새로운 혼합 비율을 얻을 수 있다.</p>
+<p>이처럼 현재 가우시안의 혼합 비율을 이용하여 각 데이터가 어느 가우시안에 속할 가능성이 높은지 계산하는 과정을 E-step(Expectation)이라고 한다.</p>
+<p>수식으로 표현하면 E-step은 다음과 같다.</p>
+<div class="math-block">\[\gamma_{ik}^{(t)}
+\frac{
+
+w_k^{(t)}\mathcal N(x_i;\mu_k,\sigma_k^2)
+
+}{
+
+\sum_{j=1}^{K}w_j^{(t)}
+
+\mathcal N(x_i;\mu_j,\sigma_j^2)
+
+}\]</div>
+<h4 id="block-3ffb12c0115c808c9183ccabf306f9a1">그렇다면 계산한 확률로 혼합 비율을 어떻게 수정할까? (M-step)</h4>
+<p>M-step에서는 이 소속 확률을 이용하여 혼합 비율을 갱신한다.</p>
+<div class="math-block">\[w_k^{(t+1)}
+=\frac1N\sum_{i=1}^{N}\gamma_{ik}^{(t)}\]</div>
+<p>실제 일반적인 GMM 학습에서는 혼합 비율뿐만 아니라 각 가우시안의 평균과 분산도 함께 갱신한다.</p>
+<p>이 과정을 반복하면 각 데이터의 소속 확률과 가우시안의 파라미터가 서로 영향을 주면서 점차 조정된다.</p>
+<p>그 결과 관측 데이터를 더 그럴듯하게 설명하는 가우시안 혼합 모델을 얻을 수 있다. 다만 초기값에 따라 서로 다른 국소 최적해로 수렴할 수도 있다.</p>
+<h4 id="block-3ffb12c0115c80fc807ef5f57aad3520">새로운 혼합 비율로 다시 계산하면 어떻게 될까?</h4>
+<p>이제 우리는 처음에 가정했던 \(w=0.5\) 대신 새롭게 계산한 \(w=0.4175\)를 얻었다.</p>
+<p>그렇다면 이 새로운 혼합 비율을 이용하여 다시 각 사진의 밤일 확률을 계산할 수 있다.</p>
+<div class="math-block">\[
+P(z=\text{밤}\mid x)
+=
+\frac{0.4175p_N(x)}
+{0.4175p_N(x)+0.5825p_D(x)}
+\]</div>
+<p>이 식을 이용하여 다섯 장의 사진을 다시 계산하면 새로운 밤일 확률들이 나온다.</p>
+<p>그리고 그 확률을 다시 더하고 5로 나누면 또 다른 혼합 비율을 얻을 수 있다.</p>
+<div class="table-wrap"><table><tr><th>반복</th><th>사용한 \(w\)</th><th>밤일 확률의 합</th><th>새롭게 계산한 \(w\)</th></tr><tr><td>1회</td><td>0.5000</td><td>2.0873</td><td>0.4175</td></tr><tr><td>2회</td><td>0.4175</td><td>2.0606</td><td>0.4121</td></tr><tr><td>3회</td><td>0.4121</td><td>2.0591</td><td>0.4118</td></tr><tr><td>4회</td><td>0.4118</td><td>2.0590</td><td>0.4118</td></tr></table></div>
+<figure><img src="/assets/notion/생성-모델-3장/3ffb12c0-115c-805e-9fe8-c1b08f8df903.png" alt="" loading="lazy" width="1536" height="864" /></figure>
+<p>반복할수록 혼합 비율의 변화가 점점 작아지고, 결국 약 0.4118이라는 값에 수렴한다.</p>
+<p>따라서 최종적으로 학습된 혼합 비율은</p>
+<div class="math-block">\[w\approx0.4118,\qquad1-w\approx0.5882\]</div>
+<p>이다.</p>
+<p>우리는 처음에 밤과 낮의 혼합 비율을 몰랐다.</p>
+<p>하지만 관측된 사진들의 밝기를 가지고 각 사진이 밤일 확률을 추론한 다음, 그 결과로 혼합 비율을 수정하는 과정을 반복했다.</p>
+<div class="math-block">\[
+
+
+\text{E-step: 각 사진의 소속 확률 추정}\\
+\downarrow\\
+\text{M-step: 혼합 비율 갱신}\\
+\downarrow\\
+\text{반복하여 분포를 학습}
+
+
+\]</div>
+<p>이것이 GMM에서 사용되는 EM(Expectation-Maximization) 알고리즘의 기본 원리이다.</p>
+<h2 id="block-3ffb12c0115c80bcb4a8f673501645a4">Part 4. 추정한 확률분포가 정말 그럴듯한지 어떻게 확인할까?</h2>
+<h3 id="block-3ffb12c0115c807bb213f0c8d2e5b7a1">1. 적합도</h3>
+<p>앞에서는 우리가 관측한 데이터로부터 원래의 확률분포를 추정하는 방법을 살펴보았다.</p>
+<p>처음에는 사진의 밝기 분포를 전혀 몰랐지만, 관측 데이터와 우도를 이용하여 여러 가우시안의 모양을 추정하고, EM 알고리즘으로 각 가우시안의 혼합 비율까지 알아낼 수 있었다.</p>
+<p>이제 우리에게는 다음과 같이 추정된 확률분포가 있다.</p>
+<div class="math-block">\[p(x)=w_{\text{밤}}p(x\mid\text{밤})
++w_{\text{낮}}p(x\mid\text{낮})\]</div>
+<p>위에서 최종적으로 얻은 혼합 비율은 다음과 같다.</p>
+<div class="math-block">\[w_{\text{밤}}=0.4118,\qquad w_{\text{낮}}=0.5882 \]</div>
+<p>그렇다면 여기서 새로운 질문이 생긴다.</p>
+<p>우리가 추정한 이 확률분포가 원래의 사진 데이터 분포를 얼마나 잘 재현하고 있는지는 어떻게 확인할 수 있을까?</p>
+<p>우리는 원래의 확률분포는 모르지만, 실제 관측 데이터의 히스토그램은 만들 수 있다.</p>
+<p>히스토그램을 보면 어떤 밝기 구간에서 사진이 많이 관측되었고, 어떤 구간에서 적게 관측되었는지 확인할 수 있다.</p>
+<p><strong>그렇다면 실제 데이터가 많이 관측된 밝기 구간에 우리가 추정한 GMM도 높은 확률밀도를 부여하고 있을까?</strong></p>
+<p>예를 들어 밝기 \(x=0.45\)부근에서 많은 사진이 관측되었다고 가정하자.</p>
+<p>우리가 추정한 GMM에 이 값을 대입하면 다음과 같다.</p>
+<div class="math-block">\[p_{\text{GMM}}(0.45)
+=0.4118p(0.45\mid\text{밤})
++0.5882p(0.45\mid\text{낮})\]</div>
+<p>이렇게 계산하면 GMM이 밝기 (0.45)에 얼마나 높은 확률밀도를 부여하는지 확인할 수 있다.</p>
+<p>다만 특정 밝기 하나에서 높은 확률밀도가 나타난다고 해서 실제 분포를 잘 재현했다고 판단할 수는 없다.</p>
+<p>실제 데이터가 많이 관측된 구간뿐 아니라 적게 관측된 구간에서도 GMM이 적절한 확률밀도를 부여하는지 확인해야 한다.</p>
+<p>따라서 실제 관측 데이터의 히스토그램을 확률밀도에 맞게 정규화하고, 그 위에 우리가 추정한 GMM의 확률밀도 곡선을 겹쳐서 비교한다.</p>
+<p>두 분포의 봉우리 위치, 폭, 전체적인 형태가 비슷하다면 GMM이 관측 데이터의 분포를 잘 설명하고 있다고 볼 수 있다.</p>
+<h3 id="block-40cb12c0115c80169fbcd16143e6ef7d">정리하기</h3>
+<p>우리는 데이터 ‭\(x\)‬가 이미 주어진 상황에서 &quot;이 데이터 ‭\(x\)‬가 나올 확률(우도)이 얼마인가?&quot;를 가우시안이 밤/낮 2개뿐이라 수식을 통해 우도를 직접 계산하여 <strong>학습(추정)</strong>할 수 있었다</p>
+<ul><li>‭\(p(x) = w_{\text{밤}}p(x\mid\text{밤}) + w_{\text{낮}}p(x\mid\text{낮})\)‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬</li></ul>
+<p>그리고 계산된 ‭\(p(x)\)‬‭‬‭‬‭‬ 곡선을 실제 데이터 히스토그램과 비교해 &quot;얼마나 잘 겹치나(적합도)&quot;<strong>평가할 수 있었다.</strong></p>
+<p>그리고 실제 현실세계와 유사한 무한한 가우시안 연속 모델을 다룬다.</p>
+<p>우리가 추정하려는 모델 \(p(x)\)를 잘 학습(추정)하려면, 윗 내용과 마찬가지로 관측 데이터가 우리 모델에서 나올 확률밀도(우도) \(p(x)\)를 계산해서 이를 최대화해야 한다.</p>
+<p>그런데 우도 ‭\(p(x) = \int p(x\vert{}z)p(z)dz\)‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬ 는 \(z\)의 차원의 저주로 인해 우리의 복잡한 모델에서는 계산 불가능해서 \(p(x)\)를 학습(추정)하지 못한다.</p>
+<ul><li>\(p(x) = \int p(x\vert{}z)p(z)dz\)‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬: 모델 파라미터를 고정했을 때 데이터 \(x\)가 나타날 확률밀도</li></ul>
+<p>따라서 직접 적분을 푸는 대신, \(z \sim p(z)\)에서 ‭\(z\)‬를 여러 개 뽑아서(샘플링해서) 적분을 근사하여 추정하는 방식(몬테카를로 / 변분 추론)을 떠올리게 된다.</p>
+<p>그러나 단순 무작위 샘플링은 유용한 ‭\(z\)‬가 뽑힐 확률이 극히 낮아 자원이 낭비되므로, &quot;적분 근사를 위해 ‭\(z\)‬를 어떻게 똑똑하게 샘플링할 것인가?&quot;의 문제로 자연스럽게 이어진다.</p>
+<p>이를 위해 잠재변수가 존재하는 복잡한 연속 모델에서 데이터가 실제로 어떻게 생성(샘플링)되는지 그 원리를 먼저 이해할 필요가 있다. 따라서 이해 대해 먼저 설명한다.</p>
+<h3 id="block-404b12c0115c8049a2e1c6683a541bc3">2. 그런데 현실의 복잡한 데이터도 동일하게 모델링할 수 있을까?</h3>
+<p>앞에서는 여러 가우시안을 결합하여 간단한 두 봉우리의 확률분포를 표현하는 GMM을 살펴보았다.</p>
+<p>그렇다면 이미지와 같은 고차원 데이터의 복잡한 확률분포도 GMM으로 표현할 수 있을까?</p>
+<p><strong>원리적으로 가능하다.</strong> 충분히 많은 가우시안을 사용하면 다양한 형태의 확률분포를 원하는 정확도까지 근사할 수 있기 때문이다.</p>
+<p>예를 들어 기존에는 밤과 낮이라는 두 개의 가우시안을 사용했지만, 분포의 형태가 더 복잡하다면 10개, 100개의 가우시안을 사용할 수도 있다.</p>
+<p>그런데 여기서 한 가지 생각해 볼 점이 있다.</p>
+<p><strong>가우시안의 개수가 늘어난다는 것은 잠재변수의 개수도 늘어난다는 의미일까?</strong></p>
+<h4 id="block-404b12c0115c8098b568c168cf734865">1) 가우시안의 개수와 잠재변수의 개수는 다르다</h4>
+<p>우리가 앞에서 사용한 밤과 낮의 GMM을 다시 생각해 보자.</p>
+<p>기존에는 잠재변수(z)가 밤과 낮 중 하나를 선택했다.</p>
+<div class="math-block">\[z=
+\begin{cases}
+0 &amp; \text{밤}\\
+1 &amp; \text{낮}
+\end{cases}\]</div>
+<p>따라서 잠재변수는 하나였지만, 두 가지 값을 가질 수 있었고, 각 값에 따라 서로 다른 가우시안 분포가 사용되었다.</p>
+<p>그렇다면 가우시안을 10개 사용하면 어떻게 될까?</p>
+<div class="math-block">\[p(x)=\sum_{k=1}^{10}P(z=k)p(x\mid z=k)\]</div>
+<p>이때 잠재변수 (z)는 다음과 같다.</p>
+<div class="math-block">\[z\in{1,2,3,\ldots,10}\]</div>
+<p>즉, 잠재변수는 여전히 하나이지만, 이제 10가지 값 중 하나를 가질 수 있다.</p>
+<p>가우시안이 100개라도 마찬가지다. 잠재변수 \(z\)하나가 100가지 값 중 하나를 가진다.</p>
+<p>각 값이 선택될 확률은 하나의 범주형 확률분포(categorical distribution) \(P(z)\)로 표현된다.</p>
+<p>따라서 가우시안의 개수를 늘린다는 것은 잠재변수의 개수를 늘리는 것이 아니라, 잠재변수가 선택할 수 있는 가우시안의 종류를 늘리는 것이다.</p>
+<p>가우시안을 100만 개 사용하는 경우에도 동일하다. 잠재변수 \(z\) 하나가 100만 가지의 이산적인 값 중 하나를 선택하도록 구성할 수 있다.</p>
+<h4 id="block-404b12c0115c804788f8e5c36a18b3f5">2) 그렇다면 연속적인 값을 갖는 잠재변수는?</h4>
+<p>이번에는 하루 동안 촬영한 사진의 밝기 분포를 다시 생각해 보자.</p>
+<p>기존에는 사진의 상태를 단순히 '밤'과 '낮' 두 가지로만 구분했다. </p>
+<p>하지만 실제로 사진은 오전 10시, 10시 5분, 오후 3시 등 하루 중 언제든 연속적인 시간에 촬영될 수 있으며, 그 시각에 따라 밝기의 분포도 미세하게 달라질 수 있다.</p>
+<p>여기서 이 연속적인 변화를 단 10개의 가우시안 분포만 사용하여 표현하는 모델을 상상해 보자.</p>
+<p>방법은 하루의 연속적인 시간을 10개의 구간으로 나누고, 각 구간마다 하나의 가우시안을 할당하는 것이다.</p>
+<p>예를 들어 오전 10시와 10시 5분은 같은 시간대에 묶여 동일한 가우시안 분포로 설명되지만, 밤 11시 사진은 완전히 다른 구간의 가우시안 분포를 따르게 된다.</p>
+<p>즉, '촬영 시각'이라는 데이터는 연속적으로 주어지더라도, 이를 표현하기 위해 사용하는 가우시안 분포는 10개로 유한하게 표현할 수 있다.</p>
+<p>촬영 시각을 (t)라고 하자. \(0\le t&lt;24\) 이 변수는 하루 중 임의의 시각을 나타내므로 연속적인 값을 가진다.</p>
+<p>이제 이 연속적인 촬영 시각을 바탕으로, 10개의 가우시안 중 몇 번째 가우시안을 사용할지 결정하는 매핑 함수 \(g(t)\)를 정의할 수 있다.</p>
+<div class="math-block">\[g(t)\in{1,2,\ldots,10}\]</div>
+<p>이 경우 특정 시각 \(t\)가 주어졌을 때 사진 밝기 \(x\)의 조건부 확률분 포는 다음과 같이 표현된다.</p>
+<div class="math-block">\[p(x\mid t)=
+\mathcal N(x\mid\mu_{g(t)},\sigma^2_{g(t)})\]</div>
+<ul><li>\(t\): 연속적으로 변하는 촬영 시각</li><li>\(g(t)\): 연속적인 시간 \(t\)를 10개의 이산적인 가우시안 분포 중 하나로 대응시키는 함수</li></ul>
+<p>변수 자체가 연속적이라고 해서 반드시 무한히 많은 가우시안 분포가 필요한 것은 아니다. 연속적인 잠재 변수라도 함수를 통해 유한한 개수의 상태(가우시안)로 묶어서 표현할 수 있다.</p>
+<p>하지만 현실에서 관측되는 데이터의 숨겨진 원인은 이처럼 이산적인 나뉘지 않는 경우가 많다. </p>
+<p>예를 들어 사진의 촬영 시각 \(t\)‬나 빛의 양 같은 요소들은 본질적으로 0과 1사이, 혹은 특정 범위 내에서 연속적인 스펙트럼을 가진다.</p>
+<p>물론 연속적으로 변하는 촬영 시각 ‭\(t\)‬를 10개, 혹은 100만 개의 유한한 구간으로 쪼개어 특정 가우시안 번호에 강제로 할당하는 매핑 함수 \(g(t)\)를 상상해 볼 수는 있다.</p>
+<p>그러나 이 방식은 부드럽게 이어지는 자연의 연속적인 변화를 계단처럼 뚝뚝 끊어지게 표현하는 셈이다.</p>
+<p>시간 구간을 아무리 잘게 쪼개어 가우시안을 100만 개로 늘린다고 하더라도, 결국 같은 구간 안에서는 변화를 구분하지 못하며 구간과 구간 사이의 경계에서는 불연속적인 부분이 존재한다.</p>
+<p>더욱이 이미지처럼 복잡한 데이터에서 잠재변수의 차원이 높아진다면 문제는 더 심각해진다.</p>
+<ul><li>예를들어 1차원의 변수를 100개의 구간으로 쪼갰다면, 2차원은 ‭\(100^2\)‬(1만 개), 3차원은 \(100^3\)‬(100만개)의 구간이 필요하다.</li><li>이미지 데이터를 다루는 잠재 공간은 보통 수백에서 수천 차원에 달하므로, 이를 유한한 구간으로 쪼개어 특정 가우시안에 할당하려면 우주의 원자 수보다 많은 천문학적인 개수의 구간이 필요해져 물리적인 계산과 메모리 할당 자체가 불가능해진다.</li></ul>
+<p>이처럼 연속적인 다차원 공간을 이산적인 격자나 구간으로 억지로 나누어 각각 가우시안을 할당하는 것은 기하급수적으로 많은 수의 가우시안을 필요로 하므로, 연산과 모델링 측면에서 극도로 비효율적이다.</p>
+<h4 id="block-404b12c0115c80f6babff8a50baaa68f">3) 연속 잠재변수와 무한한 가우시안의 결합</h4>
+<p>&quot;그렇다면 굳이 연속적인 변수 ‭\(z\)‬를 유한한 가우시안 번호로 억지로 쪼개어 변환할 필요가 있을까?&quot;</p>
+<p>발상을 전환하여 아예 구간을 나누는 방식을 버려 보자. 대신, 연속적인 잠재변수 ‭\(z\)‬의 값 자체를 가우시안의 평균 ‭\(\mu\)‬와 분산 ‭\(\sigma^2\)‬을 직접 출력해 주는 매끄러운 '연속 함수'에 통과시키는 것이다.</p>
+<div class="math-block">\[p(x\mid z)=\mathcal N(x\mid\mu(z),\sigma^2(z))‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬\]</div>
+<p>이렇게 구성하면 잠재변수 ‭\(z\)‬가 미세하게 변할 때마다 함수를 통해 평균 \(\mu(z)\)와 분산 \(\sigma^2(z)\)도 유연하게 변하게 된다. 이는 곧 ‭\(z\)‬가 연속적으로 흐름에 따라, 그 미세한 매 순간마다 서로 다른 고유한 가우시안 분포가 무수히 많이, 그리고 연속적으로 존재하게 됨을 의미한다.</p>
+<p>100만 개, 1,000만 개처럼 가우시안의 개수를 세며 뚝뚝 끊어지던 한계를 벗어나, 사실상 무한히 많은 가우시안 분포가 연속적인 선상에 부드럽게 존재하는 모델로 표현할 수 있다.</p>
+<h4 id="block-40cb12c0115c803f925be382aa1bcab5">예시: 연속함수 g(z)를 이용한 가우시안 생성</h4>
+<p>고양이 사진의 털 밝기 \(x\)를 생성하는 모델을 만든다고 가정하자.</p>
+<p>털 밝기는 0(검정)부터 255(흰색)사이의 연속적인 값을 가진다고하자.</p>
+<p>기존 GMM에서는 검은 고양이, 회색 고양이, 흰 고양이에 대응하는 가우시안의 평균과 분산을 각각 미리 정해두었다.</p>
+<p>하지만 이번에는 가우시안 분포를 직접 선택하는(평균과 분산을 직접 지정하는) 대신, 잠재변수 z를 입력받아 평균과 분산을 출력하는 연속함수 \(g(z)\)를 정의한다.</p>
+<p>잠재변수가 다음 범위에 있다고 가정하자: \(z\in[0,1]\)</p>
+<p>그리고 함수 \(g(z)\)를 다음과 같이 정의한다.</p>
+<div class="math-block">\[g(z)=
+\begin{bmatrix}
+\mu(z)\\
+\sigma^2(z)
+\end{bmatrix}
+=
+\begin{bmatrix}
+40+180z\\
+(10+10z)^2
+\end{bmatrix}\]</div>
+<p>여기서 함수 \(g(z)\)는 입력된 \(z\)에 따라 두 값을 출력한다.</p>
+<ul><li>\(\mu(z)=40+180z\): 가우시안의 평균</li><li>\(\sigma^2(z)=(10+10z)^2\): 가우시안의 분산</li></ul>
+<p>즉, \(z\)라는 값 하나를 입력하면 그 값에 대응하는 가우시안의 평균과 분산이 자동으로 결정되는 구조이다.</p>
+<ul><li>\(z=0\)을 입력하면?</li></ul>
+<div class="math-block">\[g(0)=
+\begin{bmatrix}
+40\\100
+\end{bmatrix}\]</div>
+<p>따라서 생성되는 조건부 가우시안은: \(p(x\mid z=0)=\mathcal N(x\mid40,100)\)이다.</p>
+<p>평균 밝기가 40이고 표준편차가 10이므로 어두운 털 밝기가 주로 생성된다.</p>
+<ul><li>\(z=0.5\)를 입력하면?</li></ul>
+<div class="math-block">\[g(0.5)=
+\begin{bmatrix}
+130\\225
+\end{bmatrix}\]</div>
+<p>따라서 \(p(x\mid z=0.5)=\mathcal N(x\mid130,225)\)가 된다.</p>
+<p>평균 밝기가 130이므로 회색 계열의 털 밝기가 주로 생성된다.</p>
+<ul><li>\(z=1\)을 입력하면?</li></ul>
+<div class="math-block">\[g(1)=
+\begin{bmatrix}
+220\\400
+\end{bmatrix}\]</div>
+<p>따라서 \(p(x\mid z=1)=\mathcal N(x\mid220,400)\)이 된다.</p>
+<p>평균 밝기가 220이므로 밝은 흰색 계열의 털 밝기가 주로 생성된다.</p>
+<p>\(z\)는 0, 0.5, 1이라는 세 가지 값만 가질 수 있는 것이 아니다.</p>
+<p>예를 들어 \(z=0.37\)이라는 값을 입력해도</p>
+<div class="math-block">\[g(0.37)=
+\begin{bmatrix}
+106.6\\
+187.69
+\end{bmatrix}\]</div>
+<p>이라는 새로운 평균과 분산이 계산된다: \(p(x\mid z=0.37)
+=\mathcal N(x\mid106.6,187.69)\)</p>
+<p>이처럼 \(z\)는 0과 1 사이의 모든 실숫값을 가질 수 있으므로 0.371, 0.3711, 0.37111 등 어떤 값을 입력하더라도 함수 g(z)는 그에 대응하는 평균과 분산을 계산한다.</p>
+<p>그리고 실제 생성 과정에서는 다음 두 단계를 거친다.</p>
+<ol><li>잠재변수 \(z\)를 확률분포 \(p(z)\)에서 하나 뽑는다.</li><li>\(g(z)\)로 평균과 분산을 계산한 뒤, 해당 가우시안에서 \(x\)를 샘플링한다.</li></ol>
+<p>이를 수식으로 나타내면</p>
+<div class="math-block">\[z\sim p(z) \\
+x\mid z\sim\mathcal N\left(\mu(z),\sigma^2(z)\right)\]</div>
+<p>이다.</p>
+<p>GMM에서 가우시안의 개수를 무한히 늘리고 기존의 EM 알고리즘으로 추정하는 방식을 상상할 수도 있지만, 이는 다음과 같은 한계가 있다.</p>
+<p><strong>이유1)</strong></p>
+<p>가우시안이 100만 개라면, 추정해야 할 가중치(‭\(w\)‬), 평균(‭\(\mu\)‬), 분산(‭\(\sigma^2\)‬)도 각각 100만 개씩 생긴다.</p>
+<p>이를 제대로 학습하려면 상상할 수 없을 만큼 거대한 데이터가 필요하다.</p>
+<p>데이터가 충분하지 않으면 대부분의 가우시안에는 할당되는 데이터가 하나도 없게 되어 분포를 제대로 추정할 수 없다.</p>
+<p><strong>이유2)</strong></p>
+<p>EM 알고리즘은 매 단계마다 '모든 데이터 포인트'가 '모든 가우시안'에 속할 우도를 일일이 계산해야 한다.</p>
+<p>가우시안의 개수가 무한대로 발산하면 이 연산량 역시 무한대가 되어 물리적으로 계산이 불가능해진다.</p>
+<h4 id="block-404b12c0115c805ea3a7e4aaade6c1bf">4) 잠재변수 ‭\(z\)‬의 분포는 단순해도 괜찮다</h4>
+<p>그렇다면 무한한 가우시안을 만들어내는 잠재변수 ‭\(Z=z\)값은 애초에 어떤 분포에서 뽑아야 할까? </p>
+<blockquote>무한히 존재하는 가우시안 분포 중 하나를 '선택'하는 것과 완전히 동일하다.</blockquote>
+<p>결론부터 말하자면, \(z\)‬는 가장 단순한 표준정규분포에서 무작위로 뽑아도 아무런 상관이 없다.</p>
+<p>예를들어 우리는 \(z\)를 사용하여 밤과 낮처럼 봉우리가 두 개인 복잡한 밝기 분포를 만들고싶다고 해보자.</p>
+<p>반면 표준정규분포는 평균인 0 부근에서 값이 많이 몰려 있고 봉우리가 하나뿐이다. </p>
+<p>만약 표준정규분포에서 뽑은 ‭\(z\)‬를 아무런 변환 없이 그대로 사용한다면, 데이터가 여전히 0 부근에만 집중되어 기껏해야 단조로운 종 모양의 분포만 얻게 되는 문제가 생긴다. </p>
+<p>즉, 중심에는 데이터가 넘치고 양극단(어두운 밤, 밝은 낮)의 데이터는 거의 생성되지 않아 우리가 원하는 두 개의 뚜렷한 봉우리를 가진 데이터 분포를 만들어낼 수 없는 것이다.</p>
+<p>따라서 우리는 ‭\(z\)‬를 우리가 원하는 데이터 공간 \(x\)‬로 연결해주는함수 ‭\(g(z)\)‬를 사용한다.</p>
+<p>그러므로 잠재변수 ‭\(z\)‬의 분포와 최종 데이터 ‭\(x\)‬의 분포가 반드시 같을 필요는 없다. </p>
+<p>예를들어 \(g(z)\)를 다음과 같은 함수를 생각해 보자.</p>
+<div class="math-block">\[g(z)=2\tanh(1.4z)\]</div>
+<p>이 함수는 \(z\)가 아무리 커지거나 작아지더라도 출력값을 \(-2\)에서 \(2\)사이로 제한한다.</p>
+<figure><img src="/assets/notion/생성-모델-3장/3ffb12c0-115c-806f-adfd-ec8c59b7cf76.png" alt="" loading="lazy" width="1536" height="864" /></figure>
+<p>예를 들어 \(z=0.5\) 를 뽑았다면,</p>
+<div class="math-block">\[g(0.5)=2\tanh(0.7)\approx1.21\]</div>
+<p>이 된다.</p>
+<p>반면 \(z=1.5\)를 뽑았다면,</p>
+<div class="math-block">\[g(1.5)=2\tanh(2.1)\approx1.94\]</div>
+<p>가 된다.</p>
+<p>\(g(z)\)는 입력값을 단순히 이동시키는 것이 아니라 값들 사이의 간격까지 변화시킨다는 사실이다. (\(z\)가 0근처에서 많이 샘플링이 되던 우리가 \(g\)라는 함수를 이용해서 균일하게 간격을 조절해주면 됨으로 \(z\)가 어떤 분포든 상관이없다.)</p>
+<p>예를 들어 \(z=1.5\)와 \(z=2.0\)의 차이는 0.5이다. 하지만 변환 후에는 다음과 같다.</p>
+<div class="math-block">\[g(1.5)\approx1.94,\qquad g(2.0)\approx1.99\]</div>
+<p>두 값의 차이가 약 0.05로 크게 줄어든다. 즉, \(z\)공간에서는 서로 떨어져 있던 값들이 \(x\) 공간에서는 가까운 위치에 모이게 된다.</p>
+<p>이러한 현상이 반복되면 특정 구간에 데이터가 많이 모이게 되고, 그 구간에서 확률밀도가 높아질 수 있다.</p>
+<p>따라서 표준정규분포에서 \(z\)를 뽑더라도, 변환 함수 \(g\)의 형태에 따라 실제 \(x\)의 분포는 전혀 다른 모습을 가질 수 있다.</p>
+<p>앞에서 다뤘던 밤, 낮 분포처럼 양쪽 끝에서 값들이 모이도록 변환하면, 원래 봉우리가 하나였던 정규분포에서 봉우리가 두 개인 분포를 만들 수도 있다.</p>
+<figure><img src="/assets/notion/생성-모델-3장/3ffb12c0-115c-8034-ac7f-cf8846ecb4a2.png" alt="" loading="lazy" width="832" height="652" /></figure>
+<p>위 그림처럼 표준정규분포에서 값을 샘플링하고 \(g(z)\)의 함수를 적용해 \(x\)를 뽑으면 위와 같이 봉우리가 두개인 분포로 나타나진다.</p>
+<p>이처럼 무한한 가우시안 혼합 모델을 잘 추정한다는 것은, 결국 복잡한 데이터 분포를 잘 표현할 수 있도록 ‭\(z\)‬를 변환하는 함수 ‭\(g\)‬를 정교하게 찾아내는 과정과 같다.</p>
+<h4 id="block-3ffb12c0115c807fb094f580e928c451">변환 함수에 따라 다양한 확률분포를 만들 수 있다</h4>
+<p>그렇다면 우리가 원하는 분포에 맞도록 변환 함수 \(g\)적절하게 찾는다면, 복잡한 확률분포도 표현할 수 있지 않을까?</p>
+<p>예를 들어 다음과 같은 세 가지 함수를 생각해 보자.</p>
+<div class="math-block">\[\begin{aligned}
+g_1(z)&amp;=z\\
+g_2(z)&amp;=2\tanh(1.4z)\\
+g_3(z)&amp;=e^{0.6z}-1
+\end{aligned}\]</div>
+<figure><img src="/assets/notion/생성-모델-3장/3ffb12c0-115c-8038-af23-ff4c7930beef.png" alt="" loading="lazy" width="437" height="307" /></figure>
+<ul><li>\(g_1(z) \): 원래 정규분포의 값을 그대로 이용하므로 생성되는 \(x\)도 봉우리가 하나인 정규분포를 따른다.</li><li>\(g_2(z)\): 양쪽 끝에서 값들이 가까이 모이므로 봉우리가 두 개인 분포를 만들 수 있다.</li><li>\(g_3(z)\): 오른쪽으로 갈수록 값들이 크게 벌어지므로 오른쪽 꼬리가 긴 분포를 만들 수 있다.</li></ul>
+<p>결국 ‭\(z\)‬는 데이터를 생성하기 위한 단순한 출발점일 뿐이고, ‭\(g\)‬는 그 데이터를 우리가 원하는 모양으로 빚어내는 핵심 역할을 한다. 즉, 어떤 확률분포에서 ‭\(z\)‬를 추출했는가보다 어떤 변환 함수 ‭\(g\)‬를 적용했는가에 따라 최종 데이터 ‭\(x\)‬의 분포가 결정되는 것이다.</p>
+<h4 id="block-404b12c0115c80eca9c8f5a2edd05adf">하나의 \(z\)에서 반드시 하나의 \(x\)만 생성해야 할까?</h4>
+<p>지금까지는 다음과 같이 데이터를 생성하였다.</p>
+<ul><li>표준정규분포 \(z\sim N(0, 1^2)\) 에서 \(z\)를 하나 뽑는다</li><li>변환함수 \(g(z) \)에 대입하여 \(x = g(z)\) 를 계산하여 \(x\)를 결정한다.</li></ul>
+<p>이 방식에서는 \(z\)가 정해지면 \(x\)도 하나의 확정된 값으로 결정된다.</p>
+<p>예를 들어 ‭\(z=0.5\)‬‭‬를 뽑았다면 변환 함수에 따라 항상 동일한 ‭\(x\)‬만 생성된다.</p>
+<p>그런데 실제 현실의 데이터에서는 같은 조건(같은 ‭\(z\)‬)이 주어지더라도 서로 조금씩 다른 값이 관측될 수 있다.</p>
+<p>비슷한 환경에서 촬영한 밤 사진이라도 가로등의 밝기나 카메라 센서의 노이즈 등에 따라 사진의 밝기(‭\(x\)‬)는 미세하게 달라지기 마련이다.</p>
+<p>그렇다면 \(g(z)\)를 1:1로 확정된 값으로 사용하기보다, 해당 값을 '평균'으로 하는 가우시안 분포에서 ‭\(x\)‬를 무작위로 생성하도록 약간의 여유(분산)를 두면 어떨까?</p>
+<p>예를 들어 다음과 같이 정의할 수 있다.</p>
+<div class="math-block">\[
+x=g(z)+\epsilon,\qquad
+\epsilon\sim\mathcal N(0,\sigma^2)
+\]</div>
+<p>여기서 잡음 \(\epsilon\)은 \(z\)와 독립이라고 가정한다.</p>
+<p>그러면 잠재변수 \(z\)가 주어졌을 때 \(x\)의 조건부 확률분포는 다음과 같다.</p>
+<div class="math-block">\[p(x\mid z)\sim\mathcal N(g(z),\sigma^2)
+\]</div>
+<p>이로써 연속적인 ‭\(z\)‬와 변환 함수 ‭\(g(z)\)‬‭‬‭‬‭‬, 그리고 노이즈 ‭\(\sigma^2\)‬이 결합하여 무한한 가우시안을 유연하게 표현하는 연속 잠재변수 생성 모델의 구조가 완성되었다. 이제 ‭\(z\)‬를 뽑아 함수를 통과시키기만 하면 어떤 복잡한 데이터 분포든 쉽게 만들어낼 수 있다.</p>
+<h4 id="block-404b12c0115c804aa9f3eec2d4747cd4">5) 그런데 이 모델이 얼마나 그럴듯한지는 어떻게 판단할까?</h4>
+<p>이로써 우리는 연속적인 ‭\(z\)‬와 매끄러운 변환 함수 \(g(z)\)를 통해 무한한 가우시안을 표현하는 강력한 생성 모델을 구축했다.</p>
+<p>‭\(z\)‬를 입력받아 데이터를 샘플링하는 과정은 완벽하다.</p>
+<p>그러면 이제 분포를 잘 추정하기 위해서는 &quot;우리가 만든 이 모델이 실제 관측된 현실 데이터를 얼마나 잘 설명하고 있는가?&quot;를 따져 학습해야한다.</p>
+<p>모델의 형태(\(z\)분포, 연속 함수 ‭\(g(z)\)‬‭‬‭‬‭‬ 구조)만 세웠을 뿐, 모델을 잘 추정하려면, 우리가 실제로 수집한 관측 데이터(예: ‭\(x = 4\)‬‭‬)가 이 모델에서 나올 확률밀도 \(p(x)\)를 계산하여 모델의 적합도를 평가할 수 있어야 한다.</p>
+<p>그렇다면 실제로 관측된 데이터 ‭\(x = 4\)‬‭‬가 우리 모델에서 나타날 확률밀도 \(p(x = 4)\)는 어떻게 구할 수 있을까?</p>
+<h4 id="block-404b12c0115c803aac00ff36a8ef46d6">관측된 하나의 ‭\(x\)를 만들어내느는 \(z\)는 무수히 많다. </h4>
+<p>확률을 구하기 위해 관측된 데이터 ‭\(x = 4\)‬‭‬의 생성 과정을 역으로 추적해 보자.</p>
+<p>앞서 우리는 생성 모델에 무작위적인 잡음(‭\(\epsilon \sim \mathcal{N}(0, \sigma^2)\)‬‭‬‭‬‭‬‭‬ ‭‬‭‬)을 도입했다.</p>
+<p>생성 과정에 무작위적인 여유(분산)가 생겼다는 것은, 반대로 관측된 데이터 ‭\(x = 4\)‬‭‬ 입장에서 볼 때 자신을 만들어낸 원인 후보 ‭\(z\)‬가 단 하나가 아니게 됨을 의미한다.</p>
+<p>예를 들어 다음과 같은 선형 모델이 있다고 가정하자.</p>
+<div class="math-block">\[z\sim\mathcal N(0,1) \\
+x=1.2z+\epsilon,\qquad
+\epsilon\sim\mathcal N(0,0.5^2)
+\]</div>
+<p>따라서 조건부 확률분포는 다음과 같다.</p>
+<div class="math-block">\[x\mid z\sim\mathcal N(1.2z,0.5^2)\]</div>
+<figure><img src="/assets/notion/생성-모델-3장/404b12c0-115c-8033-87a3-f70b9b707d2a.png" alt="" loading="lazy" width="427" height="253" /></figure>
+<p>여기서 \(x=4\)라는 데이터가 관측되었다고 가정하자.</p>
+<p>만약 잡음이 없다면 다음 관계에 의해</p>
+<div class="math-block">\[x=1.2z\\
+z=\frac{4}{1.2}\approx3.33\]</div>
+<p>이라는 하나의 잠재변수 값이 결정된다. 하지만 지금은 무작위 잡음이 존재한다.</p>
+<p>따라서 \(z=3.33\)이 아니더라도 \(x=4\)를 설명할 수 있다.</p>
+<p>예를 들어 다음과 같은 조합을 생각할 수 있다.</p>
+<div class="math-block">\[\begin{aligned}
+z=3.33&amp;\Rightarrow x\approx4+0\\
+z=3.00&amp;\Rightarrow x=3.6+0.4\\
+z=2.84&amp;\Rightarrow x=3.408+0.592
+\end{aligned}\]</div>
+<figure><img src="/assets/notion/생성-모델-3장/404b12c0-115c-80eb-be1b-f20e8805c464.png" alt="" loading="lazy" width="449" height="203" /></figure>
+<p>즉, 서로 다른 잠재변수 \(z\)와 잡음 \(\epsilon\)의 조합이 동일한 관측값 \(x=4\)를 만들어낼 수 있다.</p>
+<h4 id="block-404b12c0115c8003978edda7991a3cf4">합에서 적분으로 (Marginalization)</h4>
+<p>기존의 GMM에서는 잠재변수 ‭\(z\)‬가 유한한 개수의 이산적인 값(‭\(1, 2, \dots, K\)‬‭‬ ‭‬‭‬ ‭‬‭‬ ‭‬)을 가졌으므로, 각각의 가우시안 분포에 선택 확률을 곱한 후 단순히 모두 더했다.</p>
+<div class="math-block">\[p(x) = \sum_z p(x \mid z)p(z)\]</div>
+<p>‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬하지만 새로운 모델에서 잠재변수 ‭\(z\)‬는 연속적인 실수 값을 가지며, ‭\(x=4\)‬‭‬를 만들어낼 수 있는 ‭\(z\)‬의 후보 역시 연속적인 실수 공간에 무수히 많이 존재한다.</p>
+<p>예를 들어 \(z=2.84\)인 경우를 생각해 보자.</p>
+<p>여기서는 두 가지를 고려해야 한다.</p>
+<p><strong>첫째, 잠재변수 </strong>\(z=2.84\)<strong>가 사전분포에서 얼마나 그럴듯한가? (자주 등장할 법한가?)</strong></p>
+<div class="math-block">\[p(z=2.84)\]</div>
+<p>이는 잠재변수의 사전분포 \(p(z)\)에서 계산한 확률밀도이다.</p>
+<p><strong>둘째, </strong>\(z=2.84\)<strong>가 주어졌을 때 관측값 </strong>\(x=4\)<strong>가 얼마나 그럴듯한가?</strong></p>
+<div class="math-block">\[p(x=4\mid z=2.84)\]</div>
+<p>이는 조건부 가우시안 분포에서 계산한 확률밀도이다.</p>
+<p>두 값을 곱하면 다음과 같다.</p>
+<div class="math-block">\[p(x=4\mid z=2.84)p(z=2.84)\]</div>
+<p>이 값은 \(z=2.84\)부근이 전체 관측값 \(x=4\)의 확률밀도에 얼마나 기여하는지 나타낸다.</p>
+<p>그런데 가능한 잠재변수의 값이 될 수 있는 ‭\(z\)‬의 후보는 ‭\(2.84\)‬ 하나만이 아니다.</p>
+<p>\(z=2.0,\;z=2.5,\;z=3.0, \;z=3.33\) 등  연속적인 실수 공간에 무수히 많이 존재한다. </p>
+<p>따라서 끊어지지 않고 이어지는 모든 ‭\(z\)‬의 기여도를 다 더하기 위해 적분 기호(‭\(\int\)‬)를 사용해</p>
+<p>관측 데이터의 전체 확률분포를 구할 수 있다.</p>
+<div class="math-block">\[p(x = 4) = \int_{-\infty}^{\infty} p(x = 4 \mid z) p(z) dz\]</div>
+<p>이처럼 잠재변수 ‭\(z\)‬가 구체적으로 어떤 값이었는지 모르더라도, 가능한 모든 ‭\(z\)‬를 고려하여 관측값 ‭\(x\)‬에 대한 모델의 전체 확률밀도를 계산하는 과정을 확률론에서는 주변화(Marginalization)라고 부른다.</p>
+<details class="toggle"><summary><strong>Marginalization</strong></summary><div class="toggle-body"><p>예를 들어 B가 \(B_1,B_2,B_3\) 이라는 세 가지 경우로 나뉜다고 가정해보자.</p>
+<div class="math-block">\[A=(A\cap B_1)\cup(A\cap B_2)\cup(A\cap B_3)\]</div>
+<p>이때 \(B_1,B_2,B_3\)가 전체 표본공간을 빠짐없이 나누고 서로 겹치지 않는다면,</p>
+<div class="math-block">\[P(A)=\sum_iP(A\cap B_i)\]</div>
+<p>조건부 확률의 곱셈 법칙을 적용하면</p>
+<div class="math-block">\[P(A\cap B_i)=P(A|B_i)P(B_i)\]</div>
+<p>따라서</p>
+<div class="math-block">\[\boxed{P(A)=\sum_i P(A|B_i)P(B_i)}\]</div>
+<p>가 된다.</p>
+<p>이것을 연속확률변수에 적용하면 다음과 같다.</p>
+<div class="math-block">\[p(x)=\int p(x|z)p(z)\,dz\]</div></div></details>
+<h4 id="block-404b12c0115c802cb0c9df800e44e881">6) 고차원 적분의 현실적 어려움</h4>
+<p>관측된 데이터를 가지고 모델을 평가하고 학습시키기 위해서는 위의 적분식</p>
+<p> ‭\(p(x) = \int p(x \mid z) p(z) dz\)‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬를 풀어내야 한다.</p>
+<p>그러나 이 적분을 실제로 계산하기 어렵다.</p>
+<ol><li>\(g(z)\)가 비선형 함수처럼 복잡해지면, 수학적으로 적분 공식을 풀어낼 수(Analytic solution) 없다.</li><li> 1차원이면 구간을 쪼개서 일일이 더해 근사할 수 있지만, ‭\(z\)‬가 100차원 공간이 되면 \(100^{\text{100}}\)  칸이 생겨 '차원의 저주'로 인해 컴퓨터 연산이 불가능해진다.</li><li>\(z \sim \mathcal{N}(0,1)\)에서 무작위로 ‭\(z\)‬를 많이 뽑아 평균을 내는 방식도 어렵다. ‭\(x=4\)‬‭‬를 만들어낼 수 있는 유효한 ‭\(z\)‬의 영역은 극히 일부분(약 1.9%)뿐이라, 무작위로 뽑은 ‭\(z\)‬의 98% 이상은 버려져 낭비되는 자원이 너무 많다.</li><li>사전분포 \(z \sim \mathcal{N}(0, 1^2)\)에서 ‭\(M\)‬개의 ‭\(z\)‬를 무작위로 추출하여 조건부 확률 \(p(4 \mid z)\)의 평균을 구하는 몬테카를로 방식을 생각할 수도 있다. 하지만 관측값 ‭\(x=4\)‬‭‬가 주어졌을 때 ‭\(x=4\)‬‭‬를 생성하는 데 기여하는 ‭\(z\)‬의 95.4% 구간은 약 [2.07, 3.61] 사이로 매우 한정적이다. <p>문제는 우리가 사용하는 사전분포 \(\mathcal{N}(0, 1^2)\)에서 무작위로 ‭\(z\)‬를 뽑았을 때, 하필 이 유효한 구간([2.07, 3.61]) 안의 ‭\(z\)‬가 뽑힐 확률은 단 1.9%에 불과하다는 점이다.</p>
+<p>결국 뽑아낸 ‭\(z\)‬의 98.1%는 관측값 ‭\(x=4\)‬‭‬와 아무런 관련이 없는 값이 되어 버려지므로, 의미 있는 평균을 얻기 위해 상상할 수 없을 만큼 수많은 표본을 뽑아야만 하는 극심한 계산 자원 낭비가 발생한다.</p></li></ol>
+<p>결국 연속 잠재변수 모델은 다음과 같은 거대한 장벽에 직면한다.</p>
+<p>데이터를 생성하는(샘플링) 것(Forward)은 쉬운데, 관측된 데이터의 확률밀도를 계산하여 학습하는 것(Backward)은 고차원 적분 때문에 물리적으로 불가능하다.</p>
+<p>고차원 적분의 불가능성을 극복하지 못한다면, 우리가 세운 연속 잠재변수 모델은 사용하기 어렵다.</p>
+<p>이를 해결하기 위해 등장하는 핵심 열쇠로 몬테카를로 방법이 등장한다.</p>
+<p>가능한 모든 (\(z\))를 계산하는 대신, 일부 (\(z\))를 무작위로 샘플링하여 평균을 구하면 전체 적분값을 근사할 수 있지 않을까?</p>
+<p>이러한 방법이 <strong>몬테카를로(Monte Carlo) 방법</strong>이다.</p>
+<p>다음 장에서는 몬테카를로 방법에 대해서 다룬다.</p>
+<h2 id="block-40cb12c0115c802085e5d43d84555ec9">서사</h2>
+<p>1장: 실제 데이터 분포를 학습하기 위해 신경망 \(f_\theta(x)\)를 도입했으나, 이를 확률분포로 만들기 위한 정규화 상수 적분(‭\(Z_\theta = \int \exp(f_\theta(x))dx\)‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬)을 풀 수 없어 막혔다.</p>
+<p>2장: 적분이 수학적으로 이미 풀려 있어 넓이가 1이 되는 강력한 도구인 '가우시안(Gaussian)'이 등장한다.</p>
+<p>3장: 가우시안을 연속 함수 \(g(z)\)와 결합하여 현실의 복잡한 데이터를 표현하는 '무한 가우시안 연속 모델'을 세웠으나, 이번에는 모델을 추정(학습)하기 위해 주변화 적분 ‭\(p(x) = \int p(x\vert{}z)p(z)dz\)‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬라는 적분의 벽에 부딪힌다.</p>
+<p>4장: 이 적분을 풀기 위해 일부 데이터를 샘플링하여 적분을 근사하는 '몬테카를로 방식'을 먼저 시도한다. 그러나 무작위 샘플링은 98% 이상이 버려져 낭비된다는 한계가 발생한다.</p></div>
+    <div class="share-bar" data-share>
+      <span class="share-label">Share</span>
+      <button type="button" class="share-btn" data-share-copy>Copy</button>
+      <a class="share-btn share-x" data-share-x target="_blank" rel="noopener">X</a>
+      <a class="share-btn share-li" data-share-li target="_blank" rel="noopener">LinkedIn</a>
+      <button type="button" class="share-btn share-kakao" data-share-kakao hidden>카카오톡</button>
+      <button type="button" class="share-btn share-cite" data-share-cite>Cite</button>
+    </div></article>
+      <aside class="article-side" data-article-side hidden></aside>
+      <section class="comments" id="comments" data-comments hidden aria-labelledby="comments-title">
+        <h2 class="comments-title" id="comments-title">Comment</h2>
+        <div class="giscus" data-giscus></div>
+      </section>
+    </main>
+
+    <div class="fab-stack">
+      <button class="fab to-top" type="button" data-back-to-top aria-label="맨 위로" title="맨 위로" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <a class="fab jump-comments" href="#comments" data-jump-comments aria-label="댓글로 가기" title="댓글로 가기" hidden>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <script src="/assets/js/theme.js?v=1" defer></script>
+    <script src="/assets/js/post.js?v=14" type="module"></script>
+    <script src="/assets/js/palette.js?v=9" defer></script>
+  </body>
+</html>
