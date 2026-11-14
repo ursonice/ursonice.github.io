@@ -30,13 +30,13 @@
     <meta property="og:url" content="https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-3%EC%9E%A5/" />
     <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8%203%EC%9E%A5&amp;cat=AI%2F%20Deep%20Learning" />
     <meta property="article:published_time" content="2026-10-19T11:04:00.000Z" />
-    <meta property="article:modified_time" content="2026-11-12T05:58:00.000Z" />
+    <meta property="article:modified_time" content="2026-11-14T06:09:00.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="생성 모델 3장" />
     <meta name="twitter:description" content="목차 Part 1. 확률분포를 알고 있다면, 어떤 값을 구할 수 있을까? 가우시안 분포, 확률밀도, 알려진 혼합 비율을 이용한 확률 계산 Part 2. 확률분포를 모른다면, 데이터로부터 알아낼 수 있을까? 관측 데이터 → 히스토그램 → 우도 → 가우시안 혼합 모델(GMM) Part 3. 데이터의 숨겨진 " />
     <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8%203%EC%9E%A5&amp;cat=AI%2F%20Deep%20Learning" />
 
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"생성 모델 3장","description":"목차 Part 1. 확률분포를 알고 있다면, 어떤 값을 구할 수 있을까? 가우시안 분포, 확률밀도, 알려진 혼합 비율을 이용한 확률 계산 Part 2. 확률분포를 모른다면, 데이터로부터 알아낼 수 있을까? 관측 데이터 → 히스토그램 → 우도 → 가우시안 혼합 모델(GMM) Part 3. 데이터의 숨겨진 ","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8%203%EC%9E%A5&cat=AI%2F%20Deep%20Learning","datePublished":"2026-10-19T11:04:00.000Z","dateModified":"2026-11-12T05:58:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-3%EC%9E%A5/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"생성 모델 3장","description":"목차 Part 1. 확률분포를 알고 있다면, 어떤 값을 구할 수 있을까? 가우시안 분포, 확률밀도, 알려진 혼합 비율을 이용한 확률 계산 Part 2. 확률분포를 모른다면, 데이터로부터 알아낼 수 있을까? 관측 데이터 → 히스토그램 → 우도 → 가우시안 혼합 모델(GMM) Part 3. 데이터의 숨겨진 ","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8%203%EC%9E%A5&cat=AI%2F%20Deep%20Learning","datePublished":"2026-10-19T11:04:00.000Z","dateModified":"2026-11-14T06:09:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-3%EC%9E%A5/"}}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Deep Learning","item":"https://ursonice.github.io/topics/ai-deep-learning/"},{"@type":"ListItem","position":3,"name":"생성 모델 3장","item":"https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-3%EC%9E%A5/"}]}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -88,7 +88,7 @@
     <div class="article-meta">
       
       
-      <span>작성 2026년 10월 19일</span><span class="dot"></span><span>수정 2026년 11월 12일</span>
+      <span>작성 2026년 10월 19일</span><span class="dot"></span><span>수정 2026년 11월 14일</span>
       <span class="reading-size" role="group" aria-label="글자 크기">
         <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
         <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
@@ -103,6 +103,8 @@
 <p>그렇다면 관측된 데이터만 가지고 원래의 확률분포를 알아낼 수 있을까? 그 분포를 알아냈다면, 비슷한 데이터를 새롭게 생성할 수도 있을까? 반대로 특정 데이터가 주어졌을 때, 그 데이터가 어떤 원인으로 생성되었는지도 추론할 수 있을까?</p>
 <p>이 장에서는 먼저 확률분포를 이미 알고 있다고 가정하고 관측값의 원인을 추론한다.</p>
 <p>그다음 현실에서는 확률분포를 모른다는 문제로 돌아와, 관측된 데이터로부터 원래의 분포를 역으로 추정하는 방법을 알아본다.</p>
+<h2 id="block-418b12c0115c806893a9f6ce10237716">용어</h2>
+<div class="table-wrap"><table><tr><th>용어</th><th>의미</th></tr><tr><td><strong>우도 계산(채점)</strong></td><td>현재 파라미터 \(\theta\)를 고정하고, 관측 데이터의 우도값을 구하는 것</td></tr><tr><td><strong>학습</strong></td><td>우도를 계산하고, 우도가 높아지도록 \(\theta\)를 갱신하는 과정을 반복하는 것</td></tr><tr><td><strong>평가</strong></td><td>파라미터를 바꾸지 않고, 정해진 지표로 모델의 성능을 확인하는 것</td></tr></table></div>
 <h2 id="block-3ffb12c0115c8057a25efcc253c81109">Part 1. 확률분포를 알고 있다면 어떤 값을 구할 수 있을까?</h2>
 <h3 id="block-3ffb12c0115c8071be6ec000e609d8f7">1. 우리가 알고 있는 확률분포</h3>
 <p>지금까지 배운 확률과 통계에서는 일반적으로 확률분포의 모양과 수식을 알고 있는 상태에서 출발했다.</p>
@@ -561,12 +563,12 @@ P(z=\text{밤}\mid x)
 <p>따라서 실제 관측 데이터의 히스토그램을 확률밀도에 맞게 정규화하고, 그 위에 우리가 추정한 GMM의 확률밀도 곡선을 겹쳐서 비교한다.</p>
 <p>두 분포의 봉우리 위치, 폭, 전체적인 형태가 비슷하다면 GMM이 관측 데이터의 분포를 잘 설명하고 있다고 볼 수 있다.</p>
 <h3 id="block-40cb12c0115c80169fbcd16143e6ef7d">정리하기</h3>
-<p>우리는 데이터 ‭\(x\)‬가 이미 주어진 상황에서 &quot;이 데이터 ‭\(x\)‬가 나올 확률(우도)이 얼마인가?&quot;를 가우시안이 밤/낮 2개뿐이라 수식을 통해 우도를 직접 계산하여 <strong>학습(추정)</strong>할 수 있었다</p>
+<p>우리는 데이터 ‭\(x\)‬가 이미 주어진 상황에서 &quot;이 데이터 ‭\(x\)‬가 나올 확률(우도)이 얼마인가?&quot;를 가우시안이 밤/낮 2개뿐이라 수식을 통해 우도를 직접 계산하여 <strong>학습</strong>할 수 있었다</p>
 <ul><li>‭\(p(x) = w_{\text{밤}}p(x\mid\text{밤}) + w_{\text{낮}}p(x\mid\text{낮})\)‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬</li></ul>
 <p>그리고 계산된 ‭\(p(x)\)‬‭‬‭‬‭‬ 곡선을 실제 데이터 히스토그램과 비교해 &quot;얼마나 잘 겹치나(적합도)&quot;<strong>평가할 수 있었다.</strong></p>
 <p>그리고 실제 현실세계와 유사한 무한한 가우시안 연속 모델을 다룬다.</p>
-<p>우리가 추정하려는 모델 \(p(x)\)를 잘 학습(추정)하려면, 윗 내용과 마찬가지로 관측 데이터가 우리 모델에서 나올 확률밀도(우도) \(p(x)\)를 계산해서 이를 최대화해야 한다.</p>
-<p>그런데 우도 ‭\(p(x) = \int p(x\vert{}z)p(z)dz\)‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬ 는 \(z\)의 차원의 저주로 인해 우리의 복잡한 모델에서는 계산 불가능해서 \(p(x)\)를 학습(추정)하지 못한다.</p>
+<p>우리가 추정하려는 모델 \(p(x)\)를 잘 학습하려면, 윗 내용과 마찬가지로 관측 데이터가 우리 모델에서 나올 확률밀도(우도) \(p(x)\)를 계산해서 이를 최대화해야 한다.</p>
+<p>그런데 우도 ‭\(p(x) = \int p(x\vert{}z)p(z)dz\)‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬ 는 \(z\)의 차원의 저주로 인해 우리의 복잡한 모델에서는 계산 불가능해서 \(p(x)\)를 추정하지 못한다.</p>
 <p>따라서 직접 적분을 푸는 대신, \(z \sim p(z)\)에서 ‭\(z\)‬를 여러 개 뽑아서(샘플링해서) 적분을 근사하여 추정하는 방식(몬테카를로 / 변분 추론)을 떠올리게 된다.</p>
 <p>그러나 단순 무작위 샘플링은 유용한 ‭\(z\)‬가 뽑힐 확률이 극히 낮아 자원이 낭비되므로, &quot;적분 근사를 위해 ‭\(z\)‬를 어떻게 똑똑하게 샘플링할 것인가?&quot;의 문제로 자연스럽게 이어진다.</p>
 <p>이를 위해 잠재변수가 존재하는 복잡한 연속 모델에서 데이터가 실제로 어떻게 생성(샘플링)되는지 그 원리를 먼저 이해할 필요가 있다. 따라서 이해 대해 먼저 설명한다.</p>
@@ -814,7 +816,7 @@ z=2.84&amp;\Rightarrow x=3.408+0.592
 <p>이것을 연속확률변수에 적용하면 다음과 같다.</p>
 <div class="math-block">\[p(x)=\int p(x|z)p(z)\,dz\]</div></div></details>
 <h4 id="block-404b12c0115c802cb0c9df800e44e881">6) 고차원 적분의 현실적 어려움</h4>
-<p>관측된 데이터를 가지고 모델을 평가하고 학습시키기 위해서는 위의 적분식</p>
+<p>관측된 데이터를 가지고 모델을 추정하고 학습시키기 위해서는 위의 적분식</p>
 <p> ‭\(p(x) = \int p(x \mid z) p(z) dz\)‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬를 풀어내야 한다.</p>
 <p>그러나 이 적분을 실제로 계산하기 어렵다.</p>
 <ol><li>\(g(z)\)가 비선형 함수처럼 복잡해지면, 수학적으로 적분 공식을 풀어낼 수(Analytic solution) 없다.</li><li> 1차원이면 구간을 쪼개서 일일이 더해 근사할 수 있지만, ‭\(z\)‬가 100차원 공간이 되면 \(100^{\text{100}}\)  칸이 생겨 '차원의 저주'로 인해 컴퓨터 연산이 불가능해진다.</li><li>\(z \sim \mathcal{N}(0,1)\)에서 무작위로 ‭\(z\)‬를 많이 뽑아 평균을 내는 방식도 어렵다. ‭\(x=4\)‬‭‬를 만들어낼 수 있는 유효한 ‭\(z\)‬의 영역은 극히 일부분(약 1.9%)뿐이라, 무작위로 뽑은 ‭\(z\)‬의 98% 이상은 버려져 낭비되는 자원이 너무 많다.</li><li>사전분포 \(z \sim \mathcal{N}(0, 1^2)\)에서 ‭\(M\)‬개의 ‭\(z\)‬를 무작위로 추출하여 조건부 확률 \(p(4 \mid z)\)의 평균을 구하는 몬테카를로 방식을 생각할 수도 있다. 하지만 관측값 ‭\(x=4\)‬‭‬가 주어졌을 때 ‭\(x=4\)‬‭‬를 생성하는 데 기여하는 ‭\(z\)‬의 95.4% 구간은 약 [2.07, 3.61] 사이로 매우 한정적이다. <p>문제는 우리가 사용하는 사전분포 \(\mathcal{N}(0, 1^2)\)에서 무작위로 ‭\(z\)‬를 뽑았을 때, 하필 이 유효한 구간([2.07, 3.61]) 안의 ‭\(z\)‬가 뽑힐 확률은 단 1.9%에 불과하다는 점이다.</p>
@@ -829,7 +831,7 @@ z=2.84&amp;\Rightarrow x=3.408+0.592
 <h2 id="block-40cb12c0115c802085e5d43d84555ec9">서사</h2>
 <p>1장: 실제 데이터 분포를 학습하기 위해 신경망 \(f_\theta(x)\)를 도입했으나, 이를 확률분포로 만들기 위한 정규화 상수 적분(‭\(Z_\theta = \int \exp(f_\theta(x))dx\)‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬)을 풀 수 없어 막혔다.</p>
 <p>2장: 적분이 수학적으로 이미 풀려 있어 넓이가 1이 되는 강력한 도구인 '가우시안(Gaussian)'이 등장한다.</p>
-<p>3장: 가우시안을 연속 함수 \(g(z)\)와 결합하여 현실의 복잡한 데이터를 표현하는 '무한 가우시안 연속 모델'을 세웠으나, 이번에는 모델을 추정(학습)하기 위해 주변화 적분 ‭\(p(x) = \int p(x\vert{}z)p(z)dz\)‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬라는 적분의 벽에 부딪힌다.</p>
+<p>3장: 가우시안을 연속 함수 \(g(z)\)와 결합하여 현실의 복잡한 데이터를 표현하는 '무한 가우시안 연속 모델'을 세웠으나, 이번에는 모델을 추정하기 위해 주변화 적분 ‭\(p(x) = \int p(x\vert{}z)p(z)dz\)‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬라는 적분의 벽에 부딪힌다.</p>
 <p>4장: 이 적분을 풀기 위해 일부 데이터를 샘플링하여 적분을 근사하는 '몬테카를로 방식'을 먼저 시도한다. <s>그러나 무작위 샘플링은 98% 이상이 버려져 낭비된다는 한계가 발생한다.</s></p></div>
     <div class="share-bar" data-share>
       <span class="share-label">Share</span>
