@@ -30,13 +30,13 @@
     <meta property="og:url" content="https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-3%EC%9E%A5/" />
     <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8%203%EC%9E%A5&amp;cat=AI%2F%20Deep%20Learning" />
     <meta property="article:published_time" content="2026-10-19T11:04:00.000Z" />
-    <meta property="article:modified_time" content="2026-11-14T06:09:00.000Z" />
+    <meta property="article:modified_time" content="2026-11-18T06:29:00.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="생성 모델 3장" />
     <meta name="twitter:description" content="목차 Part 1. 확률분포를 알고 있다면, 어떤 값을 구할 수 있을까? 가우시안 분포, 확률밀도, 알려진 혼합 비율을 이용한 확률 계산 Part 2. 확률분포를 모른다면, 데이터로부터 알아낼 수 있을까? 관측 데이터 → 히스토그램 → 우도 → 가우시안 혼합 모델(GMM) Part 3. 데이터의 숨겨진 " />
     <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8%203%EC%9E%A5&amp;cat=AI%2F%20Deep%20Learning" />
 
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"생성 모델 3장","description":"목차 Part 1. 확률분포를 알고 있다면, 어떤 값을 구할 수 있을까? 가우시안 분포, 확률밀도, 알려진 혼합 비율을 이용한 확률 계산 Part 2. 확률분포를 모른다면, 데이터로부터 알아낼 수 있을까? 관측 데이터 → 히스토그램 → 우도 → 가우시안 혼합 모델(GMM) Part 3. 데이터의 숨겨진 ","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8%203%EC%9E%A5&cat=AI%2F%20Deep%20Learning","datePublished":"2026-10-19T11:04:00.000Z","dateModified":"2026-11-14T06:09:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-3%EC%9E%A5/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"생성 모델 3장","description":"목차 Part 1. 확률분포를 알고 있다면, 어떤 값을 구할 수 있을까? 가우시안 분포, 확률밀도, 알려진 혼합 비율을 이용한 확률 계산 Part 2. 확률분포를 모른다면, 데이터로부터 알아낼 수 있을까? 관측 데이터 → 히스토그램 → 우도 → 가우시안 혼합 모델(GMM) Part 3. 데이터의 숨겨진 ","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8%203%EC%9E%A5&cat=AI%2F%20Deep%20Learning","datePublished":"2026-10-19T11:04:00.000Z","dateModified":"2026-11-18T06:29:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-3%EC%9E%A5/"}}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Deep Learning","item":"https://ursonice.github.io/topics/ai-deep-learning/"},{"@type":"ListItem","position":3,"name":"생성 모델 3장","item":"https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-3%EC%9E%A5/"}]}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -88,7 +88,7 @@
     <div class="article-meta">
       
       
-      <span>작성 2026년 10월 19일</span><span class="dot"></span><span>수정 2026년 11월 14일</span>
+      <span>작성 2026년 10월 19일</span><span class="dot"></span><span>수정 2026년 11월 18일</span>
       <span class="reading-size" role="group" aria-label="글자 크기">
         <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
         <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
@@ -576,7 +576,8 @@ P(z=\text{밤}\mid x)
 <p>앞에서는 여러 가우시안을 결합하여 간단한 두 봉우리의 확률분포를 표현하는 GMM을 살펴보았다.</p>
 <p>그렇다면 이미지와 같은 고차원 데이터의 복잡한 확률분포도 GMM으로 표현할 수 있을까?</p>
 <p><strong>원리적으로 가능하다.</strong> 충분히 많은 가우시안을 사용하면 다양한 형태의 확률분포를 원하는 정확도까지 근사할 수 있기 때문이다.</p>
-<p>예를 들어 기존에는 밤과 낮이라는 두 개의 가우시안을 사용했지만, 분포의 형태가 더 복잡하다면 10개, 100개의 가우시안을 사용할 수도 있다.</p>
+<p>예를 들어 기존에는 밤과 낮이라는 두 개의 가우시안을 사용했지만, 분포의 형태가 더 복잡하다면 10개, 100개의 n개에 가까운 가우시안을 사용할 수도 있다.</p>
+<div class="math-block">\[p(x) = \sum_{k=1}^{n} \pi_k\,\mathcal N(x\mid\mu_k,\sigma_k^2) = \sum_{k=1}^{n} \frac{\pi_k}{\sqrt{2\pi\sigma_k^2}} \exp\left( -\frac{(x-\mu_k)^2}{2\sigma_k^2} \right)\]</div>
 <p>그런데 여기서 한 가지 생각해 볼 점이 있다.</p>
 <p><strong>가우시안의 개수가 늘어난다는 것은 잠재변수의 개수도 늘어난다는 의미일까?</strong></p>
 <h4 id="block-404b12c0115c8098b568c168cf734865">1) 가우시안의 개수와 잠재변수의 개수는 다르다</h4>
@@ -589,12 +590,13 @@ P(z=\text{밤}\mid x)
 \end{cases}\]</div>
 <p>따라서 잠재변수는 하나였지만, 두 가지 값을 가질 수 있었고, 각 값에 따라 서로 다른 가우시안 분포가 사용되었다.</p>
 <p>그렇다면 가우시안을 10개 사용하면 어떻게 될까?</p>
-<div class="math-block">\[p(x)=\sum_{k=1}^{10}P(z=k)p(x\mid z=k)\]</div>
+<div class="math-block">\[p(x) = \sum_{k=1}^{10}p(z=k)p(x\mid z=k) = \sum_{k=1}^{10}\pi_k\mathcal N(x\mid\mu_k,\sigma_k^2)\]</div>
+<ul><li>\(p(z=k)\): \(k\)번째 가우시안이 선택될 확률(\(\pi_k\))</li><li>\(p(x|z=k)\): \(k\)번째 가우시안이 선택되었을 때의 \(x\)의 확률밀도(\( \mathcal N(x\mid\mu_k,\sigma_k^2)\))</li><li>\(k\)가 1, 2, 3 .. 으로 바뀌면 평균과 분산이 바뀌므로 서로 다른 가우시안 10개를 나타낼 수 있다.</li></ul>
 <p>이때 잠재변수 (z)는 다음과 같다.</p>
-<div class="math-block">\[z\in{1,2,3,\ldots,10}\]</div>
+<div class="math-block">\[Z\in{1,2,3,\ldots,10}\]</div>
 <p>즉, 잠재변수는 여전히 하나이지만, 이제 10가지 값 중 하나를 가질 수 있다.</p>
-<p>가우시안이 100개라도 마찬가지다. 잠재변수 \(z\)하나가 100가지 값 중 하나를 가진다.</p>
-<p>각 값이 선택될 확률은 하나의 범주형 확률분포(categorical distribution) \(P(z)\)로 표현된다.</p>
+<p>가우시안이 100개라도 마찬가지다. 잠재변수 \(Z\)하나가 100가지 값 중 하나를 가진다.</p>
+<p>각 값이 선택될 확률은 하나의 범주형 확률분포(categorical distribution) \(p(z)\)로 표현된다.</p>
 <p>따라서 가우시안의 개수를 늘린다는 것은 잠재변수의 개수를 늘리는 것이 아니라, 잠재변수가 선택할 수 있는 가우시안의 종류를 늘리는 것이다.</p>
 <p>가우시안을 100만 개 사용하는 경우에도 동일하다. 잠재변수 \(z\) 하나가 100만 가지의 이산적인 값 중 하나를 선택하도록 구성할 수 있다.</p>
 <h4 id="block-404b12c0115c804788f8e5c36a18b3f5">2) 그렇다면 연속적인 값을 갖는 잠재변수는?</h4>
@@ -626,7 +628,9 @@ P(z=\text{밤}\mid x)
 <p>발상을 전환하여 아예 구간을 나누는 방식을 버려 보자. 대신, 연속적인 잠재변수 ‭\(z\)‬의 값 자체를 가우시안의 평균 ‭\(\mu\)‬와 분산 ‭\(\sigma^2\)‬을 직접 출력해 주는 매끄러운 '연속 함수'에 통과시키는 것이다.</p>
 <div class="math-block">\[p(x\mid z)=\mathcal N(x\mid\mu(z),\sigma^2(z))‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬\]</div>
 <p>이렇게 구성하면 잠재변수 ‭\(z\)‬가 미세하게 변할 때마다 함수를 통해 평균 \(\mu(z)\)와 분산 \(\sigma^2(z)\)도 유연하게 변하게 된다. 이는 곧 ‭\(z\)‬가 연속적으로 흐름에 따라, 그 미세한 매 순간마다 서로 다른 고유한 가우시안 분포가 무수히 많이, 그리고 연속적으로 존재하게 됨을 의미한다.</p>
+<div class="math-block">\[p(x) = \int p(z)\,p(x|z)dz= \int p(z)\, \mathcal N(x\mid\mu(z),\sigma^2(z)) \,dz\]</div>
 <p>100만 개, 1,000만 개처럼 가우시안의 개수를 세며 뚝뚝 끊어지던 한계를 벗어나, 사실상 무한히 많은 가우시안 분포가 연속적인 선상에 부드럽게 존재하는 모델로 표현할 수 있다.</p>
+<p>합으로 구성된 GMM은\((\sum_{k=1}^{n})\) 가우시안이 무한히 많더라도 \(1,2,3,\ldots\) 처럼 이산적인 번호를 붙여 하나씩 구분하고<strong>, </strong>각 가우시안의 선택 확률을 가중치로 더하는 표현이다. 반면 적분은 \(z\)가 특정한 번호에 제한되지 않고 연속적으로 변하며, 각 \(z\)의 값에 따라 평균과 분산이 정해지는 가우시안들을 \(p(z)\)에 따라 가중하여 모두 혼합하는 표현이다.</p>
 <h4 id="block-40cb12c0115c803f925be382aa1bcab5">예시: 연속함수 g(z)를 이용한 가우시안 생성</h4>
 <p>고양이 사진의 털 밝기 \(x\)를 생성하는 모델을 만든다고 가정하자.</p>
 <p>털 밝기는 0(검정)부터 255(흰색)사이의 연속적인 값을 가진다고하자.</p>
@@ -825,14 +829,13 @@ z=2.84&amp;\Rightarrow x=3.408+0.592
 <p>데이터를 생성하는(샘플링) 것(Forward)은 쉬운데, 관측된 데이터의 확률밀도를 계산하여 학습하는 것(Backward)은 고차원 적분 때문에 물리적으로 불가능하다.</p>
 <p>고차원 적분의 불가능성을 극복하지 못한다면, 우리가 세운 연속 잠재변수 모델은 사용하기 어렵다.</p>
 <p>이를 해결하기 위해 등장하는 핵심 열쇠로 몬테카를로 방법이 등장한다.</p>
-<p>가능한 모든 (\(z\))를 계산하는 대신, 일부 (\(z\))를 무작위로 샘플링하여 평균을 구하면 전체 적분값을 근사할 수 있지 않을까?</p>
-<p>이러한 방법이 <strong>몬테카를로(Monte Carlo) 방법</strong>이다.</p>
 <p>다음 장에서는 몬테카를로 방법에 대해서 다룬다.</p>
 <h2 id="block-40cb12c0115c802085e5d43d84555ec9">서사</h2>
 <p>1장: 실제 데이터 분포를 학습하기 위해 신경망 \(f_\theta(x)\)를 도입했으나, 이를 확률분포로 만들기 위한 정규화 상수 적분(‭\(Z_\theta = \int \exp(f_\theta(x))dx\)‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬)을 풀 수 없어 막혔다.</p>
 <p>2장: 적분이 수학적으로 이미 풀려 있어 넓이가 1이 되는 강력한 도구인 '가우시안(Gaussian)'이 등장한다.</p>
 <p>3장: 가우시안을 연속 함수 \(g(z)\)와 결합하여 현실의 복잡한 데이터를 표현하는 '무한 가우시안 연속 모델'을 세웠으나, 이번에는 모델을 추정하기 위해 주변화 적분 ‭\(p(x) = \int p(x\vert{}z)p(z)dz\)‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬라는 적분의 벽에 부딪힌다.</p>
-<p>4장: 이 적분을 풀기 위해 일부 데이터를 샘플링하여 적분을 근사하는 '몬테카를로 방식'을 먼저 시도한다. <s>그러나 무작위 샘플링은 98% 이상이 버려져 낭비된다는 한계가 발생한다.</s></p></div>
+<p>4장: 이 적분을 풀기 위해 일부 데이터를 샘플링하여 적분을 근사하는 '몬테카를로 방법론'을 적용한다. </p>
+<p><s>그러나 무작위 샘플링은 98% 이상이 버려져 낭비된다는 한계가 발생한다.</s></p></div>
     <div class="share-bar" data-share>
       <span class="share-label">Share</span>
       <button type="button" class="share-btn" data-share-copy>Copy</button>
