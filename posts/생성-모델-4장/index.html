@@ -17,7 +17,7 @@
 
     <title>생성 모델 4장 — Woojae Joo</title>
     <meta name="post-slug" content="생성-모델-4장" />
-    <meta name="description" content="목차 확률밀도와 우도차이 Part1: 모든 잠재변수를 계산하지 않고 적분을 구한다. part2: 평균을 최대화 Part3: KL의 성질 Part4: Forward KL 발산유도 확률밀도와 우도차이 모델의 모든 파라미터(평균, 분산 등)를 \theta라고 하면 다음과 같이 표현할 수 있다. 같은 수식이지만" />
+    <meta name="description" content="목차 확률밀도와 우도차이 Part1: 모든 잠재변수를 계산하지 않고 적분을 구한다. part2: 평균을 최대화 Part3: KL의 성질 Part4: Forward KL 발산유도 확률밀도와 우도차이 분포의 모양을 결정짓는 파라미터(평균, 분산 등)를 \theta라고 한다면 앞으로 우리는 확률 분포 표현식을" />
     <link rel="canonical" href="https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-4%EC%9E%A5/" />
     <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="/manifest.json" />
@@ -26,17 +26,17 @@
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Woojae Joo — Developer Note" />
     <meta property="og:title" content="생성 모델 4장" />
-    <meta property="og:description" content="목차 확률밀도와 우도차이 Part1: 모든 잠재변수를 계산하지 않고 적분을 구한다. part2: 평균을 최대화 Part3: KL의 성질 Part4: Forward KL 발산유도 확률밀도와 우도차이 모델의 모든 파라미터(평균, 분산 등)를 \theta라고 하면 다음과 같이 표현할 수 있다. 같은 수식이지만" />
+    <meta property="og:description" content="목차 확률밀도와 우도차이 Part1: 모든 잠재변수를 계산하지 않고 적분을 구한다. part2: 평균을 최대화 Part3: KL의 성질 Part4: Forward KL 발산유도 확률밀도와 우도차이 분포의 모양을 결정짓는 파라미터(평균, 분산 등)를 \theta라고 한다면 앞으로 우리는 확률 분포 표현식을" />
     <meta property="og:url" content="https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-4%EC%9E%A5/" />
     <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8%204%EC%9E%A5&amp;cat=AI%2F%20Deep%20Learning" />
     <meta property="article:published_time" content="2026-11-02T12:06:00.000Z" />
-    <meta property="article:modified_time" content="2026-11-19T00:27:00.000Z" />
+    <meta property="article:modified_time" content="2026-11-23T08:43:00.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="생성 모델 4장" />
-    <meta name="twitter:description" content="목차 확률밀도와 우도차이 Part1: 모든 잠재변수를 계산하지 않고 적분을 구한다. part2: 평균을 최대화 Part3: KL의 성질 Part4: Forward KL 발산유도 확률밀도와 우도차이 모델의 모든 파라미터(평균, 분산 등)를 \theta라고 하면 다음과 같이 표현할 수 있다. 같은 수식이지만" />
+    <meta name="twitter:description" content="목차 확률밀도와 우도차이 Part1: 모든 잠재변수를 계산하지 않고 적분을 구한다. part2: 평균을 최대화 Part3: KL의 성질 Part4: Forward KL 발산유도 확률밀도와 우도차이 분포의 모양을 결정짓는 파라미터(평균, 분산 등)를 \theta라고 한다면 앞으로 우리는 확률 분포 표현식을" />
     <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8%204%EC%9E%A5&amp;cat=AI%2F%20Deep%20Learning" />
 
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"생성 모델 4장","description":"목차 확률밀도와 우도차이 Part1: 모든 잠재변수를 계산하지 않고 적분을 구한다. part2: 평균을 최대화 Part3: KL의 성질 Part4: Forward KL 발산유도 확률밀도와 우도차이 모델의 모든 파라미터(평균, 분산 등)를 \\theta라고 하면 다음과 같이 표현할 수 있다. 같은 수식이지만","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8%204%EC%9E%A5&cat=AI%2F%20Deep%20Learning","datePublished":"2026-11-02T12:06:00.000Z","dateModified":"2026-11-19T00:27:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-4%EC%9E%A5/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"생성 모델 4장","description":"목차 확률밀도와 우도차이 Part1: 모든 잠재변수를 계산하지 않고 적분을 구한다. part2: 평균을 최대화 Part3: KL의 성질 Part4: Forward KL 발산유도 확률밀도와 우도차이 분포의 모양을 결정짓는 파라미터(평균, 분산 등)를 \\theta라고 한다면 앞으로 우리는 확률 분포 표현식을","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8%204%EC%9E%A5&cat=AI%2F%20Deep%20Learning","datePublished":"2026-11-02T12:06:00.000Z","dateModified":"2026-11-23T08:43:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-4%EC%9E%A5/"}}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Deep Learning","item":"https://ursonice.github.io/topics/ai-deep-learning/"},{"@type":"ListItem","position":3,"name":"생성 모델 4장","item":"https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-4%EC%9E%A5/"}]}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -88,7 +88,7 @@
     <div class="article-meta">
       
       
-      <span>작성 2026년 11월 2일</span><span class="dot"></span><span>수정 2026년 11월 19일</span>
+      <span>작성 2026년 11월 2일</span><span class="dot"></span><span>수정 2026년 11월 23일</span>
       <span class="reading-size" role="group" aria-label="글자 크기">
         <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
         <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
@@ -99,17 +99,29 @@
     <div class="article-content"><h2 id="block-40cb12c0115c80d99575c0b133a4fb2f">목차</h2>
 <ul><li>확률밀도와 우도차이</li><li>Part1: 모든 잠재변수를 계산하지 않고 적분을 구한다.</li><li>part2: 평균을 최대화</li><li>Part3: KL의 성질</li><li>Part4: Forward KL 발산유도</li></ul>
 <h2 id="block-40db12c0115c80a99b1ac29c58b0bbe6">확률밀도와 우도차이</h2>
-<p>모델의 모든 파라미터(평균, 분산 등)를 \(\theta\)라고 하면 다음과 같이 표현할 수 있다.</p>
+<p>분포의 모양을 결정짓는 파라미터(평균, 분산 등)를 \(\theta\)라고 한다면 앞으로 우리는 확률 분포 표현식을 다음과 같이 표현한다.</p>
 <div class="math-block">\[p_\theta(x)\]</div>
 <p>같은 수식이지만 무엇을 변수로 보는지에 따라 의미가 달라진다.</p>
-<ul><li>확률밀도(Probability Density): 모델 파라미터 \(\theta\)를 고정하고, 데이터 \(x\)를 변수로 본다. <ul><li>&quot;이 모델에서는 어떤 데이터가 자주 생성될까?&quot;</li></ul></li><li>우도(Likelihood): 관측 데이터 \(x\)를 고정하고, 모델 파라미터 \(\theta\)를 변수로 본다.<ul><li>&quot;파라미터 \(\theta\)를 어떻게 조절해야 관측된 데이터 \(x\)에서의 함수 높이 \(p_\theta(x)\)가 제일 높아질까?”</li></ul></li></ul>
-<p>따라서 두 개념은 동일한 \(p_\theta(x)\)를 서로 다른 관점에서 바라본 것이다</p>
+<ul><li>확률밀도(Probability Density): 파라미터 \(\theta\)를 고정하고, 데이터 \(x\)를 변수로 본다. <ul><li>&quot;이 모델에서는 어떤 데이터가 자주 생성될까?&quot;</li></ul></li><li>우도(Likelihood): 관측 데이터 \(x\)를 고정하고, 모델 파라미터 \(\theta\)를 변수로 본다.<ul><li>&quot;파라미터 \(\theta\)를 어떻게 조절해야 관측된 데이터 \(x\)에서의 함수 높이 \(p_\theta(x)\)가 제일 높아질까?”</li></ul></li></ul>
+<p>따라서 두 개념은 동일한 \(p_\theta(x)\)를 서로 다른 관점에서 바라본 것이다.</p>
+<details class="toggle"><summary>밑의 첨자 \(\theta\)의 상세 의미</summary><div class="toggle-body"><p>\(\theta\)는 분포의 모양을 결정짓는 파라미터로 확률 분포의 평균 ‭\(\mu\), \(\sigma\) 또는 학습해야할 신경망의 가중치 \(W\)등을 의미한다</p>
+<p>이렇게 표기하는 목적은 고정된 분포 \(p(x)\)가 아닌 \(\theta\)의 값에 따라 형태가 변화고 학습을 통해 최적화 되는 분포 \(p_{\theta}(x)\)를 명시하기 위함이다.</p></div></details>
 <h2 id="block-40db12c0115c80368afbc6d358107a65">Part1. 모든 잠재변수를 계산하지 않고 적분을 구한다.</h2>
 <h3 id="block-40db12c0115c803d987efc3a12db057b">1. 모든 잠재변수를 계산하지 말고 일부만 뽑아보자.</h3>
 <p>앞에서 우리는 생성 모델을 채점하기 위해 관측 데이터 \(x\)의 우도 \(p_\theta(x)\)를 계산해야 한다.</p>
 <p>그런데 하나의 사진을 만들어낼 수 있는 잠재변수 \(z\)의 조합은 무수히 많다.</p>
 <p>따라서 가능한 모든 잠재변수를 고려하려면 다음과 같은 적분이 필요하다.</p>
 <div class="math-block">\[p_\theta(x)=\int p_\theta(x\mid z)p(z)\,dz\]</div>
+<details class="toggle"><summary>두 분포 \(p_{\theta}(x)\)와 \(p_{\theta}(x\mid z)\)는 생긴 모양이 다른데 같은 \(\theta\)를 쓰는가?</summary><div class="toggle-body"><p>\(p(z)\)‬‭‬‭‬‭‬ (사전 분포): \(z \sim \mathcal{N}(0, 1^2)\)로 미리 고정해 둔 분포이므로 학습할 파라미터가 없어 ‭\(\theta\)‬를 표기하지 않는다.</p>
+<p>‭\(p_\theta(x \mid z)\)‬‭‬‭‬‭‬‭‬ (조건부 분포): 파라미터 ‭\(\theta\)‬가 만들어내는 분포로, 특정 ‭\(z\)‬가 주어졌을 때 어떤 ‭\(x\)‬를 생성할지(평균 ‭\(\mu\)‬, 표준편차 ‭\(\sigma\)‬ 등)를 결정한다.</p>
+<p>\(p_\theta(x)\)‬‭‬‭‬‭‬ (주변 분포): ‭\(\theta\)‬로 정의된 조건부 분포 \(p_\theta(x \mid z)\)들을 사전 분포 \(p(z)\)의 가중치로 모든 ‭\(z\)‬에 대해 무한히 합쳐(적분해) 만든 최종 생성 분포이다.</p>
+<p>그럼 왜 같은 \(\theta \)를 쓸까?</p>
+<ul><li>적분 연산의 성질: ‭\(p_\theta(x) = \int p_\theta(x \mid z)p(z)\,dz\)‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬ 식에서 적분은 잠재 변수 ‭\(z\)‬에 대해서만 수행된다. 따라서 수식에서 ‭\(z\)‬만 소거되고 파라미터 ‭\(\theta\)‬는 그대로 유지된다.</li><li>\(p_\theta(x)\)는 모든 ‭\(z\)‬에 대해 조건부 분포 ‭\(p_\theta(x \mid z)\)를 무한히 가중합(적분)한 최종 생성 분포이다. 즉, 파라미터 \(\theta\)가 결정하는 \(p_\theta(x \mid z)\)들의 개별 평균(\(\mu\))과 표준편차(\(\sigma\)‬‭‬‭‬‭‬‭‬\(‭‬‭‬‭‬‭‬‭‬‭‬ ‭‬‭‬ ‭‬\)‭‬\(‭‬\)‭‬‭‬‭‬‭‬‭‬\(‭‬‭‬\)‭‬\(‭‬‭‬‭‬\)‭‬)가 모여 \(p_\theta(x)\)를 구성하므로, 결국 두 분포 모두 동일한 파라미터 ‭\(\theta\)‬에 의해 형태가 결정된다.</li></ul>
+<p>예를들어 \(z \in \{1, 2\}\) 인 유한 가우시안 혼합모델을 생각해보자.</p>
+<p>\(p(z=1)=p(z=2)=0.5\) 라 하자. 학습할 파라미터 \(\theta=\{\mu_1,\;\mu_2\}\) 라 하자.</p>
+<p>\(p_{\theta}(x\mid z=1): \mathcal N(x\mid\mu_1),\;\;\;p_{\theta}(x \mid z=2): \mathcal N(x \mid \mu_2)\)</p>
+<p>\(p_{\theta}(x) = 0.5\mathcal N(x\mid \mu_1)+0.5\mathcal N(x\mid \mu_2)\) </p>
+<p>이렇게 같은 \(\theta\)라는 것을 볼 수 있다.</p></div></details>
 <p>하지만 잠재변수가 고차원으로 확장되면 모든 영역의 격자를 더하는 적분은 계산량이 기하급수적으로 증가하기 때문에 현실적으로 어렵다.</p>
 <p>그렇다면 모든 잠재변수를 계산하지 말고, 일부만 무작위로 뽑아서 평균을 내면 어떨까?</p>
 <p>전체 국민의 평균 키를 조사하기 위해 모든 국민을 전수조사할 필요가 없는 것처럼, 사전분포 \(p(z)\)에서 무작위로 표본을 추출하여 평균을 내면 전체 적분값을 근사할 수 있다.</p>
@@ -243,7 +255,7 @@ P_Y(y):=P(Y=y)
 <div class="math-block">\[
 q_\theta(x)
 =
-\int q(x\mid z)p(z)\,dz.
+\int q_{\theta}(x\mid z)p(z)\,dz.
 \]</div>
 <details class="toggle"><summary><strong>Example</strong></summary><div class="toggle-body"><p>예를 들어, 결과가 고양이와 강아지 두 종류뿐인 간단한 상황에서의 실제 세상의 비율은</p>
 <div class="math-block">\[p_{\mathrm{data}}(\text{고양이})=0.8,
@@ -1813,7 +1825,7 @@ D_{\mathrm{KL}}(p\parallel q)
 <p>1장: 실제 데이터 분포를 학습하기 위해 신경망 \(f_\theta(x)\)를 도입했으나, 이를 확률분포로 만들기 위한 정규화 상수 적분(‭\(Z_\theta = \int \exp(f_\theta(x))dx\)‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬)을 풀 수 없어 막혔다.</p>
 <p>2장: 적분이 수학적으로 이미 풀려 있어 넓이가 1이 되는 강력한 도구인 '가우시안(Gaussian)'이 등장한다.</p>
 <p>3장: 가우시안을 연속 함수 \(g(z)\)와 결합하여 현실의 복잡한 데이터를 표현하는 '무한 가우시안 연속 모델'을 세웠으나, 이번에는 모델을 추정하기 위해 주변화 적분 ‭\(p(x) = \int p(x\vert{}z)p(z)dz\)‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬라는 적분의 벽에 부딪힌다.</p>
-<p>4장: 이 적분을 풀기 위해 표본을 추출해 적분을 근사하는 '몬테카를로 방법론'과 우도 최대화를 대체하는 'KL 발산'의 원리를 다변량 가우시안으로 확인했으나, 정작 복잡한 연속 모델에서는 해결하지 못한다.</p></div>
+<p>4장: 이 적분을 풀기 위해 표본을 추출해 적분을 근사하는 '몬테카를로 방법론'과 우도 최대화를 대체하는 'KL 발산'의 원리를 다변량 가우시안으로 확인했으나, 정작 복잡하고 무한한 연속 가우시안모델에서는 해결하지 못한다.</p></div>
     <div class="share-bar" data-share>
       <span class="share-label">Share</span>
       <button type="button" class="share-btn" data-share-copy>Copy</button>
