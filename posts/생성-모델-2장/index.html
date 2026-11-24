@@ -30,13 +30,13 @@
     <meta property="og:url" content="https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-2%EC%9E%A5/" />
     <meta property="og:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8%202%EC%9E%A5&amp;cat=AI%2F%20Deep%20Learning" />
     <meta property="article:published_time" content="2026-09-26T03:25:00.000Z" />
-    <meta property="article:modified_time" content="2026-11-02T12:04:00.000Z" />
+    <meta property="article:modified_time" content="2026-11-24T09:41:00.000Z" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="생성 모델 2장" />
     <meta name="twitter:description" content="서론 1장의 문제였던 실제 데이터 분포를 학습하기 위해 신경망 f_\theta(x)를 도입했으나, 이를 확률분포로 만들기 위한 정규화 상수 적분(‭Z_\theta = \int \exp(f_\theta(x))dx‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬)을 풀 수 없어 막혔다. 따라서 이 장은 적분이 수학적으로 " />
     <meta name="twitter:image" content="https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8%202%EC%9E%A5&amp;cat=AI%2F%20Deep%20Learning" />
 
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"생성 모델 2장","description":"서론 1장의 문제였던 실제 데이터 분포를 학습하기 위해 신경망 f_\\theta(x)를 도입했으나, 이를 확률분포로 만들기 위한 정규화 상수 적분(‭Z_\\theta = \\int \\exp(f_\\theta(x))dx‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬)을 풀 수 없어 막혔다. 따라서 이 장은 적분이 수학적으로 ","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8%202%EC%9E%A5&cat=AI%2F%20Deep%20Learning","datePublished":"2026-09-26T03:25:00.000Z","dateModified":"2026-11-02T12:04:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-2%EC%9E%A5/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"생성 모델 2장","description":"서론 1장의 문제였던 실제 데이터 분포를 학습하기 위해 신경망 f_\\theta(x)를 도입했으나, 이를 확률분포로 만들기 위한 정규화 상수 적분(‭Z_\\theta = \\int \\exp(f_\\theta(x))dx‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬‭‬)을 풀 수 없어 막혔다. 따라서 이 장은 적분이 수학적으로 ","image":"https://ursonice--8ca24676580f11f18cd8ee650bb23af1.web.val.run/?title=%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8%202%EC%9E%A5&cat=AI%2F%20Deep%20Learning","datePublished":"2026-09-26T03:25:00.000Z","dateModified":"2026-11-24T09:41:00.000Z","author":{"@type":"Person","name":"Woojae Joo","url":"https://github.com/ursonice"},"publisher":{"@type":"Person","name":"Woojae Joo"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-2%EC%9E%A5/"}}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://ursonice.github.io/"},{"@type":"ListItem","position":2,"name":"AI/ Deep Learning","item":"https://ursonice.github.io/topics/ai-deep-learning/"},{"@type":"ListItem","position":3,"name":"생성 모델 2장","item":"https://ursonice.github.io/posts/%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-2%EC%9E%A5/"}]}</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -88,7 +88,7 @@
     <div class="article-meta">
       
       
-      <span>작성 2026년 9월 26일</span><span class="dot"></span><span>수정 2026년 11월 2일</span>
+      <span>작성 2026년 9월 26일</span><span class="dot"></span><span>수정 2026년 11월 24일</span>
       <span class="reading-size" role="group" aria-label="글자 크기">
         <button type="button" data-reading-size="sm" aria-label="작게" title="작게">가</button>
         <button type="button" data-reading-size="md" aria-label="보통" title="보통">가</button>
@@ -105,9 +105,9 @@
 <p>1장에서 신경망은 복잡한 데이터 분포의 모양을 표현할 수 있다는 것을 보았다. 하지만 신경망의 출력 \(f_\theta(x)\)는 모양일 뿐 확률이 아니다. 확률밀도가 되려면 전체 넓이가 1이어야 하므로</p>
 <div class="math-block">\[q_\theta(x)=\frac{f_\theta(x)}{Z_\theta},\qquad Z_\theta=\int f_\theta(x)\,dx\]</div>
 <p>처럼 전체 넓이 \(Z_\theta\)로 나누어야 한다. 문제는 고차원에서 이 적분을 직접 계산할 수 없다는 것이었다. 칸을 하나씩 세는 방법밖에 없는데, 차원이 오르면 칸의 수가 지수적으로 늘어나기 때문이다.</p>
-<p>그러니 막힌 곳은 결국 하나다. 적분을 어떻게 계산할 것인가. 적분을 다루는 길은 크게 둘이다.</p>
-<ul><li>적분의 답을 정확히 알고 있는 구조를 쓴다 → 가우시안</li><li>표본을 여러 개 뽑아 그 평균으로 적분값을 근사한다 → 몬테카를로(이후 4장에서 다룸)</li></ul>
-<h4 id="block-3e7b12c0115c80cc96cbd4f7e952a31c">첫 번째 길: 적분이 이미 풀려 있는 구조를 사용한다</h4>
+<p>그러니 막힌 곳은 결국 하나다. 적분을 어떻게 계산할 것인가?</p>
+<ul><li>적분의 답을 정확히 알고 있는 구조를 쓴다 → 가우시안</li></ul>
+<h4 id="block-3e7b12c0115c80cc96cbd4f7e952a31c">적분이 이미 풀려 있는 구조를 사용한다</h4>
 <p>가우시안이 유용한 이유는 한 번 적분을 풀어 놓으면 이후 무슨 연산을 해도(늘리고, 곱하고, 더해도) 다시 가우시안이 나오기 때문이다. </p>
 <p>가우시안의 확률밀도함수는</p>
 <div class="math-block">\[p(x)=\frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)\]</div>
